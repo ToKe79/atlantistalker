@@ -28451,7 +28451,7 @@ char filename[81],line[100];
 FILE *fp;
 int i,num,max,ii,format;
 static char name[20],uname[20],pass[20];
-char restrict[3][15];
+char myrestrict[3][15];
 char *error="Z technickych pricin nie je k dispozicii ziadna brana.\n";
 
 name[0]='\0';
@@ -28464,9 +28464,9 @@ fgets(line,99,fp);
 i=0;
 sprintf(text,"~FTK dispozicii su nasledovne brany:\n");
 while(!feof(fp)) {
-  for(ii=0;ii<3;ii++) restrict[ii][0]='\0';
-  sscanf(line,"%d %s %d %d %s %s %s %s %s",&num,name,&max,&format,uname,pass,restrict[0],restrict[1],restrict[2]);
-  if (restrict[0][0]) sprintf(filename,"  %-13s~FT(max. %d znakov) obmedzena na cisla %s %s %s\n",name,max,restrict[0],restrict[1],restrict[2]);
+  for(ii=0;ii<3;ii++) myrestrict[ii][0]='\0';
+  sscanf(line,"%d %s %d %d %s %s %s %s %s",&num,name,&max,&format,uname,pass,myrestrict[0],myrestrict[1],myrestrict[2]);
+  if (myrestrict[0][0]) sprintf(filename,"  %-13s~FT(max. %d znakov) obmedzena na cisla %s %s %s\n",name,max,myrestrict[0],myrestrict[1],myrestrict[2]);
   else sprintf(filename,"  %-13s~FT(max. %d znakov)\n",name,max);
   strcat(text,filename);
   i++;
@@ -28483,7 +28483,7 @@ char filename[81],line[100];
 FILE *fp;
 int i,num,max,ok[2],ii,format;
 char name[20];
-char restrict[2][15];
+char myrestrict[2][15];
 
 sprintf(filename,"misc/smsgate");
 if (!(fp=ropen(filename,"r"))) { /*APPROVED*/
@@ -28491,15 +28491,15 @@ if (!(fp=ropen(filename,"r"))) { /*APPROVED*/
  }
 fgets(line,99,fp);
 while(!feof(fp)) {
-  restrict[0][0]='\0';
-  restrict[1][0]='\0';
-  sscanf(line,"%d %s %d %d %s %s %s %s",&num,name,&max,&format,name,name,restrict[0],restrict[1]);
+  myrestrict[0][0]='\0';
+  myrestrict[1][0]='\0';
+  sscanf(line,"%d %s %d %d %s %s %s %s",&num,name,&max,&format,name,name,myrestrict[0],myrestrict[1]);
   if (num==gate_num) {
     ok[0]=1;ok[1]=1;max=0;
-    for(ii=0;ii<2;ii++) if (restrict[ii][0]) {
+    for(ii=0;ii<2;ii++) if (myrestrict[ii][0]) {
       max++;
-      for(i=0;restrict[ii][i]!='*' && i<strlen(restrict[ii]) && ok[ii]==1;i++) {
-        if (restrict[ii][i]!=str[i]) ok[ii]=0;
+      for(i=0;myrestrict[ii][i]!='*' && i<strlen(myrestrict[ii]) && ok[ii]==1;i++) {
+        if (myrestrict[ii][i]!=str[i]) ok[ii]=0;
        }
      }
     fclose(fp);
