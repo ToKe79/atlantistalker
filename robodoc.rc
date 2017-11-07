@@ -1,0 +1,78 @@
+# robodoc.rc for Atlantis Talker
+#
+items:
+    NAME
+    FUNCTION
+    SYNOPSIS
+    INPUTS
+    OUTPUTS
+    SIDE EFFECTS
+    HISTORY
+    BUGS
+    EXAMPLE
+	DESCRIPTION
+	COPYRIGHT
+	AUTHOR
+    RESULT
+ignore items:
+    HISTORY
+    BUGS
+item order:
+    FUNCTION
+    SYNOPSIS
+    INPUTS
+    OUTPUTS
+source items:
+    SYNOPSIS
+preformatted items:
+    INPUTS
+    OUTPUTS
+format items:
+    FUNCTION
+    SIDE EFFECTS
+options:
+    --src .
+    --doc ./doc/index
+    --html
+    --singledoc
+    --index
+    --tabsize 8
+    --toc
+headertypes:
+    J  "Projects"          robo_projects    2
+    F  "Files"             robo_files       1
+    e  "Makefile Entries"  robo_mk_entries
+    x  "System Tests"      robo_syst_tests
+    q  Queries             robo_queries
+ignore files:
+    README
+    CVS
+	.svn
+    *.bak
+    *~
+accept files:
+    *.cpp
+    *.c
+    *.h
+header markers:
+    /****
+remark markers:
+    *
+end markers:
+    ****
+header separate characters:
+    ,
+header ignore characters:
+    [
+remark begin markers:
+    /*
+remark end markers:
+    */
+source line comments:
+    //
+keywords:
+    if
+    do
+    while
+    for
+

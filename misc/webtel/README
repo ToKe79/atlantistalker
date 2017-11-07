@@ -1,0 +1,12 @@
+Projekt: WEBTEL
+Autor: Martin "Wolcaan" Karas, (c) 2009
+Licencia: GPLv2
+
+Projekt WEBTEL vznikol za ucelom spristupnenia WEB interface Atlantis Talkera cez telnet.
+
+Ocakavane spustanie je cez xinetd ako sluzba.
+S klientom komunikuje cez stdin/stdout (v pripade spustania cez xinetd zrejme cez TCP port).
+S Atlantisom komunikuje cez jeho mysql interface - web_index, web_in, web_out (pristup do tychto tabuliek si nacitava z webtel.conf)
+
+Vhodny tiez na testovanie WEB interface atlantisu z konzoly.
+

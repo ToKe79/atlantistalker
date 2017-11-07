@@ -1,0 +1,1635 @@
+/********************** Made in England, modified in Slovakia ***************
+ !! Dolezite zmeny: 1. pridany novy prikaz .pictell (send?) <user> <picture>
+                   2. messages & editor - nerobi medzery
+                   3. vylepsene .wake - teraz posle aj obrazok
+                   4. vypis pri nalogovani - od levelu 2 a vyssie aj site/domain:port
+                   5. kill - vypise, kto ta killne + ina hlaska
+                   6. promote/demote - detto
+                   7. pri nadavkach godom vypise, kto nadaval
+                   8. zmenene farby!
+		   9. novy prikaz - .godpriv (ak God spusti tak miestnost je
+		      PRIVATE aj pre inych godov (snaha o trochu sukromia ;)!!
+		      #define GOD_PRIVATE 4
+	       10. Board funguje ako ma t.j. zrusil som ten riadok navyse
+		      zmena v suboruch write_board, wipe_board, check_messages
+	       11. V talker.h som dodefinoval NOEXITS a directory pre
+		  POMOCFILES. Pri nabootovani mu vychod "noexits" nebude
+		  vadit. takze jail uz frci... *cheers*
+	       12. Pridal som prikaz pomoc. Subory s helpami budu v adresari
+		  /pomocfiles (zadefinovany v headeri ako POMOCFILES).
+		  Mainhelp sa bude nachadzat v subore prvapomoc
+   Buko:      13. novy prikaz - .hug - posle obr. hug.pic
+              14. novy prikaz - .sos - posle sos wizardom a vyssie
+              15. nove prikazy - .suggestion + .complaint + .excuse
+              16. + prikaz .notice - cita 15. a zapisuje do suboru noticeboard
+              17. + mnohe ine vylepsenia na ktore si nespomeniem... ;))
+              18. dlhoocakavany prikaz .kiss - mal by dokonca i fungovat ;)
+              19. prikaz .time, nepytajte sa ma co robi
+              20. .jail - hodi nespratnika do jailu + zapisuje do suboru ci je
+                  dotycny zalarovany alebo nie (JAIL_ROOM=1)
+              21. A este super spica prikaz .fight!!! Sance prideluje viac-menej
+                  nahodne, ale zavisi to hlavne od levelu. Neviem, ci ma
+                  posielat aj nejaky obrazok...
+     1.8:     22. fixovanych zopar bugov (hlavne co sa tyka .godpriv ;),
+                  pridane farby, vylepseny prikaz .who
+              23. C00LTALK - v stadiu pripravy... treba este dorobit funkciu
+                  deformator(), ktora veticku troska deformuje... ;)
+              24. <Fortune cookies> - vypisuje hlasky zo suboru FORTUNE_FILE
+              25. novy prikaz - .think v podstate je to iste co .say, akurat
+		  ze robi: "Buko thinks: . o O (This is an example)". Ked je
+		  user->muzzled==1 tento prikaz by mohol fungovat... ;))
+              26. Pridal som este jeden prikaz: .to
+                  Syntax je: .to <user> <text> a skratka je "/", cize ulahcuje
+                  zbytocne dlhe vypisovanie mena. Napr.: / pr Ahoj ty vtak!
+                  Output je: Buko (to Prizo): Ahoj ty vtak! ;-)
+                  NOTE: .to sa mi sekalo s .topic, cize: .to = to .top = topic
+     1.9:     27. Fixovanych par bugov (ignore, vypisy, etc...)
+              28. Implementovane makra (thanx, Gene ;) => 3 nove prikazy:
+                  .macro - prezeranie makier
+                  .cmacro - vytvaranie novych makier
+                  .dmacro - mazanie makier
+		  - s tym suvisia aj zmeny v hlavnej procedure exec_com(),
+                  inicializaciu ma na starosti initmacro(); Zapisuju sa do
+                  suboru MACRODIR/MACROFILE definovanom v headri.
+              29. Odstranil som Copyright (c) by Buko ;-)) hehe
+              30. Uprava <ignore> - rovnaky level ignoruje rovnaky a nizzsi
+                  level, vyssim levelom sa vypise, ze inak by ignoroval.
+maj/jun 97:   31. pridane/odstranene/opat pridane cheaty... ;>
+	      32. COUNTER - pocitadlo - pocita pristupy - nalogovania na talker
+		  - to aby sme vedeli ze aki sme dobri...
+	      33. Dalsia, vyzera to ze definitivna uprava makier - hlavne
+		  procedury create() a delete() - teraz pracuju efektivnejsie
+     2.0:     34. implementovany cooltalk - vyuziva fciu lamerize() ;-) - rozne
+		  upravy s textom (uPrawy TeXtu, FarBY, ()bRateNi3 & iN3...)
+	      35. drobne upravy, pridane dalsie fcie pre cooltalk
+	      36. teraz 3 nove prikazy: .ctalk .ctopic .cdesc
+	      37. Ak niekto pouziva .examine na teba a je <= level ako ty
+		  sa ti to vypise.
+	      38. Drobne vylepsenia: .shout, record_tell(), exec_command()
+	      39. Odhalene a fixovane bugy: cooldesc() - dlzka stringu; hug()
+		  a kiss() uz nie je mozny pokial user pouziva editor, nie je
+		  mozne menit topic ak user->muzzled.
+	      40. funkcne kraviny! - prikaz cow() - vypisuje kraviny
+jul/august: moje pokusy o implementaciu Spakkyho prikazov: 
+     2.1:     41. sing(user,inpstr) - Xy sings: * lalalalaaa, etc... * (S)
+	      42. Backdoor ;) (S)
+	      43. dmail() - vylepsene delete mail (S)
+	      44. teraz checkuje, ci user pise nadafky v editore (S)
+	      45. Kidnap & follow - celkom chutne prikazy ;) (S)
+	      46. Pridany prikaz ranks() vypisuje zoznam levelov a pocet prikazov. (S)
+	      47. Implementacia meniny(), pridane do long_date(2). (S)
+	      48. Prikaz .secho - shoutecho, ako echo ale shoutne. (S)
+	      49. JokeBoard stuff: prikazy na pracu s nastenkou na ftipy
+		  * write_joke() - napise novy ftip
+		  * read_joke() - precita ftipy
+		  * delete_joke() - vymaze ftip(y)
+		  * pri look() vypise, kolko ftipov je na JokeBoarde (S)
+	      50. Udalosti - vypisuje nahodne hlasky/udalosti do miestnosti. (S)
+	      51. dalsi prikaz sign() - vypise text do ramceka... (S)
+	      52. Bezpecnostna vystraha - posle mail userovi, na ktoreho
+		  konto sa niekto pokusal dostat. (S)
+	      53. pridany vylepseny design pri who() a people(), uprava v
+		  set_desc() (S)
+	      54. Novy prikaz: tellall(user,inpstr) - tellne vsetkym dany text. (S)
+	      55. zmena v rooms() - zlepsenie, zarovnanie vypisu .rmst sa
+		  odteraz vola .rooms (fcia rooms(user,1)) (S)
+	      56. Novy sposob podavania requestov!!! Pozri misc_op 9 a 10,
+		  posielanie, script posli a account_request(). ;-) (S)
+september, dalsie prikazy ale buducnost talkera je ohrozena (firewall) :(
+	      57. implementacia email adresy vsade kde treba (user->email) (B)
+	      58. Novy prikaz: rlogging(user,inpstr) - room logging - je to
+		  kompletne narabanie s logovanim rozhovorov v roomach. (B)
+	      59. Zmenil som '/' na '~' aby sa dalo pisat URL www.sk/~xy (B)
+	      60. Vaznejsia zmena: - pridane 2 nove levely, zmenene skratky pre
+		  levely: NEW=0 CIT=1 SOL=2 KNI=3 SAG=4 PRI=5 WIZ=6 KIN=7 GOD=8
+		  - cize nove levely KNIGHT a PRIEST - tomu samozrejme
+		  zodpoveda aj nove rozdelenie prikazov, ktore sa trosku
+----------------  "posunulo" ;) + zmena v ranks(user) (B)
+   Spartakus  61. Opravene "padacie" xyby (write_room_except a logovanie, dmacro), (S)
+    4.10.97	  prikaz .reply (:) odtelluje na posledny tell, prikazy
+ pred spustenim   ".prikazy" a ".commands" vypise mud-styled zoznam prikazov. (S)
+   tejto ver. 62. Cas sa userovi pripocitava LEN ked nieje afk a ked nieje idle!
+      2.1	  hladaj string >KEDY< pre moznu upravu ... (S)
+	      63. Novy prikaz .logtime umoznuje pridat/ubrat total login time
+		  danemu userovi (v hodinach). (S)
+   -----      64. Pri .suicide sa user vymaze aj z users.new (fcia wipe_user()) (S)
+Spa.11.10.97  65. Opravene .cmacro, upraveny vypis makier v show_macros() (S)
+este finalne  66. Upraveny write_joke(), teraz sa joky pridavaju navrch. Aj
+  upravy a	  posta by sa mohla takto zapisovat ... (S)
+ vylepsenia   67. Ak pride novy luser tak mu vypise subor newuser.nfo (S)
+	      68. Upravene udalosti(), uz to funguje ako ma ;) (S)
+	      69. Uprava v promptoch, moznost volby promptu. (S)
+	      70. Udalosti() doplnene o poradcu pre novyx luzerov. (S)
+	      71. Novy luzer nemoze pouzit meno v ktorom je nadavka. (S)
+	      72. Kompletne prerobeny system follow, cil je to jak v MUDe :)
+		  a k tomu pribudol aj prikaz .unfollow (S)
+	      73. Prikazy .faq a .rules [ PORIADOK MUSI BYT !! :-] (S)
+	      74. V niektoryx miestnostiax sa nesmie fajtovat & .smail myself,
+		  novy prikaz .pecho, kompletne odstranene cheaty (S)
+VERZIA 2.2    75. AUTORIZACIA usera - prikaz .realuser <user> vypise (ak je        
+OKT/NOV 97        to mozne) meno uzivatela zo serveru odkial sa hlasi. (S)
+	      76. VOTING SYSTEM - prikaz .vote umoznuje o hocicom hlasovat. (S)
+	      77. OPRAVENE vsetky "bugy" kde kompiler hadzal warningy (uffff) (S)
+	      78. ZAVEDENE POHLAVIE. Novy prikaz .gender, a zmenene vypisu   
+	          typu "napisal(a) spravu" na jednoznacne z hladiska pohlavia. (S)  
+	      79. OPRAVENE bugy z 2.1: who, people, obtazovanie klonov inform.,   
+	      	  kissovacie bugy, promote na GODa je mozne len ked napises   
+	      	  ".promote <niekto> sure".  (S)
+	      80. PRIKAZ .fmail forwardne vsetku postu na zadany email   (S)
+	      81. UPRAVENY system povolenia nadavok - prem. MOZENADAVAT v kt.
+		  je definovany level od ktoreho sa mozenadavat ;)   (S)
+	      82. UPRAVA v kiss, nizsi level nemoze kissnut vyssi, mohlo by
+	          sa to praktizovat aj inde. (S)
+	      83. Prikaz fight: omedzenie vystupov (flood) (S)
+	      84. Novy prikaz .revshout   (B)
+	      85. Novy prikaz .revwiz   (B)
+	      86. Zmeny v prikazoch echo, secho, pecho - inpstr nemoze obsahovat   
+	          meno lognuteho usera (robene aj kvoli poseidonovi ;) (B)
+	      87. Uprava total loginu - zapisuje, pokial niesi 60 min idle -
+	          potom ta proste vyhodi ;) (B)
+	      88. Makra BEZIA!! ;) (thnx to Spakky) (S) =TBF=
+VERZIA 2.3
+FEBRUAR '98:  89. last - novy prikaz, zobrazi posledne odhlasenych
+		  - upravene vypisy  (S)
+	      90. novy prikaz insult - urazky... ;)  (S)
+	      91. novy prikaz wfrom - who&from  (S)
+	      92. novy prikaz chname - premenuje userov nick (S)
+	      93. uprava echo, pecho, secho - nemozu sa echovat mena ani
+		  "tells you"  (B) =TBF=
+	      94. "godbot bug" - nikto nemoze byt promotnuty do levelu
+		  GODBOT ;) (B)
+	      95. "ignshout bug" - uz nevypisuje iba SIGN OFF, a SIGN ON nie (S)
+	      96. konecne BANNER - 3 typy:
+		  banner() - vypis banneru v danej roome
+		  tbanner() - tell banner - urcitemu userovi
+		  sbanner() - shout banner - vidia secia
+		  pozri hlavne create_banner()  (B)
+	      97. uprava vote: 1. vaha hlasu je odstupnovana podla levelu,
+			       2. upraveny bug s pocitanim hlasov... ;)
+			       3. CITIZEN moze hlasovat, dobre, ale iba ak ma
+				  viac ako 5 hodin total login! ;) 
+			       4. Poseidon _nemoze_ hlasovat! ;)  (B)
+	      98. Implementovane power-points (sakra to zas bude nadavok :) 
+		  plus zmena struktury userfilu: pridany PP, a homepage,
+		  action, timeout (pre pouzitie s predmetmi)  (S)
+MAREC '98 ;)  99. Skuska ACTIONu (casovane muzzle)  (S)
+	     100. novy sposob nastavovania parametrov - centralne cez .set 
+		  zatial funguju: .set gender 
+				  .set homepage  (B)
+	     101. BANNERY: pridana nova zbierka fontov - teraz 152 kusov! ;) (B)
+	     102. upraveny vypis .prompt + pridany prompt s power-pointami (B)
+	     103. vylepseny wizshoutbuffer - teraz recorduje wizshouty aj
+		  "to level KING || GOD"  (B)
+	     104. opravene bugy + pridany help k bannerom (B)
+	     105. vylepsenie prikazu jail: - mozno jailovat/unjailovat
+                  aj ked nie je  user prihlaseny
+                  - casovany jail: jail <user> [sec],
+                  vyuzivanie user->action  (B)
+             106. NOVE: talker si teraz "pamata" roomu, z ktorej sa user
+                  odhlasil, a automaticky ho do nej pri logine umiestni,
+                  vyuziva prepinac user->jailed, procedury get_goto_room() a
+                  set_goto_room() (B)
+             107. Vylepseny design pri examine (S)
+             108. Bukofix: examine bug, banner bug ;) (B)
+	     109. ARENA: uprava fightov, novy prikaz .winners, vypise top n
+		  fighterov na zaklade ich bodov zapisanych do suboru,
+		  implementovana "izolacia" areny od ostatneho sveta (B)
+	     110. WEATHER: prikaz .weather [2] - realna predpoved pocasia,
+		  taha cez http z www.shmu.sk (S) =TBF=
+	     111. amfiteater(), prehrava scenare v miestnosti amfiteater,
+		  hladaj string (R).
+April '98    112. Upraveny system spustania amfiteatra, zakazane vypisy
+ver 2.4           do miestnosti pocas predstavenia, kidnap nejde a kiss
+		  len na 1 riadok, male upravy v go() (S)
+	     113. Upraveny cooldesc (konecne sa kontoluje dlzka a nadavky) (S) =TBF=
+	     114. Zakazane vytvaranie userov s velkymi pismenami v mene (S)
+	     115. Publikovanie progr. amfika a jokeboardu na web stranku (S)
+	     116. Predstavenie ma uz aj nazov (play.nazov), ktory je v
+		  program.atl od 40. pozicie v riadku (nepozivat TABulator!) (S)
+	     117. Oxrana proti skriptarom (2x ten isty prikaz za sebou zastavi
+		  pridavanie casu :) + prikaz .skript vypise skriptarov (S)
+		    =TBF=
+	     118. Fixy: king nemoze promotovat na WIZa, do areny sa nemoze
+		  dat kidnapovat, fight a pictell uz nevyrusuju v editore,
+		  zvacseny vystup pri .winners, dalsie drobne upravy (B)
+	     119. pp na kidnap a kiss, zatial zrusene pp na tbanner a sbanner (B)
+	     120. log subor na promote/demote (level.log), uprava .notice (B)
+	     121. Upraveny examine, vypisuje aj Arena-pointy, user->site (B)
+	     122. ARENA: arena_check(), zistuje AP usera, upraveny .look v
+		  arene - vypise level a AP (B)
+	     123. hug - da sa posielat aj message (B)
+	     124. svatyna: neplati fight, wake, hug, kiss, kidnap (B)
+	     125. IGNORE USER: novy prikaz .ignuser, ignuser->list obsahuje
+		  pole userov, ktorych ignoruje (#definovane cez IGN_USERS) (B)
+	     126. afk - afk-user teraz dostava telly, zanamenavaju sa do  (B)
+		  jeho .revtell bufferu
+	     127. log_commands() - loguje kazdy jeden prikaz, robene kvoli
+		  permanentnym padom talkeru (B)
+	     128. BUGFIXNUTE padanie talkeru! (chybal jeden fclose()) ;) ! (B)
+	     129. NOVY PRIKAZ: .hint - vypise nahodne tipy zo suboru hints.txt (B)	     
+Summer '98   130. NOVY PRIKAZ: .kick - vykopne usera z miestnosti,
+                  vynimky: namestie, amfiteater, svatyna, zalar (B)
+Verzia 2.5   131. Novy sposob zmeny hesla (.passwd) (S)
+	     132. BUGFIXNUTE PADANIE TALKERU! (chybali 3 fclose()) :> (S)
+	     133. Upraveny vypis .status (taka tabulecka ;>>) (S)
+	     134. Aj useri vo svatyni NEMOZU hugovat a wakovat inyx. (S)
+	     135. semote a shout v zalari uberu vsetky pp-cka; zalar nepridava
+		  total login, osobna komunikacia len s plnymi pp-ckami (S)
+	     136. Pri vypisoch cez more() nastavi userovi ignall (S)
+	     137. Univerzalny prikaz .ignore + ignore fun, a ignore sys (S)
+	     138. Prikaz .uptime vypise uptime, pocet userof a allocated mem (S)
+	     139. Len GOD moze premiestnovat na nebesa (S)
+	     140. Vyhladavanie vo .who (napr. .who academia alebo .who GOD) (S)
+	     141. .hint vypise priamo po prihlaseni + mala zmena (S)
+	     142. Zvukotesnost miestnosti (nastavitelna cez .sndproof alebo
+		  napevno ako parameter SOUNDPROOF v 5. stlpci v configu (S)
+	     143. Vtipy uz rata len RAZ pri boote a uklada do globalky (S)
+	     144. .afk lock uz nezobrazuje heslo, pocas divadelneho pred-
+		  stavenia nepocita idle (S)
+	     145. User v zalari moze vykonavat prikazy len ak ma min. 50pp,
+		  vsetko mu uberie 1-20pp (rand), a s pravdepodob. 1:10 sa
+		  mu prikaz ani nepodari vykonat :) (s vynimkou .excuse) (S)
+	     146. OSETRENY bug v examine a smaile (Si <-> Silence) (S)
+	     147. .pecho poseidon zakazane, detect_user aktivny, odpazene
+		  'is examining you' (S)
+	     148. Novy prikaz .join <user>, premiesti ma tam kde je <user> (S)
+	     149. Novy prikaz .logcomm zapina/vypina logovanie prikazov (S)
+	     150. V .ban uz netreba pisat ci user/site; rozozna samo (S)
+	     151. Pri demote treba uviest dovod; takisto pri promote ked user
+		  este nema dostatok casu (ide to do level.log) (S)
+	     152. Novy prikaz .caction <user> (cancel action), zrusi userovu
+                  akciu (nastavi jej timeout 2, hned skonci) (S)
+             153. Mala uprave v editore (take my-style ciary a farebne od-
+                  liseny prompt (casove rozlisenie nakladov a vynosov :)) (S)
+             154. Moznost uvadzat viac userov pri tellovani a inyx vybranyx
+                  prikazoch (.tell adrika+helenka+plamienka I love you ! :>) (S)
+                  Mimo provoz az do fixu ;)
+             155. Taka maililinky neskodny prikaztek: .nuke <user> :>>>> (S)
+             156. Implementovane piskvorky (prikaz .piskvorky) (S)
+             157. Novy prikaz - .alarm; vyzaduje datafiles/alarmfile (S)
+             158. PIPO - Piskvorky Points :), zapisuje do tabulky tak ako aj 
+                  AP, plus v arena_sort zvysena velkost strukt. na 1000 (to
+                  mozno neblblo ;), da sa vracat tah v pisk., .pisk pass,
+                  .pisk who, .pisk show [user] (S)
+             159. IRColajna (prikaz .irc) (R)
+             160. NOVY PRIKAZ: .notify -> mozes si vytvorit zoznam userov,
+                  na ktorych pritomnost ta talker bude upozornovat, v
+                  userfiles na to ma kazdy vlastny subor <user>.notify (B)
+             161. fixnute piskvorky, bug ".pisk 20 20" (B)
+             162. pri disconnecte vypise aj posledne telly z revtell bufferu (B)
+	     163. [*upravy "before summer release"*]: amfiteater -> hlasku hodi
+                  do review bufferu (B)
+             164. uprava prikazu .play (design) (B)
+             165. .hug <msg> .kiss <msg> .wake <msg> (B)
+             166. nemozes vykissovat s private roomy (B)
+             167. vypinanie/zapinanie PP -> .pp on/off (B)
+             168. pri suicide musi potvrdit svoje rozhodnutie spravnym scitanim
+                  dvoch dvojcifernych cisel... ;))) (B)
+             169. uprava examine podla Spakkyho zaplaty (S)
+             170. implementacia Spakkyho patchu proti stracaniu userfajlov,
+                  ked nema dost miesta na ich save (quota) (S)
+             171. Fixnuty bug v .kidnap - kidnap do private roomy (B)
+             172. Fixnuty bug v jail <user> (B)      ... naozaj (S) :>>>
+VERZIA 2.6   173. Kozmeticke upravy: .rooms vypisuje spravne .ctopic
+jul/aug '98       V helpe a pomoci uz vypisuje aky level je hoden prikazu,
+                  drobne upravy vo vypisoch pri prihlasovani a v .look,
+                  zmena v dizajne piskvoriek (S)
+             174. Prikaz .copies - na posielanie kopii .smailu (S) 
+             175. Prikaz .save - ulozi aktualnym userom userfajly (S)
+             176. Defaultne topiky - v subore datafiles/topic (S)
+	     177. Hra HANGMAN (sibenica), prikaz .hangman; slova su v subore
+                  datafiles/hangman, aj tabulka je (datafiles/hangman.top) (S)
+             178. Pri posielani requestu forkuje ... (S)
+             179. .set lines  -ovplyvnuje vypis more() (S)
+             180. .set wrap   -nastavuje ci ma wrapovat alebo nee (S)
+             181. Odxytavanie reklam do "advert.log" (S)
+             182. .set who - nastavenie alternativneho .who (S)
+             183. prikaz .wizzes - keri wizovia a vyssie su online (S)
+             184. .set revtell - ci zobrazit alebo nezobrazit pri odxode (S)
+             185. Nova hra - .geo (prac. nazov) (S)
+             186. FIX: ".pisk wir leben sie noch" uz neberie ako 0,0 :) (S)
+             187. PREDMETY IMPLEMENTOVANE! .get, .put, .give, .create, 
+                  .dispose, .use ... (S)
+             188. Pouzitie predmetov 'nahubok', 'amulet', 'mec' a 'zuvacka'(S)
+             189. Pluskovanie (.tell user1+user2+user3 CAFTE !!!), zatial 
+                  pre prikazy tell, to, pemote, move, kill, wake, hug, bomb,
+                  kiss, fight (S) [podla potreby doplnit dalsie]
+             190. Uprava wipe_user(), vculeky maze aj pri delete_user(),
+                  funkcia rename_user_on_list() premenuje usera aj v 
+                  subore users.new (pri chname()), fixy v delete_user() (S)
+	     191. Funkcia zazuvackuj() zazuvackuje string, plus moznost
+                  skracovania nazvov predmetov pri praci s nimi (S)
+             192. Predmet 'vino' plus funkcia zachlastaj() na prechlastanie
+                  stringu :>> (S)
+             193. Fixnuty (hopefully) .notify, notifovanie aj pri odhlaseni (S)
+             194. Prikaz .predmety zobrazi kolkokrat sa predmety naxadzaju
+                  na talkeri (v roomax alebo u userov) (S)
+             195. Vylepsenie piskvoriek (ak sa spoluhrac debilneho, tak sa
+                  mu zapocita debilneho, plus protihrac sa debilneho ;>) (S)
+             196. Pri .help commands sa vypise pri prikaze aj skratka (S)
+             197. Prikaz .call a skratka "," na zryxlenie tellovania (S)
+             198. Pridavanie a odoberanie prikazov userovi! Prikaz .pridaj
+                  a .uber, uklada do PRIKAZDIR/Username.pr (S)
+             199. Predmet 'revolver' na rusku ruletu !!! (S) (namet (R))
+             200. HURAAA 200 !!!! Predmet 'lamerizator' na namet (R) 
+                  spravi z luzera lamera ;))) (S)
+             201. Casovanie zuvacky, lamerizatora a opilosti ... nie cez
+                  action, ale vlastne pocitadla (S)
+             202. Ak nalepis skratku na 1. slovo, zoberie to ( >spa caf ) (S)
+             203. Predmet 'zuby'. Sluzia na cicanie pp-ciek userovi ! :> (S)
+		  idea by (R)
+             204. Predmet 'debilizator'. User bude debilneho kazde tretie
+                  debilneho ;) (S), idea by (R)
+             205. LODICKYYYY ! (BattleShits) (R) (S)
+             206. .examine <predmet> funguje ... (S)          
+             207. Predmet 'prehanadlo'. (S) idea by (R)
+             208. Sejvovanie a loadovanie pozicie v lodickax (do adresara
+                  "lodicky-save", Username.sav (.lod save, .lod load) (S)
+             209. who_from_notify_is_online(user) - no k0m3nt (S)
+             210. .notify who a .who notify :) - vypise [209] (S)
+             211. Vypis poradoveho cisla message na boarde, jokeboarde,
+                  a v mailoch (uprava v more()), a uprava dmail() koli 
+                  ineho designu rmailu (S)
+             212. Oznacuje sa oddelovnikom koniec jokeb., boardov a mailov (S)
+             213. Totalne vylepseny .ex !!! Cil vypisuje aj to, ze co dany
+                  user ignoruje, a aj to, ci nieco pise, alebo nieco cita! (S)
+             214. Farby pre decefakov! (bez ~LI), ak user->colour==2, zapina
+                  sa cez .col fei, plus este test farieb (.col test) (S)
+             215. Funkcia dopln_predmety - nahodne pomaly doplna 
+                  predmety do miestnosti ... + prikaz .autocreate ktory to
+		  zapina/vypina (parameter-cislo oznacuje ryxlost doplnov.) (S)
+             216. Predmet 'kridla' umoznuju volne 'lietat' po atl :> id:(R) (S)
+             217. Predmet 'spiritus', silnejsi ako vino ! :) id:(R) (S)
+             218. Dalsi sposob vypisu .who :)) (S)
+ver.2.6b     219. Predmet 'bomba' !!! :))) id:(R), (S)
+part of 2.7  220. Zopar fixov (.pisk who pri geo, po odhlaseni z afro
+                  nastavi namestie, notify neotravuje pri ignall, plusko-
+                  vanie tbanner a pictell, zvysil sa pocet makier a riadkov
+                  na editaciu) (S)
+             221. Premenovanie levelu - KNIGHT na WARRIOR ! (S)
+             222. Novy predmet - LSD (S)
+             223. Predmet 'stit', a patricna uprava fight_user() (S)
+             224. Predmet 'satka' (S)
+             225. LABYRIIIIIINTTTT !!!! :> (R) (S)
+             226. Predmet 'maska' (S) 
+             227. Predmet 'napoj' neviditelnosti. (S)
+             228. Cool featureska - .rmail new !!! Precita len postu ktoru
+                  si este necital :). Takisto funguje aj .from new (S)
+             ^^^----TOUTO UPRAVOU DOSIAHLA DLZKA ZDROJ. TEXTU 700 Kb !!!! :>
+             229. Automacro! (preco by sme aj my nemohli odkukavat zo sano
+		  talkera, nee ? :) - macro s nazvom 'auto' sa aktivuje
+                  ihned po nahlaseni! Hnusny Sano talker !
+             230. Predmet 'telefon', idea by (R); (S)
+             231. Predmet 'afrodiziakum', idea by (R); (S)
+VERZIA 2.7   232. SLAVE levelu sa nevypisuje stuff po prihlaseni (motd2,
+september'98      hints, pocet vtipov etc), pretoze sa ho to netyka a zbyto-
+                  cne ho to zatazuje :> :-))
+                  Ak mas prazdny notify-zoznam, nevypise po prihlaseni ze
+                  "nikto z tvojho notify-listu nieje prihlaseny". (S)
+             233. Prompt po prihlaseni *konecne* vypise spravne, plus
+                  vypise aj automacro prikaz do prveho promptu ... yesh :) (S)
+             234. Statistika loginov podla dni: v subore statist.dat (S)
+             235. Automaticky forward posty! (.set email, .set autofwd) (S)
+             236. Prikaz .info (info_users()) vypise various information (S)
+             237. Zmena pri prihlasovani! Vcul uz otukne usera aj cez
+                  real_user() a zapise aj do syslogu a tak.. cool proste :> 
+                  Ak by to lagovalo da sa to vypnut (.checkident) (S)
+             238. funkcia check_email_arrival() - zistuje kazdu minutu ci
+                  niekomu neprisiel E-mail, ak ano, upozorni ho, a prepise
+                  cas posledne doslej posty. (S)
+	     239. Nejake fixy ... xybajuci fclose, doplnene zobrazovanie AFK
+                  vo who_from_notify_is_online(), fixnute nejake nezrovnalosti
+                  vo vypisoch (suvisiace s pohlavim), .ignore fun uz ingoruje
+                  aj telefon ... (S)
+             240. Presunute prikazy SYSTEM, VIEWLOG, CLEARLINE, SKRIPT, DISPOSE
+                  a RECOUNT levelu KING ... (S)
+             241. Tak ide ... co? No predsa .smail juzer@hostname ... cize
+                  smailovanie na email adriesku ... (S)
+VERZIA 2.7r 242. Fixnute bugy v lodickach (desne hlupa chyba v editore, ktora
+oktober '98       umoznovala stavat dve ponorky na jednu plochu + chybny vypis
+                  pohlavia vitaza), core fix v hangmanovi bez wordlistu (R)
+             243. Fixnuty bukobug v preplnenom ignore user, opraveny swearing
+                  ban (kto s tym kafral?!) (R)
+             244. Nielen GOD moze premiestnovat na nebesa (sorry, ale WHY?) (R)
+             245. Skraslene suicide, nech to ma uroven +:-) [obrazok] (R)
+             246. Zmenene promote passwd, vyhodene mizneto.zas, zvacsena dlzka
+                  retvtell bufferu, osetreny fight pri afk, fixnuty ignore user
+                  pri afk, vyhodeny Fece :) a ja uz neviem co - skratka tona 
+                  drobnych bugfixov (R)
+             247. Opravene drobne chybicky v kiss a hug + ide to do revtelu (R)
+	     248. Quit a kill uz maju aj parameter: spravu PRECO sa odhlasujem
+                  alebo som dakoho zakilloval :) (R)
+             249. Dynamicke PP! Hodnota sa udava v percentach (%), nie ze by to
+                  nemohlo byt v desatinnych miestach, ale je to tak koli blbemu
+                  spracovaniu des. miest kompilerom -> takto to bude snad okej.
+                  Moznost prepinania medzi dynamickym/statickym/vypnutym modom
+                  odoberania PP. V dynamickom mode sa vysledne PP vyrataju ako
+                  pocet_userov * dynamicka_konstanta / 100 (R)
+             250. DOOOOOOOOOM je naaaas!! Hladaj string "D00M"! Zatial iba v
+                  rozrobenom stadiu... (R)
+             251. Vyhodene "individuality" okrem login promptov :)
+             252. Zmeneny design pri signoffe (uz mi z tej ruzovej liezli pri
+                  testovani pupaky - hnusna ruzova farba! :) (R)
+             253. Upraveny dmail -> s jednym cislom to vymaze IBA prislusny
+                  mail (ved to nie je ako messageboard!) - takto je to myslim
+                  logickejsie :)(R)
+             254. Bugfixnute semote/emote so skratkou (hadzalo tam medzeru)(R)
+VERZIA 2.7x  255. Upraveny jokeboard_web + pridana funkcia atltohtm pre spravu
+(2.7 ext.)        web designu z talkeru(R)
+             256. Jeej, 2^8. A co prinasa? Tell pri citani textu ide do revtell
+		  bufferu, podobne aj tell pri praci v editore! Bingo, ne? :>
+             257. Debilizator vyprcha po jednej minute (ufff.:)(R)
+             258. Satka bola vylepsena o nahodny faktor uspesnosti Kamikaze, co
+                  pridalo na dramatickosti situacie :)(R)
+             259. Opravena funkcia pohl(user,MUZ,ZENA), to bolo cosi strasne :)
+Talker 2.8   260. DOOM: The Fate Of Atlantis, final release!(R)
+oktober '98  261. Parametricke makra!!! Hladaj string M@C! (S)
+             262. Fixnuty inpstr na medzery pred prikazom: uz je to ako say(R)
+	     263. Ako "vedlajsi produkt" makier je, ze sa da v jednom stringu
+	          zadat VIAC PRIKAZOV NARAZ oddelenych lomitkami!! Je to sice
+	          velmo pjekne, ale da sa to nexutne zneuzivat.. preto je 
+	          pridane obmedzenie na max. pocet prikazov, ktore moze osoba
+	          takto vykonat (v headri #define MAX_COMMANDS) (R)
+	     264. Dorobene "auto" macro pre nove makra v ramci kompatibility
+	          so starsimi -> pre start pri prihlaseni (R)
+	     265  Zmiernene DPP :>
+	     266. Potesenie pre atlantidskych grazlov a sucasne ulava pre tych
+	          serizonejsich: prikaz .gossip na dristy, zvasty, klebety,
+	          ohovaranie, nadavanie, kecy a ine uzitocne veci... Zbaveny
+	          cenzury ci restrikcii - jedina (schvalna!) nevyhoda je, ze
+		  pri prihlaseni uzivatela je vzdy nastaveny na ignorovanie
+	          a samozrejme stav igngossip sa neuklada do userfile, takze
+	          pri kazdom prihlaseni si musi user vypnut .ignore gossip.
+	          Skratka prikazu je '@' (R, idea by Psi, thnx!)
+	     267. Pridany flag "Invisible" pre miestnosti: v configu ak je
+	          pred typom accesu vykricnik, mietnost je neviditelna (v
+	          .rooms): napr. !PUB alebo !BOTH a podobne...(R)
+	     268. Opravena navratova adresa pri pouzivani EX-Mailu :)
+	     269. Revtell, revshout, revgossip, revwizshout doplnene o
+	          paramter: filtrovaci string. Napr. ".revshout Macko" ukaze
+	          vsetky shouty, v ktorych je slovo "Macko" (R)
+	     270. Doom sa uz nemoze macrovat na viac krat... takze take daco
+	          ako .macro x=.doom x\\.doom x\\.doom x uz nehorozi..(R)
+	   + 271. Makra sa nedaju skracovat (R)
+	   + 272. Prikaz .doom shout <text>, zobrazi text vsetkym hrajucim,
+	          ak miesto <text> bude cislo 0 az 9, tak hned hodi pripravenu
+	          hlasku :) (R)
+	   + 273. Par uprav s .set, moznost .set who [cislo] (R)
+	   + 274. Osetreny "invis" pre WIZ a vyssie -> vidiet aj KTO to hovori,
+	          nie iba "Neznamy tells you:" :) (R)
+	   + 275. Par malych bugfixov (v makrach, vo who, doome etc...)
+VERZIA 2.9   276. Prerobene ".set who" + par kozmetickych uprav (R)
+November'98  277. Spraveny prikaz ".quest" pre queeestoovanie!!!
+        	  Help je pri .quest bez parametrov, level si zisti sam:)
+	          Zhrnutie:
+	          Uzivatelska uroven: .quest <text>, who, review [pattern], 
+	          top [n], join, stop.
+	          Spravcovska: .quest open, close <winner|none>.
+	          Enjoy! :> (R, idea by B)
+             278. Nove dve WHO - titanic a volcano (S)
+             279. Novy design .status + viac informacii (S)	          
+             280. Prerobeny help(), cil uz len z pomocfiles, subory su
+                  bez pripony .sk, je mozne prikazy skracovat ... (S)
+             281. Ignore gossip sa UKLADA do userfajlu ... (sorry, ale ..
+                  preco by sa nemal?! :>) (S)
+             282. Uz sa neodsekuje riadok v telbine, ty moj kekes!!! (S) 
+             283. Male zmeny v questoch [farby, questleader pise boldom],
+                  cely quest sa loguje do QUEST_DIR (aj s farbami, pomocou
+                  atl2html sa moze hadzat na pagu!) + maly xeat :> (S)
+Verzia 2.9a  284. Uprava v questox, cil vypisuje ci uz bol quest a ak ano
+November'98       tak kedy bol, kto ho viedol, a kto vyhral; ostraneny
+WINTER rel.       maly xeat :> (S)
+             285. Oxrana proti preplnenej kvote alebo filesystemu(Hi PSI!:) (S)
+             286. prikaz .save maju aj citizeni, s tym si mozu ulozit svoj
+                  status ked sa boja ze padom atlantisu pridu o total login
+                  etc., no a kingovia a vyssi maju .save all ... (S)
+             287. Male zmeny v command logu, podrobnejsie loguje (aj parametre
+                  prikazov) + who_typ ocean teraz zobrazuje farebne pohl. (S)
+             288. Uprava v kidnap: nemozes kidnapovat editujuceho alebo
+                  citajuceho usera (S)
+2.9s         289. Male bezpecnostne opatrenie, snad pomoze proti pretlaceniu
+		  sa na usera pri floode (S)
+	     290. Mala uprava v escape sekvencii pri novom riadku, teraz by
+		  to uz nemalo blbnut (cierne pozadie/biela farba)... (S)
+	     291. Mala uprava pri portox, zatial nepocuva 7002 (zatial
+		  zbytocne, mozny flood toho ..) LYNUZ (S)
+	     292. Oxrana proti say-floodu; zamuzzluje usera (S)
+	     293. Oprava v talker_shutdown, nerobi destrukciu userov len
+		  im zavre soket takze konecne korektne funguje shutdown
+		  a reboot, plus odstranena chyba na linuxe ktora rebootovala
+		  pri odhlasovani usera - KONECNE!!! (S)
+	     294. Updatovanie faq a rules na web ... (S)
+	     295. Prevedene kriticke strcpy() na sstrncpy(), pritom odhaleny
+		  dalsi bug v notify (!!!) ktory robil sigsegv (S)
+	     296. Trosku upraveny revtell do starej podoby, koli padaniu (S)
+	     297. Zmeneny design oddelovnikov vsetkych .rev* ... (S)
+	     298. Oxrana proti floodu otvaranim vela loginov z 1 stroja (S)
+December'98  299. Zo zufalstva nad padanim spravene rozne kontroly fopen
+		  fclose, rename, unlink, a fixnutyx par bugov. (S)
+	     300. TRISTO?!?!... Opravenyx kopec xyb ktore rebootuju/totalne
+		  zahltia system (buffer overflow!!) - akoto ze tam este
+		  boli?!?! (S)
+	     301. Automaticke VYBANOVANIE sajty z ktorej sa flooduje (S)
+	     302. Geo opravne podla skutocnosti (6x7, na 4) -Thanx BAKY! (S)
+	     303. Fixnuty colour_com_count - modra farba rules! :> (R)
+		  (ale bez goto, Rider! :-S)
+Januar'99    304. Volitelne prompty!!! Uprava prompt() a toggle_prompt() (R)
+Version 3.0  305. Uz je imple(de)mentovana aj lodicka!!! Ale pozor ani som to
+project           neskontroloval(S) lebo (R) mi to uz tahal z ruky a nestiham
+PORTALIS          lebo je uz po polnoci a proste sax :>> No a co, ked som
+		  taky usilovny :-P, hladaj string "()STROV" !!!(R)
+	     306. Uprava configu v sekcii s rooms: pribudol stlpec s cislom,
+		  oznacujucim skupinu miestnosti s rovnakym "dianim" - koli
+		  ostrovu, mozno vyuzit aj inak, dava to nove moznosti :)
+		  Aktualne rozdelenie miestnoti do skupin mozno zobrazit
+		  v .rmsn (nechcel som to cpat do .rooms:) (R)
+	     307. Zablokovany .shout a .tell (+vsetky klony v style pecho,
+		  semote etc.) medzi roznymi room->group a takisto potlaceny
+		  .go bez parametru z inej skupiny ako je namestie (R)
+	     308. Podobne bolo osetrene aj kidnap a join medzi grupami (R)
+	     309. Zakazane prenasanie predmetov na palube lode - stop
+		  paserakom! :> (R)
+	     310. Zakazane aj hugovanie cez grupy + movovanie medzi nimi, s
+		  vynimkou premiestnenia do vlastnej miestnosti (cosi ako move
+		  bez parametra) - pre zisky z osobnej lodnej dopravy :>
+		  (sorry, chlapci, ale odmietam fungovat ako vytah z Portalisu
+		  na Atlantis a nazad:) (R)
+	     311. Upravene rooms a rmsn -> ak je user->level nizsi ako WIZ,
+		  zobrazi iba prislusnu grupu, ak je vyzsi, zobrazi vsetky,
+		  resp. pri ".rooms <x>" zobrazi iba grupu <x>  - koli
+		  prehladnosti (R)
+	     312. Vrateny prikaz "version" pri logine - why to bolo vypoznam-
+		  kovane??? (thnx to Milo, R)
+	     313. Do slaka, zabudol som na kridla - fixnute :) (R)
+	     314. V SHIPPING_ISLAND a SHIPPING_HOME sa zobrazuje lodicka, ak
+		  tam prave je :>> Subory s lodickou su normalne popisy room
+		  s koncovkou .S (napr. pristav.S), ak ich talker pri boote
+		  nenajde, pouzije (pokial sa to da) defaultne hodnoty z
+		  prislusnych miestnosti. (R)
+	     315. Lodicka uz prinalezi tej oblasti, pri ktorej kotvi, resp.
+		  je vo vlastnej skupine (3) :> (R)
+	     316. Nove typ who - Hell!! (Slavovi tusim preskocilo, ale inak to
+		  nema chybu:>) (S)
+	     317. Prikaz ".update rooms", znovunacita popisky vsetkych miest-
+		  nosti (R, idea by S).
+	     318. Ak user "capne" koli padu linky, odhlasi ho to s hlaskou
+		  "lost link", aby vsetci vedeli vo co go... (R, idea by S)
+	     319. User ak je v command mode, ma fixny prompt. Po zmene modu
+		  sa mu obnovi povodny... (R)
+	     320. Letecka spolocnost Atlantis Airlines moze zacat prevadzku :>
+		  Flyer lieta zo Vzudsneho pristavu na namesite, pilotuje samo-
+		  zrejme user, hladaj string FLYER [ked mame DOOMa, preco by
+		  sme nemohli mat Flight Simulation?] (R)
+	     321. Funkcia show_version oblsuhovana .ver -> ked to mas, tak to
+		  ukaz :> (S)
+	     322. Cenzura na nadavanie, review room - pridane aj wizardom
+	     323. Prerobene defaultne who od zakladu - idea & basic design by
+		  (S) (R)
+	     324. Vyhodene funkcie get_goto_room  a set_goto_room + pribudol
+		  do userfile jeden riadok s nazvom roomy - je to ovela pre-
+		  hladnejsie a roomy sa mozu v configu prehadzovat ako sa im
+		  len chce...  Flag user->jailed je zasa len binarne cislo (R)
+	     325. Zalar je upraveny tak, ze ak je tam niekto iba na "navsteve",
+		  nema nijake obmedzenia az na jedno: nepridava sa mu login
+		  time... Takze mozno jednoducho movnut do zalara a netreba
+		  vzdy jailovat - cas sa pridavat nebude a pritom osoba ostane
+		  bez obmedzeni (zakerne, ze?:) (R)
+	     326. Upraveny kill_user (skratene + nie ruzove ale cervene + al-
+		  ternativne killy + lahko pridat nove) na Spakkyho osobnu
+		  ziadost :> (R)
+	     327. Quick-call ma pridany parameter "cancel" na zrusenie (R)
+	     328. Pictell bez parametru spravi ".pomoc obrazky" (idea S) (R)
+	     329. Dorobene defaultne prompty (pre lenivcov a blondynky) (R)
+	     330. Zakazany fight + upraveny kiss na uzemi Portalisu (R)
+	     331. Funkcia check_web_board() na testovanie zapisu na boardy
+		  cez CGIcko (R podla S)
+	     332. Vyhladavanie vo who, ci je user v portalise (portalis) alebo
+		  inde (atlantis)
+	     333. Wou, polodabelske cislo - to xce daku xujovinu: opravene
+		  priznaky sialenstva od prveho az po 19. - dalsi teda bude
+		  DVADSIATY, jasne? :>> (R)
+	     334. Upraveny shout na Portalise podla reality - iba v okolitych
+		  miestnostiach, no neubera ppcky... - a takisto semote a
+		  secho... (R)
+	     335. Opraveny wipe_board + prelozeny, opraveny ten check_web_
+		  _board() (Rideeer ved to neinkrementovalo mesg_cnt) .. (S)
+	     336. Pri .from uz pise aj vyuzitie sxranky (R)
+	     337. Zavedene kvoty na postu:
+		  MAIL_QUOTA - soft limit - upozornuje pri lognuti,
+		  MAIL_LIMIT - ak prekroci, nebude moct dostavat postu (S)
+Februar'99   338. Aplikovany "tuleni" patch s user=next problemom (inyjefuc
+		  plus zmena v destruct_user() (SEALPATX) (S)
+	     339. limitovany vstup pre cooltalk() ... (S)
+	     340. V heartbeate to neodhlasuje, ale az v hlavnej slucke .. (S)
+	     341. God alebo Godbot moze byt jedine Poseidon, Spartakus, Rider,
+		  Buko, Prizo; ako vyssi level pusti jedine "X", inak kazdy
+		  s inym menom a vyssim levelom je automaticky demote (S)
+		  [Mrkwa w zime?! Hmm, hmm, hmm .... :>>>>>]
+	     342. .rjoke last vypise posledne napisany vtip ... (S)
+	     343. Plachetnicovy desc alternuje podla toho kam plava .. :> (S)
+	     344. Alternativne mapy - uz su vsetky v adresari maps, zobrazi
+		  sa prislusna mapa podla toho v ktorej grupe je juzer (S)
+	     345. Opraveny .tell y -> BAKY bug :>> (S)
+	     346. Odpazene komplet vsetky hovadiny ktore sa tykali netlinkov,
+		  aj tak nebudeme prepajat zo znamyx dovodov ...
+		  Pekne sa skratil kod aj cas kompilacie :>> (S)
+	     347. V portalise odstranene auto-mazanie nasteniek ... (S)
+	     348. Pridana vlastna funkcia crypt (crypt_slavko()) :>>, koli
+		  bezproblemovej kompilacii na FreeBSD (Netlab Rules :) (S)
+	     349. Prikaz .resolver na zapnutie/vypnutie resolvera (na Netlabe
+		  to hadam uz ficat bude, ale pre istotu :) (S)
+	     350. Ak niekto ignoruje konkretneho usera, uz nejdu ani .smaily (S)
+	     351. Joseho .rmail <cislo> uz ide !!! (R)
+	     352. Vsetky motd su v podadresari motd, a motd2 sa da menit
+		  prikazom ".set motd <subor>", kde <subor> je subor v
+		  adresari motd .. (moze byt aj neexistujuci!) ... motd1 je
+		  titulny obrazok (neda sa menit)
+		  Adresar arena som zrusil (sorry, ale koli 1 suboru?!), hodil
+		  som to do datafiles (S)
+	     353. Vsetky tabulky vitazov su v adresari tables/, a maju
+		  jednotny nazov: arena.top, hangman.top, piskvorky.top, a
+		  doom.top (sorry, ale bol v tom nesmierny xaos!) (S)
+	     354. Kontrola citania zo suboru - v /misc/kontrola subore musi
+		  byt nejaky textik, inak sa nikto nebude moct nahlasit
+		  (oxrana proti neznamej chybe OS) (S)
+	     355. Ak sa usr prihlasi do PRIVATE roomy na portalise, hodi ho
+		  to do roomy "ostrov" (S)
+	     356. Recount nasteniek by uz mal pracovat 100% spravne (S)
+	     357. Opravene a trosku zmenene hlasky pri movovani/magickych
+		  trblietavych oblakoch (aj farby, bol v tom desny xaos) (S)
+	     358. Po autopromotnuti requestom moznost prihlasit sa auto-
+		  maticky do mailinglistu :> (S)
+	     359. Logovanie posielania e-mailov von do suboru log/sentmail (S)
+	     360. Fixnuty DALSI bug v notify (.notify kub<->kubernetes ked je
+		  nahlaseny!!), sakra Buko ty ma dostanes na psyxia3u :> (S)
+	     361. Zmeneny vypis ludi ktoryx mas v notify-zozname (.notify bez
+		  parametra), taka velka (a hnuuusna) tabula ... (S)
+	     362. Novy system ukladania users.new, uklada lepsie a uspor-
+		  nejsie, to predtym bolo proste hrozne a robilo to niekedy
+		  aj flfosti!! (S)
+Marec'99     363. Fixnuty bug v dmail, ktory rebootoval talker (akoze sorry,
+		  ale toto ne!) - utekalo tam fclose (R)
+	     364. Fixnuty bug v time, ktory rebootoval talker (S+R)
+	     365. Fixnuty wake cez grupy - to bol ale cucipop! (R)
+	     366. Tell cez ostrovy je povoleny - akurat desne zere PP (R)
+	     367. Akoze sorry ale furt ludia cucipopovali takze fixy:
+		  - zrusene ppckovanie tellov cez ostrovy (:*)
+		  - v command mode uz ide prompt
+		  - fixnuty .dmail all
+		  - fixnuta hlavicka v autoforwarde posty
+		  - zakaz kickovania v letuni
+		  - bannery opat v provozu, len pozor na to!!!!!!!!!!!!
+		  (S)
+	     368. Taka vec ze ".ignore ostrov" ignoruje telly medzi ost-
+		  rovmi (pre separatistov :) (S)
+	     369. Novy cryptosystem na hesla (velmi silny), dojde k auto-
+		  matickej konverzii... POZOR: pri premenovani usera mu treba
+		  hned zmenit heslo lebo inak sa nenahlasi [akoze sorry] (S)
+	     370. .go na portalise hodi do miestnosti ostrov (S)
+	     371. Kridla cez ostrovy idu, ale len s plnymi pp; inak sa zruti.
+		  Let uberie vsetky ppcky. (*S <--pointer na Slavka)
+	     372. Pokus o phyx letuna (S)
+	     373. Fixy: .look v letuni poskytne info o prebiehajucom lete,
+		  vybanovane konkretne farby, nielen ~f, ~b etc, .quit na
+		  skale samovrahov vypise hlasku, fixnuty muzzle v .stat,
+		  vo .who 9 uz ide search portalis/atlantis (S)
+	     374. Timeoutuje: normalne ak je user neafk, a dvojnasobny cas
+		  ak je afk ... (S)
+	     375. Bazina NORMALNE topi!!! (R)-(s paranoickou asistenciou(S))
+	     376. Echo a secho by mali ist spravne, plus fixnute nejake
+		  nezrovnalosti, a tak ... (S)
+
+
+	     377. Bannery definitivne zablokovane pokial tuna na mojom
+		  linuxiku nebudu bez problemov ficat (sorry, ale ak nebezia
+		  tu, tak tam JE nejaka xyba :) (S)
+ver. 3.1     378. Opraveny kidnap, upraveny fight (hlasny LEN v miestnosti kde
+Morlor Rel.	  sa to odohrava, ale v signoffe sa vypise kto ho fajtol (S)
+koniec marca 379. Milov klient moze dostavat postu aj ked ma preplnenu
+		  sxranku (kua musim presvedcit Mila nex to robi inak!) (S)
+	     380. New-style notify, a nikto sa uz nebude stazovat!!! (S)
+	     381. Slave bez requestu je zmazany ihned po odhlaseni (S)
+	     382. Odstraneny problem ".jail igi" ;->> (ale pruser - co ak
+		  je to aj inde ... :< ) (S)
+Ver. 3.2     383. Skorova tabulka pre letun!!! (S)
+Tis&Talis    384. Uprava pictell: prehodene parametre (intuitivnost!), vypis
+		  bez more(), uprava vypisovania zoznamu obrazkov, a dal
+		  som to uz sageovi ... (S)
+April '99    385. Imple(de)mented vybodkovavanie pri cenzure! (R)
+	     386. Vypisuje cislo spravy ktoru napisal user na nastenu (S)
+	     387. Editor uz ma aj view! (S)
+	     388. Do .sos prikazu mozes (musis) dat text ... (S)
+	     389. PRELOZENE SKORO VSETKY TEXTY do lovencina (hogy!) len
+		  niektore zakladne veci co lepsie vyzeraju v ENG zostali
+		  v ENG ... a par "TOSLOV" fraz treba este prelozitj! (S)
+	     390. .read <cislo>, moznost citat az od urciteho message (S)
+	     391. Prerobeny .winners - teraz cezen dostupne vsetky
+		  skorove tabulky!!! (S)
+	     392. Definovanie userov ktori nemaju kvotu na postu, v subore
+		  misc/noquota (Milo bude mat radost :) ... (S)
+	     393. VSETKY typy who su prerobene na zapis do suboru, zabije
+		  3 muxy 1 ranou: Nebude odsekavat, nebude snad sekat na
+		  strojox na devine, NAVYse kazde who moze morovat! (S)
+	     394. VYLEPSENY EdiTCHOR! Prikazy .redo <cisloriadku>, .rev
+		  a .copy <cisloriadku> !!! (S)
+	     395. .set pagewho, moznost nastavit si pageovanie who, plati
+		  pre KAZDY typ!!! (S)
+	     396. Novy sposob resolvovania!! (R)
+	     397. Fixnute bugy z 3.1 - zmazanie slavea ked si neda req.,
+		  .godprivate <room>, .godpriv & .rooms (S)
+	     398. Dalsie fixnute veci z 3.2, zmeneny design .look, zakaz
+		  fightu na lodi (S)
+	     399. SKLONOVANIE IDE! by (R)! (imple(de)ment & uprava (S))
+	     400. -==============CHEEEEEEEERS - 400 UPRAF!!!================-
+		  Zmenene X-heslo a promote-heslo, zvysena bezpecnost (prikaz
+		  notice a neukladanie promote hesla do logu) (S)
+	     401. Fixed bugs: klony, pictell ... (S)
+
+
+
+Maj '99      402. Vylepsene MORE!!! Moznost vracat stranku (B-back), a znovu
+		  zobrazit terajsiu stranku (R-redisplay). Zaroven aj ukazuje
+		  progress indicator v percentax ... (S)
+Jun '99      403. Opravene bugy: back&ignore all bug, zuvacka bug (S)
+	     404. V .wfrom mozne pouzit ciastkovu adresu & ipcku (S)
+HAPPY (9.6.)-405. Opravene: cdesc bug, notify bug (S)
+ BIRTHDAY   -406. Kompletne prerobeny kiss ... (S)
+[21] SLVK:>  407. KOMPLETNE PREROBENE NOTIFY ... robene dynamickym zoznamom,
+		  a teda moznost zaradit lubovolny pocet ludi :> (S)
+	     408. Dynamicke sialenstvo pokracuje ... pager (vracanie stranky
+		  etc) prerobene cez dynamicky zasobnik, a room descriptions
+		  sa tiez dynamicky alokuju - len potrebna dlzka pre kazdu
+		  miestnost (S)
+Ver. 3.3     409. Dalsie dynamicke veci: revtell usera, a review v roome (S)
+	     410. Rozdelene checkovanie messages na:
+		  check_messages(user) -> len recountuje (pri .recount)
+		  check_messages_night() -> pri boote, a v noci (aj maze) (S)
+	     411. Upraveny .wipe -> priest moze mazat LEN svoje message,
+		  od wizarda vyssie lubovolnu .. (S)
+	     412. Bezpecnostne opatrenie - subor misc/dict, v nom su hesla
+		  ktore su lahke ... ak ma user take heslo, hodi mu
+		  varovanie - misc/varovanie
+	     413. OPRAVENA dealokacia fontu v banneroch (sakra zasa musim
+		  len ja deBUKOvat po inyx :-) (S)
+	     414. Po odchode z editora alebo citania sa vypisu telly (S)
+	     415. FIXED .last, upravene .afk aby vypisalo hned telly, aby
+		  nesekalo 1. slovo tellu ak som afk, citam alebo editujem
+		  (to sa stavalo pri .reply alebo .call, nie pri .tell),
+		  a casovy bug (S)
+	     416. Trosku prerobene bannery (tbanner, sbanner, banner) aby
+		  to aj vyzeralo :> + 1duhsia moznost prezerat si bannery
+		  cez .tbanner (S)
+	     417. Upraveny .djoke aby sa dal mazat len 1 vtip naraz, plus
+		  znovu zaradeny check_safewrite() lebo disk sa stale
+		  presiera :< (S)
+Jul '99      418. Zablokovane update jokeboardu, uz je na to CGI ... (S)
+	     419. Logovanie pristupov z klienta (S)
+August '99   420. Spravil som toho tak vela, ze nechcite po mne zoznam...
+		  nastastie navonok sa nezmenilo nic, len sa kompiluje na
+		  viac pokracovani a moze sa pouzivat -Wall flag bez obav
+		  o superflood obrazovky. Vyhodil som vsetky warningy a
+		  vsetky bugy, na ktore som natrafil a teraz som zrely
+		  na psychiatriu :(( (R)
+	     421. Preklad .insult do slovenciny. (R)
+	     422. Opravene LF/CR na CR/LF (uph!) (R)
+	     423. Zmeneny signal handler, a zablokovane pouzivanie ~~ alebo ~
+		  na konci riadku co sposobovalo problemy, plus zablokovane
+		  pouzivanie ~ v cooldesc a cooltopic (robilo ~RS) (S)
+	     424. Prerobene suggestion, complain a excuse - na editor,
+		  a vypisuje krajsie :> (S)
+	     425. Po otravovani s mailinglistom sa automaticky pyta na
+		  pohlavie, konecne nieje treba osobitne nastavovat ... (S)
+	     426. .ignore word <slovo> bezi ... ale nefunguje v more! (R)
+	     427. Opravene logovanie questov (after all!) (S)
+Ver. 3.4     428. Fixnuta cenzura velkyx pismen + Sugg,Compl,Exc vypisuje
+		  priamo na talkeri wizom(compl+excs) a godom(sugg) (S)
+	     429. Male zamedzenie floodu od robotov (hladaj "saturate")
+		  (thanx za "napad", somebody:() (S)
+	     430. Opraveny (snad) telefon, vo svatyni zakaz lamer&debil (S)
+	     431. Pri logovani je load_user_details zamenene za
+		  load_user_password (koli bezpecnosti a este niecomu...) (S)
+	     432. Automaticke nastavenie hesla 123456 premenovanemu userovi
+		  (baxa - len nahlasenemu!) (S)
+	     433. Prerobene .colour ... (S)
+	     434. Znovu zavedene xeckovanie kvoty posty, strong password
+		  forcing pre WIZ a vyssie (S)
+	     435. Vsetky hry&sortovanie&zapisovanie tabuliek vyhodene do
+		  osobitneho fajlu (S)
+	     436. A brand NEW booting screen! :-))))))))))) (S)
+	     437. Opraveny a optimalizovany dmail, vylepseny alarm o funkciu
+		  "stop" ... (S)
+	     438. Volanie funkcie ctime() nahradene novou, vlastnou
+		  funkciou zobraz_datum() (S)
+September'99 439. Novy sposob BANovania - treba udat dovod, a odbanovat moze
+		  len ten, kto zabanoval .. Pri pokuse o login sa vypise
+		  aj dovod BANu, a kto vyblokoval :-) (S)
+	     440. Zalarovanie prerobene podobne (len necasovane) (S)
+	     441. Aj demotovanie urobene podobne, plus uprava listbans() (S)
+	     442. Quest upraveny o moznost dat hocikomu pravo otvorit a
+		  viest quest cez ".quest grant <user>" (S)
+	     443. Logovanie pridavania/uberania total loginu (S)
+	     444. (triple four :-) .rmail <cislo> (S)
+	     445. Moznost vyhladavat retazec v syslogu (.viewlog <text>) (S)
+	     446. GOD moze odvratit Jail a Demote od hocikoho, pouzitim
+		  parametra "sure" (S)
+	     447. Opraveny .bcast, AFK nepripocitava TLT (S)
+	     448. Ludia ktori mozu pouzivat redir (23) su zadefinovani v
+		  subor misc/redir.allow (S)
+	     449. Podpora pre rastlinky a qtynky na portalise ... (S)
+	     450. Novy typ WHO!!! :-) - Winamp playlist :>> (S)
+	     451. Novy prikaz (pre wizardov a vyssie) -> .idletime - zobrazi
+		  total IDLE userov za session, a pomer voci logintime a
+		  idletime ... plus farebne rozlisi podozrivyx (S)
+	     452. GUEST SYSTEM JE TU!!! Prikaz .guest a upravy v say() a
+		  exec_com() (S)
+	     453. MAGAZINE (casopise) JE TU!!! Prikaz .magazine a novy modul
+		  - parser, a adresar issues (R)
+	     454. Novy prikaz .icq <ICQ#> <sprava> posiela ICQ spravu na
+		  dane cislo ... (S)
+	     455. Znovu spojazdneny .finger <user@host> (S)
+Oktober '99  456. Oprava quest grant, join medzi ostrovi pre >WIZ, uprava
+                  vo vypise pri bannutom userovi, .real dane wizardom,
+                  povoleny hug medzi ostrovmi (pomaly sa povoli secko :() (S)             
+             457. Specialny zoznam nickov ktore budu zakazane (ako napr.
+                  atlantis, god, wizard, etc ...)-> misc/nickblock (S)
+             458. Ukladanie a nahravanie cachovanych IPciek (S)
+             459. Ak sa nahlasi SLAVE, vypise sa to wizardom a vyssie (S)
+             460. Dorobeny parameter "noprofile" do .examine (S)
+             461. Autosave uzivatelov (S)
+             462. Moznost prezerania history userof .. koli skriptom 
+                  (asi len docasne) (S)
+             463. Zakaz .kidnap na SLAVEa, ... (S)
+             464. Zruseny prikaz .save pre citizenov, opraveny .from,
+                  history dane kingom, fixed ignall bug, moznost degrantnut
+                  userovi quest, fix questu, vylepsena history (S)
+             465. Celkom novy checkovac realnej identity - asi lepsi :) (S)
+November '99 466. Odblokovane niektore hlasky pre echo&secho (SIGN ON,
+                  SYSTEM etc ...) (S)
+             467. Opravy: .sbanner nevidno medzi ostrovmi, semote je podobne
+                  shoutu, slaveovia nemozu .set email (S)
+         468-499. Kompletny preklad do slovenciny - vsetky texty v Atlantise,
+         	  nazvy levelov (takze su nove), skratka uplne _vsetko_ okrem
+         	  prikazov, skratka 3 dni prace a este tam urcite su zalezene
+		  dake chyby, ak ich najdete dakto, tak ich hned opravte...
+		  Uz budem dobry (mozno), uz budem poslusny (mozno), uz budem
+		  slusnucky (mozno), ale TOTO UZ NECHCEM ROBIT NIKDY!!! (R)
+Verzia 3.5   500. Opravenych par malickosti + plno chyb v preklade :) (R+S?)
+	     501. Fixnuty bug v load_user_passwd (nefungoval .minlogin!) (R)
+December'99  502. Fixnuty reboot - uz by mal *normalne* rebootovat ;>>>	(R)
+	     503. ^^^ tedybybolo :-) ... fixol som to cez system() ale aj
+	          <tomu> neverim :(( (S)
+	     504. Doplnene .set examine (1/0 - stary/novy), upravene slov.
+	          hlasky (sepkanie), farby, gramatika pre mena typu "Delet"
+	          a "Herkules" (S)
+	     505. Dal som naspat niektore zakladne hlasky do syslogu... (S)
+Verzia 3.6  &506. Zmena EVENTs, osobitne funkcie na daily, every_min,
+	          every_5min [lepsia prehladnost] (S)
+	     507. Moznost blokovat zakladanie userov z urcitej adresy -
+	          prikazy .newban, .newunban (S)
+	     508. NORMALNE spraveny .connect!!!! +.remote (S)
+	     509. .map atlantis, .map portalis, .map ocean (S)
+	     510. Novy prikaz - poznamkovy blok - .note + .dnote (S)
+	     511. Kto ide z klienta: user->akl==1 (S)
+             512. Wow, ake okruhle cislo! Staro-novy predmet: zabacina :-) (S)
+	     513. Prerobene .ranks (sorry Buko ta Tvoja ruzova to bolo cosi
+	          neuveritelne priserne :) (S)
+	     514. Normalne spraveny NOVY system heartbeatovania!!! Uz bez
+	          alarmov a prerusovania xodu programu .. XEERS!!! (S)
+	     515. AUTO-AFK ... (rules) (S)
+	     516. Prerobeny .weather, ukazuje pocasie aj na stredne, vychodne,
+	          zapadne Slovensko, Blavu a Tatry (S)
+	     517. Forkovaci real_auth - nebude zatuhovat talker (S)
+	     518. Ak user napise prikaz ktory nema, vypise sa od ktoreho
+	          levelu je dany prikaz .. (S)
+	     519. Kokso ... > IRC < CONNECT!!!! Vlastny IRC Klient v Atlantide
+	          rules!!! (S)
+	     520. KUZLA! Prikaz .spell a to kolo toho! (R) [
+Januar 2000  521. Lynx - www browser pre Atlantis? Jasne!! :-) (R) [TBF]
+HAPPY N.Y.!  522. Fixnute room_link (umoznovalo pripojit jednu miestnost k
+(New York:>)      druhej viac krat - funny (R)
+	     523. Vypitvane user->md5 (uz to snad maju vsetci skonvertovane) a
+	          nahradene user->mana
+	     524. Examine a Status uz neukazuju AP (preco by mali?) ale manu
+	     525. Funkcia fopen() nahradena ropen() - pricom kontroluje, ci je
+		  na disku dost miesta. Ak nie, pri zapise nepovoli otvorenie
+		  suboru a vrati chybu. Preco ma to sakra nenapadlo skor? (R)
+	     526. Kuzlo "supyoloarnopar" na zmenu usera na sliepku ;) (R)
+	     527. Novy predmet "kniha" - obsahuje kuzla (POCET_KUZIEL), popisky
+	     	  su umiestnene v talker/predmety/kuzlo.?? (R)
+	     528. Nastavenie titulku okna v Xterme, CRTcku, screene a podobnom
+	     	  staffe na "ATLANTIS Talker" - aj popis ikonky (R)
+	     529. Nova vec v strukture: user->statline. Sluzi ako indikator modu
+	          pristupu usera (character/line), zatial nemozno automaticky
+	          zistit stav modu a prepinat jednotlive mody :( Az to bude
+	          hotove, budu sa s tym dat robit pekne veci (doom sipkami,
+	          status lajna a tak...) (R)
+	     530. Pefektna vec: IRCo lajna - zatial v beta verzii. Iba v char
+	          mode, zatial si ho nevie prepnut sam (az sa dozviem ako, tak
+	          to urcite spravim, zatial... neviem). Stavovy riadok v
+	          linemode (snad) pribudne neskor, ked si spomeniem, ako som
+	          to svojho casu robil ;-) (R)
+	     531. Dorobene prepinanie character/line modu, dorobena status
+	          line, tabulator je v status line mode obdobou .tell
+	          <last_tell>. Osetrene more() a relogin. (R)
+	     532. Fixnuty problem s kurzorom v charmode: posle sa escape pre
+	          schovanie kurzoru ;-) (R)
+	     533. Dorobene automaticke zistovanie velkosti okna (data do 
+	          user->lines a user->colms) - funguje to dynamicky, bacha
+	          na to! TODO: vyuzitie user->colms na lamanie riadkov.
+	          Funkcie rjoke, read a podobne samozrejme podporu maju. (R)
+	     534. Shoutbanner uz nejde do revshout buffer - iba na jeden
+	          riadok (ludia to tak chceli a maju recht...) (R)
+	     535. Dynamicke prisposobovanie polohy statline pri zmene velkosti
+	          okna (joj, ale som usilovny:) Neskor: dorobena aj zmena
+	          dlzky statline pri zmene dlzky okna. Ono je to normalne
+	          uplne genialne a transcendentalne :^) (R)
+	     536. Fixnuty skaredy fclose() bug v ".remote list" - Slafko,
+	          ty si nedas povedat?! :) (R)
+	     537. Prerobeny resolver (revolver?:) - uz nezapisuje data do
+	          suboru, ale posiela ich cez ruru... (R)
+	     538. Upraveny lynx - nekilluje iba forknuty proces, ale celu
+	          process group vcitane shellu a lynxu - takze uz by to robit
+	          problemy nemalo (R)
+	     539. V atl-remo.c je definovany zoznam escape sequencii, ktore
+	          moze prijimat user so statline - uzitocne, aby to zbytocne
+	          neresetovalo term a tak. Nezname escape sequencie su skratka
+	          nahradene medzerou...(R)
+	     540. Dost skaredym sposobom zaplatany bug v more() - cosi tam
+	          blblo, aj viem kde, ale ani za goda netusim co a preco.
+	          Fixnute aby to nehadzalo core, ale iba "odhadom" :( (R)
+	     541. Dorobena podpora sipok pre prezeranie more() v charmode +
+	          po stlaceni prislusnej klavesy netreba davat ENTER (R)
+	     542. Doplnena gramatika pre nicky vzoru "Perseus", "Odysseus" (R)
+	     543. Dorobene ovladanie DOOMu na sipky (so statline)! (R)
+Year-2-Kill: 544. Zaplatana diera v 540. - thanx to (S) - buffer sax (R)
+World Is     545. Dorobena podpora CRTcka pre status line + osetrene
+Not Enough        resetovanie terminalu koli bugu v CRT - yeah! (R)
+Release      546. Upravene cls() o pocet mazanych riadkov. Ak je nula,
+                  berie sa z user->lines (lebo doterajsi system sax:) (R)
+             547. Porieseny vypis cdesc v .rooms - blblo to... (R)
+             548. Dorobena podpora qjetyniek a inych prisad do kuziel (R)
+	     549. Obnovenie status line po stlaceni CTRL+L (R)
+	     550. Ake pekne gulate ;-) Prepisane write(blabla) v remote na
+	          write_sock + fixnute user->newline handling v remote (R)
+	     551. Dorobena podpora escape sequencii z fornaxu - safra, kolko
+	          si ich este kto povymysla?! (R)
+	     552. Sipka hore opakuje posledny prikaz - err.. mno... huh! (R)
+	     553. Prikaz ".quest ban <user>" - pre nepolepsitelnych cvokov (R)
+	     554. Indikacia remote talkera pri status lajne (ak pri zmagnuti
+	          skratky), obnovovanie statline kaz. minutu ... (S)
+Februar'99   555. (3 5-ky, cool!) Dorobeny .set ircserver, par bogfixov a 
+NOVY KOMP         pridana prkotinka do buducnosti - blackjack, ale len pre
+RULEZ!! :-)       jedneho usera (S)
+             556. Sbanner podlieha ignore fun (pise len jednoriadkove) (S)
+             557. Fixnute tony bugov v IRC a v remote connecte, dorobene
+                  zobrazovanie nicku a kanalu v statusline pri IRC +automaticka
+                  zmena statusline pri prexode medzi IRC a talkermi (S)
+	     558. Taka vec na krizove stavy - prikaz .comlevel nacita z
+	          misc/comlevel nove levely k prikazom .. keby nieco blblo (S)
+	     559. Opravene drobnucke ale o to odpornejsie chybicky v statline
+	          a v jej resetovani, doladene cls pri DOOMe (R)
+	     560. KOOOONECNE osetreny (snad ;-) buffer overflow, co nam veselo
+	          uz tyzdne zhadzoval Atlantis a ani za toho goda sme ho
+	          nemohli vypatrat!!! Saaafra praca! Slafko, sme lameri! (R)
+	     561. Uprava c. 509. nefungovala, tak som to opravil ;-) (R)
+	     562. Uprava upravy (560.) makier - zakaz multiple $* (naco by to
+	          sakra mal tam niekto mat? Jedine koli floodu) ... (S)
+Marec'99     563. Fixed: gossip (pohlavie), do promptu prirobene $M (mana),
+Verzia 3.61       dorobene vypisanie dovodu logoutu aj do notify hlasky (S)
+             564. Dorobeny .ignore look (vypis .look po prihlaseni) (S)
+             565. Dovod odhlasenia sa vypisuje aj v .last (S)
+             566. Vyhladavanie v .revtell, .revsh a pod. uz nieje zavisle
+                  od velkyx/malyx pismen ... (S)
+	     567. .entpro premenovane na .profile, BOH na GOD (S)
+             568. Fixnuty quest, plus moznost GODa uzavriet lubovolny quest
+                  cez .quest close meno[none] force (S)	   
+             569. Identifikacia usera pre remote - aj von, aj dnu! (R)
+ 	     570. Prikazy mozno zadavat aj velkymi pismenami (aj v helpe),
+ 	          casto to miatlo uzivatelov ... (S)
+ 	     571. Zakaza nadavania cez farby v cooltalk, spravne skolovanie
+ 	          v cooltalk, opravene xyby z 565., join funguje do invitnutej
+ 	          miestnosti ... (S)
+ 	     572. Uplne nove .version, ukazuje aj vek atlantisu :-) (S)
+Verzia 3.7   573. Normalne REVERSI!!! Thanx to: Alfonz (A)
+April 2000   574. Modifikacia wieh (typov who :-) aby ukazovali kto hra 573 (S)
+             575. Timeoutovanie callu write() vo write_sock(); (S)
+             576. Normalny MINESWEEPER! (miny) od Dixieho(!) (D)
+             577. Normalna DAMA od V;pera!!! (uff nejako sa to rozbehlo :) (V)
+             578. Prikaz .rebirth - obnovenie konta po suicide! (S)
+             579. Pri zaciatku questu sa vymaze .quest rev, a to iste aj
+                  pri zaciatku predstavenia (nezmaze sa quest buffer, ale
+                  review v amfiteatri :-O (S)
+Verzia 3.8   580. Vidno kto echuje (wiz a vyssie), uprava bodovania
+                  min, kill kuzlo nejde do svatyne ... (S)
+             581. makra: $$* pre puntickarov, plus odstraneny bug "preco nemozem
+                  napisat 9 opacnyx lomitok za sebou?" (S)
+             582. V rev-bufferi (tell, gossip, etc) sa vyraduju ~LB (S)
+             583. Promotovat mozu aj wizardi, ale len pokial ma user na to
+                  adekvatny total-login (S)
+             584. Normalne sa kazdy den posielaju nove veci z noticeboardu
+                  godom - rafinovane, hehe ;-) (S)
+             585. Normalne sa nove telly ktore pridu pocas AFK, poslu na 
+                  smail alebo email usera, pokial bol "nasilne" odhlaseny! (S)
+             586. Supeeeer vylepsene makra! Listen:
+                  - makro s nazvom "default" sa vykonava miesto saya!!!
+                  - .macro s jednym parametrom - nazvom makra, ho vypise (S)
+             587. Prikaz .games -> zobrazenie kto hra aku hru!!! (S)
+Maj'00       588. NORMALNE CLOVECE!!! Od V;pera!!!!!! (V)
+Jun'00       589. Fix CLOVECE plus pamata sa aj IPcka usera nielen hostname (S)
+             590. Clovece zaradene do .games a do .who (S)
+             591. Fix clovece, aj ze po 6-ke nemusi vytiahnut figurku :> (V)
+             592. Fix skrateneho .hug, .wake (overflow vo write_cent()) (S)
+             593. Fix .lynx (.lynx localhost|cat</etc/passwd) !!!!! (R)
+September'00 594. Fix .cow [Rider1 miesto Rider] (R)
+             595. Fix blbych dvoch vlnoviek v .desc, uz sa to moc rozmahalo (S)
+	     596. Fix spellu ... force nie na Wiz & vyssie (S)
+	     597. Fix problemu s descom a vlnovkami, ktory nehorazne vzrusoval
+	          par blbeckov (Hi Dusky!) (S)
+October'00   598. Fix: write timeout (R)
+             599. V;PER on board. (V)
+	          When in trouble or in doubt, run in circles, scream and shout.
+	     599. + .set color <shout | gossip | say | meno | tell> (V)
+             600. DogFix transport-hlaska pri '.go' removed, ak luzer je invis.
+		  (napise sa len: Neznamy opustil miestnost) (V)
+	     601. + .faraon -> kartova gamesa && pridane do .games (V)
+	     602. + .clovece review (V)
+	     603. Fix:  no notify_check ak user ide cez wizport (V)
+	     604. Change: v .remote namiesto auth sa posiela nick[site] (V)
+	     605. + jazykove mutacie: shout, gossip, say, think, sing
+	          && + .set language <en | sk> (V)
+	     606. Fix: .clovece/.faraon povedz odstavene ak je user muzzled (V)
+	     607. Zmena struktury userfajlu: pridane 60 x int a 10 x char (S+V)
+	     608. + time_t first_login (=time(0) pri novom userovi) (V)
+	     609. Fix .chname: heslo je random 1000-9999, zmeni sa aj ked je
+	          user offline. Ak ma autoforward, posle sa mu smail.
+	     610. + Log vysledkov multiplayer hier - log/games - 4 BAKY (V)
+	     611. Kompletne prerobene predmety, kazdy predmet ma premennu (V)
+	     612. + quit hlaska pri predavkovani lsd (V)
+	     613. Change: hlaska pri dozuvani zuvacky,
+	          na prilepenie usera treba zuvacku najprv trochu pozuvat (V)
+	     614. + kridla sa daju zlozit 4 krat, potom sa rozpadnu (V)
+	     615. + Qvetinky nam zvadnu 10 min. po odtrhnuti (V)
+	     616. + Zwjerata! behaju po miestnostiach, daju sa zdvihnut,
+	          po chvili sa vysmyknu.
+             617. + io frazy pre miestnosti (-> Viper odisiel do husteho lesa.)
+	     618. pri nastaveni genderu u OBCANa, nastavia sa mu defaultne io
+	          frazy podla pohlavia. (V)
+	     618. + .ignore zvierata
+	     619. + function title(): netreba pisat -.-.-. na sirku obrazovky (V)
+	     620. + prikaz .statistic <user> zobrazi v percentach a cislach
+	          frekvenciu pouzivania vybranych prikazov usera. (V)
+	     621. + Defaultne makra, ovladanie atlantisu IRC-compatible prikazmi 
+	          /whois=.ex $*, /who=.who $*, /me=.emote $* ..etc..etc.. (V)
+	     622. Vkladanie medzery za znaky !@/ a pod. presunute do exec_com,
+	          takze sa daju robit aj makra zacinajuce tymito znakmi. (V)
+	     623. Zvierata sa daju .kick -ovat z miestnosti (V)
+	     624. Zvierata zdrhaju pri .shout, .sing, .fight
+	     625. Mec sa lame/stit rozpadava po 10/12-tich fightoch (V).
+	     626. Na ostrove po 25 min. idle utocia zvieratka ;)
+	     627. Da sa ist do zalara na navstevu, vazen musi najprv invitnut.
+	          Samozrejme platia navstevne hodiny a po 3 minutach straze
+		  vyvedu navstevu zo zalara. Inspired by sugg. (V)
+             628. + odstranenie usera z JDB_JAILED pri delete_user. Nedal sa 
+	          unjailnut, ak sa vytvoril znova, nedal sa ani jailnut! (V)
+	     629. Ofarbenie predmetov (rastliny zelen, zvierata hnede) (V)
+	     630. + Tunel (otvara sa na vrchol/pohorie/husty_les && trhovisko
+	          /krcma na 5-15 minut vzdy po 3-6 hodinach. Insp. by R. (V)
+	     631. + nemcina + pohaluzeny tell,uz sa v tom nevyznam ani ja (V)
+	     632. ~OL <user> ~RS si ta pridal do notify. Qoli echu. (V)
+	     633. Pri prelete cez more sa strati vsetko okrem rastlin (V)
+	     634. + Zwery sa daju zmarovat mecom (po doneseni letunom z o.) (V)
+	     635. + Posielanie smajlov viacerym naraz (.smail viper+rider) (V)
+	     636. + Osetrene floodovanie kopiami smajlov (.copies zwj zwj..) (V)
+637. Posunuty zaciatok riadoku v newsoch dolava. Bolo tu strasne malo miesta (V)
+638. + .look <predmet> (.ex exuje userov pri niekt. predm. ak je logged atd) (V)
+639. Velke jarne upratovanie v telli (11.3 kB -> 7.6 kB),funguje geni(t)alne (V)
+640. Fix who typ 8, uz nezobrazuje invis >level, * pri nizssom a rovnakom (V)
+641. /zwj huh -> Viper (neznamemu): huh -> aby v roome nevedeli kto je invis (V)
+642. Pri nastaveni topicu sa za topic doplni [user->name]..ze kto to spachal (V)
+643. Fix .pemote vip -> pemotlo viperovi ak 'viperus' bol nahlaseny (V)
+644. Opravene ciselka levelov v ranks. (V)
+645. Aktivovane kuzlo prekrytia levelu. (formulka bola totozna s invis kuz.) (V)
+646. Fix .chname, uz sa da premenovat len na ISO 9009 compatible username (V)
+647. Pridane .ignore colortell - na ignorovanie farieb v telloch (V)
+648. Secho podlieha ignore shout (V)
+649. + francuzsky jazyk (thanx 2 Portal) (V)
+650. Fix pri .chname sa nepremenoval notes. Uz sa. (V)
+651. Mozu sa nalogovat aj vytvorit useri s menami predmetov. (V)
+652. Soldier moze fightovat len v arene. (V)
+653. Oprava makier + oprava konfliktu irc <=> globalne makra (V)
+654. Pri meneni hesla inemu userovi sa zobrazi meno komu menis heslo (V)
+655. Vo wizshoute sa moze nadavat (V)
+656. Tunel osetreny proti: kridla, join, kidnap.
+657. Osetrene padanie / ;((( / qoli put all. (V)
+658. Fix: letun, predmety v .status, farba .semote (V)
+659. Pri .notify sa nezobrazia aktivny ti co su invis a maju vyssi level (V)
+660. Farebne topiky v .rooms (V)
+661. Ak si invis, nevidno logout a nizsie lvly ta nevidia aktivneho v notify (V)
+662. Spravcovia si moznu vypnut ignorovanie shoutov na portalise (V)
+663. What a mess in send_to_jail(); Upratane, da sa poslat na cas aj s dovodom.
+     Nepouziva sa uz ->action ani ->timeout, staci na to ->jailed ;) (V)
+664. Revolver vystreli na 1 - 6 krat. (V)
+665. Kazdy user sa da premenovat len raz a potom raz nas5 (V)
+666. Uz nemozes premenovat usera s >= levelom. Mohol byt pekny takeover :) (V)
+667. set autoafk (min 3-10/120 wizzes), set timeout (10-120 min len wizzes) (V)
+668. revw, revs, revg, revt: parameter cislo - pocet poslednych riadkov. (V)
+669. .sclerotic <user> - vygeneruje, zmeni a posle heslo luzerovi na email (V)
+670. Fix vypis IDDQD v jokeboarde pri niektorych klientoch. (S)
+671. pri nastavovani minloginu sa to nevypise setkym looserom (V)
+672. .prikazy a .commands zobrazuje prikazy usporiadane podla levelov 
+     stare sa daju vyvolat .prik zoznam (V)
+673. shoutovat moze len user s minimalne 3 hodinami TLT. (V)
+674. BUG od Zuzany, Dakujeme! :) Vo .wizz 'niesu' sa ma pisat oddelene (V)
+675. Zvierata s vahou mensou ako 13 sa daju chalovat (zozrat) (V)
+676. Na zozabovacie kuzlo staci aj zabacina (netreba rastliny) (V)
+= 4.12 = 677. Predmety sa daju hadzat do susednych miestnosti (V)
+678. Pridane idle do notify who (V)
+679. Pridane zobrazovanie poctu zvierat do .rooms (V)
+680. Ked shoutuje invis, wizzom sa napise kto to je (V)
+681. Ak niekto sechuje na portalise, napise sa wizzom aj v kt. miestnosti (V)
+682. Doplneny examine typ 1 aby zobrazoval setky predmety kt. nesje user (V)
+683. Userove PPcka sa delia poctom nadavok v shoute. heh. njeje to kul ? (V)
+684. .ign afktell -> v autoafk sa ti zobrazia telly, defaultne je ignorovane (V)
+685. .wake <user> force [<text>] -> king+ wakne usera aj ked cita/pise (V)
+--==< November '00 v4.13 >==--
+686. .rev sa neda pozriet v zvukotesnej ak tam nie si (V)
+687. throw bere PPcka (V)
+688. Fix: poet nepodliehal ignore user (V)
+689. Dynamicky ignore list + ostava aj po odhlaseni (ako notify) (V)
+     + neda sa poslat smail userovi ktory ma ignoruje aj ked sa odhlasil (V)
+690. Faraon: bug sa v experimen. podm. neprejavuje, ale nieco som tam fixol (V)
+691. Kuzlo prekrytia levelu nahodne vyberie level do KNAZA. Prekryvanie na 
+     CARODEJa, KRALa a GODa sposobovalo davovu hysteriu (V)
+692. .set mailnotify -> notifikacia mailov na email ak nie je logged (V)
+693. .rmail last <n> -> zobrazi poslednych <n> sprav. (V)
+694. .listban renamed -> zobrazi premenovania userov (V)
+695. Do .wizzes pridane Zobrazovanie Idle/AFK (V)
+696. Fix - secho sa zapisovalo do revshoutu aj z portalisu (V)
+697. Vyrjesena zahada nemeho klona .. saturate  (V)
+698. V zalari sa ubera TLT 30 nasobnou rychlostou (the need 4 speed) (V)
+699. Mana sa dobija 3 krat pomalsie (1 ks/6 sec) (V)
+700. Ak pouzijes killovacie kuzlo na usera ktory ta ignoruje, killnes seba (V)
+701. Upraveny autocreate (V)
+702. .jail <user> <time> -> time sa zadava v minutach. (V)
+703. .ignore games -> aby usera nebol obtazovany gamesami (V)
+704. followowanie aj ked sa prenasledovany user transportuje (V)
+705. Opraveny hug,kiss od invisa, v revtelli bolo jeho meno (V)
+706. Echo, secho zo zvukotesnej miestnosti spravcovia nevidia (V)
+707. Zobrazovanie vlastnych arena bodov pridane do .status a .look v arene (V)
+708. Dorobene pocitanie wizshoutov do .statistic a TLT zhltnute jailom (V)
+709. Ak kicknes vlastne zvjera, vykasle sa na teba (V)
+710. .who bere 2 podmienky zobrazovania (napr. .who portalis KNAZ) (V)
+711. Kazde zvjera sa da njecim nakrmit a potom je panovi verne :> (V)
+712. '.fmail note' posle tvoj poznamkovy blok (.note) na tvoj email (V)
+713. Pri pemote sa do revtellu zapise aj komu si pemotil (V)
+714. Tlt sa v zalari ubera len vaznom, navstevne hodiny neplatia pre wizzes (V)
+715. Hades, James sa sklonuje Jamesovi, Hadesovi, namiesto Hadovi, Jamovi (V)
+716. V .statistic sa zobrazuju aj ubrate prikazy. (V)             ===4.20===
+     Zapisuje sa level kt. ubral, nizsi level nemoze vratit (V)
+717. Papral som sa so swaring_ban-om a s farbami .swban teraz prepina medzi
+     vybodkovavanim a nevykonavanim prikazu. Farby uz nemaju so swbanom nic (V)
+718. Dorobene autopromote (obcan-knaz), pridane ignore autopromote (V)
+719. Zavedene prachy (dukaty) & odstranene zbytocne premenne action a timeout (V)
+720. Vyradene 3 fonty zo zoznamu.. chybali (V)
+721. Pri swape sa posle nova identifikacia usera talkerom kam je remotnuty (V)
+722. Nadavky sa vybodkovavaju celeeee, vratane prveho a posledneho pismena
+     Ulahci to pracu wizzom, budu jailovat len tych co obchadzaju bodkovanie (V)
+723. Ked invisak nastavi topic, nenapise sa za topic [\253Im] bo to haluzilo (V)
+724. Opraveny jail aby spravne fungoval aj pri jailovani offline luzera (V)
+725. Pridany jazyk madaaaaaarsky (toto sme chceli ?? toto ?) a talijansky (V)
+726. do .rooms sa daju zadat 2 parametre => && podmienky zobrazenia riadku (V)
+727. Novy luzer defaultne ignoruje sys (V)
+728. pridany parameter do .last, napr. .last viper, .last zabity, .last 9:30 (V)
+729. Ak ti tellne neznamy, mozes mu reply (:) ale nezistis jeho meno (V)
+730. Osetrene pofarbickovane who vypisy ak mal v descu niekto ~LI, ~BB apod. (V)
+731. Pri kille sa napise vsetkym aj koho a preco ak bol udany dovod.. (V)
+732. Ak sa <=knaz pokusi zadat >=king prikaz, napise mu ze prikaz neexistuje (V)
+733. Opraveny bug v .games pri zobrazovani faraona.. krepe cisielko (V)
+734. Dorobena cenzura do non-editor writov na board (.write .....\n) (V)
+735. Added shortcut: '  -> tellnes znova poslednemu komu si telloval (V)
+736. Osetrene floodovanie pluskovanim (.tell viper+viper+viper lamer!) (V)
+737. Ak das netopjera macke, po jeho konzumacii ti ostanu kridla (V)
+738. Ked ta dohryzu zvery, pri quite sa nastavi 200 PP, lebo pri lognuti znova
+     si mal 0, nemohol si ani hugnut a nebolo fer voci idlakom z atlantisu (V) 
+739. ak mas 2 ks krtkov, .use krtko v pohori, vrchole, hustom_lese vytvori
+     v danej miestnosti tunel ak uz nie je vytvoreny. (V)
+740. Spravcovia mozu wake aj cez ostrovy (V)
+741. Help k prikazu sa zobrazi len ak mas tento prikaz k dispozicii (V)
+742. Znizene podmienky na fajt ak si v arene (dec 80->60,can 160->100) (V)
+743. PPcka sa uberaju aj tomu kto bol fajtnuty, ale len polovca. (V)
+744. Zo skaly mozes .kick <obet> strcit niekoho ak obet ma idle > 12 min. (V)
+745. TLT v zalari neklesne pod 1 hod, ak mas zaporne, zvysuje sa az k nule. (V)
+746. Mozes zadat maximalne 10 uzivatelov -> a mohol si len 9.. fixed (V)
+747. Opraveny bug v examine pri zobrazovani dlzky prihlasenia nad 24 hodin (V)
+748. zmenena formulacia pri letmein (V)
+749. Upravene poradie niektorych prikazov, napr .u  bralo .unban miesto .use. (V)
+750. Cas expirovania messagov v configu znova funguje, nastaveny na 05:00, bacha
+     na tu nulu pred 5kou! Pri bootovani uz sa messidze necheckuju (V)
+751. seriova vyroba letunov.. fixed. (V)
+752. Autopromote/demote funguje len v epsylon okoli potrebneho casu na level,
+     epsylon = 1 hodina. Napr. knaza promotne ak jeho tlt=<18dni,18 dni 1 hodina) (V)
+753. Naliaty FRIDEX, vonku uz je dost kosa.. (write-timeout) (GRV)
+754. New commands: .xannel, .xsay ..chat channels.. transcendentalne (V)
+755. Qa aj s Neilsom, co to za krepy napad write_user-ovat userovi ked nje je
+     lognuty, ked je len docasne vyrobeny qoli zmene v UserFajle ?? Fixed. (V)
+756. Oprafeny sclerotic. Ten majl siel njekam do bazin.. (V)
+757. Fixnute prerazanie hlasok zvierat ak prisli za tebou, faraona a clovece do
+     editora alebo pri citani (V)
+758. + pocitanie nadaviek (v gossipe osve) -> .statistic <user> swears (V)
+759. Do roomstruct pridane room->where, do 'datafiles/ioroom' doplnene sklonenia
+     napr: v hustom lese, na luke, okrem ineho sa vyuzije aj v outphr. (V)
+760. Premenne v outphr: $0, $1, $2 (na namestie, na namesti, namestie) (V)
+761. Do setkych .review-commandov doplneny colour_com_strip, bo ked si dal
+     '.revtell ol' tak to vyplulo setky telly lebo tam bolo sade ~OL. (V)
+762. .set multiply a mozes sa lognut dvojmo. GOD only.. nedalo mi to.. ;) (V)
+763. Odobratie prikazov na meno.. vratit moze len ten kto slohol.. (V)
+764. Pri swape ti v novej sesne napise odkial si lognuty v starej aj opacne (V)
+765. .revtell new -> zobrazi nove telly v revtelli od posledneho quqanja !
+     dorobene aj do .review, .revshout. + preklady pri grepovani a ignore word,
+     lebo napr. '.revs zakrical' nezobrazilo nic... (V)
+766. Fixed kick aby sa dalo kopat zvjera aj ked user s jeho menom je online (V)
+767. Pravdepodobnost fajtu je level-independent, goda nefajtne nikto okrem goda,
+     kral ma v arene sance ako iny useri, mimo areny ho nefajtne nikto (V)
+768. .ignore sys2 -> ignorujes sys okrem novacikov a requestov (V)
+769. Poll(): error condition -> zapisuje sa raz za 2 sec kolko ich bolo, lebo 
+     obcas to tam pisalo 200 krat za sekundu a trvalo to 10 - 30 minut. (V)
+770. Do xannelov dorobeny topic. (V)
+771. Som sa papral s tym wrajttajmautom. Dufam ze som to nepopapral (V)
+772. Hlaska ze si siel auto-afk sa nevypise ak prave editujes. (V)     
+773. .statistic <user> timeouts || .people timeouts zobrazi tajmauty userov,
+     .set maxtimeouts nastavi od kolko wtos vyhadzujeme. Talker si kazdu
+     minutu nacitava z misc/timeouts.max -> mwtos sa da zmenit bez prihlasenia. (V)
+=v4.30= 15.12.00
+774. Say fixed. Nesiel nizsim levelom v prikazovom mode qoli ->saturate. (V)
+775. Added Sell & buy. Mozes ponukat konkretnej osobe, alebo vsetkym
+     v miestnosti, na trhovisku sa daju kupovat predmety za pevne ceny. (V)
+776. .sms obmedzene: po prihlaseni max naraz 3 smsky, potom kazdych 12 min
+     mozes poslat dalsiu. Ak neposielas, naakumuluje sa max 5 sms. (V)
+777. Upravene vyhladavanie userov/miestnosti pri .to/.go tak aby sa najprv
+     hladalo ci je niekto taky v miestnosti, potom globalne. Napr: 'Viper' je na
+     namesti, 'Vip' je v arene. '.to vip lamer' na namesti sa vypise Viperovi (V)
+778. Dorobeny tchor, ked je s tebou v miestnosti tak mas halusky jak pri lsd (V)
+779. Pridane predmety pre 'Atlantis Wars':
+     + rezervne zvery: lesna haved a ritoplesk. Neautocreatuju sa. (V)
+780. Do .create dorobeny parameter <user> -> ktoremu sa priradi ak je zviera (V)
+781. Dorobeny .revs na portalise (1 spolocny buffer pre setky miestnosti) (V)
+782. Fixes Agent X, qoli levelu padal talker (V)
+783. A.W. walking system (V)
+=v4.31= 19.12.00
+784. Opravene nastavovanie maxtimeoutov a vyhadzovanie (V)
+785. Added wizlog -> zaznamenavaju sa spravcovske aktivity (kill, jail, etc) (V)
+786. Do .revs pridany parameter 'atlantis', ak si chces pozret z portalisu (V)
+787. V statistic sa zobrazuje pri ubratych prikazoch aj kto ubral. (V)
+=v4.32= 21.12.00
+788. Upravene vyhladavanie prikazov, vyhladava sa skratka prikazu daneho levelu (V)
+789. Upraveny last, nezobrazuje desc, zobrazuje vacsiu cast hlasky quitu (V)
+790. Prikazy presunute pod set(): autocreate, logging, resolver, logcommands,
+     swearban, checkident, minlogin. (V)
+=v4.34= 22.12.00
+791. Komplet prerobene predmety na dynamicke, mozno za behu modifikovat,
+     vytvarat nove. Ma to aj pekelny parser ktory ak je chyba vypluje aka chyba
+     aj v ktorom predmete a na ktorom riadku. Genialna idea by (R). (V)
+792. Pri kickovani zvera s velkou vahou kopne do hlavy a vidno ***. (kon) (V)
+793. .dispose [everything | everyuser | everyroom | every] vycisti setky
+     predmety z talkera | drzane usermi | leziace v roomach | daneho typu. (V)
+--==< January 2001 >==--
+794. .create roomlink  <room1> <room2> -> zlinkuje roomy za behu,
+     .dispose roomlink <room1> <room2> ich zas rozlinkuje. (V)
+795. .predmety <predmet> zobrazi v kt. roomach a useroch sa nachadza predmet (V)
+796. Wizzes mozu cumet cez .look do hociktorej mjestnosti (V)
+797. Resolver uz sa neloguje.
+798. Spravcom sa zobrazuju .echa iba ak obsahuju nadavky (V)
+799. .kick uz nekickne do privatnej miestnosti. (V)
+800. .throw <predmet> <user> -> hadzanie do userof ale len v AWars abo GODi (V)
+801. Do promptu pridana moznost $A - zobrazenie zostavajuceho casu do alarmu (V)
+802. .create/.dispose <predmet> hand/quiet -> do/z ruky/roomy potichu (V)
+803. Implementovane funkcie: dopravne prostriedky ! Cagiva Blues 125 rulez!
+     zamena pismenok napisanych userom, predmety konzumovatelne, hviezdickovacie,
+     trhavinovite, textdoplnovacie, premenitelne na iny predmet etc. (V)
+804. Kazdy predmet moze zobrazit svoj obrazok pri definovanom evente. (V)
+805. .predmet create | edit | show | describe | delete -> dynamicke p. (V)
+806. disable_web YES/NO - nova polozka configu pre testovaciu verziu (V)
+807. Osetrene floodovanie prikazom .letmein (V)
+808. Implementovane schovavanie sa na brutalise. (V)
+809. Grcanie.. ak to prezenies s alkoholom. (V)
+810. Loguju sa pokusy requestov na adresu kam uz niekto je registrovany,
+     sa mohlo spravit hned pri obmedzeni, pride sa tym na dost klonov.. (V)
+811. .pemote je farebne tell-like, aj sa zapisuje do .revt a da sa pemotovat
+     aj ked user nieco edituje alebo cita. (V)
+812. Wake funguje aj cez ostrovy (ako tell, pemote, etc.) (V)
+813. Ked je victim vo svatyni, ucinok kuzla sa otoci na attackera. (V)
+--==< February 2001 >==--
+814. Premakany komand .sms -> .set mobil, .set sms [all | notify | noignore |
+     noone] -> ze kto mi moze poslat smsku, pritom nezisti moje cislo.
+     obmedzenie x sms/den; x definovatelne + logovanie. (V)
+815. Globalne makra sa daju reloadnut: .macro reload (V)
+816. .statistic doplnene o info: ci bol user premenovany, kto ho jailol a za co,
+     ci je vybanovany a preco a datum pokusu o request na pouzity mail (V)
+817. Vylepseny .skript - kontroluje posledne dva intervaly zadania prikazov,
+     kontroluje ci posledny prikaz bol opakovany 2 krat. (V)
+818. .mymail <user> - pozries si postu ktoru si poslal userovi z jeho schranky.(V)
+819. Nova funkcia predmetu -> writable - da sa citat a pripisovat. (V)
+820. .set securetell <zap|vyp> - tell sa nevykona ak meno je skratka 2+ userov (V)
+821. nove remote spojenie sa da teraz pridat on the fly (V)
+822. o5 prerobeny sms.. Mila zrusilo 200 SMSiek denne ktore chodili z atly :)
+     teraz pouzivame 'smssend' a v 'misc/smsgate' je zoznam bran, ktore si user
+     moze nastavit. V 'misc/smsgate.txt' je help k parseru bran (V)
+823. .wfrom same / .realuser same -> useri iduci z rovnakej site/konta (V)
+824. .set wizpass -> nastavis si wizpassword, ktory pyta policia, ak prejavujes
+     spravcovsku hyperaktivitu (kill,etc.) alebo pri shutdown,reboot,minlogin (V)
+825. .set birth <datum> - podla tohto sa potom pocita vek (v rokoch) v .ex (V)
+826. pribudla miestnost 'cintorin'. Namiesto nastenky je zoznam umrti (V)
+827. .topic odteraz konzumuje PPcka. Pri nastaveni topicu ktory uz je v inej
+     miestnosti prejavuje zvysenu pazravost. (V)
+828. Pri pisani ftipu (.wjoke) sa pise meno aj ked je user invis. Pisali tam
+     oplzle nadavky a urazali, pise sa to aj na web a nemohli byt potrestani..
+     If you overstep the boundaries, be prepared for the consequences.. (V)
+829. Fixnuty bug s lamerizatorom & prikazmi s povinnym parametrom (ctalk,..) (V)
+830. .search upraveny na case insensitive. (V)
+831. wizpassword osetreny proti nasilnemu zavretiu session (V)
+832. 1 user moze nastavit max. 3 topicy (V)
+833. '.topic' bez parametrom wizzom ukaze kto napisal topic aj ked bol invis (V)
+834. Vykuzlenie predmetu 2ma pupavami obmedzene na autodoplnacie predmety (V)
+835. Opraveny bug pri calle (,) ak user zviacha zuvacku (V)
+-= v4.71 =-
+836. Odteraz si pamatame najdlhsiu session usera. Neptunove tabulky... (V)
+837. Pri bootovani sa mi posle SMSka s casom nabootovania a s casom a pricinou
+     crashu/shutdownu.. kewl :) (V)
+838. Opraveny hlaskovy bug v unfollow.. (V)
+839. Notifkacia mailov na atlantise na mobil SMSkami (V)
+840. smsfollow.. hadajte co to robi! :))) (V)
+841. Cintorin - zapisuje sa len user s TLT 2 dni a vyssie, pise sa aj desc. (V)
+842. Zvierata uz nebehaju ani sa nedaju kicknut do privatnej miestnosti (V)
+843. Pecho wizzom vypisuje od koho je. Ja by som pecho zrusil, je to ucinny
+     prostriedok na zneprijemnovanie zivota a nevidim v nom ziadne pozitivum (V)
+844. .who gossip - zobrazi userov neignorujucich gossip - gossipujucich (V)
+845. UFff.. finaly.. definovatelneee whooo + web who skin editor RULEZ! (V)
+846. Vylepseny securetell.. ked najprv checkuje ci skratka je skratka mena
+     toho komu som naposledy telloval.. cize: >viper a potom uz staci >v (V)
+847. Opraveny bug v .throw. (V)
+848. kiss uz nevypisuje mne ze Viper pobozqal, zobrazuje text kery som zadal. (V)
+849. Odstranene pocitanie nadavok v gossipe. Wolcaan njekomu cumel do monitora
+     a zacal robit velky krik qoli tomu.. ta informacia za to nestoji..(V)
+850. Wake, Bcast atd uz nepipaju pri ign beep (boli tam \07 mjesto ~LB) (V)
+851. Logout message sa zapisuje do userfajlu a zobrazuje v .examine (V)
+852. Pagovanie makier, pagovanie .rooms (V)
+853. Spravcom vrateny suicide + na suicide je potrebne zadat wizpass (V)
+854. .set timeinrevt - na zaciatku kazdeho riadku v .revt je cas (V)
+855. .set show (.set disp) zobrazi aktualne nastavenia setu (V)
+856. zavedeny vynimky bodkovania swearingu (opica, sprchujem) (V)
+857. Brutalny kalendar s vyhladavanim mien a prezeranim rokov.. (V)
+858. .who notify zobrazi who s ludmi v notify. .notify who ostalo povodne (V)
+860. notifikacia prihlasenia usera z notify ak som nieco pisal/editoval (V)
+861. farebne kody sa uz neotacaju pri zreverzovani (V)
+862. Definovatelne examine. (V)
+--==< March 2001 >==--
+863. version posunuty vyssie na obcana (V)
+864. .set pagewho obnovene.. nemalo by blbnut since who sa pluje cez more() (V)
+865. uplne vyhladavanie vo who (V)
+866. pridane anglicke miestnosti (preklad: Numko) + komplet .look je en/sk (V)
+867. podpora vyhladavania anglickych nazvov miestnosti (V)
+868. pridana hlaska v .get,.put,.give ak je user invis (V)
+869. fixnute dopravne prostr. tak aby sa pouzil volny ak ich je viac v roome (V)
+870. ign coltell premenovany na ign coluser a pwosobi na tell, pemote, gossip (V)
+871. osetreny swearing cez: .ctalk 2 acip .. otocilo a veselo tam bolo 'pica' (V)
+872. implementovane slovenske prikazy.. neupravovat rucne, spravil som na to
+     taky maly parser co vytvori atl-list.h a vlozi tam upratane prikazy (V)
+873. sklonovanie nickov v get user.. takze fici: .povedz viperovi lamer! (V)
+874. vylepseny skript, pise roznofarebne. Rovnako dlhe idle, vracanie z afk. (V)
+875. godovi sa uz neda civet do history. (V)
+876. Nicky case insensitive. (V)
+877. dorobene oblecko. (V)
+878. brutalisovsky fight - close combat weapons (V)
+879. Nove .vote cez MySQL, paralelne hlasovania, pre levely (V)
+880. .winners v MySQL (V)
+881. Povolene 1 pismeno velke okrem prveho (V)
+882. .kick sa neda ak ma user ignoruje (V)
+883. fixnuty chname bug s existenciou usera (V)
+-= v491 =-
+884. fixnuty brutalny bug sposobujuci konzumaciu pamate vo velkom (R)
+     APcka pridane do user_struct -> mame APcka k dispozicii bez mysql query,
+     do winners tabulky sa zapisuju qoli .winners (V)
+885. Vyhodena notifikacia majlov na mobil vo forme SMS. (V)
+-= v492 =-
+886. Upravene vote.. daju sa pozerat vysledky uzavreteho hlasovania (V)
+887. Prerobene autocreate.. casovane intervalom v sekundach medzi doplneniami (V)
+888. pri killovacom spelli sa obeti vypise utocnik (V)
+-= v493 =-
+889. autocreate je zrychlene po reboote na avg 2.5 min kym sa okotia predmety (V)
+890. v echo, pecho a secho moze user pouzivat svoje meno. (V)
+891. fixed get_user_exact, teraz je case insensitive (V) 
+892. swearingban aplikovany aj na afk hlasky (V)
+893. godi nemozu suicide.. nepvosobi to dobre.. spaky nebima :)  (V)
+894. .set exa a who upravene - na nastavenie treba .set who copy <skin> (V)
+895. Dynamicke autocreate - nastavitelna reakcia na pocet userov (V)
+896. Brutalis stuff v examine (V)
+897. fixnuty .look <miestnost> pre wizzes.. zobrazovalo zly popis miestnosti (V)
+898. Pridane freeovanie predmetov, roomiek a globalnych makier pri shutdowne (V)
+899. Pridane .set april - par sprostosti na 1. april (V)
+900. kuzlo prekrytia levelu nefici na spravcov (V)
+-=v495=-
+901. fixed suicide bug s nevymazanim usera (V)
+902. fixed lastlog - lajny neboli pri boote vynulovane (V)
+903. do parse() pridane return ak je user destroyed. (V)
+904. odstavene aprilove halusky. (V)
+905. fixed - chybala inicializacia user->agecode (V)
+-=v496=-
+906. wash_bell aplikovane aj na .review v miestnosti (V)
+907. Fixed bug v .sclerotic (V)
+908. Prerobena struktura winners + pridany letun do sql winners (V)
+909. help narvany do mysql. (V)
+910. fixed minlogin.. ono sa totizto v load_user_passwd nacitaval aj level :)
+     a v db_load_user_passwd sa na to akosi zadublo.. (V)
+911. fixed timeinrevt - nezapisovalo sa do userfajlu (V)
+912. Wake funguje cez autoafk (V)
+913. Mysql predmet files (V)
+914. Mysql profiles - konvertor + showrow() + upraveny .profile a webeditor (V)
+915. Notifikacia ak si este nehlasoval pri prihlaseni (V)
+916. Upravene .vote aby tmavo boli hlasovania kde si uz hlasoval a uzavrete (V)
+917. Kozmeticke upravy hugu (V)
+-=v502=-
+918. nahradenie par 'Neznamych' za user->name (V)
+919. Fixed light bug (wolcaan) v examine a who editore. (V)
+920. Podpora hesiel pre mysql web clienta (V)
+-=v503=-
+921. Upraveny chname na mysql compatible + allows 2 uppercase letters (V)
+922. Prehanadlo ta neodvlecie z plachetnice (V)
+923. atlantis.ini - fajl v roote kde je zapisany nazov databazy a tiez
+     jednoducho kryptovane heslo mySQL usera (V)
+-=v504=- 17.6.01
+924. fixed hole 2 mysql (.ex xxx';xxx;) (V)
+925. parametre obmedzenia pouzita predmetu ag ma user ignoruje; nema v notify (V)
+926. ak mas ignall, nemozes tellovat (V)
+927. parameter predmetu na ktory ostrov / do ktorej miestnosti sa doplnuje (V)
+928. msg separator ';' v predmetoch (V)
+929. picturesy narvane do mysql + upraveny .pictell + web editor (V)
+930. .private & .public uberaju PPcka (V)
+931. makra naliate do mysql (V)
+932. irc files namontovane do mysql (V)
+933. remote nasypane do DB (V)
+934. notify + ignore user napchate do db (V)
+935. command ban prerobeny na dynamicky (like notify) + -> DB (V)
+936. fixed db_load_user_details bug s nacitavanim longestsession (V)
+937. pri pagovani cez more() ak zadas cislo x, posunie ta o x stranok dopredu (V) 
+938. vyhladavanie v pagovani /text - kazdy vyskyt 'text' bude cervenym pozadim (V)
+939. pridane farebne kody - ~HX - highlighted a ~DX (~RS~FX)- dark foreground (V)
+940. sign sa zapisuje do .reviewu (V)
+941. zapisovanie textu .pictellu do revtellu a upraveny design hlasok (V)
+942. fight - upravene hlasky + invis mena (V)
+943. zoznam globalnych makier - .macro global (V)
+944. guardian - web passwd chcecker s blokovanim na 10 min po 4 neuspechoch (V)
+-=v5.08=-
+945. eliminated spare fclose in check_email_arrival (V)
+-=v5.09=-
+946. Ked niekoho ignorujes, nemozes mu tellovat (V)
+947. select username from users where online=1  -> vsetci prave prihlaseni (V)
+948. pri vypise hlasky ze xyz ma dvojitu identitu sa vypise aj s kym.. (V)
+949. vyhladavanie aj skratenych nazvov v helpoch (V)
+950. .rmail USER - zobrazi postu ktoru mam v schranke od usera (V)
+-=5.10=-
+951. opravene cisla stranok v more() + posun dozadu o x stranok (V)
+952. opravene .predmet enable (V)
+953. zakazane spell move do areny (V)
+954. ~~FR -> zobrazi: ~FR ako text (V)
+955. .prompt show -> zobrazi zdrojovy text promptu aj s kodmi farieb (V)
+-=5.11=- int more() small fixes
+-=5.12=-
+956. .tell : <text>=:<text>; .tell , <text>=,<text>; .tell . <text>=`<text> (V) 
+957. kill spell zabije attackera ak sa pokusi killnut niekoho v private (V)
+958. .desc, .prompt zobrazi aj zdrojovy text farebnych kodov. (V)
+959. nove farebne kody pridane do advert_words.. (V)
+960. roomy nakrmene do databazy (V)
+961. web editor miestnosti (V)
+-=5.13=-
+962. premenovania zapisane do user->struct (V)
+963. JDB_BAN,DEMOTE,JAIL sa ukladaju do DB (V)
+964. .sms pouziva len mtn sms + viac kont na mtnsms ktore sa striedaju (V)
+-=5.14=-
+965. Web config editor (V)
+966. .set msg -> nastavitelne hlasky 'ti povedal' etc. (V)
+-=5.15=-
+967. fixed .lynx www.xxx.xy/file.zip >200 KB KILLer bug (V)
+968. altered .pictell + files table structure (V)
+969. fixed offline .chname bug (V)
+970. sqlmore(user,socket,query) - strankuje priamo z DB (V)
+971. rules, faq, news, motd1, motd2, mapy -> atlantis.files (V)
+972. .set col notify <cislo> - farba mena v telli osve pre userov v notify (V)
+-=5.16=-
+973. fixed bug pri vyradovani z notify (V)
+974. fixed gateway sql bug (V)
+975. fixed gateway new colorcodes (V)
+976. .set birth -> je mozne nastavit len raz (V)
+-=5.17=-
+977. fixed ign all sqlmore bug (V)
+978. v .sms umoznene medzinarodne cisla dlzky 10 - 15 (V)
+-=5.18=-
+979. pridany parameter predmetu - obmedzenie podla pohlavia (V)
+980. who skiny napchate do databazy + upraveny editor (V)
+981. examine skiny v db, prerobeny examine parser.. ufff (V)
+982. prerobeny poznamkovy blok -> podstranky + mysql (V)
+983. .set birth disable|reset user -> zablokovanie .set birth a veku (V)
+984. rozsirene who a exa skiny: $a, $H, $S (V)
+985. okradnutie v afk - .get <user> <thing> (V)
+986. Upgradnuty editor - pri ukladani: (O)dlozit -> potom sa da v editore
+     insertnut odlozeny text (.ins) alebo pozret (.postponed) (V)
+-=5.19=-
+987. vyhodeny jeden malloc z examine (V)
+988. vylepsene makra - $n, $g, $d, $a - 1.-4. pad usera zadaneho ako prvy
+     parameter, ak nieje prihlaseny, makro sa nevykona. (V)
+989. klikaci .request -> staci kliknut na URL co pride v majle
+     a si povyseny (V) 
+990. fixed mysql subquery brutal bug (V)
+991. fixed .lynx filesize bug (V)
+-=5.20=-
+-= BASE DIFF 10.8.01 =-
+992. fixed IDs (V)
+993. fixed .rooms invisible bug (V)
+994. pridany .revbcast (V)
+-=5.21=-
+995. upraveny .sos -> na odpovedanie userovi + vidia wizardi (V)
+996. pridany .revsos buffer (V)
+997. pridane logovanie pamate do commlogu, default off (.set logcom mem) (V)
+998. fixnute zobrazovanie obrazkov pri predmetoch zo suboru aj z mysql (V)
+-=5.22=-
+999. fixed vote, fixed lynx
+1000. sortovanie notes podla casu pridania (V)
+-=5.23=-
+1001. .ignore user odfiltruje aj shout, secho, gossip, say, say_to etc (V)
+1002. fixed examine $3B bug (V)
+1003. .set name2,3,4 <user> <sklonovany user> - moznost nastavit individualne
+      sklonovanie (V)
+1004. stazeny suicide - nad 2 dni tlt treba vyriesit 5 narocnych prikladov (V)
+1005. .note forward - fwdne notes na email (V)
+1006. .macro forward - fwdne makra na email (V)
+1007. opraveny vehicle+kridla bug (V)
+1008. fixed .tell spar+spart+spartak+spartaku+SpAr+SparT+SPART bug (V)
+1009. fixed $n,.. bez zadania parametru (V)
+1010. $K - afk_message pridana do examine skinu (V)
+1011. editor - pridana polozka odloz&uloz (V)
+1012. fixed .say + opica bug (V)
+1013. .ex viper 10 - v examine sa zobrazi 10 riadkov z profilu (V)
+1014. fixed kidnap in same room bug (V)
+1015. po nasilnom odhlaseni sa posiela cely revtell buffer (V)
+1016. .set revt quit - posielane revtelu smailom po kazdom odhlaseni (V)
+1017. afk hlaska sa zapise do logoutmsg za cas vyprsal (ak vyprsal) (V)
+1018. pridane $E - newline do promptu (obmedzenie max 1 ks v prompte) (V)
+
+						   (navrat hore: CTRL+K U :)
+****************************************************************************/
+
+-=5.24=-
+1019. MAILY DO MYSQL (V)
+1020. shout funguje od 5 hodin. (V)
+1021. fixed max_users_was overflow bug (V)
+1022. pluskovanie sa checkuje len pri povolenych komandoch (qoli !x+y+z) (V)
+-=5.26=-
+1023. BOARDY v mysql (V)
+1024. prerobeny search board (V)
+1025. vyhladavanie v mailmore (V)
+1026. preskakovanie stranok v mailmore (V)
+1027. prerobene mymail (V)
+1028. prerobene .rmail <fromuser> (V)
+1029. do search pridany parameter - cislo - zobrazi spravy stare max x dni (V)
+-=5.27=-
+1030. jokeboard -> SQL (V)
+-=5.28=-
+1031. rmail design changes + emil update (V)
+1032. hadanie celych slov v hangmanovi osetrene ak neni rovnaka dlzka hadaneho (V)
+-=5.29=-
+1033. fixed wipe (V)
+1034. fixed offline jail (V)
+1035. fixed ign io & invis moving messages (V)
+1036. .ignore blink (V)
+1037. .ignore pict (V)
+1038. fixed site na konci dlheho tellu,shoutu (V)
+1039. ign blink! (V)
+1040. ign pict (V)
+-=5.30=-
+1041. brutalis gate (V)
+1042. .look <weapon> - ukaze naboje (V)
+1043. fixed .set name2-4 (V)
+1044. fixed customexamine get_user/get_user_exact bug (V)
+1045. + zobrazovanie casu v .review buffroch (V)
+1046. entities: ammunition funct (V)
+1047. gemote command(V)
+-=5.35=-
+1048. predmety - prepojene s webom, daju sa lubovolne menit on the fly (V)
+-=5.36=-
+1049. convert -> .use <predmet1>+<predmet2>+.. vznikne nejaky predmet,
+      tiez funguje cez spell a je to dynamicke a bude na to editor (V)
+-=5.37=-
+1050. entity funct killing machine - zombiek ==> .use zombik <user> -
+      zacne utocit na usera ak je v miestnosti. Je mozne nanho utocit,
+      ma zdravie, ak nikomu nepatri, po case sa rozpadne, ak nanho niekto
+      zautoci, zacne utocit aj zombik nanho az kym neodide user z miestnosti.
+      Da sa liecit (funct naboje). Ak zombik malo energie a zacne nanho
+      utocit majitel, zombik prestane pana lubit a zacne ho mlatit. 
+      Jednoducho zombik rulez.. skoro 40 hodin kodenia (aj s #1049) <V;p>
+-=5.38=-
+1051. bug fixes - lenive zombiky, pridana '*' pred vlastnych zombiekov v look,
+      fixnute kuzla aby sa nedal vytvorit brutalisovsky predmet. (V)
+1052. tabulka visitors - pocet lognutych userov kazdych 10 minut. (V)
+
+
+*/
+
