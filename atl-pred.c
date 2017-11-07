@@ -158,7 +158,7 @@ int maxbefore=0,index;
 
 
  total=0;
- sprintf(query,"select name,dativ,akuzativ,inytiv,type,food,function,altfunct, restrikt,dur,amount,weight,price,pp,enter,leave,uinphr,uoutphr,rinphr,routphr,ustart, rstart,ustop,rstop,userphr,roomphr,victimphr,special,error,attack, firerate,seconddur,tajm,picture,showpict,ofense,defense,udestroy, rdestroy,spawn,spawnarea,ujoin,rjoin,search from entities where disabled=0 order by name;");
+ sprintf(query,"select `name`,`dativ`,`akuzativ`,`inytiv`,`type`,`food`,`function`,`altfunct`,`restrikt`,`dur`,`amount`,`weight`,`price`,`pp`,`enter`,`leave`,`uinphr`,`uoutphr`,`rinphr`,`routphr`,`ustart`,`rstart`,`ustop`,`rstop`,`userphr`,`roomphr`,`victimphr`,`special`,`error`,`attack`,`firerate`,`seconddur`,`tajm`,`picture`,`showpict`,`ofense`,`defense`,`udestroy`,`rdestroy`,`spawn`,`spawnarea`,`ujoin`,`rjoin`,`search` from `entities` where `disabled`=0 order by `name`;");
 
 
  if (!(result=mysql_result(query))) return;
@@ -269,7 +269,7 @@ int maxbefore=0,index;
  pocet_predmetov=total;
  
  total=0;
- sprintf(query,"select component1,component2,component3,component4,product, source,destination,setowner,eliminate,usermsg,roommsg,missing,spell,mana,health from convert where disabled=0 order by id");
+ sprintf(query,"select `component1`,`component2`,`component3`,`component4`,`product`,`source`,`destination`,`setowner`,`eliminate`,`usermsg`,`roommsg`,`missing`,`spell`,`mana`,`health` from `convert` where `disabled`=0 order by `id`");
 
  if ((result=mysql_result(query))) {
    while ((row=mysql_fetch_row(result))) {
@@ -452,7 +452,7 @@ FILE *fp;
  if (newline) write_user(user,"\n");
  sprintf(filename,"pictures/%s",predmet[vec]->picture);
 
- sprintf(query,"select body from files where filename='%s';",predmet[vec]->picture);
+ sprintf(query,"select `body` from `files` where `filename`='%s';",predmet[vec]->picture);
 
  if ((predmet[vec]->showpict & 1)) {
    if (more(user,user->socket,filename)==1) { user->misc_op=2; return; }
@@ -3199,9 +3199,7 @@ if (!strcmp(word[1],"reload")) {
       }
     text[strlen(text)-1]='\0';
     strcpy(tmp,dbf_string(rm->desc_sk));
-    sprintf(query,"replace into rooms (name_sk,name_en,label,desc_sk,desc_en,links,
-    topic,defaccess,access,grp,disabled,intophr,fromphr,wherephr) 
-    values ('%s','%s','%s','%s','%s','%s','%s','%d','%d','%d',0,'%s','%s','%s');",
+    sprintf(query,"replace into `rooms` (`name_sk`,`name_en`,`label`,`desc_sk`,`desc_en`,`links`,`topic`,`defaccess`,`access`,`grp`,`disabled`,`intophr`,`fromphr`,`wherephr`) values ('%s','%s','%s','%s','%s','%s','%s','%d','%d','%d',0,'%s','%s','%s');",
     rm->name,rm->name_en,rm->label,tmp,dbf_string(rm->desc_en),text,rm->topic,
     rm->access,rm->access,rm->group,rm->into,rm->from,rm->where);
     mysql_kvery(query);
@@ -3214,12 +3212,7 @@ if (!strcmp(word[1],"reload")) {
 /*if (!strcmp(word[1],"!dbstore!")) {
   i=0;y=0;
   while (predmet[i]!=NULL) {
-    sprintf(query,"insert into entities (name,dativ,akuzativ,inytiv,food,
-    type,weight,dur,price,function,altfunct,amount,attack,firerate,seconddur,
-    pp,restrikt,tajm,enter,leave,inphr,outphr,ustart,rstart,ustop,rstop,
-    userphr,roomphr,victim,special,pict,error,showpict,ofense,defense,udestroy,
-    rdestroy,spawn)
-    values ('");
+    sprintf(query,"insert into `entities` (`name`,`dativ`,`akuzativ`,`inytiv`,`food`,`type`,`weight`,`dur`,`price`,`function`,`altfunct`,`amount`,`attack`,`firerate`,`seconddur`,`pp`,`restrikt`,`tajm`,`enter`,`leave`,`inphr`,`outphr`,`ustart`,`rstart`,`ustop`,`rstop`,`userphr`,`roomphr`,`victim`,`special`,`pict`,`error`,`showpict`,`ofense`,`defense`,`udestroy`,`rdestroy`,`spawn`) values ('");
     strcpy(text,dbf_string(predmet[i]->name));
     strcat(query,text);strcat(query,"','");
     strcpy(text,dbf_string(predmet[i]->dativ));
@@ -3319,7 +3312,7 @@ if (!strcmp(word[1],"disable")) {
     write_user(user,"Taky predmet neexistuje.\n");
     return;
    }
-  sprintf(query,"update entities set disabled='1' where name='%s';",predmet[vec]->name);
+  sprintf(query,"update `entities` set `disabled`='1' where `name`='%s';",predmet[vec]->name);
   if (mysql_query(&mysql,query)) {
     sprintf(text,"~OL~FRError: %s.\n",mysql_error(&mysql));
     write_user(user,text);
@@ -3339,7 +3332,7 @@ if (!strcmp(word[1],"enable")) {
     return;
    }
   inpstr=remove_first(inpstr);
-  sprintf(query,"select disabled,name from entities where name='%s'",inpstr);
+  sprintf(query,"select `disabled`,`name` from `entities` where `name`='%s'",inpstr);
   status=0;
   if ((result=mysql_result(query))) {
     if ((row=mysql_fetch_row(result))) {
@@ -3360,7 +3353,7 @@ if (!strcmp(word[1],"enable")) {
     return;
    }
   
-  sprintf(query,"update entities set disabled='0' where name='%s';",inpstr);
+  sprintf(query,"update `entities` set `disabled`='0' where `name`='%s';",inpstr);
   if (mysql_query(&mysql,query)) {
     sprintf(text,"~OL~FRError: %s.\n",mysql_error(&mysql));
     write_user(user,text);

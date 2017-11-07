@@ -85,11 +85,11 @@ int i,pos,stage=0;
            boot_exit(1);
         }
 
-   sprintf(query,"delete from web_index;");
+   sprintf(query,"truncate table `web_index`;");
    mysql_kvery(query);
-   sprintf(query,"delete from web_in;");
+   sprintf(query,"truncate table `web_in`;");
    mysql_kvery(query);
-   sprintf(query,"delete from web_out;");
+   sprintf(query,"truncate table `web_out`;");
    mysql_kvery(query);
  return 1;
 }
@@ -268,19 +268,19 @@ extern int db_save_user_details(UR_OBJECT user, int save_current)
    
    if (user->id>1000000000) uid[0]='\0';
    else sprintf(uid,"'%d',",user->id);
-   sprintf(query,"REPLACE INTO %s\
- (%susername,passwd,\
- last_login,total_login,last_login_len,read_mail,level,prompt,muzzletime,\
- charmode_echo,command_mode,colour,jailed,sex,pp,gold,sayswears,\
- ignore_bits,lines_count,wrap,who_type,rt_on_exit,\
- lastm,autofwd,mana,pagewho,examine,\
- first_login,col0,col1,col2,col3,col4,col5,col6,lang,goafkafter,killmeafter,ch,\
- commused0,commused1,commused2,commused3,commused4,commused5,commused6,commused7,commused8,commused9,\
- totaljailtime,totalmuzzletime,nontimejails,killed,commused10,muzzled,team,\
- shoutswears,smsssent,smsday,allowsms,switches,smsgate,agecode,longestsession,idletime,\
- last_site,user_desc,in_phrase,out_phrase,email,homepage,prompt_string,room,requestemail,mobile,wizpass,smsfollow,logoutmsg,online,\
- prevname,shoutmsg,shoutmsg2,gossipmsg,gossipmsg2,saymsg,saymsg2,\
- tellmsg,tellmsg2,wizshmsg,wizshmsg2,request,name2,name3,name4)\
+   sprintf(query,"REPLACE INTO `%s` \
+ (%s`username`,`passwd`,\
+ `last_login`,`total_login`,`last_login_len`,`read_mail`,`level`,`prompt`,`muzzletime`,\
+ `charmode_echo`,`command_mode`,`colour`,`jailed`,`sex`,`pp`,`gold`,`sayswears`,\
+ `ignore_bits`,`lines_count`,`wrap`,`who_type`,`rt_on_exit`,\
+ `lastm`,`autofwd`,`mana`,`pagewho`,`examine`,\
+ `first_login`,`col0`,`col1`,`col2`,`col3`,`col4`,`col5`,`col6`,`lang`,`goafkafter`,`killmeafter`,`ch`,\
+ `commused0`,`commused1`,`commused2`,`commused3`,`commused4`,`commused5`,`commused6`,`commused7`,`commused8`,`commused9`,\
+ `totaljailtime`,`totalmuzzletime`,`nontimejails`,`killed`,`commused10`,`muzzled`,`team`,\
+ `shoutswears`,`smsssent`,`smsday`,`allowsms`,`switches`,`smsgate`,`agecode`,`longestsession`,`idletime`,\
+ `last_site`,`user_desc`,`in_phrase`,`out_phrase`,`email`,`homepage`,`prompt_string`,`room`,`requestemail`,`mobile`,`wizpass`,`smsfollow`,`logoutmsg`,`online`,\
+ `prevname`,`shoutmsg`,`shoutmsg2`,`gossipmsg`,`gossipmsg2`,`saymsg`,`saymsg2`,\
+ `tellmsg`,`tellmsg2`,`wizshmsg`,`wizshmsg2`,`request`,`name2`,`name3`,`name4`)\
  VALUES \
  (%s'%s','%s',\
  FROM_UNIXTIME(%d),FROM_UNIXTIME(%d),'%d',FROM_UNIXTIME(%d),'%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d',\
@@ -329,7 +329,7 @@ int i;
    for (i=0;i<USER_NAME_LEN;i++)
     if (user->name[i]=='\'' || user->name[i]==';') user->name[i]=' ';
 
-   sprintf(query," SELECT passwd, UNIX_TIMESTAMP(last_login),UNIX_TIMESTAMP(total_login),last_login_len,UNIX_TIMESTAMP(read_mail),level,prompt,muzzletime,charmode_echo,command_mode,colour,jailed,sex,pp,gold,sayswears, ignore_bits,lines_count,wrap,who_type,rt_on_exit, lastm,autofwd,mana,pagewho,examine, UNIX_TIMESTAMP(first_login),col0,col1,col2,col3,col4,lang,goafkafter,killmeafter,ch, commused0,commused1,commused2,commused3,commused4,commused5,commused6,commused7,commused8,commused9, totaljailtime,totalmuzzletime,nontimejails,killed,commused10,col5,muzzled,team, shoutswears,smsssent,smsday,allowsms,switches,smsgate,agecode,longestsession,idletime, last_site,user_desc,in_phrase,out_phrase,email,homepage,prompt_string,room,requestemail,mobile,wizpass,smsfollow,logoutmsg, id,username,prevname,shoutmsg,shoutmsg2,gossipmsg,gossipmsg2,saymsg,saymsg2, tellmsg,tellmsg2,wizshmsg,wizshmsg2,col6,request,name2,name3,name4 FROM %s WHERE username='%s'",repository?"repository":"users",user->name);
+   sprintf(query," SELECT `passwd`,UNIX_TIMESTAMP(`last_login`),UNIX_TIMESTAMP(`total_login`),`last_login_len`,UNIX_TIMESTAMP(`read_mail`),`level`,`prompt`,`muzzletime`,`charmode_echo`,`command_mode`,`colour`,`jailed`,`sex`,`pp`,`gold`,`sayswears`,`ignore_bits`,`lines_count`,`wrap`,`who_type`,`rt_on_exit`,`lastm`,`autofwd`,`mana`,`pagewho`,`examine`,UNIX_TIMESTAMP(`first_login`),`col0`,`col1`,`col2`,`col3`,`col4`,`lang`,`goafkafter`,`killmeafter`,`ch`,`commused0`,`commused1`,`commused2`,`commused3`,`commused4`,`commused5`,`commused6`,`commused7`,`commused8`,`commused9`,`totaljailtime`,`totalmuzzletime`,`nontimejails`,`killed`,`commused10`,`col5`,`muzzled`,`team`,`shoutswears`,`smsssent`,`smsday`,`allowsms`,`switches`,`smsgate`,`agecode`,`longestsession`,`idletime`,`last_site`,`user_desc`,`in_phrase`,`out_phrase`,`email`,`homepage`,`prompt_string`,`room`,`requestemail`,`mobile`,`wizpass`,`smsfollow`,`logoutmsg`,`id`,`username`,`prevname`,`shoutmsg`,`shoutmsg2`,`gossipmsg`,`gossipmsg2`,`saymsg`,`saymsg2`,`tellmsg`,`tellmsg2`,`wizshmsg`,`wizshmsg2`,`col6`,`request`,`name2`,`name3`,`name4` FROM `%s` WHERE `username`='%s'",repository?"repository":"users",user->name);
 
    if (!(result=mysql_result(query))) return 0; /* asutka okjurla */
    if (!(row=mysql_fetch_row(result))) { /* no such user */
@@ -540,7 +540,7 @@ int i;
 
 int db_load_user_password(UR_OBJECT user)
 {
-   sprintf(query,"SELECT passwd,level FROM users WHERE username='%s'",user->name);
+   sprintf(query,"SELECT `passwd`,`level` FROM `users` WHERE `username`='%s'",user->name);
    if (!(result=mysql_result(query))) return 0; /* bad select or something */
    if (!(row=mysql_fetch_row(result))) {         /* no such user */
       mysql_free_result(result);
@@ -557,7 +557,7 @@ int db_load_user_level(char *username)
 {
    int level;
 
-   sprintf(query,"SELECT level FROM users WHERE username='%s'",username);
+   sprintf(query,"SELECT `level` FROM `users` WHERE `username`='%s'",username);
    if (!(result=mysql_result(query))) return -2; /* bad select or something */
    if (!(row=mysql_fetch_row(result))) {         /* no such user */
       mysql_free_result(result);
@@ -572,7 +572,7 @@ int db_userid(char *username)
 {
    int uid;
 
-   sprintf(query,"SELECT id FROM users WHERE username='%s'",username);
+   sprintf(query,"SELECT `id` FROM `users` WHERE `username`='%s'",username);
    if (!(result=mysql_result(query))) return -2; /* bad select or something */
    if (!(row=mysql_fetch_row(result))) {         /* no such user */
       mysql_free_result(result);
@@ -589,7 +589,7 @@ int db_user_exists(char *username)
    username[USER_NAME_LEN]='\0';
    for (i=0;i<USER_NAME_LEN;i++)
     if (username[i]=='\'' || username[i]==';') username[i]=' ';
-   sprintf(query,"SELECT username FROM users WHERE username='%s'",username);
+   sprintf(query,"SELECT `username` FROM `users` WHERE `username`='%s'",username);
    if (!(result=mysql_result(query))) return 0; /* bad select or something */
    if ((row=mysql_fetch_row(result)) && row[0]) {
      mysql_free_result(result);
@@ -608,7 +608,7 @@ char *db_user_name(char *username)
    username[USER_NAME_LEN]='\0';
    for (i=0;i<USER_NAME_LEN;i++)
     if (username[i]=='\'' || username[i]==';') username[i]=' ';
-   sprintf(query,"SELECT username FROM users WHERE username='%s'",username);
+   sprintf(query,"SELECT `username` FROM `users` WHERE `username`='%s'",username);
    if (!(result=mysql_result(query))) return sensitivename; /* bad select or something */
    if ((row=mysql_fetch_row(result)) && row[0]) {
      strcpy(sensitivename,row[0]);
@@ -622,7 +622,7 @@ char *db_username_by_id(int uid)
 static char name[USER_NAME_LEN+2];
    
  name[0]='\0';
- sprintf(query,"SELECT username FROM users WHERE id='%d'",uid);
+ sprintf(query,"SELECT `username` FROM `users` WHERE `id`='%d'",uid);
  if (!(result=mysql_result(query))) return name; /* bad select or something */
  if ((row=mysql_fetch_row(result)) && row[0]) strcpy(name,row[0]);
  mysql_free_result(result);
@@ -636,7 +636,7 @@ int ok=0,i;//,id=0;
    username[USER_NAME_LEN]='\0';
    for (i=0;i<USER_NAME_LEN;i++)
     if (username[i]=='\'' || username[i]==';') username[i]=' ';
-/*   sprintf (query,"select id from users where username='%s'",username);
+/*   sprintf (query,"select `id` from `users` where `username`='%s'",username);
    if ((result=mysql_result(query))) {
      while ((row=mysql_fetch_row(result))) {
        if (row[0]!=NULL) {
@@ -644,10 +644,10 @@ int ok=0,i;//,id=0;
         }
       }
      mysql_free_result(result);
-     sprintf(query,"DELETE FROM winners WHERE userid='%d'",id);
+     sprintf(query,"DELETE FROM `winners` WHERE `userid`='%d'",id);
      if (mysql_query(&mysql,query)) ok=1;
     }*/
-   sprintf(query,"DELETE FROM users WHERE username='%s'",username);
+   sprintf(query,"DELETE FROM `users` WHERE `username`='%s'",username);
    if (mysql_query(&mysql,query)) ok=1;
    return ok;
 }
@@ -703,14 +703,14 @@ int note_vote(UR_OBJECT user)
 int votes=0,possible=0;
 int has_to_vote=0;
 
-   sprintf (query,"select id from vote_i where level<'%d' and closed=0;",user->level+1);
+   sprintf (query,"select `id` from `vote_i` where `level`<'%d' and `closed`=0;",user->level+1);
    if (!(result=mysql_result(query))) {
      return 0;
     }
    possible=mysql_num_rows(result);
    mysql_free_result(result);
    
-   sprintf (query,"select id from vote_i,vote_v where level<'%d' and closed=0 and userid='%d' and voteid=id order by (level>6);",user->level+1,user->id);
+   sprintf (query,"select `id` from `vote_i`,`vote_v` where `level`<'%d' and `closed`=0 and `userid`='%d' and `voteid`=`id` order by (`level`>6);",user->level+1,user->id);
    if (!(result=mysql_result(query))) {
      return 0;
     }
@@ -728,7 +728,7 @@ int id,total=0,already_voted=0,choice=0,closed=0,wizz=0,level=0;
 int uvoted[101],cnt=0,i;
 
  if (word_count==1) {
-   sprintf (query,"select id from vote_i,vote_v where level<'%d' and closed=0 and userid='%d' and voteid=id order by (level>6);",user->level+1,user->id);
+   sprintf (query,"select `id` from `vote_i`,`vote_v` where `level`<'%d' and `closed`=0 and `userid`='%d' and `voteid`=`id` order by (`level`>6);",user->level+1,user->id);
    if (!(result=mysql_result(query))) {
      write_user(user,"Nastala chyba pri citani hlasovacieho listka.\n");
      return;
@@ -742,7 +742,7 @@ int uvoted[101],cnt=0,i;
     }
    mysql_free_result(result);
    
-   sprintf (query,"select label,description,level,closed,id from vote_i where level<'%d' and closed<2 order by (level>6),(1-closed),id;",user->level+1);
+   sprintf (query,"select `label`,`description`,`level`,`closed`,`id` from `vote_i` where `level`<'%d' and `closed`<2 order by (`level`>6),(1-`closed`),`id`;",user->level+1);
    if (!(result=mysql_result(query))) {
      write_user(user,"Nastala chyba pri citani hlasovacieho listka.\n");
      return;
@@ -780,7 +780,7 @@ int uvoted[101],cnt=0,i;
   }
 
  if (word_count==2) {
-   sprintf (query,"select id,question,label,closed from vote_i where level<'%d' and label LIKE '%s%%' and closed<2 order by id;",user->level+1,word[1]);
+   sprintf (query,"select `id`,`question`,`label`,`closed` from `vote_i` where `level`<'%d' and `label` LIKE '%s%%' and `closed`<2 order by `id`;",user->level+1,word[1]);
    if (!(result=mysql_result(query))) {
      write_user(user,"Nastala chyba pri citani hlasovacieho listka.\n");
      return;
@@ -800,7 +800,7 @@ int uvoted[101],cnt=0,i;
     }
 
    if (!closed) {
-     sprintf (query,"select userid from vote_v where userid='%d' and voteid='%d';",user->id,id);
+     sprintf (query,"select `userid` from `vote_v` where `userid`='%d' and `voteid`='%d';",user->id,id);
      if (!(result=mysql_result(query))) {
        write_user(user,"Nastala chyba pri citani hlasovacieho listka.\n");
        return;
@@ -815,7 +815,7 @@ int uvoted[101],cnt=0,i;
    write_user(user,texthb);
    write_user(user,"~OL~FY+------------------------------------------------------------------------------+\n");
 
-   sprintf (query,"select optionid,votes,opt from vote_o where id='%d' order by optionid;",id);
+   sprintf (query,"select `optionid`,`votes`,`opt` from `vote_o` where `id`='%d' order by `optionid`;",id);
    if (!(result=mysql_result(query))) {
      write_user(user,"Nastala chyba pri citani hlasovacieho listka.\n");
      return;
@@ -844,7 +844,7 @@ int uvoted[101],cnt=0,i;
   }
 
  if (word_count==3) {
-   sprintf (query,"select id,question,label,closed from vote_i where level<'%d' and label LIKE '%s%%' and closed<2 order by id;",user->level+1,word[1]);
+   sprintf (query,"select `id`,`question`,`label`,`closed` from `vote_i` where `level`<'%d' and `label` LIKE '%s%%' and `closed`<2 order by `id`;",user->level+1,word[1]);
    if (!(result=mysql_result(query))) {
      write_user(user,"Nastala chyba pri citani hlasovacieho listka.\n");
      return;
@@ -866,7 +866,7 @@ int uvoted[101],cnt=0,i;
      write_user(user,"Hlasovanie uz je uzavrete, mozes si len pozriet vysledky.\n");
      return;
     }
-   sprintf (query,"select userid from vote_v where userid='%d' and voteid='%d';",user->id,id);
+   sprintf (query,"select `userid` from `vote_v` where `userid`='%d' and `voteid`='%d';",user->id,id);
    if (!(result=mysql_result(query))) {
      write_user(user,"Nastala chyba pri citani hlasovacieho listka.\n");
      return;
@@ -881,7 +881,7 @@ int uvoted[101],cnt=0,i;
     }
     
    choice=atoi(word[2]);
-   sprintf (query,"select opt from vote_o where id='%d' and optionid='%d';",id,choice);
+   sprintf (query,"select `opt` from `vote_o` where `id`='%d' and `optionid`='%d';",id,choice);
    if (!(result=mysql_result(query))) {
      write_user(user,"Nastala chyba 1 pri citani hlasovacieho listka.\n");
      return;
@@ -890,13 +890,13 @@ int uvoted[101],cnt=0,i;
      sprintf(texthb,"Dakujeme za Tvoj hlas! ==> %s\n",row[0]?row[0]:"");
      mysql_free_result(result);
 
-     sprintf (query,"insert into vote_v values('%d','%d');",user->id,id);
+     sprintf (query,"insert into `vote_v` values('%d','%d');",user->id,id);
      if (!mysql_kvery(query)) {
        write_user(user,"Nastala chyba pri citani hlasovacieho listka.\n");
        return;
       }
 
-     sprintf (query,"update vote_o set votes=votes+1 where id='%d' and optionid='%d';",id,choice);
+     sprintf (query,"update `vote_o` set `votes`=`votes`+1 where `id`='%d' and `optionid`='%d';",id,choice);
      if (!mysql_kvery(query)) {
        write_user(user,"Nastala chyba pri citani hlasovacieho listka.\n");
        return;
@@ -911,7 +911,7 @@ int uvoted[101],cnt=0,i;
    write_user(user,text);
    write_user(user,"~OL~FY+------------------------------------------------------------------------------+\n");
 
-   sprintf (query,"select optionid,votes,opt from vote_o where id='%d' order by optionid;",id);
+   sprintf (query,"select `optionid`,`votes`,`opt` from `vote_o` where `id`='%d' order by `optionid`;",id);
    if (!(result=mysql_result(query))) {
      write_user(user,"Nastala chyba pri citani hlasovacieho listka.\n");
      return;
@@ -988,11 +988,11 @@ else {
  else if (type==DB_BRUTALIS)  { strcpy(lab,"brut"); strcpy(label,"masovych vrahov"); }
  
  texthb[0]='\0';
- if (mode==1) sprintf(query,"select users.username,winners.%s from winners,users where users.id=winners.userid order by %s desc limit %d;",lab,lab,kolko);
- else if (mode==2) sprintf(query,"select users.username,fly_w,fly_l,fly_p,fly_s from winners,users where users.id=winners.userid order by fly_s desc limit %d;",kolko);
+ if (mode==1) sprintf(query,"select `users`.`username`,`winners`.`%s` from `winners`,`users` where `users`.`id`=`winners`.`userid` order by `%s` desc limit %d;",lab,lab,kolko);
+ else if (mode==2) sprintf(query,"select `users`.`username`,`fly_w`,`fly_l`,`fly_p`,`fly_s` from `winners`,`users` where `users`.`id`=`winners`.`userid` order by `fly_s` desc limit %d;",kolko);
  else {
-   if (type==DB_BRUTALIS) sprintf(query,"select users.username,winners.%s_w,winners.%s_l from winners,users where users.id=winners.userid and (%s_w-%s_l<>0) order by (%s_w-%s_l) desc limit %d;",lab,lab,lab,lab,lab,lab,kolko);
-   else sprintf(query,"select users.username,winners.%s_w,winners.%s_l from winners,users where users.id=winners.userid order by (%s_w-%s_l) desc limit %d;",lab,lab,lab,lab,kolko);
+   if (type==DB_BRUTALIS) sprintf(query,"select `users`.`username`,`winners`.`%s_w`,`winners`.`%s_l` from `winners`,`users` where `users`.`id`=`winners`.`userid` and (`%s_w`-`%s_l`<>0) order by (`%s_w`-`%s_l`) desc limit %d;",lab,lab,lab,lab,lab,lab,kolko);
+   else sprintf(query,"select `users`.`username`,`winners`.`%s_w`,`winners`.`%s_l` from `winners`,`users` where `users`.`id`=`winners`.`userid` order by (`%s_w`-`%s_l`) desc limit %d;",lab,lab,lab,lab,kolko);
   }
  if (!(result=mysql_result(query))) {
    write_user(user,"Nastala chyba pri citani tabulky.\n");
@@ -1031,9 +1031,9 @@ else {
    else if (mode==2) write_user(user,"~OL~FB|=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=|\n");
    else write_user(user,"~OL~FB|=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=|\n");
    if (!current) {
-     if (mode==1) sprintf(query,"select %s from winners where userid='%d';",lab,user->id);
-     else if (mode==2) sprintf(query,"select fly_w,fly_l,fly_p,fly_s from winners where userid='%d';",user->id);
-     else sprintf(query,"select winners.%s_w,winners.%s_l from winners where userid='%d';",lab,lab,user->id);
+     if (mode==1) sprintf(query,"select `%s` from `winners` where `userid`='%d';",lab,user->id);
+     else if (mode==2) sprintf(query,"select `fly_w`,`fly_l`,`fly_p`,`fly_s` from `winners` where `userid`='%d';",user->id);
+     else sprintf(query,"select `winners`.`%s_w`,`winners`.`%s_l` from `winners` where `userid`='%d';",lab,lab,user->id);
      if (!(result=mysql_result(query))) return;
      if ((row=mysql_fetch_row(result))) {
        if (mode==1) sprintf(text,"~OL~FB|     | ~FR%-12s~FB | ~FW%7s~FB    |\n~OL~FB|=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=|\n",user->name,row[0]);
@@ -1055,7 +1055,7 @@ UR_OBJECT user;
 {
 int points;
 
- sprintf(query,"select arena from winners where userid='%d';",user->id);
+ sprintf(query,"select `arena` from `winners` where `userid`='%d';",user->id);
  if (!(result=mysql_result(query))) return 0;
  if ((row=mysql_fetch_row(result))) {
    points=atoi(row[0]);
@@ -1075,7 +1075,7 @@ reve_w=0,reve_l=0,dama_w=0,dama_l=0,miny_w=0,miny_l=0,brut_w=0,brut_l=0,fly_w=0,
  if (type==DB_ARENA) user->ap+=amount;
  if (amount<0) losts=-amount; else wins=amount;
 
- sprintf(query,"select arena,quest,pisk_w,pisk_l,hang_w,hang_l,doom_w,doom_l, reve_w,reve_l,dama_w,dama_l,miny_w,miny_l,brut_w,brut_l,fly_w,fly_l,fly_p,fly_s from winners where userid='%d';",user->id);
+ sprintf(query,"select `arena`,`quest`,`pisk_w`,`pisk_l`,`hang_w`,`hang_l`,`doom_w`,`doom_l`,`reve_w`,`reve_l`,`dama_w`,`dama_l`,`miny_w`,`miny_l`,`brut_w`,`brut_l`,`fly_w`,`fly_l`,`fly_p`,`fly_s` from `winners` where `userid`='%d';",user->id);
  if (!(result=mysql_result(query))) return;
  if ((row=mysql_fetch_row(result))) {
    arena =atoi(row[ 0]);
@@ -1118,7 +1118,7 @@ reve_w=0,reve_l=0,dama_w=0,dama_l=0,miny_w=0,miny_l=0,brut_w=0,brut_l=0,fly_w=0,
    else fly_s=(fly_w-fly_l)+((fly_p-90)*(fly_p-90));
   }
 
- sprintf(query,"replace into winners (userid,arena,quest,pisk_w,pisk_l, hang_w,hang_l,doom_w,doom_l,reve_w,reve_l,dama_w,dama_l, miny_w,miny_l,brut_w,brut_l,fly_w,fly_l,fly_p,fly_s) values ('%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d');", user->id,arena,quest,pisk_w,pisk_l, hang_w,hang_l,doom_w,doom_l,reve_w,reve_l,dama_w,dama_l, miny_w,miny_l,brut_w,brut_l,fly_w,fly_l,fly_p,fly_s);
+ sprintf(query,"replace into `winners` (`userid`,`arena`,`quest`,`pisk_w`,`pisk_l`,`hang_w`,`hang_l`,`doom_w`,`doom_l`,`reve_w`,`reve_l`,`dama_w`,`dama_l`,`miny_w`,`miny_l`,`brut_w`,`brut_l`,`fly_w`,`fly_l`,`fly_p`,`fly_s`) values ('%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d');", user->id,arena,quest,pisk_w,pisk_l, hang_w,hang_l,doom_w,doom_l,reve_w,reve_l,dama_w,dama_l, miny_w,miny_l,brut_w,brut_l,fly_w,fly_l,fly_p,fly_s);
  mysql_kvery(query);
 }
 
@@ -1150,7 +1150,7 @@ int lineid=0;
 static char ret[ARR_SIZE+1];
  ret[0]='\0';
  if (user->socket<1000) return ret;
- sprintf(query,"select line,lineid from web_in where id='%d' order by lineid limit 1;",user->socket-1000);
+ sprintf(query,"select `line`,`lineid` from `web_in` where `id`='%d' order by `lineid` limit 1;",user->socket-1000);
  if (!(result=mysql_result(query))) return ret;
  if ((row=mysql_fetch_row(result))) {
    strncpy(ret,row[0],ARR_SIZE);
@@ -1159,14 +1159,14 @@ static char ret[ARR_SIZE+1];
   }
  mysql_free_result(result);
  
- sprintf(query,"delete from web_in where id='%d' and lineid='%d' limit 1;",user->socket-1000,lineid);
+ sprintf(query,"delete from `web_in` where `id`='%d' and `lineid`='%d' limit 1;",user->socket-1000,lineid);
  mysql_kvery(query);
  return ret;
 }
 
 void write_web(int socket,char *str)
 {
- sprintf(query,"insert into web_out (id,line) values ('%d','%s');",socket-1000,dbf_string(str));
+ sprintf(query,"insert into `web_out` (`id`,`line`) values ('%d','%s');",socket-1000,dbf_string(str));
  mysql_kvery(query);
 }
 
@@ -1174,7 +1174,7 @@ void eliminate_webuser(int socket)
 {
  sprintf(text,"%c",223);
  write_web(socket,text); // chcipni web klient
- sprintf(query,"update web_index set status=3 where id='%d';",socket-1000);
+ sprintf(query,"update `web_index` set `status`=3 where `id`='%d';",socket-1000);
  mysql_kvery(query);
 }
 
@@ -1188,7 +1188,7 @@ int port=0;
 UR_OBJECT u;
 FILE *fp;
 
- sprintf(query,"select id,ip,site,port from web_index where status=1;");
+ sprintf(query,"select `id`,`ip`,`site`,`port` from `web_index` where `status`=1;");
  if (!(result=mysql_result(query))) return;
  while ((row=mysql_fetch_row(result))) {
    id=atoi(row[0]);
@@ -1262,7 +1262,7 @@ FILE *fp;
    num_of_logins++;
    user->zaradeny=1;
    strcpy(user->ipcka,ipcka);
-   sprintf(query,"update web_index set status=2 where id='%d';",id);
+   sprintf(query,"update `web_index` set `status`=2 where `id`='%d';",id);
    mysql_kvery(query);
   }
  mysql_free_result(result);
@@ -1275,7 +1275,7 @@ UR_OBJECT user,next;
 int id[50],i;
 //int kick[50];
 
- sprintf(query,"select id from web_index where idle>1 limit 50;");
+ sprintf(query,"select `id` from `web_index` where `idle`>1 limit 50;");
  if (!(result=mysql_result(query))) return;
  cnt=0;
  while ((row=mysql_fetch_row(result))) {
@@ -1300,14 +1300,14 @@ int id[50],i;
       }
      user=next;
     }
-   sprintf(query,"delete from web_index where id='%d';",id[i]);
+   sprintf(query,"delete from `web_index` where `id`='%d';",id[i]);
    mysql_kvery(query);
-   sprintf(query,"delete from web_out where id='%d';",id[i]);
+   sprintf(query,"delete from `web_out` where `id`='%d';",id[i]);
    mysql_kvery(query);
-   sprintf(query,"delete from web_in where id='%d';",id[i]);
+   sprintf(query,"delete from `web_in` where `id`='%d';",id[i]);
    mysql_kvery(query);
   }
- sprintf(query,"update web_index set idle=idle+1;");
+ sprintf(query,"update `web_index` set `idle`=`idle`+1;");
  mysql_kvery(query);
 }
 
@@ -1321,7 +1321,7 @@ int cnt=0;
 
 if (word_count==1) {
   write_user(user,"~OLZoznam dostupnych obrazkov:\n");
-  sprintf(query,"select filename from files where type=1 order by filename;");
+  sprintf(query,"select `filename` from `files` where `type`=1 order by `filename`;");
   if (!(result=mysql_result(query))) {
     write_user(user,"Zoznam obrazkov nieje k dispozicii.\n");
     return;
@@ -1381,7 +1381,7 @@ else {
     return;
    }
 
-  sprintf(query,"select body from files where filename='%s' and (type=1 or type=2);",dbf_string(word[2]));
+  sprintf(query,"select `body` from `files` where `filename`='%s' and (`type`=1 or `type`=2);",dbf_string(word[2]));
   if (!(result=mysql_result(query))) {
     write_user(user,"Nastala chyba pri citani obrazku.\n");
     return;
@@ -1427,7 +1427,7 @@ else {
 int load_macros(MACRO *list,int id) {
 int pocet=0;
   
-  sprintf(query,"select name,value from macros where userid='%d';",id);
+  sprintf(query,"select `name`,`value` from `macros` where `userid`='%d';",id);
   if (!(result=mysql_result(query))) return -1;
   while ((row=mysql_fetch_row(result))) {
     if (row[0] && row[1]) {
@@ -1444,7 +1444,7 @@ UR_OBJECT user;
 {
 int cnt=0;
 
-sprintf(query,"select doom_w,doom_l from winners where userid='%d';",user->id);
+sprintf(query,"select `doom_w`,`doom_l` from `winners` where `userid`='%d';",user->id);
 if (!(result=mysql_result(query))) return 0;
 if ((row=mysql_fetch_row(result)) && row[0] && row[1]) cnt=atoi(row[0])-atoi(row[1]);
 mysql_free_result(result);
@@ -1453,7 +1453,7 @@ return cnt;
 
 int db_user_switch(int uid,int svitch) 
 {
- sprintf(query,"select userid from people where userid='%d' and switch='%d'",uid,svitch);
+ sprintf(query,"select `userid` from `people` where `userid`='%d' and `switch`='%d'",uid,svitch);
  if ((result=mysql_result(query))) {
    if ((row=mysql_fetch_row(result)) && row[0]) {
      mysql_free_result(result);
@@ -1548,29 +1548,29 @@ void construct_query(UR_OBJECT user,int max)
    switch (user->browsing) {
       case 2:
      case 10:
-       sprintf(query,"select length(message) from mailbox where userid='%d' order by time limit %d,10000",user->id,user->messnum-1);
+       sprintf(query,"select length(`message`) from `mailbox` where `userid`='%d' order by `time` limit %d,10000",user->id,user->messnum-1);
      break;
      case 3:
-       sprintf(query,"select length(message) from board where room='%s' and deleted=0 order by time limit %d,10000",user->subject,user->messnum-1);
+       sprintf(query,"select length(`message`) from `board` where `room`='%s' and `deleted`=0 order by `time` limit %d,10000",user->subject,user->messnum-1);
      break;
      case 4: 
-       sprintf(query,"select length(message) from board where deleted=0 and message like('%%%s%%') order by time limit %d,10000",user->findstr,user->messnum-1);
+       sprintf(query,"select length(`message`) from `board` where `deleted`=0 and `message` like('%%%s%%') order by `time` limit %d,10000",user->findstr,user->messnum-1);
      break;
      case 11: 
-       sprintf(query,"select length(message) from mailbox where userid='%d' and sender='%s' order by time limit %d,10000",user->id,user->subject,user->messnum-1);
+       sprintf(query,"select length(`message`) from `mailbox` where `userid`='%d' and `sender`='%s' order by `time` limit %d,10000",user->id,user->subject,user->messnum-1);
      break;
      case 12: 
-       sprintf(query,"select length(message) from mailbox where userid='%s' and sender='%s' order by time limit %d,10000",user->subject,user->name,user->messnum-1);
+       sprintf(query,"select length(`message`) from `mailbox` where `userid`='%s' and `sender`='%s' order by `time` limit %d,10000",user->subject,user->name,user->messnum-1);
      break;
      case 20: 
-       sprintf(query,"select length(joke) from jokes order by id desc limit %d,10000",user->messnum-1);
+       sprintf(query,"select length(`joke`) from `jokes` order by `id` desc limit %d,10000",user->messnum-1);
      break;
      case 21: 
-       sprintf(query,"select length(joke) from jokes order by id desc limit 1");
+       sprintf(query,"select length(`joke`) from `jokes` order by `id` desc limit 1");
      break;
      default:
       if (user->browsing>100)
-       sprintf(query,"select length(message) from board where deleted=0 and time>FROM_UNIXTIME('%d') order by time limit %d,10000",(int)time(0)-(user->browsing-100)*86400,user->messnum-1);
+       sprintf(query,"select length(`message`) from `board` where `deleted`=0 and `time`>FROM_UNIXTIME('%d') order by `time` limit %d,10000",(int)time(0)-(user->browsing-100)*86400,user->messnum-1);
      break;
     }
    return;
@@ -1578,29 +1578,29 @@ void construct_query(UR_OBJECT user,int max)
  switch (user->browsing) {
     case 2:
    case 10:
-     sprintf(query,"select message,sender,time,UNIX_TIMESTAMP(time) from mailbox where userid='%d' order by time limit %d,%d",user->id,user->messnum-1,max);
+     sprintf(query,"select `message`,`sender`,`time`,UNIX_TIMESTAMP(`time`) from `mailbox` where `userid`='%d' order by `time` limit %d,%d",user->id,user->messnum-1,max);
    break;
    case 3:
-     sprintf(query,"select message,autor,time,dow,status from board where room='%s' and deleted=0 order by time limit %d,%d",user->subject,user->messnum-1,max);
+     sprintf(query,"select `message`,`autor`,`time`,`dow`,`status` from `board` where `room`='%s' and `deleted`=0 order by time limit %d,%d",user->subject,user->messnum-1,max);
    break;
    case 4: 
-     sprintf(query,"select message,autor,time,dow,status,room from board where deleted=0 and message like('%%%s%%') order by time limit %d,%d",user->findstr,user->messnum-1,max);
+     sprintf(query,"select `message`,`autor`,`time`,`dow`,`status`,`room` from `board` where `deleted`=0 and `message` like('%%%s%%') order by `time` limit %d,%d",user->findstr,user->messnum-1,max);
    break;
    case 11:
-     sprintf(query,"select message,sender,time,UNIX_TIMESTAMP(time) from mailbox where userid='%d' and sender='%s' order by time limit %d,%d",user->id,user->subject,user->messnum-1,max);
+     sprintf(query,"select `message`,`sender`,`time`,UNIX_TIMESTAMP(`time`) from `mailbox` where `userid`='%d' and `sender`='%s' order by `time` limit %d,%d",user->id,user->subject,user->messnum-1,max);
    break;
    case 12:
-     sprintf(query,"select message,sender,time,UNIX_TIMESTAMP(time) from mailbox where userid='%s' and sender='%s' order by time limit %d,%d",user->subject,user->name,user->messnum-1,max);
+     sprintf(query,"select `message`,`sender`,`time`,UNIX_TIMESTAMP(`time`) from `mailbox` where `userid`='%s' and `sender`='%s' order by `time` limit %d,%d",user->subject,user->name,user->messnum-1,max);
    break;
    case 20: 
-     sprintf(query,"select joke,autor from jokes order by id desc limit %d,%d",user->messnum-1,max);
+     sprintf(query,"select `joke`,`autor` from `jokes` order by `id` desc limit %d,%d",user->messnum-1,max);
    break;
    case 21: 
-     sprintf(query,"select joke,autor from jokes order by id desc limit 1");
+     sprintf(query,"select `joke`,`autor` from `jokes` order by `id` desc limit 1");
    break;
    default:
     if (user->browsing>100)
-     sprintf(query,"select message,autor,time,dow,status,room from board where deleted=0 and time>FROM_UNIXTIME('%d') order by time limit %d,%d",(int)time(0)-(user->browsing-100)*86400,user->messnum-1,max);
+     sprintf(query,"select `message`,`autor`,`time`,`dow`,`status`,`room` from `board` where `deleted`=0 and `time`>FROM_UNIXTIME('%d') order by `time` limit %d,%d",(int)time(0)-(user->browsing-100)*86400,user->messnum-1,max);
    break;
   }
 }
@@ -1682,7 +1682,7 @@ PAGER pom;
        if (user->findstr[0])
          sprintf(text,"Ziadna z nasledujucich sprav neobsahuje slovo '%s'.\n",user->findstr);
        else {
-         sprintf(query,"select count(msgid) from mailbox where userid='%d'",user->id);
+         sprintf(query,"select count(`msgid`) from `mailbox` where `userid`='%d'",user->id);
          max=query_to_int(query);
          if (max==0)
           sprintf(text,"Nemas ziadnu postu.\n");
@@ -1711,7 +1711,7 @@ PAGER pom;
        if (user->findstr[0])
          sprintf(text,"Ziadna z nasledujucich sprav neobsahuje slovo '%s'.\n",user->findstr);
        else {
-         sprintf(query,"select count(msgid) from board where room='%s' and deleted=0",user->subject);
+         sprintf(query,"select count(`msgid`) from `board` where `room`='%s' and `deleted`=0",user->subject);
          max=query_to_int(query);
          if (max) sprintf(text,"Na nastenke je len %d %s.\n",max,skloncislo(max,"sprava","spravy","sprav"));         
          else sprintf(text,"Nastenka je prazdna.\n");
@@ -1727,7 +1727,7 @@ PAGER pom;
        if (user->findstr[0])
          sprintf(text,"Ziadny z nasledujucich vtipov neobsahuje slovo '%s'.\n",user->findstr);
        else {
-         sprintf(query,"select count(id) from jokes");
+         sprintf(query,"select count(`id`) from `jokes`");
          max=query_to_int(query);
          if (max) sprintf(text,"Na jokeboard je len %d vtip%s.\n",max,skloncislo(max,"","y","ov"));
          else sprintf(text,"Na jokeboarde niesu ziadne vtipy ;(\n");
@@ -2197,7 +2197,7 @@ if (user->vis) name=user->name; else name=invisname2(user);
    if (user->sex) g=1;
    else g=2;
   }
- sprintf(query,"insert into board (room,msgid,time,autor,dow,status,message) values ('%s','%d',FROM_UNIXTIME('%d'),'%s','%d','%d','%s')",
+ sprintf(query,"insert into `board` (`room`,`msgid`,`time`,`autor`,`dow`,`status`,`message`) values ('%s','%d',FROM_UNIXTIME('%d'),'%s','%d','%d','%s')",
  user->room->name,max+1,(int)time(0),user->name,twday,g,dbf_string(ptr));
 
  if (mysql_query(&mysql,query)) {
@@ -2239,13 +2239,13 @@ if (user->vis) name=user->name; else name=invisname(user);
 
 if (!strcmp(word[1],"all")) {
   if (user->level>=KIN) {
-    sprintf(query,"delete from board where room='%s' and deleted=0",user->room->name);
+    sprintf(query,"delete from `board` where `room`='%s' and `deleted`=0",user->room->name);
     mysql_kvery(query);
     vyfluslo=mysql_affected_rows(&mysql);
     write_user(user,"Vsetky spravy boli zmazane.\n");
    }
   else {
-    sprintf(query,"delete from board where room='%s' and autor='%s' and deleted=0",user->room->name,user->name);
+    sprintf(query,"delete from `board` where `room`='%s' and `autor`='%s' and `deleted`=0",user->room->name,user->name);
     mysql_kvery(query);
     vyfluslo=mysql_affected_rows(&mysql);
     if (vyfluslo) {
@@ -2259,7 +2259,7 @@ if (!strcmp(word[1],"all")) {
    }
   sprintf(text,"%s vymazal%s %d sprav z nastenky v miestnosti %s.\n",user->name,pohl(user,"","a"),vyfluslo,user->room->name);
   write_syslog(text,1);
-  sprintf(query,"select count(msgid) from board where room='%s' and deleted=0",user->room->name);
+  sprintf(query,"select count(`msgid`) from `board` where `room`='%s' and `deleted`=0",user->room->name);
   cnt=query_to_int(query);
   user->room->mesg_cnt=cnt;
   if (cnt==0) {
@@ -2278,14 +2278,14 @@ if (from>to) {
   return; 
  }
 
-sprintf(query,"select msgid from board where room='%s' and deleted=0 order by time limit %d,1",user->room->name,from-1);
+sprintf(query,"select `msgid` from `board` where `room`='%s' and `deleted`=0 order by `time` limit %d,1",user->room->name,from-1);
 if ((result=mysql_result(query))) {
   if ((row=mysql_fetch_row(result)) && row[0]) {
     fromid=atoi(row[0]);
    }
   else {
     mysql_free_result(result);
-    sprintf(query,"select count(msgid) from board where room='%s' and deleted=0",user->room->name);
+    sprintf(query,"select count(`msgid`) from `board` where `room`='%s' and `deleted`=0",user->room->name);
     cnt=query_to_int(query);
     sprintf(text,"Na nastenke %s len %d sprav%s.\n",skloncislo(cnt,"je","su","je"),cnt,skloncislo(cnt,"a","y",""));
     write_user(user,text);
@@ -2301,7 +2301,7 @@ if (from==to) {
   toid=fromid;
  }
 else {
-  sprintf(query,"select msgid from board where room='%s' and deleted=0 order by time limit %d,1",user->room->name,to-1);
+  sprintf(query,"select `msgid` from `board` where `room`='%s' and `deleted`=0 order by `time` limit %d,1",user->room->name,to-1);
   if ((result=mysql_result(query))) {
     if ((row=mysql_fetch_row(result)) && row[0]) toid=atoi(row[0]);
     else toid=0;
@@ -2314,15 +2314,15 @@ else {
  }
 
 if (user->level>=KIN) texthb[0]='\0';
-else sprintf(texthb," autor='%s' and",user->name);
+else sprintf(texthb," `autor`='%s' and",user->name);
 
 if (toid==0) 
-  sprintf(query,"delete from board where room='%s' and deleted=0 and%s %d<=msgid",user->room->name,texthb,fromid);
+  sprintf(query,"delete from `board` where `room=`'%s' and `deleted`=0 and%s %d<=`msgid`",user->room->name,texthb,fromid);
 else  
-  sprintf(query,"delete from board where room='%s' and deleted=0 and%s %d<=msgid and msgid<=%d",user->room->name,texthb,fromid,toid);
+  sprintf(query,"delete from `board` where `room`='%s' and `deleted`=0 and%s %d<=`msgid` and `msgid`<=%d",user->room->name,texthb,fromid,toid);
 mysql_kvery(query);
 vyfluslo=mysql_affected_rows(&mysql);
-sprintf(query,"select count(msgid) from board where room='%s' and deleted=0",user->room->name);
+sprintf(query,"select count(`msgid`) from `board` where `room`='%s' and `deleted`=0",user->room->name);
 cnt=query_to_int(query);
 user->room->mesg_cnt=cnt;
 
@@ -2401,10 +2401,10 @@ else {
   ptr=user->malloc_start;
  }
 
- sprintf(query,"select max(id) from jokes");
+ sprintf(query,"select max(`id`) from jokes");
  max=query_to_int(query);
 
- sprintf(query,"insert into jokes (id,autor,joke) values ('%d','%s','%s')",
+ sprintf(query,"insert into `jokes` (`id`,`autor`,`joke`) values ('%d','%s','%s')",
  max+1,user->name,dbf_string(ptr));
 
  if (mysql_query(&mysql,query)) {
@@ -2440,7 +2440,7 @@ write_user(user,text);
 
 
 if (!strcmp(word[1],"last")) {
-  user->rjoke_from=query_to_int("select max(id) from jokes");
+  user->rjoke_from=query_to_int("select max(`id`) from `jokes`");
   user->browsing=21;
   user->messnum=user->rjoke_from;
   ret=mailmore(user);
@@ -2464,7 +2464,7 @@ int countjoke()
 {
 int cnt;
 
-sprintf(query,"select count(id) from jokes");
+sprintf(query,"select count(`id`) from `jokes`");
 cnt=query_to_int(query);
 printf("%d vtipov.\n",cnt);
 return cnt;
@@ -2490,7 +2490,7 @@ if (((word_count==3) && (((from=atoi(word[1]))<1) || ((to=atoi(word[2]))<1)))) {
  }
 
 if (!strcmp(word[1],"all")) {
-  sprintf(query,"delete from mailbox where userid='%d'",user->id);
+  sprintf(query,"delete from `mailbox` where `userid`='%d'",user->id);
   mysql_kvery(query);
   write_user(user,"Vsetka posta bola zmazana.\n");
   user->lastm=0;
@@ -2502,14 +2502,14 @@ if (from>to) {
   return; 
  }
 
-sprintf(query,"select msgid from mailbox where userid='%d' order by time limit %d,1",user->id,from-1);
+sprintf(query,"select `msgid` from `mailbox` where `userid`='%d' order by `time` limit %d,1",user->id,from-1);
 if ((result=mysql_result(query))) {
   if ((row=mysql_fetch_row(result)) && row[0]) {
     fromid=atoi(row[0]);
    }
   else {
     mysql_free_result(result);
-    sprintf(query,"select count(msgid) from mailbox where userid='%d'",user->id);
+    sprintf(query,"select count(`msgid`) from `mailbox` where `userid`='%d'",user->id);
     sprintf(text,"V schranke mas len %d sprav.\n",query_to_int(query));
     write_user(user,text);
     return;
@@ -2524,7 +2524,7 @@ if (from==to) {
   toid=fromid;
  }
 else {
-  sprintf(query,"select msgid from mailbox where userid='%d' order by time limit %d,1",user->id,to-1);
+  sprintf(query,"select `msgid` from `mailbox` where `userid`='%d' order by `time` limit %d,1",user->id,to-1);
   if ((result=mysql_result(query))) {
     if ((row=mysql_fetch_row(result)) && row[0]) toid=atoi(row[0]);
     else toid=0;
@@ -2537,12 +2537,12 @@ else {
  }
 
 if (toid==0) 
-  sprintf(query,"delete from mailbox where userid='%d' and %d<=msgid",user->id,fromid);
+  sprintf(query,"delete from `mailbox` where `userid`='%d' and %d<=`msgid`",user->id,fromid);
 else  
-  sprintf(query,"delete from mailbox where userid='%d' and %d<=msgid and msgid<=%d",user->id,fromid,toid);
+  sprintf(query,"delete from `mailbox` where `userid`='%d' and %d<=`msgid` and `msgid`<=%d",user->id,fromid,toid);
 mysql_kvery(query);
 vyfluslo=mysql_affected_rows(&mysql);
-sprintf(query,"select count(msgid) from mailbox where userid='%d'",user->id);
+sprintf(query,"select count(`msgid`) from `mailbox` where `userid`='%d'",user->id);
 cnt=query_to_int(query);
 
 if (cnt==0) {
@@ -2566,7 +2566,7 @@ int echo;
 int cnt=0,zobraz=0,i=0,mailboxsize=0;
 double dbl;
 
- sprintf(query,"select sender,time,UNIX_TIMESTAMP(time) from mailbox where userid='%d' order by time",user->id);
+ sprintf(query,"select `sender`,`time`,UNIX_TIMESTAMP(`time`) from `mailbox` where `userid`='%d' order by `time`",user->id);
  if ((result=mysql_result(query))) {
    while ((row=mysql_fetch_row(result))) {
      cnt++;
@@ -2606,7 +2606,7 @@ else {
  }
 
 mailboxsize=0;
-sprintf(query,"select sum(length(message)) from mailbox where userid='%d'",user->id);
+sprintf(query,"select sum(length(`message`)) from `mailbox` where `userid`='%d'",user->id);
 mailboxsize=query_to_int(query);
 i=db_user_switch(user->id,2); /* no quota userlist */
 
@@ -2629,7 +2629,7 @@ return cnt;
 int has_unread_mail(user)
 UR_OBJECT user;
 {
- sprintf(query,"select max(UNIX_TIMESTAMP(time)) from mailbox where userid='%d'",user->id);
+ sprintf(query,"select max(UNIX_TIMESTAMP(`time`)) from `mailbox` where `userid`='%d'",user->id);
  if (query_to_int(query)>(int)user->read_mail) return 1;
  return 0;
 }
@@ -2663,18 +2663,18 @@ if (strstr(emailadr,"@")) { /* Je to E-MAIL sprava. */
 
 /* Local mail */
 uid=db_userid(to);
-sprintf(query,"select max(msgid) from mailbox where userid='%d'",uid);
+sprintf(query,"select max(`msgid`) from `mailbox` where `userid`='%d'",uid);
 max=query_to_int(query);
 
 if (user==NULL) 
- sprintf(query,"insert into mailbox (userid,msgid,time,sender,message) values ('%d','%d',FROM_UNIXTIME('%d'),'%s','%s')",
+ sprintf(query,"insert into `mailbox` (`userid`,`msgid`,`time`,`sender`,`message`) values ('%d','%d',FROM_UNIXTIME('%d'),'%s','%s')",
 uid,max+1,(int)time(0),"MAILER",dbf_string(ptr));
 else {
   rov[0]='\0';
   strcpy(rov,"=");
   for (i=1; i<=6+(12-strlen(user->name)); i++) strcat(rov,"=");
 
-  sprintf(query,"insert into mailbox (userid,msgid,time,sender,message) values ('%d','%d',FROM_UNIXTIME('%d'),'%s','%s')",
+  sprintf(query,"insert into `mailbox` (`userid`,`msgid`,`time`,`sender`,`message`) values ('%d','%d',FROM_UNIXTIME('%d'),'%s','%s')",
   uid,max+1,(int)time(0),user->name,dbf_string(ptr));
  }
 if (mysql_query(&mysql,query)) {
@@ -2803,7 +2803,7 @@ if (from==to) {
   toid=fromid;
  }
 else {
-  sprintf(query,"select id from jokes order by id desc limit %d,1",to-1);
+  sprintf(query,"select `id` from `jokes` order by `id` desc limit %d,1",to-1);
   if ((result=mysql_result(query))) {
     if ((row=mysql_fetch_row(result)) && row[0]) toid=atoi(row[0]);
     else toid=0;
@@ -2820,10 +2820,10 @@ if (toid==0) {
   return;
  }
 
-sprintf(query,"delete from jokes where %d<=id and id<=%d",toid,fromid); //sorted descending
+sprintf(query,"delete from `jokes` where %d<=`id` and `id`<=%d",toid,fromid); //sorted descending
 mysql_kvery(query);
 vyfluslo=mysql_affected_rows(&mysql);
-sprintf(query,"select count(id) from jokes");
+sprintf(query,"select count(`id`) from jokes");
 cnt=query_to_int(query);
 
 if (cnt==0) {

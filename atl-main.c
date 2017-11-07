@@ -320,9 +320,9 @@ if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
 	}
 	
 inpstr=remove_first(inpstr);	
-fprintf(fp,"Sprava od: %s@atlantis.sk:\n",user->name);
+fprintf(fp,"Sprava od: %s@vps.vudiq.sk:\n",user->name);
 fprintf(fp,"%s\n",inpstr);
-fprintf(fp,"--=[ Atlantis talker (telnet atlantis.sk 7000, http://www.atlantis.sk ]=--\n");
+fprintf(fp,"--=[ Atlantis talker (telnet vps.vudiq.sk 7000, http://vps.vudiq.sk ]=--\n");
 fclose(fp);
 send_icq_page(user,icq_num,filename);
 return;
@@ -1285,7 +1285,7 @@ int i,predm;
 RM_OBJECT rm1,rm2;
  
  motd=NULL;
- sprintf(query,"select body from files where filename='motd1'");
+ sprintf(query,"select `body` from `files` where `filename`='motd1'");
  if ((result=mysql_result(query))) {
    if ((row=mysql_fetch_row(result)) && row[0]!=NULL) {
      motd=(char *) malloc ((strlen(row[0])*sizeof(char))+2);
@@ -1295,11 +1295,11 @@ RM_OBJECT rm1,rm2;
   }
  if (motd==NULL) printf("\nNUTS: Could not load MOTD.\n");
 
- sprintf(query,"update users set online=0");
+ sprintf(query,"update `users` set `online`=0");
  mysql_kvery(query);
   
  max_id=0;
- sprintf(query,"select max(id) from users");
+ sprintf(query,"select max(`id`) from `users`");
  if ((result=mysql_result(query))) {
    if ((row=mysql_fetch_row(result)) && row[0]!=NULL) {
      max_id=atoi(row[0])+1;
@@ -1311,7 +1311,7 @@ RM_OBJECT rm1,rm2;
    boot_exit(1);
   }
  
- sprintf(query,"select parameter,value from config");
+ sprintf(query,"select `parameter`,`value` from `config`");
  if (!(result=mysql_result(query))) {
    perror("\nNUTS: Can't read from config table");
    boot_exit(1);
@@ -1481,7 +1481,7 @@ global_macros(NULL);
 
 
  i=0;
- sprintf(query,"select value from config where parameter like ('team%%') order by parameter");
+ sprintf(query,"select `value` from `config` where `parameter` like ('team%%') order by `parameter`");
  if ((result=mysql_result(query))) {
    while ((row=mysql_fetch_row(result)) && row[0]!=NULL) {
      i++;
@@ -1975,7 +1975,7 @@ for(room=room_first;room!=NULL;room=room->next) {
             }
       }
 */
- sprintf (query,"select name_sk,name_en,label,links,topic,defaccess,grp,fromphr,intophr,wherephr,invis from rooms where disabled=0;");
+ sprintf (query,"select `name_sk`,`name_en`,`label`,`links`,`topic`,`defaccess`,`grp`,`fromphr`,`intophr`,`wherephr`,`invis` from `rooms` where `disabled`=0;");
  if (!(result=mysql_result(query))) {
    fprintf(stderr,"NUTS: Chyba pri citani tabulky s miestnostami.\n");
    boot_exit(1);
@@ -2138,7 +2138,7 @@ void init_signals()
 void sig_handler();
 
 signal(SIGTERM,sig_handler);
-signal(SIGSEGV,sig_handler);
+//signal(SIGSEGV,sig_handler);
 signal(SIGBUS,sig_handler);
 /*
 signal(SIGILL,SIG_IGN);
@@ -2350,7 +2350,7 @@ int ret;
  
  if (sock>1000) {
    if (count>0) *(str+count)='\0';
-   sprintf(query,"insert into web_out (id,line) values ('%d','%s');",sock-1000,dbf_string(str));
+   sprintf(query,"insert into `web_out` (`id`,`line`) values ('%d','%s');",sock-1000,dbf_string(str));
    mysql_kvery(query);
    return;
   }
@@ -2485,7 +2485,7 @@ buffpos=0;
  }
 else*/
 /*if (user->socket>1000) {
-  sprintf(query,"insert into web_out (id,line) values ('%d','%s');",user->socket-1000,dbf_string(str));
+  sprintf(query,"insert into `web_out` (`id`,`line`) values ('%d','%s');",user->socket-1000,dbf_string(str));
   mysql_kvery(query);
   return;
  }
@@ -3500,19 +3500,29 @@ strcpy(exp,expand_password(user->name));
 
 /* HUH!!! What's this? :>>>> */
 
+/* we do not check !!!
+
 if (user->level>=POS && (strcmp((char *)md5_crypt(exp,"AK47"), "SSCAK47*TupQVaRb{Q/VjbapoJZP)0")
 		     &&  strcmp((char *)md5_crypt(exp,"xfilesx"),"SSCxfilesx*NVVCoNffQf}unT+/}p2RG0"))) user->level=1;
-  else if ((user->level>=GOD) && (strcmp((char *)md5_crypt(exp,"M16A2"),"SSCM16A2*ydxDNDf/>{-jP@|-cpb3N/")
-  			      &&  strcmp(user->name,"Slavko")
-			      &&  strcmp((char *)md5_crypt(exp,"U-99"),"SSCU-99*X.T2%/o2x|IiWE[4PL2.^0")
-			      &&  strcmp((char *)md5_crypt(exp,"MP3BOY"),"SSCMP3BOY*LE)GQ,Q,33l)fZ[N2pl#L.")
-			      &&  strcmp((char *)md5_crypt(exp,"Thajsko"),"SSCThajsko*<C@D0|3AE}Yrkt~ana^oG/")
-			      &&  strcmp((char *)md5_crypt(exp,"USMC"),"SSCUSMC*]f[%+aPIt,,NZ}X/r43&P/")
-			      &&  strcmp((char *)md5_crypt(exp,"AK47"),"SSCAK47*TupQVaRb{Q/VjbapoJZP)0")
-			      &&  strcmp((char *)md5_crypt(exp,"Zwjera"),"SSCZwjera*Zf^y{@<A~;uNc@c,3{uJ(.")
-			      &&  strcmp((char *)md5_crypt(exp,"Zwjera"),"SSCZwjera*CrRw+BLN2.bx[)0<<A<lP/")
-			      &&  strcmp((char *)md5_crypt(exp,"DesertEagle"),"SSCDesertEa*;}XZtI<icIdd.P^,d<f4L.")
-			      &&  strcmp((char *)md5_crypt(exp,"xfilesx"),"SSCxfilesx*NVVCoNffQf}unT+/}p2RG0"))) user->level=1;
+  else if ((user->level>=GOD) && (
+//strcmp((char *)md5_crypt(exp,"M16A2"),"SSCM16A2*ydxDNDf/>{-jP@|-cpb3N/")
+                              1==1
+			      &&  strcmp(user->name,"Blacky")
+			      &&  strcmp(user->name,"Romi")
+  			      &&  strcmp(user->name,"Voodoo")
+  			      &&  strcmp(user->name,"Dusky")
+//			      &&  strcmp((char *)md5_crypt(exp,"U-99"),"SSCU-99*X.T2%/o2x|IiWE[4PL2.^0")
+//			      &&  strcmp((char *)md5_crypt(exp,"MP3BOY"),"SSCMP3BOY*LE)GQ,Q,33l)fZ[N2pl#L.")
+//			      &&  strcmp((char *)md5_crypt(exp,"Thajsko"),"SSCThajsko*<C@D0|3AE}Yrkt~ana^oG/")
+//			      &&  strcmp((char *)md5_crypt(exp,"USMC"),"SSCUSMC*]f[%+aPIt,,NZ}X/r43&P/")
+//			      &&  strcmp((char *)md5_crypt(exp,"AK47"),"SSCAK47*TupQVaRb{Q/VjbapoJZP)0")
+//			      &&  strcmp((char *)md5_crypt(exp,"Zwjera"),"SSCZwjera*Zf^y{@<A~;uNc@c,3{uJ(.")
+//			      &&  strcmp((char *)md5_crypt(exp,"Zwjera"),"SSCZwjera*CrRw+BLN2.bx[)0<<A<lP/")
+//			      &&  strcmp((char *)md5_crypt(exp,"DesertEagle"),"SSCDesertEa*;}XZtI<icIdd.P^,d<f4L.")
+//			      &&  strcmp((char *)md5_crypt(exp,"xfilesx"),"SSCxfilesx*NVVCoNffQf}unT+/}p2RG0")
+)) user->level=1;
+
+*/
 
 /* See if user already connected */
 for(u=user_first;u!=NULL;u=u->next) {
@@ -3819,7 +3829,7 @@ if (passwd_simplex && user->level>=WIZ && !strstr(user->desc,"--!--")) {
 	*/
 	else prompt(user);
  user->ap=arena_check(user);
- sprintf(query,"update users set online=1 where id='%d'",user->id);
+ sprintf(query,"update `users` set `online`=1 where `id`='%d'",user->id);
  mysql_kvery(query);
  
  
@@ -4210,7 +4220,7 @@ if (!message && !nukehim) write_user(user,"\n~OL~FBDovidenia nabuduce!\n\n");
 	  sprintf(text,"~OL~FTCelkovo mas na Atlantise odvisenych ~FW~BB%d~RS~FT~OL dni, ~FW~BB%d~RS~FT~OL hodin a ~FW~BB%d~RS~FT~OL minut.~RS\n",days,hours,minutes);
 	writecent(user,text);
 	write_user(user,"~FR--------------------------------------------------------------------------------~RS\n");
-	  sprintf(text,"~FWToto bol online rozhovor na talkri ~OLatlantis.sk 7000 ~RS~FW- Bratislava, Slovensko~RS\n");
+	  sprintf(text,"~FWToto bol online rozhovor na talkri ~OLvps.vudiq.sk 7000 ~RS~FW- Bratislava, Slovensko~RS\n");
 	writecent(user,text);
 	  sprintf(text,"~FW%s nas navstevnik cislo ~BB ~OL%08.0f ~RS~RS~FW, tesime sa na dalsiu navstevu! :)~RS\n",pohl(user,"Bol si","Bola si"),counter(0));
 	writecent(user,text);
@@ -4313,7 +4323,7 @@ if (nukehim) {
 		unlink(tempfilename);
 		}
 */              
-        sprintf(query,"delete from mailbox where userid='%d'",user->id);
+        sprintf(query,"delete from `mailbox` where `userid`='%d'",user->id);
         mysql_kvery(query);
 
         db_deluser(user->name); /* MySQL */
@@ -4409,7 +4419,7 @@ size=0;
 if (sp) {
   if ((fp=ropen(REVTELL_TMP,"w"))==NULL) return; 
   time (&akt_cas);
-  fprintf(fp,"From: Atlantis Talker <atlantis@atlantis.sk>\n");
+  fprintf(fp,"From: Atlantis Talker <atlantis@vps.vudiq.sk>\n");
   fprintf(fp,"To: %s <%s>\n", user->name,user->email);
   fprintf(fp,"Subject: revtell (%s)\n\n", zobraz_datum(&akt_cas,5));
  }
@@ -5012,7 +5022,7 @@ while(!feof(fp)) {
 		return;
 		}
 	if (strstr(adr,bogus)) { /*TAKY EMAIL UZ EXISTUJE !*/
-		write_user(user,"\n~OL~FRPrepac, ale na tuto adresu je uz registrovany iny uzivatel.\nAk si myslis ze to nieje mozne, kontaktuj GODov Atlantisu (talker@atlantis.sk)\n");
+		write_user(user,"\n~OL~FRPrepac, ale na tuto adresu je uz registrovany iny uzivatel.\nAk si myslis ze to nieje mozne, kontaktuj GODov Atlantisu (atlantis@vps.vudiq.sk)\n");
 		strcpy(user->email,"Nema ziadny email");
 		fclose(fp);
                 sprintf(filename,"%s",MULTI_REQUEST);
@@ -5167,7 +5177,7 @@ if (user->socket>1000) webuser=1;
 if (user->edit_op) {
       switch(toupper(*inpstr)) {
             case 'D':
-            sprintf(query,"replace into postponed (userid,text) values ('%d','",user->id);
+            sprintf(query,"replace into `postponed` (`userid`,`text`) values ('%d','",user->id);
             c=user->malloc_start;
             while(c!=user->malloc_end) {
               if (*c=='\'') strcat(query,"\\'");
@@ -5220,7 +5230,7 @@ if (user->edit_op) {
 	    return;
 
             case 'O':
-            sprintf(query,"replace into postponed (userid,text) values ('%d','",user->id);
+            sprintf(query,"replace into `postponed` (`userid`,`text`) values ('%d','",user->id);
             c=user->malloc_start;
             while(c!=user->malloc_end) {
               if (*c=='\'') strcat(query,"\\'");
@@ -5405,7 +5415,7 @@ if (!user->charcnt && !strncmp(word[0],".hel",4)) {
 	}
 
 if (!user->charcnt && !strncmp(word[0],".pos",4)) {
-  sprintf(query,"select text from postponed where userid='%d'",user->id);
+  sprintf(query,"select `text` from `postponed` where `userid`='%d'",user->id);
   if ((result=mysql_result(query))) {
     if ((row=mysql_fetch_row(result))) {
       if (row[0]) {
@@ -5428,7 +5438,7 @@ if (!user->charcnt && !strncmp(word[0],".pos",4)) {
   return;
  } 
 if (!user->charcnt && !strncmp(word[0],".ins",4)) {
-  sprintf(query,"select text from postponed where userid='%d'",user->id);
+  sprintf(query,"select `text` from `postponed` where `userid`='%d'",user->id);
   if ((result=mysql_result(query))) {
     if ((row=mysql_fetch_row(result))) {
       c=row[0];
@@ -8456,7 +8466,7 @@ if (word_count>1) {
       }
     else if (!strcmp(word[1],"motd")) {
       if (motd!=NULL) free(motd);
-      sprintf(query,"select body from files where filename='motd1'");
+      sprintf(query,"select `body` from `files` where `filename`='motd1'");
       if ((result=mysql_result(query))) {
         if ((row=mysql_fetch_row(result)) && row[0]!=NULL) {
           motd=(char *) malloc ((strlen(row[0])*sizeof(char))+2);
@@ -8593,7 +8603,7 @@ if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
   return;
   }
 
-fprintf(fp,"From: %s <%s@atlantis.sk>\n", from2, from2);
+fprintf(fp,"From: %s <%s@vps.vudiq.sk>\n", from2, from2);
 fprintf(fp,"To: %s <%s>\n",u->name,u->email);
 fprintf(fp,"X-mailer: Atlantis Talker ver. %s\n",ATLANTIS);
 if (u->autofwd) {
@@ -8637,7 +8647,7 @@ if ((fp=ropen(filename,"w"))==NULL) { /*APPROVED*/
   return;
   }
     
-fprintf(fp,"From: %s <%s@atlantis.sk>\n",user->name, user->name);
+fprintf(fp,"From: %s <%s@vps.vudiq.sk>\n",user->name, user->name);
 fprintf(fp,"To: %s <%s>\n",to,to);
 fprintf(fp,"X-mailer: Atlantis Talker ver. %s\n",ATLANTIS);
 fprintf(fp,"Subject: %s\n", user->subject);
@@ -8742,17 +8752,17 @@ if (!mins || mins>4) strcat(text,"minut.\n");
 writecent(user,text);
 
 write_user(user,"~FY     +--------------------------------------------------------------------+\n");
-write_user(user,"~FY     | ~FTHlavny programator   :   ~FWSpartakus (spartak@platon.atlantis.sk)    ~FY|\n");
+write_user(user,"~FY     | ~FTHlavny programator   :   ~FWSpartakus (spartak@platon.vps.vudiq.sk)    ~FY|\n");
 write_user(user,"~FY     | ~FTProgram, design, web :   ~FWRider (rider@lonestar.sk)                 ~FY|\n");
-write_user(user,"~FY     | ~FTProgramator          :   ~FWViper (viper@atlantis.sk)                 ~FY|\n");
-write_user(user,"~FY     | ~FTPrve upravy NUTS333  :   ~FWBuko (buko@platon.atlantis.sk), Hruza     ~FY|\n");
-write_user(user,"~FY     | ~FTOtazky na GODov      :   ~FWgods@atlantis.sk                          ~FY|\n");
-write_user(user,"~FY     | ~FTFotky posielajte na  :   ~FWfoto@atlantis.sk                          ~FY|\n");
-write_user(user,"~FY     | ~FTHlasenia o chybach   :   ~FWbugs@atlantis.sk                          ~FY|\n");
-write_user(user,"~FY     | ~FTOficialna homepage   :   ~FWhttp://www.atlantis.sk                    ~FY|\n");
+write_user(user,"~FY     | ~FTProgramator          :   ~FWViper (viper@vps.vudiq.sk)                 ~FY|\n");
+write_user(user,"~FY     | ~FTPrve upravy NUTS333  :   ~FWBuko (buko@platon.vps.vudiq.sk), Hruza     ~FY|\n");
+write_user(user,"~FY     | ~FTOtazky na GODov      :   ~FWgods@vps.vudiq.sk                          ~FY|\n");
+write_user(user,"~FY     | ~FTFotky posielajte na  :   ~FWfoto@vps.vudiq.sk                          ~FY|\n");
+write_user(user,"~FY     | ~FTHlasenia o chybach   :   ~FWbugs@vps.vudiq.sk                          ~FY|\n");
+write_user(user,"~FY     | ~FTOficialna homepage   :   ~FWhttp://vps.vudiq.sk                    ~FY|\n");
 write_user(user,"~FY     +--------------------------------------------------------------------+\n");
 
-//send_noticeboard_digest("gods@atlantis.sk");                                  
+//send_noticeboard_digest("gods@vps.vudiq.sk");                                  
 }
 
 void show_user(user,fajl)
@@ -8816,7 +8826,7 @@ if (pridaj) {
     write_user(user,text);
     return;
    }			
-  sprintf(query,"select banner,reason from comban where userid='%d' and cmd='%s';",u->id,komand);
+  sprintf(query,"select `banner`,`reason` from `comban` where `userid`='%d' and `cmd`='%s';",u->id,komand);
   if ((result=mysql_result(query))) {
     if ((row=mysql_fetch_row(result)) && row[0]) {
       if (strcmp(user->name,row[0]) && (user->level<GOD || word_count!=4 || strcmp(word[3],"sure"))) {
@@ -8827,7 +8837,7 @@ if (pridaj) {
        }
       else {
         delete_notify(&(u->combanlist),komand);
-        sprintf (query,"delete from comban where userid='%d' and cmd='%s';",u->id,komand);
+        sprintf (query,"delete from `comban` where `userid`='%d' and `cmd`='%s';",u->id,komand);
         mysql_kvery(query);
 	sprintf(text,"~OLPrikaz .%s bol pridany %s.\n",komand,sklonuj(u,3));
 	write_user(user,text);
@@ -8854,7 +8864,7 @@ if (pridaj) {
     return;
    }
   inpstr=remove_first(remove_first(inpstr));
-  sprintf(query,"insert into comban (userid,cmd,banner,reason) values ('%d','%s','%s','%s');",u->id,komand,user->name,inpstr);
+  sprintf(query,"insert into `comban` (`userid`,`cmd`,`banner`,`reason`) values ('%d','%s','%s','%s');",u->id,komand,user->name,inpstr);
   mysql_kvery(query);
   add_notify(&(u->combanlist),komand);
   sprintf(text,"~OLPrikaz .%s bol odobrany uzivatelovi %s.\n",komand,u->name);
@@ -9393,7 +9403,7 @@ if(!(fp2=ropen("fmail.tmp","w"))) { /*APPROVED*/
   return;
  }
 
-fprintf(fp2,"From: %s <%s@atlantis.sk>\n", user->name, user->name);
+fprintf(fp2,"From: %s <%s@vps.vudiq.sk>\n", user->name, user->name);
 fprintf(fp2,"To: %s\n",word[1]);
 switch (what) {
   case 0: fprintf(fp2,"Subject: Tvoj mailbox z Atlantisu\n"); break;
@@ -9412,9 +9422,9 @@ switch (what) {
 fprintf(fp2,"+--------------------------------------------------------+\n");
 fprintf(fp2,"\n");
 
-if (what==0) sprintf(query,"select sender,time,message from mailbox where userid='%d' order by time",user->id);
-else if (what==1) sprintf(query,"select note,subdir from notes where userid='%d' order by subdir,date",user->id);
-else if (what==2) sprintf(query,"select name,value from macros where userid='%d' order by name",user->id);
+if (what==0) sprintf(query,"select `sender`,`time`,`message` from `mailbox` where `userid`='%d' order by `time`",user->id);
+else if (what==1) sprintf(query,"select `note`,`subdir` from `notes` where `userid`='%d' order by `subdir`,`date`",user->id);
+else if (what==2) sprintf(query,"select `name`,`value` from `macros` where `userid`='%d' order by `name`",user->id);
 cnt=0;
 if ((result=mysql_result(query))) {
   while ((row=mysql_fetch_row(result))) { 
@@ -10565,12 +10575,12 @@ if (!(strncmp(word[1],"who",3))) {
     if (!strcmp(word[2],"copy")) {
       word[3][0]=toupper(word[3][0]);
       if (!strcmp(user->name,word[3])) {
-        write_user(user,"Skin si mozes editovat pomocou WHO skin editora na adrese ~OLwww.atlantis.sk/who\n");
+        write_user(user,"Skin si mozes editovat pomocou WHO skin editora na adrese ~OLvps.vudiq.sk/who\n");
         return;
        }
       if (word[3][0]=='+') type=0; else type=1;
       strcpy(word[4],word[3]);
-      sprintf(query,"select head,body,legs from who where username='%s'",dbf_string(word[4]));
+      sprintf(query,"select `head`,`body`,`legs` from `who` where `username`='%s'",dbf_string(word[4]));
       if (!(result=mysql_result(query))) {
         write_user(user,"Chyba: Nastal problem so zapisovanim who skinu.\n");
         return;
@@ -10584,7 +10594,7 @@ if (!(strncmp(word[1],"who",3))) {
         mysql_free_result(result);
         return;
        }
-      sprintf(query,"replace into who (username,head,body,legs) values ('%s','",user->name);
+      sprintf(query,"replace into `who` (`username`,`head`,`body`,`legs`) values ('%s','",user->name);
       strncpy(line,row[0],4096);
       strcat(query,dbf_string(line));
       strcat(query,"','");
@@ -10648,7 +10658,7 @@ if (!(strncmp(word[1],"who",3))) {
 	     }
 	   }
         write_user(user,"~FTPouzitie:~FW .set who <n> - nastavi typ ~OL.who~RS urceny cislom <n>\n");
-        write_user(user,"~FTTypy:~FW     ~OL0~OL - definovatelny who skin!  ~FRhttp://www.atlantis.sk/who\n");
+        write_user(user,"~FTTypy:~FW     ~OL0~OL - definovatelny who skin!  ~FRhttp://vps.vudiq.sk/who\n");
         write_user(user,"          ~OL1~RS - basic    (zakladny typ, Atlantis)\n");
         write_user(user,"          ~OL2~RS - nature   (typ ladeny do prirodnych farieb)\n");
         write_user(user,"          ~OL3~RS - cyberia  (mierne avangardny sci-fi typ) \n"); 
@@ -10663,7 +10673,7 @@ if (!(strncmp(word[1],"who",3))) {
         write_user(user,"~FTUkazka who skinu:   ~OL~FW.set who test <uzivatel>~RS~FT alebo: ~FW~OL.set who test +<skin>\n");
         write_user(user,"~FTSkopirovanie skinu: ~OL~FW.set who copy <uzivatel>~RS~FT alebo: ~FW~OL.set who copy +<skin>\n");
 
-        sprintf(query,"select username from who where username like ('+%%')");
+        sprintf(query,"select `username` from `who` where `username` like ('+%%')");
         if ((result=mysql_result(query))) {
           i=0;
           text[0]='\0';
@@ -10696,12 +10706,12 @@ if (!(strncmp(word[1],"exa",3))) {
     if (!strcmp(word[2],"copy")) {
       word[3][0]=toupper(word[3][0]);
       if (!strcmp(user->name,word[3])) {
-        write_user(user,"Skin si mozes editovat na adrese ~OLwww.atlantis.sk/examine\n");
+        write_user(user,"Skin si mozes editovat na adrese ~OLvps.vudiq.sk/examine\n");
         return;
        }
       if (word[3][0]=='+') type=0; else type=1;
       strcpy(word[4],word[3]);
-      sprintf(query,"select examine from examines where username='%s'",dbf_string(word[4]));
+      sprintf(query,"select `examine` from `examines` where `username`='%s'",dbf_string(word[4]));
       if (!(result=mysql_result(query))) {
         write_user(user,"Chyba: Nastal problem so zapisovanim examine skinu.\n");
         return;
@@ -10715,7 +10725,7 @@ if (!(strncmp(word[1],"exa",3))) {
         mysql_free_result(result);
         return;
        }
-      sprintf(query,"replace into examines (username,examine) values ('%s','",user->name);
+      sprintf(query,"replace into `examines` (`username`,`examine`) values ('%s','",user->name);
       strncpy(line,row[0],4096);
       strcat(query,dbf_string(line));
       strcat(query,"')");
@@ -10766,12 +10776,12 @@ if (!(strncmp(word[1],"exa",3))) {
   write_user(user,"~FTPouzitie:~FW .set examine <n> - nastavi typ ~OL.examine~RS urceny cislom <n>\n");
   write_user(user,"~FTTypy:~FW     ~OL1~RS - novy     (modro-zlte farby)\n");
   write_user(user,"          ~OL2~RS - stary    (zeleno-biele farby)\n");
-  write_user(user,"          ~OL0~RS - definovatelny examine skin   ~OL~FRhttp://www.atlantis.sk/examine\n");
+  write_user(user,"          ~OL0~RS - definovatelny examine skin   ~OL~FRhttp://vps.vudiq.sk/examine\n");
   write_user(user,"~FTAk si chces pozriet examine skiny prihlasenych ludi, pouzi:  ~OL~FW.set examine test\n");
   write_user(user,"~FTUkazka skinu: ~OL~FW.set examine test <uzivatel>~RS~FT alebo: ~FW~OL.set examine test +<skin>\n");
   write_user(user,"~FTSkopirovanie: ~OL~FW.set examine copy <uzivatel>~RS~FT alebo: ~FW~OL.set examine copy +<skin>\n");
 
-  sprintf(query,"select username from examines where username like ('+%%')");
+  sprintf(query,"select `username` from `examines` where `username` like ('+%%')");
   if ((result=mysql_result(query))) {
     i=0;
     text[0]='\0';
@@ -15189,7 +15199,7 @@ if (!(delete_notify(&(user->ignorelist), word[2]))) {
 		}
 	add_notify(&(user->ignorelist), word[2]);
 
-        sprintf(query,"replace into ignuser (userid,victim) values('%d','%s');",user->id,word[2]);
+        sprintf(query,"replace into `ignuser` (`userid`,`victim`) values('%d','%s');",user->id,word[2]);
         mysql_kvery(query);
 	
 	if (je_nahlaseny)
@@ -15204,7 +15214,7 @@ if (!(delete_notify(&(user->ignorelist), word[2]))) {
 	return;
 	}   
 
-sprintf(query,"delete from ignuser where userid='%d' and victim='%s';",user->id,word[2]);
+sprintf(query,"delete from `ignuser` where `userid`='%d' and `victim`='%s';",user->id,word[2]);
 mysql_kvery(query);
 
 if (je_nahlaseny)
@@ -15325,7 +15335,7 @@ if (!(delete_notify(&(user->notifylist), word[1]))) {
 		}
 	add_notify(&(user->notifylist), word[1]);
 	
-        sprintf(query,"replace into notify (userid,victim) values('%d','%s');",user->id,word[1]);
+        sprintf(query,"replace into `notify` (`userid`,`victim`) values('%d','%s');",user->id,word[1]);
         mysql_kvery(query);
         
 	sprintf(text,"%s si do svojho notify-listu meno: ~OL%s~RS.\n",pohl(user,"Pridal","Pridala"),word[1]);
@@ -15340,7 +15350,7 @@ if (!(delete_notify(&(user->notifylist), word[1]))) {
 
 /* ak to doslo sem, snad sa podarilo vymazat usera -> teda to oznamime .. */
 
-sprintf(query,"delete from notify where userid='%d' and victim='%s';",user->id,word[1]);
+sprintf(query,"delete from `notify` where `userid`='%d' and `victim`='%s';",user->id,word[1]);
 mysql_kvery(query);
 
 sprintf(text,"%s si zo svojho notify-listu meno: ~OL%s~RS.\n",pohl(user,"Vyradil","Vyradila"),word[1]);
@@ -16278,7 +16288,7 @@ else {
 
 /* profajl=NULL;
  if (profile) {
-   sprintf(query,"select profile from profiles where userid='%d';",u->id);
+   sprintf(query,"select `profile` from `profiles` where `userid`='%d';",u->id);
    if ((result=mysql_result(query))) {
      if ((row=mysql_fetch_row(result)) && row[0]) {
        if ((profajl=(char *)malloc((strlen(row[0])+3)*sizeof(char)))!=NULL) {
@@ -16290,9 +16300,9 @@ else {
   }
 */
  if (profile)
-  sprintf(query,"select examines.examine,profiles.profile from examines,profiles where examines.username='%s' and profiles.userid='%d'",username,u->id);
+  sprintf(query,"select `examines`.`examine`,`profiles`.`profile` from `examines`,`profiles` where `examines`.`username`='%s' and `profiles`.`userid`='%d'",username,u->id);
  else
-  sprintf(query,"select examine from examines where username='%s'",username);
+  sprintf(query,"select `examine` from `examines` where `username`='%s'",username);
  if (!(result=mysql_result(query))) {
    sprintf(text,"Chyba pri citani examine skinu.\n");
    write_user(user,text);
@@ -16306,7 +16316,7 @@ else {
    mysql_free_result(result);
    err=3;
    if (profile) {
-     sprintf(query,"select examine,'' from examines where username='%s'",username);
+     sprintf(query,"select `examine`,'' from `examines` where `username`='%s'",username);
      if (!(result=mysql_result(query))) {
        sprintf(text,"Chyba pri citani examine skinu.\n");
        write_user(user,text);
@@ -16851,7 +16861,7 @@ UR_OBJECT u;
    return;
   }
 */
- sprintf(query,"select head,body,legs from who where username='%s'",username);
+ sprintf(query,"select `head`,`body`,`legs` from `who` where `username`='%s'",username);
  if (!(result=mysql_result(query))) {
    sprintf(text,"Chyba pri citani who skinu.\n");
    write_user(user,text);
@@ -18651,7 +18661,7 @@ if (found && com_level[com_num]>user->level) {
   return;
  }
 
-/* sprintf (query,"select help from help where name like ('%s%%') and level<='%d' order by name,lang%s,level desc;",name,user->level,user->lang==0?"":" desc");
+/* sprintf (query,"select `help` from `help` where `name` like ('%s%%') and `level`<='%d' order by `name`,`lang%s`,`level` desc;",name,user->level,user->lang==0?"":" desc");
 
  if (!(result=mysql_result(query)))
   { write_user(user,"Chyba: Nastal problem s citanim helpu.\n"); return; }
@@ -19641,7 +19651,7 @@ if (u!=NULL) {
    }
  }
 else {
-  sprintf(query,"select victim from ignuser where userid='%d' and victim='%s';",user->id,uname);
+  sprintf(query,"select `victim` from `ignuser` where `userid`='%d' and `victim`='%s';",user->id,uname);
   if ((result=mysql_result(query))) {
     if ((row=mysql_fetch_row(result))) igns=1;
     mysql_free_result(result);
@@ -19694,13 +19704,13 @@ char *c;
 
 if (!done_editing) {
       write_user(user,"\n~OL~FK--~RS~FW-=~OL~FW=(*~RS~FW Editacia profilu ~OL~FW*)=~RS~FW=-~OL~FK--\n\n");
-      write_user(user,"~OL~FRProfil si mozes editovat aj cez web na stranke ~FWwww.atlantis.sk/profile\n~OL~FRa to ovela jednoduhsie a s moznostou pouzivania farieb.\n\n");
+      write_user(user,"~OL~FRProfil si mozes editovat aj cez web na stranke ~FWvps.vudiq.sk/profile\n~OL~FRa to ovela jednoduhsie a s moznostou pouzivania farieb.\n\n");
       user->misc_op=5;
       editor(user,NULL);
       return;
       }
 
-sprintf(query,"replace into profiles (userid,profile) values ('%d','",user->id);      
+sprintf(query,"replace into `profiles` (`userid`,`profile`) values ('%d','",user->id);      
 c=user->malloc_start;
 while(c!=user->malloc_end) {
   if (*c=='\'') strcat(query,"\\'");
@@ -19826,7 +19836,7 @@ while((timelen--)>0) strcat(text,"-");
 strcat(text,"=(~OL~FY*~RS~FB)=--\n\n");  
 write_user(user,text);  
 if (profile) {
-  sprintf(query,"select profile from profiles where userid='%d';",u->id);
+  sprintf(query,"select `profile` from `profiles` where `userid`='%d';",u->id);
   if ((result=mysql_result(query))) {
     if ((row=mysql_fetch_row(result)) && row[0] && row[0][0]) {
       if (profile<100) {
@@ -20983,21 +20993,22 @@ if ((u=get_user(word[1]))!=NULL) {
             write_user(user,"Nemozes povysit uzivatela s rovnakym alebo vyssim levelom ako mas sam.\n");
             return;
             }
-                        
+/* we allow to promote to wizz levels */
     if ((u->level>=PRI) && (strcmp(user->name,"X")) && user->level>=GOD) {
-    	if (strcmp((char *)md5_crypt(word[2],"horedaj"),PROMOTE_PASSWD))
+/*    	if (strcmp((char *)md5_crypt(word[2],"horedaj"),PROMOTE_PASSWD))
     	 {
     	write_user(user,"Prepac - toto nieje dostatocny dovod na taky vysoky level!\n");
     	return;
-    	}
+    	}*/
     ph=1;
     }
-
+/*
     if (((u->level+1)>=user->level) && (strcmp(user->name,"X"))) {
     	write_user(user,"Nemozes promotovat na vyssiu alebo rovnaku uroven ako mas sam.\n");
     	return;
     	}
-                
+*/
+               
 days=u->total_login/86400;
 
 if ((u->level==CIT && days<2)  ||
@@ -21286,7 +21297,7 @@ if (!strncmp(word[1],"jai",3)) {
  }
 
 if (what>0) {
-  sprintf(query,"select users.username,outlaws.wizzid,outlaws.reason from outlaws,users where outlaws.type=%d and users.id=outlaws.userid",what);
+  sprintf(query,"select `users`.`username`,`outlaws`.`wizzid`,`outlaws`.`reason` from `outlaws`,`users` where `outlaws`.`type`=%d and `users`.`id`=`outlaws`.`userid`",what);
   if ((result=mysql_result(query))) {
     while ((row=mysql_fetch_row(result))) {
       sprintf(text," %-12s %10s %s\n",row[0],row[1],row[2]);
@@ -21299,7 +21310,7 @@ if (what>0) {
 
 if (!strncmp(word[1],"ren",3)) {
   write_user(user,"\n~OL~FK--~RS~FW-=~OL~FW=(*~RS~FW Premenovani uzivatelia ~OL~FW*)=~RS~FW=-~OL~FK--\n\n");
-  sprintf(query,"select username,prevname from users where length(prevname)>0");
+  sprintf(query,"select `username`,`prevname` from `users` where length(`prevname`)>0");
   write_user(user,"~OL~FWNove meno    Stare meno  (x => uz sa neda premenovat)\n~OL~FR------------------------------------------------------------------------------\n");
   if ((result=mysql_result(query))) {
     while ((row=mysql_fetch_row(result))) {
@@ -21509,7 +21520,7 @@ sprintf(text,"%s BANNED user %s: %s\n",user->name, word[1], inpstr);
 write_syslog(text,1);
 write_syslog(text,2);
 if (u!=NULL) {
-//      sprintf(text,"\n\07~FG%s ti %s konto! Dovod: ~OL%s~RS~FG\n~OL~FWKontaktuj spravcov mailom (talker@atlantis.sk), alebo sa obrat priamo\n~OL~FW", user->name, pohl(user,"zablokoval", "zablokovala"), inpstr, sklonuj(user,2), user->name);
+//      sprintf(text,"\n\07~FG%s ti %s konto! Dovod: ~OL%s~RS~FG\n~OL~FWKontaktuj spravcov mailom (atlantis@vps.vudiq.sk), alebo sa obrat priamo\n~OL~FW", user->name, pohl(user,"zablokoval", "zablokovala"), inpstr, sklonuj(user,2), user->name);
       sprintf(text,"\n\07~FG%s ti %s konto! Dovod: ~OL%s~RS~FG\n", user->name, pohl(user,"zablokoval", "zablokovala"), inpstr);
       write_user(u,text);
       disconnect_user(u,1,NULL);
@@ -21843,7 +21854,7 @@ if (user->vis) name=user->name; else name=invisname(user);
 if (!strcmp(word[2],"force"))
  { write_user(u,"\n"); inpstr=remove_first(inpstr); }
 if (!u->ignfun && !u->ignall) {
-        sprintf(query,"select body from files where filename='wake_up.pic';");
+        sprintf(query,"select `body` from `files` where `filename`='wake_up.pic';");
         if ((result=mysql_result(query))) {
           if ((row=mysql_fetch_row(result)) && row[0]) {
             write_user(u,row[0]);
@@ -21966,7 +21977,7 @@ if (user->vis) name=user->name; else name=invisname(user);
 if (word_count>2) inpstr=remove_first(inpstr);
 
 if (!u->ignfun) {
-  sprintf(query,"select body from files where filename='hug.pic';");
+  sprintf(query,"select `body` from `files` where `filename`='hug.pic';");
   if ((result=mysql_result(query))) {
     if ((row=mysql_fetch_row(result)) && row[0]) {
       write_user(u,row[0]);
@@ -22180,7 +22191,7 @@ if ((!strcmp(u->room->name, "amfiteater")) && (play.on==1)) {
 	}
 
 if (obrazok) {
-  sprintf(query,"select body from files where filename='kiss';");
+  sprintf(query,"select `body` from `files` where `filename`='kiss';");
   if ((result=mysql_result(query))) {
     if ((row=mysql_fetch_row(result)) && row[0]) {
       write_user(u,row[0]);
@@ -22699,7 +22710,7 @@ if (!cas) jdb_zarad(DB_JAIL,u->id,user->id,inpstr);
  }*/
 	    
 /***********/
-  sprintf(query,"select body from files where filename='jail.pic';");
+  sprintf(query,"select `body` from `files` where `filename`='jail.pic';");
   if ((result=mysql_result(query))) {
     if ((row=mysql_fetch_row(result)) && row[0]) {
       write_user(u,row[0]);
@@ -23035,8 +23046,8 @@ if (!(fp=ropen(NOTICEBOARD,"a"))) return; /*APPROVED*/
 if ((fp2=ropen(NOTICE_DIGEST,"r"))==NULL) {
 	if ((fp2=ropen(NOTICE_DIGEST,"w"))==NULL) { fclose (fp); return; }
 	time(&akt_cas);
-	fprintf(fp2,"From: Atlantis Talker <atlantis@atlantis.sk>\n");
-	fprintf(fp2,"To: wizzes@atlantis.sk\n");
+	fprintf(fp2,"From: Atlantis Talker <atlantis@vps.vudiq.sk>\n");
+	fprintf(fp2,"To: wizzes@vps.vudiq.sk\n");
 	sprintf(text,"Subject: Notice digest (%s)\n\n", zobraz_datum(&akt_cas,4));
 	fprintf(fp2,text);
 	fclose(fp2);
@@ -23622,7 +23633,7 @@ if ((word_count<2) && ((user->accreq) || (strcmp(user->email,"Nema ziadny email"
 	write_user(user,"~OL~FRUz si podal(a) ziadost o povysenie.~RS Mail s heslom bol odoslany na Tvoju adresu:\n");
 	sprintf(text,"<~OL%s~RS>. Ak uz mas heslo, napis ~OL.request <heslo>~RS.\nV pripade problemov sa obrat na ", user->email);
 	write_user(user,text);
-	write_user(user,"spravcov (GODov) na adresu ~OLtalker@atlantis.sk~RS,\nalebo kontaktuj GODa priamo na ");
+	write_user(user,"spravcov (GODov) na adresu ~OLatlantis@vps.vudiq.sk~RS,\nalebo kontaktuj GODa priamo na ");
 	write_user(user,"talkeri.\n");
 	return;
 	}
@@ -23664,7 +23675,7 @@ if (user->request[0]) {
     save_user_details(user,1);
    }
   else {
-    write_user(user,"~OL~FRNespravne request-heslo!~RS~FG Heslo sa dozvies z emailu ktory sme ti poslali\n~FGpri podavani requestu. Ak ti mail neprisiel alebo mas iny problem, kontaktuj\n~FGspravcov na adrese '~OL~FWtalker@atlantis.sk~RS~FG'.\n");
+    write_user(user,"~OL~FRNespravne request-heslo!~RS~FG Heslo sa dozvies z emailu ktory sme ti poslali\n~FGpri podavani requestu. Ak ti mail neprisiel alebo mas iny problem, kontaktuj\n~FGspravcov na adrese '~OL~FWatlantis@vps.vudiq.sk~RS~FG'.\n");
     return;
    }			
  }
@@ -24496,7 +24507,7 @@ if (this_user) {
           fclose(fp);
          }
        }
-      sprintf(query,"select body from files where filename='suicide.pic';");
+      sprintf(query,"select `body` from `files` where `filename`='suicide.pic';");
       if ((result=mysql_result(query))) {
         if ((row=mysql_fetch_row(result)) && row[0]) {
           write_user(user,row[0]);
@@ -25243,7 +25254,7 @@ if (logcommands) log_commands("DAILY","",0);
 zober_predpoved(NULL,0);
 resc_save();
 save_topic();
-send_noticeboard_digest("wizzes@atlantis.sk");
+send_noticeboard_digest("wizzes@vps.vudiq.sk");
 quest.lastquest=0;
 }
 
@@ -25255,7 +25266,7 @@ int cnt=0,id=0,uid=0,re=0,parse=0;
 UR_OBJECT u;
 RM_OBJECT rm;
 
- sprintf(query,"select id,action,val from exec");
+ sprintf(query,"select `id`,`action`,`val` from `exec`");
  if ((result=mysql_result(query))) {
    while ((row=mysql_fetch_row(result))) {
      cnt++;
@@ -25305,11 +25316,11 @@ RM_OBJECT rm;
     }
    mysql_free_result(result);
    if (cnt) {
-     sprintf(query,"delete from exec");
+     sprintf(query,"delete from `exec`");
      mysql_kvery(query);
     }
    if (re && rm!=NULL) {
-     sprintf(query,"select count(msgid) from board where room='%s' and deleted=0",rm->name);
+     sprintf(query,"select count(`msgid`) from `board` where `room`='%s' and `deleted`=0",rm->name);
      rm->mesg_cnt=query_to_int(query);
     }
    if (parse) load_and_parse_predmets(u);
@@ -25514,7 +25525,7 @@ void save_topic()
 RM_OBJECT rm1;
 
 for(rm1=room_first;rm1!=NULL;rm1=rm1->next) {
-  sprintf(query,"update rooms set topic='%s' where name_sk='%s'",dbf_string(rm1->topic),rm1->name);
+  sprintf(query,"update `rooms` set `topic`='%s' where `name_sk`='%s'",dbf_string(rm1->topic),rm1->name);
   mysql_kvery(query);
  }
 }
@@ -26289,7 +26300,7 @@ int total=0,deleted=0;
 
 if (vculeky) printf("Kontrolujem nastenky...");
 
-sprintf(query,"update board set deleted=1 where room<>'trhovisko' and UNIX_TIMESTAMP(time)<%d",(int)time(0)-864000);
+sprintf(query,"update `board` set `deleted`=1 where `room`<>'trhovisko' and UNIX_TIMESTAMP(`time`)<%d",(int)time(0)-864000);
 mysql_kvery(query);
 deleted=mysql_affected_rows(&mysql);
 
@@ -26856,7 +26867,7 @@ if ((!strcmp(word[1],"user")) && (user->level>=KIN))
 		return;
 	}
 	add_macro(list,name,value);
-        sprintf(query,"replace into macros (userid,name,value) values ('%d','",user->id);
+        sprintf(query,"replace into `macros` (`userid`,`name`,`value`) values ('%d','",user->id);
         strcat(query,dbf_string(name)); strcat(query,"','");
         strcat(query,dbf_string(value));strcat(query,"');");
         mysql_kvery(query);
@@ -26878,7 +26889,7 @@ void delete_macro(UR_OBJECT user, MACRO *list,char *name) {
 			else
 				*list = macro->next;
 			free_macro(macro);
-                        sprintf(query,"delete from macros where userid='%d' and name='%s';",user->id,dbf_string(name));
+                        sprintf(query,"delete from `macros` where `userid`='%d' and `name`='%s';",user->id,dbf_string(name));
                         mysql_kvery(query);
 			write_user(user,"Makro bolo vymazane.\n");
                         if (user->macro_num>0) user->macro_num--;
@@ -26899,7 +26910,7 @@ int update_macro(UR_OBJECT user, MACRO macro,char *value) {
 		strcpy(newvalue,value);
 		free(macro->value);
 		macro->value=newvalue;
-                sprintf(query,"replace into macros (userid,name,value) values ('%d','",user->id);
+                sprintf(query,"replace into `macros` (`userid`,`name`,`value`) values ('%d','",user->id);
                 strcat(query,dbf_string(macro->name)); strcat(query,"','");
                 strcat(query,dbf_string(macro->value));strcat(query,"');");
                 mysql_kvery(query);
@@ -27504,7 +27515,7 @@ int load_notifylist(NOTIFY *list,int id,int noti)
 {
 int pocet=0;
 
-  sprintf(query,"select %s from %s%s%s where userid='%d' %s;",(noti<2)?"victim":"cmd",noti==1?"notify":"",noti==0?"ignuser":"",noti==2?"comban":"",id,(noti<2)?"order by victim desc":"");
+  sprintf(query,"select %s from %s%s%s where `userid`='%d' %s;",(noti<2)?"`victim`":"`cmd`",noti==1?"`notify`":"",noti==0?"`ignuser`":"",noti==2?"`comban`":"",id,(noti<2)?"order by `victim` desc":"");
   if ((result=mysql_result(query))) {
     while ((row=mysql_fetch_row(result))) {
       if (row[0]) {
@@ -27737,7 +27748,7 @@ int jdb_zarad(int co, int uid, int wizzid, char *dovod)
 {
 
  if (uid<1) return 0;
- sprintf(query,"replace into outlaws (userid,wizzid,type,reason) values ('%d','%d','%d','%s')",uid,wizzid,co,dovod);
+ sprintf(query,"replace into `outlaws` (`userid`,`wizzid`,`type`,`reason`) values ('%d','%d','%d','%s')",uid,wizzid,co,dovod);
  mysql_kvery(query);
  if (mysql_affected_rows(&mysql)==1) return 1;
  else return 0;
@@ -27747,7 +27758,7 @@ int jdb_zarad(int co, int uid, int wizzid, char *dovod)
 int jdb_vyrad(int co, int uid)
 {
  if (uid<0) return 0;
- sprintf(query,"delete from outlaws where userid='%d' and type='%d'",uid,co);
+ sprintf(query,"delete from `outlaws` where `userid`='%d' and type='%d'",uid,co);
  mysql_kvery(query);
  if (mysql_affected_rows(&mysql)==1) return 1;
  else return 0;
@@ -27761,7 +27772,7 @@ int uid=0;
 uid=db_userid(username);
 if (uid<1) return NULL;
 
-sprintf(query,"select reason from outlaws where userid='%d' and type='%d'",uid,co);
+sprintf(query,"select `reason` from `outlaws` where `userid`='%d' and type='%d'",uid,co);
 if ((result=mysql_result(query))) {
   if ((row=mysql_fetch_row(result))) { 
     strncpy(texthb,row[0],sizeof(texthb)-1);
@@ -27782,7 +27793,7 @@ uname[0]='\0';
 uid=db_userid(username);
 if (uid<1) return uname;
 
-sprintf(query,"select wizzid from outlaws where userid='%d' and type='%d'",uid,co);
+sprintf(query,"select `wizzid` from `outlaws` where `userid`='%d' and type='%d'",uid,co);
 if ((result=mysql_result(query))) {
   if ((row=mysql_fetch_row(result)) && row[0]) { 
     uid=atoi(row[0]);
@@ -28185,7 +28196,7 @@ if (u->prevname[0]) {
  }
 
 i=0;vel=0;
-sprintf(query,"select cmd,banner,reason from comban where userid='%d';",u->id);
+sprintf(query,"select `cmd`,`banner`,`reason` from `comban` where `userid`='%d';",u->id);
 if ((result=mysql_result(query))) {
   while ((row=mysql_fetch_row(result))) {
     if (i==0) {
@@ -28763,7 +28774,7 @@ for(u=user_first;u!=NULL;u=u->next) {
  }
 
 if (level && tmin%10==0) {
-  sprintf(query,"insert into visitors (date,time,males,females) values ('%04d-%02d-%02d','%d','%d','%d')",tyear,tmonth,tmday,thour*10+tmin/10,muzi,zeny);
+  sprintf(query,"insert into `visitors` (`date`,`time`,`males`,`females`) values ('%04d-%02d-%02d','%d','%d','%d')",tyear,tmonth,tmday,thour*10+tmin/10,muzi,zeny);
   mysql_kvery(query);
  }
 

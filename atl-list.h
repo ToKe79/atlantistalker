@@ -107,7 +107,8 @@ VER,           VIS,           VIEWLOG,       VOTE,          WHO,
 WRITE,         WIPE,          WAKE,          WIZSHOUT,      WJOKE,         
 WFROM,         WINNERS,       WEATHER,       WIZZES,        XSAY,          
 XANNEL,        CMD_MODULE,
-} com_num;
+};
+int com_num;
 
 int com_level[]={
 CIT, CIT, KIN, KIN, SOL, 

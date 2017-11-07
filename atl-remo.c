@@ -511,7 +511,7 @@ char *hlp="~FTPouzi:~FW .note >strana <poznamka> ~FTalebo ~FW.note <poznamka>  ~
 
 if (word_count==1) { 
   write_user(user,title("~OL~FYTvoj poznamkovy blok","~OL~FB"));
-  sprintf(query,"select note from notes where userid='%d' and subdir='' order by date;",user->id);
+  sprintf(query,"select `note` from `notes` where `userid`='%d' and `subdir`='' order by date;",user->id);
   if ((result=mysql_result(query))) {
     while ((row=mysql_fetch_row(result))) { 
       cnt++;
@@ -520,7 +520,7 @@ if (word_count==1) {
      }
     mysql_free_result(result);
    }
-  sprintf(query,"select subdir from notes where userid='%d' group by subdir;",user->id);
+  sprintf(query,"select `subdir` from `notes` where `userid`='%d' group by `subdir`;",user->id);
   if ((result=mysql_result(query))) {
     text[0]='\0';
     while ((row=mysql_fetch_row(result))) { 
@@ -559,16 +559,16 @@ else {
      }
     strcpy(texthb,dbf_string(word[3+sub]));
     strcpy(text,dbf_string(word[2]));
-    sprintf(query,"select note from notes where userid='%d' and subdir='%s' order by date;",user->id,sub?text:"");
+    sprintf(query,"select `note` from `notes` where `userid`='%d' and `subdir`='%s' order by `date`;",user->id,sub?text:"");
     if ((result=mysql_result(query))) {
       while ((row=mysql_fetch_row(result))) { 
         if (!row[0]) continue;
         cnt++;
         if (num==cnt) {
           if (strlen(word[3+sub])==1)
-            sprintf(query,"update notes set subdir='' where userid='%d' and subdir='%s' and note='%s'",user->id,sub?text:"",dbf_string(row[0]));
+            sprintf(query,"update `notes` set `subdir`='' where `userid`='%d' and `subdir`='%s' and `note`='%s'",user->id,sub?text:"",dbf_string(row[0]));
           else 
-            sprintf(query,"update notes set subdir='%s' where userid='%d' and subdir='%s' and note='%s'",texthb,user->id,sub?text:"",dbf_string(row[0]));
+            sprintf(query,"update `notes` set `subdir`='%s' where `userid`='%d' and `subdir`='%s' and `note`='%s'",texthb,user->id,sub?text:"",dbf_string(row[0]));
           mysql_kvery(query);
           subs++;
          }
@@ -594,7 +594,7 @@ else {
     return;
    }
   if (word_count==2) {
-    sprintf(query,"select note from notes where userid='%d' and (subdir='%s' or subdir='>%s') order by date;",user->id,dbf_string(word[1]),dbf_string(word[1]));
+    sprintf(query,"select `note` from `notes` where `userid`='%d' and (`subdir`='%s' or `subdir`='>%s') order by `date`;",user->id,dbf_string(word[1]),dbf_string(word[1]));
     if ((result=mysql_result(query))) {
       while ((row=mysql_fetch_row(result))) { 
         cnt++;
@@ -627,7 +627,7 @@ else {
     strcpy(texthb,dbf_string(word[1]));
    }
   inpstr[512]='\0';
-  sprintf(query,"replace into notes (userid,subdir,note,date) values ('%d','%s','%s',FROM_UNIXTIME(%d))",
+  sprintf(query,"replace into `notes` (`userid`,`subdir`,`note`,`date) values ('%d','%s','%s',FROM_UNIXTIME(%d))",
   user->id,sub?texthb:"",dbf_string(inpstr),(int)time(0));
   mysql_kvery(query);
   word[1][0]=' ';
@@ -650,7 +650,7 @@ if (word_count<2) {
  }
 
 if (word_count==2 && !strcasecmp(word[1],"all")) {
-  sprintf(query,"delete from notes where userid='%d'",user->id);
+  sprintf(query,"delete from `notes` where `userid`='%d'",user->id);
   mysql_kvery(query);
   sprintf(text,"Vysklbal%s si vsetky strany zo svojho poznamkoveho bloku.\n",pohl(user,"","a"));
   write_user(user,text);
@@ -658,7 +658,7 @@ if (word_count==2 && !strcasecmp(word[1],"all")) {
  }
 
 if (word_count==3 && word[1][0]=='>' && strlen(word[1]) && !strcasecmp(word[2],"all")) {
-  sprintf(query,"delete from notes where userid='%d' and subdir='%s'",user->id,dbf_string(word[1]));
+  sprintf(query,"delete from `notes` where `userid`='%d' and `subdir`='%s'",user->id,dbf_string(word[1]));
   mysql_kvery(query);
   word[1][0]=' ';
   if (mysql_affected_rows(&mysql)) {
@@ -681,13 +681,13 @@ else po=atoi(word[2+sub]);
 if (od<1 || po<1 || od>po) write_user(user,help);
 else {
   strcpy(texthb,dbf_string(word[1]));
-  sprintf(query,"select note from notes where userid='%d' and subdir='%s' order by date;",user->id,sub?texthb:"");
+  sprintf(query,"select `note` from `notes` where `userid`='%d' and `subdir`='%s' order by `date`;",user->id,sub?texthb:"");
   if ((result=mysql_result(query))) {
     while ((row=mysql_fetch_row(result))) { 
       if (!row[0]) continue;
       cnt++;
       if (od<=cnt && cnt<=po) {
-        sprintf(query,"delete from notes where userid='%d' and subdir='%s' and note='%s'",user->id,sub?texthb:"",dbf_string(row[0]));
+        sprintf(query,"delete from `notes` where `userid`='%d' and `subdir`='%s' and `note`='%s'",user->id,sub?texthb:"",dbf_string(row[0]));
         mysql_kvery(query);
         deleted++;
        }
@@ -1288,7 +1288,7 @@ void view_remote(UR_OBJECT user)
 			  	}
 			  else {
                             sprintf(tmp,"%c",user->remote[i]->shortcut);
-                            sprintf(query,"select name,pass from remote where userid='%d' and talker='%s';",user->id,dbf_string(tmp));
+                            sprintf(query,"select `name`,`pass` from `remote` where `userid`='%d' and talker='%s';",user->id,dbf_string(tmp));
                             if ((result=mysql_result(query))) {
                               if ((row=mysql_fetch_row(result))) {
                                 if (row[0] && row[1]) {
@@ -1369,7 +1369,7 @@ void view_remote(UR_OBJECT user)
 		  	fscanf(fp,"%c %s %s %s\n",&shortcut, name, port, desc);
                         
                             sprintf(tmp,"%c",shortcut);
-                            sprintf(query,"select name from remote where userid='%d' and talker='%s';",user->id,dbf_string(tmp));
+                            sprintf(query,"select `name` from `remote` where `userid`='%d' and `talker`='%s';",user->id,dbf_string(tmp));
                             if ((result=mysql_result(query))) {
                               if ((row=mysql_fetch_row(result))) {
                                 if (row[0]) {
@@ -1424,7 +1424,7 @@ void view_remote(UR_OBJECT user)
     {
     case 2:
       sprintf(tmp,"%c",shortcut);
-      sprintf(query,"delete from remote where userid='%d' and talker='%s';",user->id,dbf_string(tmp));
+      sprintf(query,"delete from `remote` where `userid`='%d' and `talker`='%s';",user->id,dbf_string(tmp));
       if (mysql_kvery(query)) {
         if (mysql_affected_rows(&mysql)) {
 	  sprintf(text,"%s si talker ~OL%s~RS zo svojho zoznamu.\n", pohl(user,"Vymazal","Vymazala"), desc);
@@ -1447,7 +1447,7 @@ void view_remote(UR_OBJECT user)
 	  return;
 	}
       sprintf(tmp,"%c",shortcut);
-      sprintf(query,"replace into remote (userid,talker,name,pass) values ('%d','%s','",user->id,dbf_string(tmp));
+      sprintf(query,"replace into `remote` (`userid`,`talker`,`name`,`pass`) values ('%d','%s','",user->id,dbf_string(tmp));
       strcat(query,dbf_string(word[2])); strcat(query,"','");
       strcat(query,dbf_string(word[3])); strcat(query,"');");
       if (mysql_kvery(query)) {

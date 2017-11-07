@@ -106,7 +106,7 @@ int writeerror,max_timeouts,max_timeoutz;
 
 /* Zabezpecenie otvarania suborov (ropen) */
 
-#define FILESYSTEM "/dev/hda3"  /* cesticka k disk-device */
+#define FILESYSTEM "/"  /* cesticka k disk-device */
 #define LOW_DISK_LIMIT 1024     /* minimum volneho v KB   */
 
 #define POCET_KUZIEL 16
@@ -1169,12 +1169,12 @@ int            auth_rtimeout;
    kuknut .... a pripadne zmenit, ale nexajte to tak ako to je, je to dobre
    :> */
 /*   
-#define talker_signature  "===============================================================================\nForwardovana sprava z Atlantis Talkera (telnet atlantis.sk 7000)\n"
-#define talker_signature2 "===============================================================================\nPoslane z Atlantis Talkera (telnet atlantis.sk 7000, www.atlantis.sk)\n"
+#define talker_signature  "===============================================================================\nForwardovana sprava z Atlantis Talkera (telnet vps.vudiq.sk 7000)\n"
+#define talker_signature2 "===============================================================================\nPoslane z Atlantis Talkera (telnet vps.vudiq.sk 7000, www.atlantis.sk)\n"
 */
 
-#define talker_signature  "-------\nAtlantis talker (telnet atlantis.sk 7000, http://www.atlantis.sk)\n"
-#define talker_signature2 "-------\nAtlantis talker (telnet atlantis.sk 7000, http://www.atlantis.sk)\n"
+#define talker_signature  "-------\nAtlantis talker (telnet vps.vudiq.sk 7000, http://www.atlantis.sk)\n"
+#define talker_signature2 "-------\nAtlantis talker (telnet vps.vudiq.sk 7000, http://www.atlantis.sk)\n"
 
 /* Sem, ale to uz fakt presahuje vsetko, neviem preco akurat sem, ale predsa-
    len som sa rozhodol ze sem, aj ked to je uplne f pazi, ale sem, sem, sem,
