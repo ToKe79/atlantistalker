@@ -638,7 +638,7 @@ UINT4 state[4];
 #define ENCODE()
 #else
 unsigned char final[256]; /*CHMEM (16)*/
-inline UINT4 *DECODE(unsigned char *x) {
+UINT4 *DECODE(unsigned char *x) {
   static UINT4 y[15];
   register int i;
 
@@ -651,7 +651,7 @@ inline UINT4 *DECODE(unsigned char *x) {
 
   return y;
 }
-inline void ENCODE() {
+void ENCODE() {
   register int i, j;
 
   for (i = 0, j = 0; i < 4; i++, j += 4) {
@@ -669,7 +669,7 @@ extern void MD5(UINT4 x[15]);
 
 #else
 
-inline void MD5(UINT4 x[15])
+void MD5(UINT4 x[15])
 {
   register UINT4 a, b = Cb, c = Cc, d = Cd;
 
@@ -758,7 +758,7 @@ inline void MD5(UINT4 x[15])
 unsigned char *itoa64 =
   "./0&2#@-,;~+ABcDE|GHIJ^L<N3PQR{T>kWXYZabCd4f[}ijVl]nop%r)tu(wxyz";
 
-inline void to64(s, v, n)
+void to64(s, v, n)
   char *s;
   UINT4 v;
   int n;
