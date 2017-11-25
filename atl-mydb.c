@@ -85,11 +85,11 @@ int i,pos,stage=0;
            boot_exit(1);
         }
 
-   sprintf(query,"truncate table `web_index`;");
+   sprintf(query,"truncate table `web_index`");
    mysql_kvery(query);
-   sprintf(query,"truncate table `web_in`;");
+   sprintf(query,"truncate table `web_in`");
    mysql_kvery(query);
-   sprintf(query,"truncate table `web_out`;");
+   sprintf(query,"truncate table `web_out`");
    mysql_kvery(query);
  return 1;
 }
@@ -133,7 +133,6 @@ char *dbf_string(char *string)
 
 MYSQL_RES *mysql_result(char *select)
 {
-   
    if (mysql_query(&mysql,select)) {
       sprintf(text,"~OL~FRMYSQL RESULT ERROR: %s\n",mysql_error(&mysql));
       write_level(KIN,1,text,NULL);

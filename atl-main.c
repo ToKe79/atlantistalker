@@ -18433,6 +18433,8 @@ if (!load_user_details(u)) {
   return;
  }
 if (user->level<=u->level) {
+  destruct_user(u);
+  destructed=0;
   write_user(user,"Spravcom sa skleroza netoleruje!\n");
   return;
  }
