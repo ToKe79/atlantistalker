@@ -15,7 +15,7 @@ PROJECT = atlantis.exe
 # Toto uz je pre Linuziqoqoze
 #
 # LIBS    = -L/usr/local/lib/mysql -lmysqlclient -lccmalloc -ldl
-LIBS    = -L /usr/local/mysql/lib/mysql -lmysqlclient -ldl -rdynamic -Wl,--version-script=$(PROJECT_VERSION_SCRIPT) $(XMLLIBS)
+LIBS    = -lmysqlclient -ldl -rdynamic -Wl,--version-script=$(PROJECT_VERSION_SCRIPT) $(XMLLIBS)
 XMLLIBS	= $(shell xml2-config --libs)
 XMLFLAGS	= $(shell xml2-config --cflags)
 CCFLAGS = -Wall -ggdb -I. $(XMLFLAGS)
@@ -24,7 +24,7 @@ PROJECT_VERSION_SCRIPT = $(PROJECT).version
 SRCS    = ${wildcard *.c}
 TODO    = $(patsubst %.c,%.o,$(SRCS))
 
-.PHONY: clean doc libs
+.PHONY: clean libs
 
 $(PROJECT): $(TODO) $(DEPENDS) $(PROJECT_VERSION_SCRIPT)
 	$(CC) $(CCFLAGS) -o $(PROJECT) $(TODO) $(LIBS)
@@ -50,10 +50,5 @@ $(DEPENDS):
 	@echo "Building dependencies"
 	@gcc -E -MM $(SRCS) > $(DEPENDS)
 
-doc:
-	@echo -n "Creating documentation.."
-	robodoc --rc robodoc.rc
-
 -include $(DEPENDS)
-
 
