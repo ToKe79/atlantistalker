@@ -1,6 +1,10 @@
+sudo: true
+dist: xenial
+language: c
+
 before_install:
         - sudo apt-get -qq update
-        - sudo apt-get install -y ccache libxml2-dev default-libmysqlclient-dev
+        - sudo apt-get install -y ccache libxml2-dev libmysqlclient-dev
 
 install: true
 
