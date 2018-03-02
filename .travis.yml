@@ -1,11 +1,8 @@
-sudo: true
-dist: xenial
 language: c
-
-before_install:
-        - sudo apt-get -qq update
-        - sudo apt-get install -y ccache libxml2-dev libmysqlclient-dev
-
-install: true
-
-script: make
+matrix:
+        include:
+                - os: linux
+                  sudo: required
+                  dist: trusty
+                  install: ./.travis/install_deps.sh
+                  script: ./.travis/compile.sh
