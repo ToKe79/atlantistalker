@@ -2,27 +2,16 @@
 # ===========================================================================
 
 CC	= ccache gcc
-PROJECT = atlantis.exe
-
-#
-# Nasledujuce 2 riadky sluzia pre kompilaciu pod Window
-#
-
-#LIBS	= -L/usr/local/lib/mysql -lmysql
-#CCFLAGS = -Wall -DWIN32
-
-#
-# Toto uz je pre Linuziqoqoze
-#
-# LIBS    = -L/usr/local/lib/mysql -lmysqlclient -lccmalloc -ldl
+PROJECT = atlantis
 LIBS    = -lmysqlclient -ldl -rdynamic -Wl,--version-script=$(PROJECT_VERSION_SCRIPT) $(XMLLIBS)
 XMLLIBS	= $(shell xml2-config --libs)
-XMLFLAGS	= $(shell xml2-config --cflags)
+XMLFLAGS= $(shell xml2-config --cflags)
 CCFLAGS = -Wall -ggdb -I. $(XMLFLAGS)
 DEPENDS = make.depend
-PROJECT_VERSION_SCRIPT = $(PROJECT).version
 SRCS    = ${wildcard *.c}
 TODO    = $(patsubst %.c,%.o,$(SRCS))
+
+PROJECT_VERSION_SCRIPT = $(PROJECT).version
 
 .PHONY: clean libs
 
@@ -36,7 +25,7 @@ $(PROJECT_VERSION_SCRIPT): atl-libapi.o
 libs: libs/liblog.so
 
 libs/liblog.so: libs/lib_log.c
-	$(CC) $(CCFLAGS) -shared $< -o $@
+	$(CC) $(CCFLAGS) -fPIC -shared $< -o $@
 
 clean:
 	@echo -n "Deleting all object files..."
@@ -51,4 +40,3 @@ $(DEPENDS):
 	@gcc -E -MM $(SRCS) > $(DEPENDS)
 
 -include $(DEPENDS)
-
