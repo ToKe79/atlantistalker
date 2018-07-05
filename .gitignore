@@ -1,3 +1,6 @@
 *.o
 make.depend
-atlantis*
+runtime/atlantis
+runtime/atlantis.ini
+runtime/atlantis.version
+runtime/log

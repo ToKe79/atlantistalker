@@ -2,7 +2,7 @@
 # ===========================================================================
 
 CC	= ccache gcc
-PROJECT = atlantis
+PROJECT = runtime/atlantis
 LIBS    = -lmysqlclient -ldl -rdynamic -Wl,--version-script=$(PROJECT_VERSION_SCRIPT) $(XMLLIBS)
 XMLLIBS	= $(shell xml2-config --libs)
 XMLFLAGS= $(shell xml2-config --cflags)
@@ -38,5 +38,6 @@ clean:
 $(DEPENDS):
 	@echo "Building dependencies"
 	@gcc -E -MM $(SRCS) > $(DEPENDS)
+	@mkdir -p runtime
 
 -include $(DEPENDS)
