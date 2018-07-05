@@ -1,0 +1,17 @@
+atlantis_db
+atlantis_user
+atlantis_password
+
+# Thís file provides database connection details, so they
+# are not hardcoded to the code and can be defined at runtime.
+# First line defines the database name, second line defines
+# the database user, third lines defines the password.
+#
+# Maximum length of any of the tree parameters is 29 characters!
+#
+# As this file is stored in plaintext, make sure only the file
+# owner can read/modify this file.
+#
+# Original code used a simple encryption for the password
+# storage, but to make the things easier, this was removed in the
+# public release.

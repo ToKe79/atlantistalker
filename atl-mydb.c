@@ -39,13 +39,16 @@ int init_database(void)
 {
 FILE *fp;
 char line[200];
-char adb_name[30],adb_pass[30];
+char adb_name[30],adb_user[30],adb_pass[30];
 int i,pos,stage=0;
     
    if (!(fp=ropen("atlantis.ini","r"))) return 0;
    fgets(line,199,fp);
    line[strlen(line)-1]='\0';
    strncpy(adb_name,line,29);
+   fgets(line,199,fp);
+   line[strlen(line)-1]='\0';
+   strncpy(adb_user,line,29);
    fgets(line,199,fp);
    line[strlen(line)-1]='\0';
    fclose(fp);
@@ -76,11 +79,11 @@ int i,pos,stage=0;
            fprintf(stderr,"MYSQL: Nedostatok pamate pre vytvorenie objektu!\n");
            boot_exit(1);
         }
-	if (!mysql_real_connect(&mysql,DBHOSTNAME,adb_name,adb_pass,NULL,0,NULL,0)) {
+	if (!mysql_real_connect(&mysql,DBHOSTNAME,adb_user,adb_pass,NULL,0,NULL,0)) {
            fprintf(stderr,"MYSQL: Zlyhalo pripojenie k databaze: %s\n",mysql_error(&mysql));
            boot_exit(1);
         }
-	if (mysql_select_db(&mysql,"atlantis")) {
+	if (mysql_select_db(&mysql,adb_name)) {
            fprintf(stderr,"MYSQL: Nemozno vybrat zakladnu databazu!\n");
            boot_exit(1);
         }
