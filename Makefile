@@ -29,7 +29,7 @@ libs/liblog.so: libs/lib_log.c
 
 clean:
 	@echo -n "Deleting all object files..."
-	@rm -f *.o $(PROJECT) $(DEPENDS) $(PROJECT_VERSION_SCRIPT)
+	@rm -f *.o $(DEPENDS)
 	@echo "OK"
 
 %.o:
