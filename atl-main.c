@@ -3433,15 +3433,30 @@ echo_on(user);
 /* ZMENA - counter ;) */
 float counter(int zobraz)
 {
-char filename[80];
+char filename[80], text[100];
 float pocitadlo;
 FILE *fp;
 
 sprintf(filename,"%s",COUNTERFILE);
-if (!(fp=ropen(filename,"r")))  return 0; /*APPROVED*/
-
-fscanf(fp,"%f",&pocitadlo);
- fclose(fp);
+if (!(fp=ropen(filename,"r"))) {
+  sprintf(text,"Neexistuje subor '%s' s pocitadlom navstev - pokusim sa ho vytvorit\n",filename);
+  write_syslog(text,1);
+  if(!(fp=ropen(filename,"w"))) {
+    sprintf(text, "Neda sa vytvorit subor pocitadla navstev '%s'!\n", filename);
+    write_syslog(text,1);
+    return 0;
+  } else {
+    // initialize counter with zero
+    pocitadlo=0;
+    fprintf(fp,"%.0f",pocitadlo);
+    fclose(fp);
+    sprintf(text, "Subor '%s' s pocitadlom navstev uspesne vytvoreny so stavom %.0f\n", filename, pocitadlo);
+    write_syslog(text,1);
+  }
+} else {
+  fscanf(fp,"%f",&pocitadlo);
+  fclose(fp);
+}
 if (zobraz==1) {
  pocitadlo++;
  if (!(fp=ropen(filename,"w")))  return 0;   /*APPROVED*/
@@ -5033,7 +5048,7 @@ while(!feof(fp)) {
                 sprintf(text,"%12s  %-12s %-12s %s",zobraz_datum(&akt_cas,4),user->name,usermeno,bogus);
                 fprintf(fp,"%s\n",text);
 		fclose(fp);
-		return;		
+		return;
 		}
 	fscanf(fp,"%s %s %s", userheslo, usermeno, bogus);
 	}
