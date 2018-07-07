@@ -24,7 +24,7 @@
 
 //#define HTML
 
-#define title_path "/usr/home/atlantis/talker/issues"
+#define title_path "issues"
 #define WEB_CGI_PATH "http://www.atlantis.sk/cgy/magazine.cgi"
 #define title_name "dialogs"
 #define TITLEN sizeof("[title]")
