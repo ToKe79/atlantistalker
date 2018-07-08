@@ -4998,6 +4998,7 @@ FILE *fp;
 char filename[80];
 char userheslo[7],usermeno[13], bogus[70];
 char par[200];
+char text[100];
 time_t t,akt_cas;
 
 strcpy(adr,user->email);
@@ -5012,15 +5013,34 @@ if ((!strstr(adr,".")) || (!strstr(adr,"@")) || (!isalpha(adr[strlen(adr)-1])) |
 	user->ignall=1;
 	user->misc_op=9;
         write_user(user,"Tvoja E-mail adresa: ");
-	no_prompt=1;	
+	no_prompt=1;
 	return;
-   	} 
+   	}
 
 sprintf(filename,"%s",ZOZNAM_USEROV);
-if (!(fp=ropen(filename,"r"))) { /*APPROVED*/
-	write_user(user,"Problem: nemozem otvorit subor s usermi! :-(\n");
-	return;
-	} 
+if (!(fp=ropen(filename,"r"))) {
+	sprintf(text,"Neexistuje subor '%s' s usermi, pokusim sa ho vytvorit\n",filename);
+	write_syslog(text,1);
+	if (!(fp=ropen(filename,"w"))) {
+		sprintf(text,"Nie je mozne vytvorit subor '%s' s usermi!\n",filename);
+		write_syslog(text,1);
+		write_user(user,"Prepac, nastal problem, kontaktuj prosim strazcov Atlantisu! :-(\n");
+		sprintf(text,"~OL~FRCHYBA: ~OL~FWNie je mozne vytvorit subor '%s'! Userko %s nemoze dokoncit .request!~RS\n",filename,user->name);
+		writesys(WIZ,1,text,NULL);
+		return;
+	}
+	fclose(fp);
+	sprintf(text,"Subor '%s' uspesne vytvoreny!\n",filename);
+	write_syslog(text,1);
+	if (!(fp=ropen(filename,"r"))) {
+		write_user(user,"Prepac, nastal problem, kontaktuj prosim strazcov Atlantis! :-(\n");
+		sprintf(text,"Subor '%s' nie je mozne otvorit na citanie!\n",filename);
+		write_syslog(text,1);
+		sprintf(text,"~OL~FRCHYBA: ~OL~FWNie je mozne otvorit subor '%s'! Userko %s nemoze dokoncit .request!~RS\n",filename,user->name);
+		writesys(KIN,1,text,NULL);
+		return;
+	}
+}
 
 fscanf(fp,"%s %s %s", userheslo, usermeno, bogus);
 while(!feof(fp)) {		
@@ -5052,7 +5072,7 @@ while(!feof(fp)) {
 		}
 	fscanf(fp,"%s %s %s", userheslo, usermeno, bogus);
 	}
- fclose(fp);
+fclose(fp);
 
 write_user(user, "\n~OLVyborne, uspesne si sa zaregistroval. ~RSKazdu chvilu ocakavaj email v ktorom sa\n");
 write_user(user, "dozvies svoje request-heslo. Potom zadaj prikaz ~OL.request <heslo>~RS a stanes sa\n");
@@ -5072,11 +5092,13 @@ strcpy(user->request,heslo);
 
 user->accreq=1;
 save_user_details(user,1);
-strcpy(filename,"misc/users.new");
+strcpy(filename,ZOZNAM_USEROV);
 if (!(fp=ropen(filename,"a"))) { /*APPROVED*/
-	write_user(user,"CHYBA: nemozem otvorit subor s usermi!\n");
+	write_user(user,"Prepac, nastal problem, kontaktuj prosim strazcov Atlantis! :-(\n");
+	sprintf(text,"~OL~FRCHYBA: ~OL~FWNie je mozne pridavat do suboru '%s'! Userko %s nemoze dokoncit .request!~RS\n",filename,user->name);
+	writesys(KIN,1,text,NULL);
 	return;
-	}
+}
 
 fprintf(fp,"%-6s %-12s %s\n",heslo,user->name, user->email);
 fclose(fp);
