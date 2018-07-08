@@ -1,8 +1,9 @@
+#!/bin/bash
 # Toto je skript, ktory posle informacie luserovi. Musi byt v adresari kde
 # je spustaci program, teda v ~/talker.
 
 (
-echo "From: Atlantis Talker <talker@atlantis.sk>"
+echo "From: Atlantis Talker <vudiq@vps.vudiq.sk>"
 echo "To: $2"
 echo "Subject: Request-password ($1)"
 echo "X-User-Name: $1"
@@ -24,5 +25,5 @@ echo "                                 Tvoji GODovia."
 echo ""
 echo "--------------------------------------------------------------------------"
 echo "Atlantis talker: telnet atlantis.sk 7000, http://talker.atlantis.sk"
-) | sendmail -f talker@atlantis.sk $2 
+) | sendmail -f vudiq@vps.vudiq.sk $2 
 
