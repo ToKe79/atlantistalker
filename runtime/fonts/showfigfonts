@@ -1,0 +1,60 @@
+#!/bin/sh -
+# showfigfonts by Glenn Chappell <ggc@uiuc.edu> (with help from many others)
+# 28 Apr 1995
+# Based on showfigfonts by Greg Galperin <grg@ai.mit.edu>, Nov 1993.
+#
+# Prints a list of available figlet fonts, along with a sample of each
+# font.  If directory is given, lists fonts in that directory; otherwise
+# uses the default font directory.  If word is given, prints that word
+# in each font; otherwise prints the font name.
+#
+# Usage: showfigfonts [ -d directory ] [ word ]
+
+# Set up PATH so figlet can be found
+DIRSAVE=`pwd`
+cd `(dirname "$0") 2>/dev/null`
+PATH="$PATH":`pwd`
+cd "$DIRSAVE"
+
+# Get figlet version
+FIGVERSION=`figlet -I1 2>/dev/null`
+if [ -z "$FIGVERSION" ]; then
+  FIGVERSION=20000
+fi
+
+USAGE="Usage: `basename $0` [ -d directory ] [ word ]"
+
+if [ "$1" = '-d' ]; then
+  FONTDIR="$2"
+  WORD="$3"
+  if [ $# -gt 3 ] || [ $# -lt 2 ]; then
+    echo "$USAGE" >&2
+    exit 1
+  fi
+else
+  WORD="$1"
+  if [ $# -gt 1 ]; then
+    echo "$USAGE" >&2
+    exit 1
+  fi
+  if [ "$FIGVERSION" -lt 20100 ]; then
+    # figlet 2.0
+    FONTDIR="`figlet -F | sed -e '1d' -e '3,$d' -e 's/.*: //'`"
+  else
+    # figlet 2.1 or later
+    FONTDIR="`figlet -I2`"
+  fi
+fi
+
+cd "$FONTDIR"
+FONTLIST=`ls *.flf | sed s/\.flf$//`
+cd $DIRSAVE
+for F in $FONTLIST ; do
+  echo "$F" :
+  if [ -n "$WORD" ]; then
+    echo "$WORD" | figlet -d "$FONTDIR" -f "$F"
+  else
+    echo "$F" | figlet -d "$FONTDIR" -f "$F"
+  fi
+  echo "" ; echo ""
+done

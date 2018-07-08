@@ -1,0 +1,92 @@
+#!/bin/sh -
+# figlist by Glenn Chappell <ggc@uiuc.edu>
+# File counting by Bruce Jakeway <pbjakewa@barrow.uwaterloo.ca>
+# 28 Apr 1995
+#
+# Lists all fonts and control files in figlet's default font directory.
+# Replaces "figlet -F", which was removed from figlet version 2.1.
+#
+# Usage: figlist [ -d directory ]
+#
+# If this script doesn't work on your system, try
+# figlet -F        (figlet 2.0)
+# ls `figlet -I2`  (figlet 2.1 or later)
+#
+# Or, if the problem is only that your system doesn't have the "wc" (word
+# count) program, put a "#" at the beginning of the two lines containing
+# "wc", i.e., the lines beginning "NUMFONTS=" and "NUMCONTROL=".
+
+# Set up PATH so figlet can be found
+DIRSAVE=`pwd`
+cd `(dirname "$0") 2>/dev/null`
+PATH="$PATH":`pwd`
+cd "$DIRSAVE"
+
+# Get figlet version
+FIGVERSION=`figlet -I1 2>/dev/null`
+if [ -z "$FIGVERSION" ]; then
+  FIGVERSION=20000
+fi
+
+USAGE="Usage: `basename $0` [ -d directory ]"
+
+if [ "$1" = "-d" ]; then
+  FONTDIROPT="-d $2"
+  if [ $# -ne 2 ]; then
+    echo "$USAGE" >&2
+    exit 1
+  fi
+else
+  FONTDIROPT=""
+  if [ $# -ne 0 ]; then
+    echo "$USAGE" >&2
+    exit 1
+  fi
+fi
+
+if [ "$FIGVERSION" -lt 20100 ]; then
+  # figlet 2.0
+  figlet -F | sed -e '2,$d'
+  FONTDIR="`figlet -F | sed -e '1d' -e '3,$d' -e 's/.*: //'`"
+else
+  # figlet 2.1 or later
+  echo "Default font: `figlet -I3`"
+  FONTDIR=`figlet $FONTDIROPT -I2`
+fi
+echo "Font directory: $FONTDIR"
+
+if [ ! -d "$FONTDIR" ] || [ ! -r "$FONTDIR" ]; then
+  echo 'Unable to open directory'
+  exit
+fi
+cd "$FONTDIR"
+
+NUMFONTS=`ls *.flf 2>/dev/null | wc -l | sed 's/^ *//'`
+echo ""
+if [ "$NUMFONTS" = 0 ]; then
+  echo 'No figlet fonts in this directory'
+else
+  if [ "$NUMFONTS" -eq 1 ]; then
+    echo "1 figlet font in this directory:"
+  else
+    echo $NUMFONTS "figlet fonts in this directory:"
+  fi
+  ls -C *.flf 2>/dev/null | expand | sed s/\.flf\\\>//g
+fi
+
+if [ $FIGVERSION -lt 20100 ]; then
+  exit
+fi
+
+NUMCONTROL=`ls *.flc 2>/dev/null | wc -l | sed 's/^ *//'`
+echo ""
+if [ "$NUMCONTROL" = 0 ]; then
+  echo 'No figlet control files in this directory'
+else
+  if [ "$NUMCONTROL" -eq 1 ]; then
+    echo "1 figlet control file in this directory:"
+  else
+    echo $NUMCONTROL "figlet control files in this directory:"
+  fi
+  ls -C *.flc 2>/dev/null | expand | sed s/\.flc\\\>//g
+fi

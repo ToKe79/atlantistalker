@@ -1,0 +1,109 @@
+.go bez parametru ta prenesie vzdy na namestie (pokial nie si v zalari)?
+.tbanner mozes tellovat aj sam sebe (a skusat si tak typy fontov)?
+.pictell mozes posielat aj sam sebe?
+.smail mozes posielat aj sam sebe (napr. robit si poznamky)?
+.fmail <email> posle vsetku tvoju postu na zadanu adresu? Ak zadas nespravnu    adresu, nepride nic!
+.col zapina a vypina farby ? S farbami je Atlantis ovela prehladnejsi!
+v miestnosti svatyna mas absolutny pokoj od fightov, kidnapov, wakeov ...?
+pomocou .ignore user mozes ignorovat jednotlivych userov (az 30)?
+v .examine, AP su arena-pointy a PP su PowerPointy?
+.from ti vypise od koho ti prisla posta?
+pomocou .set gender si mozes nastavit pohlavie? (muz/zena)
+pomocou .set homepage si mozes nastavit adresu (URL) svojej homepage?
+">" je skratka pre .tell?
+"!" je skratka pre .shout?
+"/" je skratka pre .to?
+"#" je skratka pre .semote?
+vypis prikazov dostanes bud cez .h c alebo .commands?
+pomoc o jednotlivom prikaze sa dozvies: ENG: .h <command> SVK: .pom <prikaz>?
+vsetky prikazy a nazvy mozu byt skratene?
+.weather zobrazi aktualnu predpoved pocasia na dnes, a .weather 2 na zajtra?
+poseidon je robot? Skus si s nim pokecat... ;)
+pomocou prikazu .vote mozes hlasovat? .vote -v zobrazi aktualny stav volieb.
+.ignore user <user> - ignorujes <user>-ove telly, pemoty, waky, hugy, proste    vsetko?
+pomocou .last si pozries vypis poslednych n odhlasenych uzivatelov?
+Atlantis ma aj svoju vlastnu stranku na adrese: http://www.atlantis.sk?
+s .hug, .wake a .kiss sa teraz da posielat aj sprava? Skus .hug <user> sprava.
+v miestnosti amfiteater sa konaju divadelne predstavenia? Pozri prikaz .play.
+.sos sluzi na upozornenie wizardov na problem, s ktorym si sam nevies rady?
+pomocou prikazu .prompt sa mozes dozviet uzitocne info priamo vo vstupnom       riadku?
+heslo si mozes zmenit prikazom .passwd?
+.suggestion <text> sluzi na poslanie tvojej pripomienky spravcom talkeru?
+.complaint <text> sluzi na predostretie tvojej staznosti spravcom talkeru?
+.excuse <text> sluzi na oficialne ospravedlnenie spravcom talkeru?
+v miestnosti Arena sa kazdy tvoj vyhrany fight zapocita do tabulky .winners?
+precitanim obsahu .faq a .rules mozes len ziskat?
+cely jokeboard sa nachadza na adrese www.atlantis.sk/jokeboard ?
+.time vypise kolko je hodin a ine uzitocne informacie? ;)
+ak si afk, telly ktore dostanes sa zaznamenaju do .revtell bufferu?
+skratka ":" znamena reply, odpoved poslednemu tellujucemu?
+.poet sluzi na generovanie basniciek? Blizsie info cez .pomoc poet
+existuje e-mailova konferencia o Atlantise? Informacie o prihlaseni cez prikaz  .pomoc mlist
+prikaz .cow generuje nahodne kraviny?
+najvyssie prava ma Poseidon?
+prikaz .news vypise novinky ktore su na Atlantise, a ktore by si rozhodne nemal prehliadat? 
+prikazom .kick mozes vykopnut nespratnika z miestnosti?
+ak Ta znervoznuju wake, hug a kiss, mozes ich dostavat len na jednoriadkove?    Vyskusaj .ignore fun
+vo svatyni mas pokoj od wake, hug a kiss?
+prikaz .who HRDINA zobrazi prihlasenych warriorov? Viac sa dozvies z .pomoc who
+prikazom .join <user> sa mozes presunut priamo k zadanemu userovi?
+v Atlantide mozes hrat s ostatnymi uzivatelmi piskvorky? Skus prikaz .piskvorky
+prikaz .alarm sluzi na nastavenie budika? Vhodne, ak Ti o pol hodiny ide auto-  bus ... ;-)
+postu mozes posielat aj viacerym uzivatelom naraz? Skus prikaz .copies!
+ak ma Tvoj terminal iny pocet riadkov ako 24, mozes si jeho velkost nastavit?   Vypisy sa potom prisposobia nastavenej velkosti!
+ak nevidis konce riadkov, mozes si nastavit ich zalamovanie? Vyskusaj: .set wrap
+existuju aj odlisne vypisy (design, farby) pri .who? Nastavis si ich prikazom   .set who
+zrychlit komunikaciu cez .tell mozes pomocou prikazu .call? Viac informacii:    .pomoc call
+s revolverom mozes hrat rusku ruletu? :-)
+v Atlantide si mozes zahrat namornu bitku? Vyskusaj prikaz .lodicky !
+predmety mozes skumat prikazom .examine?
+predmety v miestnostiach sa postupom casu same doplnaju?
+pomocou prikazu .notify si mozes vytvorit zoznam priatelov, na ktorych          prihlasenia/odhlasenia a pritomnost budes automaticky upozornovany?
+v Atlantide mozes hrat znamu hru so slovami 'obesenec'? Vyskusaj prikaz .hangman
+novu postu si mozes precitat prikazom .rmail new?
+makro s nazvom 'auto' sa vykona hned ked sa prihlasis?
+posta sa Ti moze automaticky forwardovat na e-mail adresu? Skus prikazy         .set email a .set autofwd !
+v Atlantide mozes hrat hru DOOM? Pozri si navod: .pomoc doom
+necenzurovany rozhovor mozes viest pomocou prikazu .gossip?
+Wizardi pravidelne poriadaju sutaze (questy)? Pozri si .pomoc quest
+v jednom riadku mozes vykonavat viac prikazov, ked ich oddelis opacnou          lomkou? (\)
+v makrach mozes pouzivat parametre? Pozorne si precitaj .pomoc macro
+prikaz .revshout linux ukaze vsetky shout v ktorych bolo slovo "linux"?
+v blizkosti Atlantisu existuje ostrov Portalis, na ktory sa dostanes lodou z    pristavu?
+na ostrove Portalis sa nachadza mnoho miestnosti ktore si mozes nastavit na pri-vatne?
+z Portalisu na Atlantis sa mozes rychlejsie dopravit na palube letuna?
+typ vypisu .who cislo 8 obsahuje mnoho zaujimavych dodatocnych informacii?
+svoj prompt si mozes lubovolne nadefinovat a vyfarbit?
+prikaz .map zobrazi mapu ostrova na ktorom sa nachadzas?
+prikaz .rooms zobrazi zoznam lokacii na ostrove na ktorom sa nachadzas?
+prikaz ".who portalis" zobrazi vsetkych ludi na ostrove Portalis?
+jokeboard si mozes citat aj od urciteho cisla vtipu (.rjoke cislo)
+prikaz .rjoke last vypise najnovsie napisany vtip?
+nastenky (boardy) si mozes citat (a aj na ne pisat) cez web? Gateway sa nachadzana adrese www.atlantis.sk/brd
+ak si citas alebo editujes nejaky text, telly sa Ti ukladaju do revtell bufferu?
+e-mail poslany na adresu tvojnick@atlantis.sk Ti pride priamo na talker?
+v editore mozes pouzivat specialne prikazy? Pozri si: .pomoc editor
+pomocou .set pagewho si mozes nastavit vypis kazdeho typu ".who" po strankach?
+nastenku mozes citat aj od urcitej spravy? Staci napisat .read <cislo_spravy>
+vsetky skore-tabulky hier v Atlantide sa daju zobrazit prikazom .winners?
+existuje specialny klient pre pripojenie na Atlantis? Jeho autorom je Milo, a   stiahnut si ho mozes z adresy www.atlantis.sk/aklient (len pre Win95/98/NT)
+.rmail 12 zobrazi Tvoju postu od 12. spravy?
+v notify-zozname mozes mat lubovolny pocet ludi?
+fonty pre .banner si mozes prezerat cez .tbanner?
+pomocou .ignore word <slovo> mozes ignorovat vety obsahujuce dane slovo?
+prikaz ".alarm stop" zastavi nastaveny alarm?
+pomocou .set examine si mozes zvolit dizajn vypisu prikazu .examine?
+prikazom .remote sa mozes napojit na iny talker alebo na IRC priamo od nas?
+z Atlantisu sa mozes napojit aj na IRC? Vyskusaj prikaz .irc connect!
+.map atlantis zobrazi mapu Atlantisu, .map portalis zobrazi mapu Portalisu?
+kratke poznamky si mozes robit pomocou prikazu .note?
+prikazom .who [Z] si zobrazis vsetky prihlasene osoby nezneho pohlavia?
+prikazom .who [AKLIENT] si zobrazis vsetkych prihlasenych, ktori pouzivaju      Atlantis Klienta (www.atlantis.sk/aklient)?
+na Atlantise mozes od levelu KNAZ pouzivat kuzla? (.spell)
+Atlantis ma vstavany web-browser? Vyskusaj prikaz .lynx!
+prikaz .client zapne vstavaneho klienta ktory ma mnoho uzitocnych funkcii?
+pri zapnutej funkcii .client mozes dooma ovladat kurzorovymi klavesmi?
+pri zapnutej funkcii .client sa mozes posuvat po citanom texte kurzormi?
+stavovy riadok (pri zapnutom .client) mozes obnovit (refresh) stlacenim CTRL+L?
+si mozes nadefinovat vlasnty vzhlad who ? (pozri .set who)
+ze si mozes nastavit datum narodenia podla ktoreho sa bude zobrazovat tvoj aktualny vek v .examine ? (pozri .set birth)

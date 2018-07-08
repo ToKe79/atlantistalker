@@ -1,0 +1,17 @@
+~FTKAPITOLA DRUHA: SYNTAX KUZLA~FW
+
+Kazdy proces meditacie spojenej s recitovanim mantier v runovom pisme pre
+zjednodusenie nazveme "kuzlo", hoci nie je to magia v povodnom slova zmysle.
+Pre maximalny efekt treba casto pouzit vhodnu kombinaciu doplnkovych
+predmetov - spravidla liecivych rastin, ktorych odvar umozni cloveku omnoho
+lepsi psychicky rozhlad. Su to teda akesi prisady na kuzlenie. Pouzitie je
+nasledovne:
+
+.spell <magicka formulka> [dodatkove slova]
+
+Spell je obdobou samotneho sustredenia sa. Magicka formulka je skupina run,
+tvoriacich kuzlo. Prva runa vzdy udava typ kuzla - co vlastne ma kuzlo
+robit. Druha runa udava ciel kuzla. Vsetky ostatne runy tvoria telo
+samotneho kuzla. Dodatkove slova upresnuju vyznam prvej runy - upresnuju
+ciel kuzla. Moze to byt meno, nazov alebo podobne...
+

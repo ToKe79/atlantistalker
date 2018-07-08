@@ -1,0 +1,28 @@
+# Toto je skript, ktory posle informacie luserovi. Musi byt v adresari kde
+# je spustaci program, teda v ~/talker.
+
+(
+echo "From: Atlantis Talker <talker@atlantis.sk>"
+echo "To: $2"
+echo "Subject: Request-password ($1)"
+echo "X-User-Name: $1"
+echo "X-User-Email: $2"
+echo "X-Req-Passwd: $3"
+echo "X-User-Site: $4"
+echo ""
+echo "Ahoj $1 !"
+echo ""
+echo "Posielame Ti Tvoje registracne heslo na talker Atlantis."
+echo ""
+echo "Klikni na http://talker.atlantis.sk/r.php?n=$1&p=$3"
+echo "alebo sa prihlas na talker, a napis prikaz: .request $3"
+echo "Stanes sa tak plnopravnym obcanom Atlantisu." 
+echo ""
+echo "Dakujeme za Tvoju priazen, a prajeme Ti prijemne chvile stravene v Atlantise."
+echo ""
+echo "                                 Tvoji GODovia."
+echo ""
+echo "--------------------------------------------------------------------------"
+echo "Atlantis talker: telnet atlantis.sk 7000, http://talker.atlantis.sk"
+) | sendmail -f talker@atlantis.sk $2 
+
