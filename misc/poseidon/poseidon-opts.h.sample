@@ -1,0 +1,8 @@
+#define TISHOST		"localhost"		/* hostname of the Atlantis Talker */
+#define TISPORT		7000			/* port to connect to */
+#define MYNAME		"poseidon"		/* bots nick */
+#define MYPASS		"SecretPwd"		/* bots password */
+#define LOGFILE		"poseidon.log"		/* name of log file */
+
+/* Koho bude Poseidon posluchat, posledne musi byt hviezdicka */
+char *masters[]={"MyMaster","*"};
