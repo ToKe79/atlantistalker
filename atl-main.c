@@ -3192,6 +3192,7 @@ switch(user->login) {
       strcpy(user->homepage,"Nema ziadnu homepage");
       strcpy(user->reserved,"-");
       strcpy(user->requestemail,"N/A");
+      strcpy(user->wizpass,"-");
       user->sex=2; /* Standardne muz(1), ale 2 aby sme vedeli ze si este nezmenil pohlavie;) */
       user->pridavacas=1;
       
