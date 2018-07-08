@@ -215,6 +215,7 @@ int writeerror,max_timeouts,max_timeoutz;
 #define NOTICE_DIGEST "misc/notice_digest"  /* digest z noticof */
 #define REVTELL_TMP "mailspool/rt_tmp"      /* revtell tempfile */
 #define CLOVECEFILES "xclosave"             /* clovece */
+#define BACKUP_DIR "backup_db"              /* adresar na zalohy db */
 
 /* Status line */
 enum statline {NONEMODE,UNKNOWN,LINEMODE,CHARMODE};

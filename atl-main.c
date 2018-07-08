@@ -28814,11 +28814,12 @@ void do_db_backup(int full)
 {
 char filename[80],store[80];
 FILE *fp;
+extern char adb_name[30],adb_user[30],adb_pass[30];
 
  switch(double_fork()) {
    case -1: return;
    case  0:
-     sprintf(filename,"autobackup");
+     sprintf(filename,"./autobackup");
      if ((fp=fopen(filename,"w"))==NULL) {
        sprintf(text,"Failed opening %s in do_db_backup()\n",filename);
        write_syslog(text,1);
@@ -28826,17 +28827,15 @@ FILE *fp;
       }
      if (full) {
        sprintf(store,"f%0dh-%02dd-%02dm",thour,tmday,tmonth);
-       fprintf(fp,"mysqldump -B atlantis -a -u atlantis --password=%s >%s.dump\n",PASSWORD,store);
+       fprintf(fp,"mysqldump -B %s -a -u %s --password=%s >%s/%s.dump\n",adb_name,adb_user,adb_pass,BACKUP_DIR,store);
        write_syslog("Dumping database..\n",1);
       }
      else {
        sprintf(store,"u%0dh-%02dd-%02dm",thour,tmday,tmonth);
-       fprintf(fp,"mysqldump -B atlantis -a --tables users -u atlantis --password=%s >%s.dump\n",PASSWORD,store);
+       fprintf(fp,"mysqldump -B %s -a --tables users -u %s --password=%s >%s/%s.dump\n",adb_name,adb_user,adb_pass,BACKUP_DIR,store);
        write_syslog("Dumping usertable..\n",1);
       }
-     fprintf(fp,"rar a -pattupd db/%s.rar %s.dump\n",store,store);
-     fprintf(fp,"rm %s.dump\n",store);
-     fprintf(fp,"rm autobackup\n");
+     fprintf(fp,"rm %s\n",filename);
      fclose(fp);
      chmod(filename,S_IRUSR+S_IWUSR+S_IXUSR);
      system(filename);
@@ -28844,4 +28843,3 @@ FILE *fp;
      return;
   }
 }
-

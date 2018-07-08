@@ -35,11 +35,12 @@ char *colcode2[NUM_COLS]={
 
 };
 
+char adb_name[30],adb_user[30],adb_pass[30];
+
 int init_database(void)
 {
 FILE *fp;
 char line[200];
-char adb_name[30],adb_user[30],adb_pass[30];
 int i,pos,stage=0;
     
    if (!(fp=ropen("atlantis.ini","r"))) return 0;
