@@ -557,11 +557,9 @@ while(1) {
        
       /* check for connection to listen sockets */
       for(i=0;i<2;++i) { /*LYNUZ*/
-         /*   if (FD_ISSET(listen_sock[i],&readmask)) */
-              if (fds[i].revents & (POLLIN | POLLPRI))
-                  accept_connection(listen_sock[i],i);
-            }
-
+        /* if (FD_ISSET(listen_sock[i],&readmask)) */
+        if (fds[i].revents & (POLLIN | POLLPRI)) accept_connection(listen_sock[i],i);
+      }
 
     /* REM0TE */    
     for (user=user_first;user!=NULL;user=user->next)
@@ -640,7 +638,6 @@ while(1) {
             next=user->next; /* store in case user object is destructed */
             /* If remote user or clone ignore */
             if (user->type!=USER_TYPE || user->socket>1000) {  user=next;  continue; }
-
           /*
             if (!FD_ISSET(user->socket,&readmask)) { user=next;  continue; }
           */
@@ -2102,8 +2099,8 @@ tunelik=60;
 tajmauts=0;
 tajmautz=0;
 pollerror=0;
-max_timeouts=1000;
-max_timeoutz=100;
+max_timeouts=5;
+max_timeoutz=3;
 writeerror=0;
 max_sms=0;
 for (i=0;i<LASTLOG_LINES;i++) lastlog[i][0]='\0';
@@ -4368,7 +4365,7 @@ if (mins>3 && strcmp(user->smsfollow,"-")) {
   send_sms(user->smsfollow,text,0);
  }
 
-UPDATE_FDS();
+//UPDATE_FDS();
 destruct_user(user);
 reset_access(rm);
 who_for_web();
