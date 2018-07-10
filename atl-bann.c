@@ -645,6 +645,7 @@ static char out[2000];
 void printline(user1, user2, output)
 UR_OBJECT user1;
 UR_OBJECT user2;
+int output;
 {
   int i, j;
   char vystupny_banner[2000];
@@ -685,7 +686,6 @@ if (output==3) {		     /* sbanner() */
     }  
   clrline();  
   } 
-
 }
 
 
@@ -779,7 +779,7 @@ UR_OBJECT user;
 char *inpstr;  
 {  
   
-char *name,filename[80];
+char name[15],filename[80];
 int type;  
   
 if (user->muzzled) {  
@@ -813,7 +813,7 @@ if (type<1 || type>BANNER_NUM) {
       write_user(user,nocolors);
       return;
       }      
-if (user->vis) name=user->name; else name=invisname(user);
+if (user->vis) strcpy(name,user->name); else strcpy(name,invisname(user));
 inpstr=remove_first(inpstr);
 if (user->level<WIZ && strlen(inpstr)>MAX_BANNER_LEN_LUSER) {  
       sprintf(text,"Nemozes generovat banner dlhsi ako %d znakov.\n",MAX_BANNER_LEN_LUSER);  
@@ -835,8 +835,8 @@ if (user->pp < BANNERCAN) {    /*PP*/
 /* Vyber typu fontu*/
 /*sprintf(text,"Generating font, type %d:\n",type);
 write_user(user,text);  */
-sprintf(text,"~FR%s ~RS~FW%s banner[~OL%d~RS]:\n",user->name,pohl(user,"napisal","napisala"),type);
-write_room(user->room,text);  
+sprintf(text,"~FR%s ~RS~FW%s banner[~OL%d~RS]:\n",name,pohl(user,"napisal","napisala"),type);
+write_room(user->room,text);
  
 decrease_pp(user,BANNERDEC,0); 
  
@@ -857,7 +857,7 @@ UR_OBJECT user;
 char *inpstr;
 {
 
-char *name,filename[80];
+char name[15],filename[80];
 int type;
 UR_OBJECT u;
 
@@ -896,7 +896,7 @@ if (type<1 || type>BANNER_NUM) {
       sprintf(text,"Typ musi byt cele kladne cislo a musi byt z rozsahu 1-%d.\n",BANNER_NUM);
       write_user(user,text);      return;
       }
-if (user->vis) name=user->name; else name=invisname(user);
+if (user->vis) strcpy(name,user->name); else strcpy(name,invisname(user));
 
 inpstr=remove_first(inpstr);  
 if (user->level<WIZ && strlen(inpstr)>MAX_BANNER_LEN_LUSER) {  
@@ -960,8 +960,8 @@ if ((user->jailed) && (user->pp<MAXPP)) {
 if (user!=u) {
 	sprintf(text,"~OL~FW%s %s banner:\n", u->name, pohl(u,"dostal","dostala"));
 	write_user(user,text);  
-	sprintf(text,"~OL~FW%s Ti posiela banner[%d]:\n",user->name,type);  
-	write_user(u,text);  
+	sprintf(text,"~OL~FW%s Ti posiela banner[%d]:\n",name,type);  
+	write_user(u,text);
 	}
  	else {
  		sprintf(text,"Takto vyzera banner ~OL%d~RS:\n", type);
@@ -987,7 +987,7 @@ UR_OBJECT user;
 char *inpstr;
 {
 
-char *name,filename[80];
+char name[15],filename[80];
 int type,i;
 
 if (user->muzzled) {
@@ -1021,7 +1021,7 @@ if (type<1 || type>BANNER_NUM) {
       write_user(user,nocolors);
       return;
       }     
-if (user->vis) name=user->name; else name=invisname(user);
+if (user->vis) strcpy(name,user->name); else strcpy(name,invisname(user));
 inpstr=remove_first(inpstr);
 if (user->level<WIZ && strlen(inpstr)>MAX_BANNER_LEN_LUSER) {  
       sprintf(text,"Nemozes generovat banner dlhsi ako %d znakov.\n",MAX_BANNER_LEN_LUSER);  
@@ -1042,7 +1042,7 @@ if (user->pp < SBANNERCAN) {
  
 sprintf(text,"~OL~FY%s si banner:\n",pohl(user,"Vyslal","Vyslala"));
 write_user(user,text);
-sprintf(text,"~OL~FY%s %s banner[~FW%d~FY]: ~RS~FW%s\n",user->name,pohl(user,"vyslal","vyslala"),type, inpstr);
+sprintf(text,"~OL~FY%s %s banner[~FW%d~FY]: ~RS~FW%s\n",name,pohl(user,"vyslal","vyslala"),type, inpstr);
 
 if (user->room->group==2) /* ()STROV */
    {
@@ -1055,10 +1055,10 @@ if (user->room->group==2) /* ()STROV */
    }
 else {
 	write_room_except(NULL,text,user);
-        sprintf(text,"~OL~FY%s %s banner: ~FG[~RS~FW%s~OL~FG]~RS\n",user->name,pohl(user,"vyslal","vyslala"),inpstr);
+        sprintf(text,"~OL~FY%s %s banner: ~FG[~RS~FW%s~OL~FG]~RS\n",name,pohl(user,"vyslal","vyslala"),inpstr);
 	record_shout(text);
 	}
-   
+
 if (!create_banner(user, NULL, type,inpstr,3)) { write_user(user,"Chyba pri nacitavani fontu! ;(\n");
 					return; }
 
