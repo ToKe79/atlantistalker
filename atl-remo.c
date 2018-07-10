@@ -1498,6 +1498,7 @@ int UPDATE_FDS()
     {
       if (u->type != USER_TYPE || u->socket == 0 || u->socket >= 1000)
 	continue;
+      fds[size_fds].fd=u->socket;
       fds[size_fds].events=(POLLIN|POLLPRI);
       fds[size_fds].revents=0;
       u->fds=size_fds;

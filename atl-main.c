@@ -4365,7 +4365,7 @@ if (mins>3 && strcmp(user->smsfollow,"-")) {
   send_sms(user->smsfollow,text,0);
  }
 
-//UPDATE_FDS();
+UPDATE_FDS();
 destruct_user(user);
 reset_access(rm);
 who_for_web();
