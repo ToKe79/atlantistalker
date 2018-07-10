@@ -38,6 +38,5 @@ clean:
 $(DEPENDS):
 	@echo "Building dependencies"
 	@gcc -E -MM $(SRCS) > $(DEPENDS)
-	@mkdir -p runtime
 
 -include $(DEPENDS)
