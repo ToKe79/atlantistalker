@@ -13271,11 +13271,11 @@ if (check_ignore_user(user,u)) {  /* ignorovanie single usera */
 
 user->commused[2]++;
 inpstr=remove_first(inpstr);
-sprintf(text,"~FT\252C2%s~RS~FW (%s): %s\n",pohl(user,"\253P3","\253P4"),sklonuj(u,3),inpstr);
+sprintf(text,"~FT\252C2%s (~RS~FW%s~FT):~RS %s\n",pohl(user,"\253P3","\253P4"),sklonuj(u,3),inpstr);
 write_user(user,text);
 if (user->vis) name=user->name; else name=invisname(user);
-if (u->vis) sprintf(text,"~FT\252C2%s~RS~FW (%s): %s\n",name,sklonuj(u,3),inpstr);
-       else sprintf(text,"~FT\252C2%s~RS~FW (%s): %s\n",name,pohl(u,"\253Un","\253UN"),inpstr);
+if (u->vis) sprintf(text,"~FT\252C2%s (~RS~FW%s~FT):~RS %s\n",name,sklonuj(u,3),inpstr);
+       else sprintf(text,"~FT\252C2%s (~RS~FW%s~FT):~RS %s\n",name,pohl(u,"\253Un","\253UN"),inpstr);
 write_room_except(user->room,text,user);
 record(user->room,text);
 }
