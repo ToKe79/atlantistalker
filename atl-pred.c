@@ -966,7 +966,7 @@ if (spell==1) {
 
 void use_predmet(UR_OBJECT user,char *inpstr)
 {
-int vec=-1,vec2=-1,dur=0,dur2=0,kder=-1,kdeh=-1,pos2=-1;
+int vec=-1,vec2=-1,dur=0,kder=-1,kdeh=-1,pos2=-1;
 UR_OBJECT u=NULL;
 int i,nah,where,pos;
 char type[50], *name;
@@ -1147,9 +1147,7 @@ else dur=user->dur[pos];
 if (word_count>2) {
   vec2=expand_predmet(word[2]);
   kder=is_in_room(user->room,vec2);
-  if (kder>-1) dur2=user->room->dur[kder];
   kdeh=is_in_hands(user,vec2);
-  if (kdeh>-1) dur2=user->dur[kdeh];
   u=get_user(word[2]);
  }
  
