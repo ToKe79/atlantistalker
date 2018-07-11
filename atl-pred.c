@@ -966,7 +966,7 @@ if (spell==1) {
 
 void use_predmet(UR_OBJECT user,char *inpstr)
 {
-int vec=-1,vec2=-1,dur=0,kder=-1,kdeh=-1,pos2=-1;
+int vec=-1,vec2=-1,dur=0,dur2=0,kder=-1,kdeh=-1,pos2=-1;
 UR_OBJECT u=NULL;
 int i,nah,where,pos;
 char type[50], *name;
