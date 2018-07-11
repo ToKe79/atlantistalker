@@ -324,7 +324,7 @@ int maxbefore=0,index;
  
  if (user==NULL) {
    sprintf(text,"Hotofka.. %d predmetov, %d konverzii.\n",pocet_predmetov,pocet_konverzii);
-   printf(text);
+   printf("%s",text);
   }
  else {
    sprintf(text,"~HG%d~HW ks, ~HG%d~HW konverzii.\n",pocet_predmetov,pocet_konverzii);
@@ -966,7 +966,7 @@ if (spell==1) {
 
 void use_predmet(UR_OBJECT user,char *inpstr)
 {
-int vec=-1,vec2=-1,dur=0,dur2=0,kder=-1,kdeh=-1,pos2=-1;
+int vec=-1,vec2=-1,dur=0,kder=-1,kdeh=-1,pos2=-1;
 UR_OBJECT u=NULL;
 int i,nah,where,pos;
 char type[50], *name;
@@ -3160,7 +3160,7 @@ char filename[81],*c;
 if (done_editing) {
   sprintf(filename,"pictures/%s",user->mail_to);
   if (!(fp=ropen(filename,"a"))) { /*APPROVED*/
-    sprintf("CHYBA: Nemozno otvorit subor %s pre zapis v predmet_write().\n",filename);
+    sprintf(text,"CHYBA: Nemozno otvorit subor %s pre zapis v predmet_write().\n",filename);
     write_syslog(text,0);
     user->mail_to[0]='\0';
     return;
@@ -3455,7 +3455,7 @@ i=0;proom=0;puser=0;len=0;
 vec=expand_predmet(word[1]);
 if (word_count>1 && vec>-1) {
   sprintf(texthb,"%s",predmet[vec]->name);
-  sprintf(text,title(texthb,"~FG"));
+  sprintf(text,"%s",title(texthb,"~FG"));
   for(rm=room_first;rm!=NULL;rm=rm->next) {
     cnt=0;			
     for(y=0;y<MPVM; y++) if (rm->predmet[y]==vec) cnt++;
