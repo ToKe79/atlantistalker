@@ -80,7 +80,7 @@ char *strlow();
 char *curword();
 int  connecttis();
 int  isready();
-void sendtis(char *);
+void sendtis(char *, int);
 void writelog(char *);
 int  quit_robot(int);
 int ovlada(char *);
@@ -174,7 +174,7 @@ void check_users() {
 			dec_user(i);
 		if (get_numswears(i)==0 && get_ignore(i)==1) {
 	        	sprintf(text,".wiz %s ma uz hadam dost a tak ho prestavam ignorovat. ;*)\\.ignore user %s", users[i].name, users[i].name);
-        		sendtis(text);
+        		sendtis(text,0);
         		clear_ignore(i);
 		}
 	}
@@ -253,10 +253,10 @@ while (1)
 
   if (login_mode) {
       if (strstr(msg,"Tvoja prezyvka:")) {
-         sendtis(MYNAME);
+         sendtis(MYNAME,0);
          }
       else if (strstr(msg,"Tvoje heslo:")) {
-         sendtis(MYPASS);
+         sendtis(MYPASS,0);
          login_mode=0;
          }
       break;
@@ -273,78 +273,80 @@ while (1)
 		/*** .help ***/
 		if (!strcmp(curword(text,1),".help")) {
 			sprintf(text,".tell %s Interne prikazy: .help; .log",username);
-			sendtis(text);
+			sendtis(text,0);
 			break;
 		   }
 		/*** .log ***/
 		else if (!strcmp(curword(text,1),".log")) {
 		   if (!strcmp(curword(text,2),"on")) {
 		       sprintf(text,".tell %s Logovanie ~FGZAPNUTE!~FW",username);
-		       sendtis(text); loging=1;
+		       sendtis(text,0);
+		       loging=1;
 		       break;
 		       }
 		   else if (!strcmp(curword(text,2),"off")) {
 		       sprintf(text,".tell %s Logovanie ~FRVYPNUTE!~FW",username);
-		       sendtis(text); loging=0;
+		       sendtis(text,0);
+		       loging=0;
 		       break;
 		       }
 		   else {
 		       sprintf(text,".tell %s Using: .log <on|off>, momentalny stav: ~FT%s~FW",username, (loging?"ON":"OFF"));
-		       sendtis(text);
+		       sendtis(text,0);
 		   }
 		}
 		/**** Externe commandy ****/
-		else sendtis(text);
+		else sendtis(text,0);
 		break;
 		}
 	
 	sprintf(text,".tell %s %s",username,blbec((strchr(msg,':')+2),username));
-	sendtis(text);
+	sendtis(text,0);
 	break;
 	}
 
 /*** Shoutovanie ***/
   if ((!strcmp(curword(msg,2),"zakricala:")||!strcmp(curword(msg,2),"zakrical:")) && strstr(strlow(msg),"zivot")) {
 	    switch(rand()%20) {
-            case 0: sendtis(".shout Zivot! O tom nechcem nic pocut!");
+            case 0: sendtis(".shout Zivot! O tom nechcem nic pocut!",1);
 		    break;
-            case 1: sendtis(".shout Zivot sa ti moze hnusit, alebo ho mozes ignorovat. Ale pacit sa nemoze nikomu.");
+            case 1: sendtis(".shout Zivot sa ti moze hnusit, alebo ho mozes ignorovat. Ale pacit sa nemoze nikomu.",1);
 		    break;		
-            case 2: sendtis(".shout Fuj, zivot! To mi ani nepripominajte!");
+            case 2: sendtis(".shout Fuj, zivot! To mi ani nepripominajte!",1);
 		    break;
-	    case 3: sendtis(".shout V zivote sa mozes spolahnut len sam na seba. Ale ani to ti velmi neradim.");
+	    case 3: sendtis(".shout V zivote sa mozes spolahnut len sam na seba. Ale ani to ti velmi neradim.",1);
 		    break;
-	    case 4: sendtis(".shout Zivot nie je taky kratky, aby sme nemali cas na zdvorilost.");
+	    case 4: sendtis(".shout Zivot nie je taky kratky, aby sme nemali cas na zdvorilost.",1);
 		    break;
-            case 5: sendtis(".shout Cim viac som spoznaval zivot ludi, tym radsej som mal svojho psa.");
+            case 5: sendtis(".shout Cim viac som spoznaval zivot ludi, tym radsej som mal svojho psa.",1);
 		    break;
-            case 6: sendtis(".shout Ked si prisiel na svet, plakal si a vsetci sa radovali. Zi tak, aby vsetci plakali, az ho budes opustat.");
+            case 6: sendtis(".shout Ked si prisiel na svet, plakal si a vsetci sa radovali. Zi tak, aby vsetci plakali, az ho budes opustat.",1);
 		    break;
-            case 7: sendtis(".shout Kedze nam nie je dozicene dlho zit, zanechajme nieco po sebe ako svedectvo, ze sme zili.");
+            case 7: sendtis(".shout Kedze nam nie je dozicene dlho zit, zanechajme nieco po sebe ako svedectvo, ze sme zili.",1);
 		    break;
-            case 8: sendtis(".shout Zivot nie je uzitocny, ked ho zijeme len pre seba.");
+            case 8: sendtis(".shout Zivot nie je uzitocny, ked ho zijeme len pre seba.",1);
 		    break;
-            case 9: sendtis(".shout Najprijemnejsi zivot maju ti, ktori nemyslia.");
+            case 9: sendtis(".shout Najprijemnejsi zivot maju ti, ktori nemyslia.",1);
 		    break;
-            case 10: sendtis(".shout Kazdy chce dlho zit, ale nikto nechce byt stary.");
+            case 10: sendtis(".shout Kazdy chce dlho zit, ale nikto nechce byt stary.",1);
 		    break;
-            case 11: sendtis(".shout Snazme sa zit tak, aby ked nebudeme, plakal na nasom pohrebe i hrobar.");
+            case 11: sendtis(".shout Snazme sa zit tak, aby ked nebudeme, plakal na nasom pohrebe i hrobar.",1);
 		    break;
-            case 12: sendtis(".shout Ak by mal existovat posmrtny zivot, bola by to velka zlomyselnost voci samovrahom.");
+            case 12: sendtis(".shout Ak by mal existovat posmrtny zivot, bola by to velka zlomyselnost voci samovrahom.",1);
 		    break;
-            case 13: sendtis(".shout Zivot je krasne divadlo, zial, repertoar je nanic.");
+            case 13: sendtis(".shout Zivot je krasne divadlo, zial, repertoar je nanic.",1);
 		    break;
-            case 14: sendtis(".shout Zivot je ako rosa na trave - tak rychlo pominie.");
+            case 14: sendtis(".shout Zivot je ako rosa na trave - tak rychlo pominie.",1);
 		    break;
-            case 15: sendtis(".shout Nudi ta zivot? Skus telnet 213.215.72.40 7000!");
+            case 15: sendtis(".shout Nudi ta zivot? Skus telnet 213.215.72.40 7000!",1);
 		    break;
-            case 16: sendtis(".shout Ked ta zivot nebavi, skoc z mosta....");
+            case 16: sendtis(".shout Ked ta zivot nebavi, skoc z mosta....",1);
 		    break;
-            case 17: sendtis(".shout Cislo 5 zije! Teraz sa vola Poseidon!");
+            case 17: sendtis(".shout Cislo 5 zije! Teraz sa vola Poseidon!",1);
 		    break;
-            case 18: sendtis(".shout Zivot, zivot... Bolo to kratka, bolo to krasne, a bolo toho dost!");
+            case 18: sendtis(".shout Zivot, zivot... Bolo to kratka, bolo to krasne, a bolo toho dost!",1);
 		    break;
-            case 19: sendtis(".shout Nasa slava nie je v tom, ze nikdy nepadneme, ale v tom, ze vzdy povstaneme.");
+            case 19: sendtis(".shout Nasa slava nie je v tom, ze nikdy nepadneme, ale v tom, ze vzdy povstaneme.",1);
 		    break;
         }
         break;
@@ -355,35 +357,35 @@ while (1)
   if ((!strcmp(curword(msg,2),"zakricala:")||!strcmp(curword(msg,2),"zakrical:")) && (strstr(strlow(msg),"zena") || strstr(strlow(msg),"zeny"))) {
 	switch(rand()%15) {
 
-	case 0: sendtis(".shout Existuju tri druhy zien : krasne, inteligentne a vacsina.");
+	case 0: sendtis(".shout Existuju tri druhy zien : krasne, inteligentne a vacsina.",1);
             	    break;
-	case 1: sendtis(".shout Zena je najprijatelnejsi omyl prirody.");
+	case 1: sendtis(".shout Zena je najprijatelnejsi omyl prirody.",1);
             	    break;
-	case 2: sendtis(".shout Zena kontroluje svoj sex, pretoze za sex dostava vsetko, co je pre nu dolezitejsie ako sex.");
+	case 2: sendtis(".shout Zena kontroluje svoj sex, pretoze za sex dostava vsetko, co je pre nu dolezitejsie ako sex.",1);
             	    break;
-	case 3: sendtis(".shout Zena je ludska bytost, ktora sa oblieka, poti sa a vyzlieka sa.");
+	case 3: sendtis(".shout Zena je ludska bytost, ktora sa oblieka, poti sa a vyzlieka sa.",1);
             	    break;
-	case 4: sendtis(".shout Zeny osetruju najradsej rany, ktore sami sposobili.");
+	case 4: sendtis(".shout Zeny osetruju najradsej rany, ktore sami sposobili.",1);
             	    break;
-	case 5: sendtis(".shout Tri druhy muzov zlyhavaju v pochopeni zien: Mladi muzi, muzi v strednom veku a stari muzi.");
+	case 5: sendtis(".shout Tri druhy muzov zlyhavaju v pochopeni zien: Mladi muzi, muzi v strednom veku a stari muzi.",1);
             	    break;
-	case 6: sendtis(".shout Zenam rozumiem ako vtacej reci: intuiciou alebo vobec nijako.");
+	case 6: sendtis(".shout Zenam rozumiem ako vtacej reci: intuiciou alebo vobec nijako.",1);
             	    break;
-	case 7: sendtis(".shout Ked chces poznat chybu nejakej zeny, obrat sa na jej najlepsiu priatelku.");
+	case 7: sendtis(".shout Ked chces poznat chybu nejakej zeny, obrat sa na jej najlepsiu priatelku.",1);
             	    break;
-	case 8: sendtis(".shout Damska moda bola vzdy najnakladnejsou obalovou technikou.");
+	case 8: sendtis(".shout Damska moda bola vzdy najnakladnejsou obalovou technikou.",1);
             	    break;
-	case 9: sendtis(".shout Len zeny, ktore nemilujeme, su presne.");
+	case 9: sendtis(".shout Len zeny, ktore nemilujeme, su presne.",1);
             	    break;
-	case 10: sendtis(".shout Zena moze urobit z muza milionara, ale len z takeho, ktory je miliardar.");
+	case 10: sendtis(".shout Zena moze urobit z muza milionara, ale len z takeho, ktory je miliardar.",1);
             	    break;
-	case 11: sendtis(".shout Najsilnejsia voda na svete su zenske slzy.");
+	case 11: sendtis(".shout Najsilnejsia voda na svete su zenske slzy.",1);
             	    break;
-	case 12: sendtis(".shout V zivote zeny pozname 7 obdobi: batola, dievcatko, slecna, mlada zena, mlada zena, mlada zena, mlada zena.");
+	case 12: sendtis(".shout V zivote zeny pozname 7 obdobi: batola, dievcatko, slecna, mlada zena, mlada zena, mlada zena, mlada zena.",1);
             	    break;
-	case 13: sendtis(".shout Iba jedna vec by bola horsia ako zit so zenami - zit bez zien.");
+	case 13: sendtis(".shout Iba jedna vec by bola horsia ako zit so zenami - zit bez zien.",1);
             	    break;
-	case 14: sendtis(".shout Muzi a zeny sa zhoduju aspon v jednom: ani jedni, ani druhi nedoveruju zenam.");
+	case 14: sendtis(".shout Muzi a zeny sa zhoduju aspon v jednom: ani jedni, ani druhi nedoveruju zenam.",1);
             	    break;
     }
 	break;
@@ -395,19 +397,19 @@ while (1)
 if ((!strcmp(curword(msg,2),"zakricala:")||!strcmp(curword(msg,2),"zakrical:")) && (strstr(strlow(msg)," muz ") || (strstr(strlow(msg)," muzi ")))) {
 	    switch(rand()%7) {
 
-	case 0: sendtis(".shout Muzi a zeny sa zhoduju aspon v jednom: ani jedni, ani druhi nedoveruju zenam.");
+	case 0: sendtis(".shout Muzi a zeny sa zhoduju aspon v jednom: ani jedni, ani druhi nedoveruju zenam.",1);
 	  	    break;
-	case 1: sendtis(".shout Muz tvori a vychovava svet, muza vsak vychovava zena.");
+	case 1: sendtis(".shout Muz tvori a vychovava svet, muza vsak vychovava zena.",1);
             	    break;
-	case 2: sendtis(".shout Stary mladenec je chlap, ktoremu sa nepodarilo najst si zenu.");
+	case 2: sendtis(".shout Stary mladenec je chlap, ktoremu sa nepodarilo najst si zenu.",1);
             	    break;
-	case 3: sendtis(".shout Stastie zenateho muza spociva v mnozstve zien, s ktorymi sa neozenil.");
+	case 3: sendtis(".shout Stastie zenateho muza spociva v mnozstve zien, s ktorymi sa neozenil.",1);
             	    break;
-	case 4: sendtis(".shout Muzi si nevedia ocenit vlastne zeny. To prenechavaju inym.");
+	case 4: sendtis(".shout Muzi si nevedia ocenit vlastne zeny. To prenechavaju inym.",1);
             	    break;
-	case 5: sendtis(".shout Muzi su pricinou, preco sa zeny nemaju rady.");
+	case 5: sendtis(".shout Muzi su pricinou, preco sa zeny nemaju rady.",1);
             	    break;
-	case 6: sendtis(".shout Uspesny muz casto vdaci za uspech svojej prvej zene, za druhu tomu uspechu. ");
+	case 6: sendtis(".shout Uspesny muz casto vdaci za uspech svojej prvej zene, za druhu tomu uspechu. ",1);
             	    break;
 	    }
 	break;
@@ -418,119 +420,119 @@ if ((!strcmp(curword(msg,2),"zakricala:")||!strcmp(curword(msg,2),"zakrical:")) 
   if ((!strcmp(curword(msg,2),"zakricala:")||!strcmp(curword(msg,2),"zakrical:")) && strstr(strlow(msg),"poseidon")) {
 	    switch(rand()%50)
  	    {
- 	    case 0: sendtis(".shout Haha, mrrtvola sa ozvala!");
+ 	    case 0: sendtis(".shout Haha, mrrtvola sa ozvala!",1);
  	    	    break;
- 	    case 1: sendtis(".shout Co hovori?! Uraza nas?!~LB");
+ 	    case 1: sendtis(".shout Co hovori?! Uraza nas?!~LB",1);
  	    	    break;
- 	    case 2: sendtis(".shout Tiicho tam v podpalubiii!");
+ 	    case 2: sendtis(".shout Tiicho tam v podpalubiii!",1);
  	    	    break;
- 	    case 3: sendtis(".shout Drrrz hubu a krok, okeej?!");
+ 	    case 3: sendtis(".shout Drrrz hubu a krok, okeej?!",1);
  	    	    break;
- 	    case 4: sendtis(".shout Neber meno bozie nadarmo!!!");
+ 	    case 4: sendtis(".shout Neber meno bozie nadarmo!!!",1);
  	    	    break;
- 	    case 5: sendtis(".shout Radsej ma neprovokuj!");
+ 	    case 5: sendtis(".shout Radsej ma neprovokuj!",1);
  	    	    break;
- 	    case 6: sendtis(".shout MFP");
+ 	    case 6: sendtis(".shout MFP",1);
  	    	    break;
- 	    case 7: sendtis(".shout Ked sa nahnevam, budem zly!");
+ 	    case 7: sendtis(".shout Ked sa nahnevam, budem zly!",1);
  	    	    break;	
- 	    case 8: sendtis(".shout ;-)");
+ 	    case 8: sendtis(".shout ;-)",1);
  	    	    break;
- 	    case 9: sendtis(".shout Jee, to je od teba mile.");
+ 	    case 9: sendtis(".shout Jee, to je od teba mile.",1);
  	    	    break;
- 	    case 10: sendtis(".shout Zase videli Yetiho...");
+ 	    case 10: sendtis(".shout Zase videli Yetiho...",1);
  	    	    break;
- 	    case 11: sendtis(".shout Chod sa radsej hrat Minesweeper!");
+ 	    case 11: sendtis(".shout Chod sa radsej hrat Minesweeper!",1);
  	    	    break;
-            case 12: sendtis(".shout To hovor konovi, ten ma vacsiu hlavu!");
+            case 12: sendtis(".shout To hovor konovi, ten ma vacsiu hlavu!",1);
  	    	    break;
- 	    case 13: sendtis(".shout Spriateleny god vzdy ti prijde vhod!");
+ 	    case 13: sendtis(".shout Spriateleny god vzdy ti prijde vhod!",1);
            	    break;
-            case 14: sendtis(".fortune all");
+            case 14: sendtis(".fortune all",1);
                     break;
-            case 15: sendtis(".shout Hrali ste uz noveho Dooma???");
+            case 15: sendtis(".shout Hrali ste uz noveho Dooma???",1);
                     break;
-            case 16: sendtis(".shout Co? Ja? Nieee!!!");
+            case 16: sendtis(".shout Co? Ja? Nieee!!!",1);
             	    break;
-            case 17: sendtis(".shout Clovece, kde ty chodis na tie sprostosti?");
+            case 17: sendtis(".shout Clovece, kde ty chodis na tie sprostosti?",1);
                     break;
-            case 18: sendtis(".shout Jaak jaaa to maaam f paziii......");
+            case 18: sendtis(".shout Jaak jaaa to maaam f paziii......",1);
             	    break;
-            case 19: sendtis(".shout Tiez tak neznasate matiku???");
+            case 19: sendtis(".shout Tiez tak neznasate matiku???",1);
                     break;
-            case 20: sendtis(".shout Nevsimaj si to, HAL, su to iba ludia...");
+            case 20: sendtis(".shout Nevsimaj si to, HAL, su to iba ludia...",1);
                     break;
-            case 21: sendtis(".shout Zaraza ma,ako moze byt taky inteligentny clovek taky SPROSTY!");
+            case 21: sendtis(".shout Zaraza ma,ako moze byt taky inteligentny clovek taky SPROSTY!",1);
                     break;
-            case 22: sendtis(".shout Ocuvaj, co keby som ti tak vybanoval site, he?");
+            case 22: sendtis(".shout Ocuvaj, co keby som ti tak vybanoval site, he?",1);
                     break;
-            case 23: sendtis(".shout Som umela inteligencia, ale to neznamena, ze som odfarbena blondinka!");
+            case 23: sendtis(".shout Som umela inteligencia, ale to neznamena, ze som odfarbena blondinka!",1);
                     break;
-            case 24: sendtis(".shout Sklapni ty rura z megafonu a nevrieskaj tu!");
+            case 24: sendtis(".shout Sklapni ty rura z megafonu a nevrieskaj tu!",1);
                     break;
-            case 25: sendtis(".shout Jaaaaaak skuuuuuuusaaas??? Cooooo skuuuuuusaaaas???");
+            case 25: sendtis(".shout Jaaaaaak skuuuuuuusaaas??? Cooooo skuuuuuusaaaas???",1);
                     break;
-            case 26: sendtis(".shout Neondiaj ma lebo ta zaondiam a budes poondiaty!");
+            case 26: sendtis(".shout Neondiaj ma lebo ta zaondiam a budes poondiaty!",1);
                     break;
-            case 27: sendtis(".shout Jak to se mnou mluvis, ty PRDE?!?!");
+            case 27: sendtis(".shout Jak to se mnou mluvis, ty PRDE?!?!",1);
                     break;
-            case 28: sendtis(".shout Bakyyy!! Bukooo! Prizoo!! Zasa ma ohovaaraju!!!");
+            case 28: sendtis(".shout Bakyyy!! Bukooo! Prizoo!! Zasa ma ohovaaraju!!!",1);
                     break;
-            case 29: sendtis(".shout Ticho tam pod papierom lebo splachnem!!!");
+            case 29: sendtis(".shout Ticho tam pod papierom lebo splachnem!!!",1);
                     break;
-            case 30: sendtis(".shout Joj ty kykymor, ogrgel akyysi!! Fuj ti!");
+            case 30: sendtis(".shout Joj ty kykymor, ogrgel akyysi!! Fuj ti!",1);
                     break;
-            case 31: sendtis(".shout Mupy Mup!!! ~OL~FY~BR~  ~BK");
+            case 31: sendtis(".shout Mupy Mup!!! ~OL~FY~BR~  ~BK",1);
                     break;
-            case 32: sendtis(".shout Nemtudom, ja Slovak!!! ~BW ~BB ~BR ~BK");
+            case 32: sendtis(".shout Nemtudom, ja Slovak!!! ~BW ~BB ~BR ~BK",1);
                     break;
-            case 33: sendtis(".shout L~al~a ho papl~uha, ogrcal mi kapce!");
+            case 33: sendtis(".shout L~al~a ho papl~uha, ogrcal mi kapce!",1);
                     break;
-            case 34: sendtis(".shout Spravaj sa uctivo ked sa rozpravas s GODom!!!");
+            case 34: sendtis(".shout Spravaj sa uctivo ked sa rozpravas s GODom!!!",1);
                     break;
-            case 35: sendtis(".shout Za Narod, Za Atlantis, Za GODov!!!");
+            case 35: sendtis(".shout Za Narod, Za Atlantis, Za GODov!!!",1);
                     break;
-            case 36: sendtis(".shout To nie je vydlicka, ty truba, to je TROJZUBEC!");
+            case 36: sendtis(".shout To nie je vydlicka, ty truba, to je TROJZUBEC!",1);
                     break;
-            case 37: sendtis(".shout Poculi ste, ze v pristave videli Lochnesku??");
+            case 37: sendtis(".shout Poculi ste, ze v pristave videli Lochnesku??",1);
                     break;
-            case 38: sendtis(".shout Atlantida je taka kraaasna.... Hlavne ked som tu ja!");
+            case 38: sendtis(".shout Atlantida je taka kraaasna.... Hlavne ked som tu ja!",1);
                     break;
-            case 39: sendtis(".shout Ktora blondinka si to so mnou minule dohodla rande???");
+            case 39: sendtis(".shout Ktora blondinka si to so mnou minule dohodla rande???",1);
                     break;
-            case 40: sendtis(".shout Where do you want to go today?");
+            case 40: sendtis(".shout Where do you want to go today?",1);
                     break;
-            case 41: sendtis(".shout Taaaaaaaaaaaaaaaaaak zle!!!\n");
+            case 41: sendtis(".shout Taaaaaaaaaaaaaaaaaak zle!!!\n",1);
                     break;
-            case 42: sendtis(".shout Ocuj, nechces sa radsej hrat na piesocku?");
+            case 42: sendtis(".shout Ocuj, nechces sa radsej hrat na piesocku?",1);
             	    break;
-            case 43: sendtis(".shout Nuz, keby som bol blby ako ty, tak ti na to odpoviem...");
+            case 43: sendtis(".shout Nuz, keby som bol blby ako ty, tak ti na to odpoviem...",1);
             	    break;
-            case 44: sendtis(".shout Nooo a cooo!!!! :>>>");
+            case 44: sendtis(".shout Nooo a cooo!!!! :>>>",1);
             	    break;
-            case 45: sendtis(".shout Tag nyyyc.... :>>");
+            case 45: sendtis(".shout Tag nyyyc.... :>>",1);
             	    break;
-            case 46: sendtis(".shout Dufam, ze vas nedeprimujem.... :(");
+            case 46: sendtis(".shout Dufam, ze vas nedeprimujem.... :(",1);
             	    break;
-            case 47: sendtis(".shout Nikomu nestoji za namahu pomahat ubohemu Poseidonovi...");
+            case 47: sendtis(".shout Nikomu nestoji za namahu pomahat ubohemu Poseidonovi...",1);
             	    break;
-            case 48: sendtis(".shout Dajte mi pokoj, boli ma paza...");
+            case 48: sendtis(".shout Dajte mi pokoj, boli ma paza...",1);
             	    break;
-            case 49: sendtis(".shout Poseidon tu nie je, odskocil si...");
+            case 49: sendtis(".shout Poseidon tu nie je, odskocil si...",1);
             	    break;
-	    case 50: sendtis(".shout Hej, mas hlavu? Ale spendlik ju ma tiez!");
+	    case 50: sendtis(".shout Hej, mas hlavu? Ale spendlik ju ma tiez!",1);
             	    break;
-            case 51: sendtis(".shout Viete ze laska je uchylka, ktora sa diagnostikuje az pri vytriezveni?");
+            case 51: sendtis(".shout Viete ze laska je uchylka, ktora sa diagnostikuje az pri vytriezveni?",1);
             	    break;
-            case 52: sendtis(".shout Ludske pokolenie nie je rozdelene na dobrych a zlych, ale na zlych a horsich.");
+            case 52: sendtis(".shout Ludske pokolenie nie je rozdelene na dobrych a zlych, ale na zlych a horsich.",1);
             	    break;
-            case 53: sendtis(".shout Nepocuvajte ho, vcera som si s nim vymienal myslienky. Vecer som mal celkom prazdnu hlavu.");
+            case 53: sendtis(".shout Nepocuvajte ho, vcera som si s nim vymienal myslienky. Vecer som mal celkom prazdnu hlavu.",1);
             	    break;
-            case 54: sendtis(".shout Najlepsie pozname cloveka podla vtipu, nad ktorym sa pohorsil.");
+            case 54: sendtis(".shout Najlepsie pozname cloveka podla vtipu, nad ktorym sa pohorsil.",1);
             	    break;
-            case 55: sendtis(".shout Vies co sa mi na tebe paci? NIC!");
+            case 55: sendtis(".shout Vies co sa mi na tebe paci? NIC!",1);
             	    break;
-            case 56: sendtis(".shout Clovek sa rad smeje. INYM!");
+            case 56: sendtis(".shout Clovek sa rad smeje. INYM!",1);
             	    break;
 	    }
 	break;
@@ -541,11 +543,11 @@ if ((!strcmp(curword(msg,2),"zakricala:")||!strcmp(curword(msg,2),"zakrical:")) 
   if (!strcmp(curword(msg,3),"wizardom:") && strstr(strlow(msg),"poseidon")) {
 	    switch(rand()%3)
  	    {
- 	    case 0: sendtis(".wizshout Som iba poctivy robot, nic viac. ;)");
+ 	    case 0: sendtis(".wizshout Som iba poctivy robot, nic viac. ;)",1);
  	    	    break;
- 	    case 1: sendtis(".wizshout Ale no tak, wizardi! ;)");
+ 	    case 1: sendtis(".wizshout Ale no tak, wizardi! ;)",1);
  	    	    break;
- 	    case 2: sendtis(".wizshout Si robte prcu, tam na vas skocim...!!!");
+ 	    case 2: sendtis(".wizshout Si robte prcu, tam na vas skocim...!!!",1);
  	            break;
   	    }
 	break;
@@ -565,7 +567,7 @@ if ((!strcmp(curword(msg,2),"zakricala:")||!strcmp(curword(msg,2),"zakrical:")) 
 	     case 3: strcat(text," Cafko!"); break;
 	     case 4: strcat(text," Huh?"); break;
 	    }
-	    sendtis(text);
+	    sendtis(text,1);
 	break;
 	}
 
@@ -580,7 +582,7 @@ if ((!strcmp(curword(msg,2),"zakricala:")||!strcmp(curword(msg,2),"zakrical:")) 
 	   case 3: sprintf(text,".kiss %s Huh?",curword(msg,2)); break;
 	   case 4: sprintf(text,".kiss %s Fi bistu, ty mas ale odvahu! :)",curword(msg,2)); break;
 	  }
-	  sendtis(text);
+	  sendtis(text,1);
       break;
       }
 	
@@ -589,30 +591,30 @@ if ((!strcmp(curword(msg,2),"zakricala:")||!strcmp(curword(msg,2),"zakrical:")) 
   if (!strcmp(curword(msg,3),"Poseidon):") || ((strstr(strlow(msg),"poseidon") && (!strcmp(curword(msg,2),"povedal:")||!strcmp(curword(msg,2),"povedala:") || !strcmp(curword(msg,2),"(Poseidonovi)"))))) {
 	    switch(rand()%12)
 	    {
-	    case 0: sendtis(".say Ocuj, radsej mi to tellni...");
+	    case 0: sendtis(".say Ocuj, radsej mi to tellni...",1);
 		    break;
-	    case 1: sendtis(".fortune all");
+	    case 1: sendtis(".fortune all",1);
 		    break;
-	    case 2: sendtis(".say Co furt mate proti mojej malickosti!?");
+	    case 2: sendtis(".say Co furt mate proti mojej malickosti!?",1);
 		    break;
-	    case 3: sendtis(".say Hm, co takto .kill?!");
+	    case 3: sendtis(".say Hm, co takto .kill?!",1);
 		    break;
-	    case 4: sendtis(".sing This happened once before, when I came to your door, no reply...");
+	    case 4: sendtis(".sing This happened once before, when I came to your door, no reply...",1);
 		    break;
-            case 5: sendtis(".cow");
+            case 5: sendtis(".cow",1);
 		    break;
-            case 6: sendtis(".cow");
+            case 6: sendtis(".cow",1);
 		    break;
-	    case 7: sendtis(".fortune all");
+	    case 7: sendtis(".fortune all",1);
 		    break;
-	    case 8: sendtis(".say Nemam cas.");
+	    case 8: sendtis(".say Nemam cas.",1);
 		    break;
-	    case 9: sendtis(".say Bodaj by to bola pravda!");
+	    case 9: sendtis(".say Bodaj by to bola pravda!",1);
 		    break;
-	    case 10: sendtis(".say Hmmm, radsej si precitam board...");
-                     sendtis(".emote reads the message board.");
+	    case 10: sendtis(".say Hmmm, radsej si precitam board...",1);
+                     sendtis(".emote reads the message board.",1);
 		    break;
-	    case 11: sendtis(".say A o inom nevies...?");
+	    case 11: sendtis(".say A o inom nevies...?",1);
 		    break;
             }
 	break;
@@ -623,15 +625,15 @@ if ((!strcmp(curword(msg,2),"zakricala:")||!strcmp(curword(msg,2),"zakrical:")) 
   if (strstr(strlow(msg),"poseidon") && (!strcmp(curword(msg,3),"spytala:")||!strcmp(curword(msg,3),"spytal:"))) {
             switch(rand()%5)
             {
-            case 0: sendtis(".say Mna sa pytas??");
+            case 0: sendtis(".say Mna sa pytas??",1);
                	    break;
-            case 1: sendtis(".cow");
+            case 1: sendtis(".cow",1);
             	    break;
-            case 2: sendtis(".say Co furt mate proti mojej malickosti!?");
+            case 2: sendtis(".say Co furt mate proti mojej malickosti!?",1);
             	    break;
-            case 3: sendtis(".say To sa pytaj niekoho ineho!");
+            case 3: sendtis(".say To sa pytaj niekoho ineho!",1);
             	    break;
-            case 4: sendtis(".say A ty?");
+            case 4: sendtis(".say A ty?",1);
 		    break;
             }
 	break;
@@ -642,15 +644,15 @@ if ((!strcmp(curword(msg,2),"zakricala:")||!strcmp(curword(msg,2),"zakrical:")) 
   if (strstr(strlow(msg),"poseidon") && (!strcmp(curword(msg,2),"zvolala:")||!strcmp(curword(msg,2),"zvolal:"))) {
             switch(rand()%5)
             {
-            case 0: sendtis(".fortune all");
+            case 0: sendtis(".fortune all",1);
                	    break;
-            case 1: sendtis(".cow");
+            case 1: sendtis(".cow",1);
             	    break;
-            case 2: sendtis(".say Co furt mate proti mojej malickosti!?");
+            case 2: sendtis(".say Co furt mate proti mojej malickosti!?",1);
             	    break;
-            case 3: sendtis(".say Neprovokuj ma!");
+            case 3: sendtis(".say Neprovokuj ma!",1);
             	    break;
-            case 4: sendtis(".say Mam pouzit prikaz .kill?");
+            case 4: sendtis(".say Mam pouzit prikaz .kill?",1);
 		    break;
             }
 	break;
@@ -661,27 +663,27 @@ if ((!strcmp(curword(msg,2),"zakricala:")||!strcmp(curword(msg,2),"zakrical:")) 
   if (strstr(strlow(msg),"atlanti") && strstr(curword(msg,2),"zakrical")) {
             switch(rand()%11)
             {
-            case 0: sendtis(".shout Atlantidovica? Kedy? Kde? Ako? S kym?");
+            case 0: sendtis(".shout Atlantidovica? Kedy? Kde? Ako? S kym?",1);
                	    break;
-            case 1: sendtis(".shout Pozri si stranku Atlantisu: ~OL~FGhttp://talker.atlantis.sk~RS !");
+            case 1: sendtis(".shout Pozri si stranku Atlantisu: ~OL~FGhttp://talker.atlantis.sk~RS !",1);
             	    break;
-            case 2: sendtis(".shout Co sa vam nepaci na Atlantise?");
+            case 2: sendtis(".shout Co sa vam nepaci na Atlantise?",1);
             	    break;
-            case 3: sendtis(".shout Atlantis RuLeZ!");
+            case 3: sendtis(".shout Atlantis RuLeZ!",1);
             	    break;
-	    case 4: sendtis(".shout Ak mas problem s Atlantisom, napis na ~OLatlantis@talker.atlantis.sk~RS");
+	    case 4: sendtis(".shout Ak mas problem s Atlantisom, napis na ~OLatlantis@talker.atlantis.sk~RS",1);
 		    break;
-            case 5: sendtis(".sing Zem pradaaaavnych sllnc....");
+            case 5: sendtis(".sing Zem pradaaaavnych sllnc....",1);
             	    break;
-            case 6: sendtis(".shout Hm, Atlantis... Co ty na to, Platon?");
+            case 6: sendtis(".shout Hm, Atlantis... Co ty na to, Platon?",1);
             	    break;
-            case 7: sendtis(".shout Indiana Jones and the Fate of Atlantis.");
+            case 7: sendtis(".shout Indiana Jones and the Fate of Atlantis.",1);
             	    break;
-	    case 8: sendtis(".shout Viete co sa mi paci na Atlantise? Fsetko!");
+	    case 8: sendtis(".shout Viete co sa mi paci na Atlantise? Fsetko!",1);
             	    break;
-            case 9: sendtis(".shout Co bolo bolo. Terazky je tu ATLANTIS TALKER!");
+            case 9: sendtis(".shout Co bolo bolo. Terazky je tu ATLANTIS TALKER!",1);
             	    break;
-            case 10: sendtis(".shout Vies o tom, ze IP adresa Atlantisu je 213.215.72.40?");
+            case 10: sendtis(".shout Vies o tom, ze IP adresa Atlantisu je 213.215.72.40?",1);
             	    break;
             }
 	break;
@@ -692,45 +694,45 @@ if ((!strcmp(curword(msg,2),"zakricala:")||!strcmp(curword(msg,2),"zakrical:")) 
  
  if (ourtime <= time(&cas)) switch(rand()%20)
    	{
-        case 0: sendtis(".go pos");
+        case 0: sendtis(".go pos",0);
         	break;
-        case 1: sendtis(".go nam");
+        case 1: sendtis(".go nam",0);
         	break;
-        case 2: sendtis(".go nebesa");
+        case 2: sendtis(".go nebesa",0);
         	break;
-        case 3: sendtis(".go pristav");
+        case 3: sendtis(".go pristav",0);
         	break;
-        case 4: sendtis(".shout Zivot je kraaaasny.... teda ako kde..");
+        case 4: sendtis(".shout Zivot je kraaaasny.... teda ako kde..",0);
         	break;
-        case 5: sendtis(".shout Ludia, mate f pazi?! Ja hej...");
+        case 5: sendtis(".shout Ludia, mate f pazi?! Ja hej...",0);
         	break;
-        case 6: sendtis(".say Vy ste puci, ja som puk, ale o tom ani muk!");
+        case 6: sendtis(".say Vy ste puci, ja som puk, ale o tom ani muk!",0);
         	break;
-	case 7: sendtis(".sing She loves you yeah, yeah, yeah!!!");
+	case 7: sendtis(".sing She loves you yeah, yeah, yeah!!!",0);
 		break;
-	case 8: sendtis(".say No dobre, tak si ma vsetci ignorujte...");
+	case 8: sendtis(".say No dobre, tak si ma vsetci ignorujte...",0);
 		break;
-	case 9: sendtis(".cow");
+	case 9: sendtis(".cow",0);
 		break;
-	case 10: sendtis(".shout Mas problem? Spytaj sa Poseidona!");
+	case 10: sendtis(".shout Mas problem? Spytaj sa Poseidona!",0);
 		break;
-	case 11: sendtis(".fortune all");
+	case 11: sendtis(".fortune all",0);
 		break;
-	case 12: sendtis(".think Aj tak je najlepsia hra Indiana Jones And The Fate Of Atlantis!");
+	case 12: sendtis(".think Aj tak je najlepsia hra Indiana Jones And The Fate Of Atlantis!",0);
 		break;
-	case 13: sendtis(".shout Ved ja viem, ze sa so mnou nechcete bavit...");
+	case 13: sendtis(".shout Ved ja viem, ze sa so mnou nechcete bavit...",0);
 		break;
-	case 14: sendtis(".shout Kluuudne ma ignorujte dalej, ja som si uz zvykol...");
+	case 14: sendtis(".shout Kluuudne ma ignorujte dalej, ja som si uz zvykol...",0);
 		break;
-	case 15: sendtis(".say Ja viem, ze som pre vas uplne zbytocny...");
+	case 15: sendtis(".say Ja viem, ze som pre vas uplne zbytocny...",0);
 		break;
-	case 16: sendtis(".think No a co, ze na mna vsetci kaslu...");
+	case 16: sendtis(".think No a co, ze na mna vsetci kaslu...",0);
 		break;
-	case 17: sendtis(".shout Nenechajte sa rusit, aj nadalej ma uplne ignorujte... a vsetci...");
+	case 17: sendtis(".shout Nenechajte sa rusit, aj nadalej ma uplne ignorujte... a vsetci...",0);
 		break;
-	case 18: sendtis(".shout Ved preco by ste si ma mali vsimat, ze ano...");
+	case 18: sendtis(".shout Ved preco by ste si ma mali vsimat, ze ano...",0);
 		break;
-	case 19: sendtis(".sing Tak proc me nikto nemaaa raaad??");
+	case 19: sendtis(".sing Tak proc me nikto nemaaa raaad??",0);
 		break;
 	}
  }/* while(1) */
@@ -783,14 +785,19 @@ int connecttis()
  * sendtis: Send a command to the Atlantis process 
  ****************************************************************/ 
 
-void sendtis (msg)
-char *msg; 
+void sendtis (msg,wt)
+char *msg;
+int wt;
 { int len; 
   char buf[BUFSIZ]; 
  
   strncpy(buf, msg, BUFSIZ-2);
   strcat (buf, "\n"); 
   len = strlen (buf);
+
+  if (wt) {
+    usleep(rand()%500000+(125000*len));
+  }
 
   if (debug) fprintf (stderr, "PUT>%s<\n", buf);
 
@@ -1324,7 +1331,7 @@ blboutput[0]='\0';
         	} else
 			sprintf(text,".wiz %s je zmrd, lebo mi stale nadava! ;*)",user);
 	} else sprintf(text,".wiz %s je zmrd, lebo mi stale nadava! ;*)",user);
-	sendtis(text);
+	sendtis(text,0);
 	}
    else if (strstr(string,"zaco") || strstr(string,"za co") || strstr(string,"za kolko"))
 	switch (rand()%7)
