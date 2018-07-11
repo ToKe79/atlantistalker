@@ -62,7 +62,7 @@ Fix #3  - fixnuta chyba z Tisu -> char(127) (thanx to Dusky!) (R)
 
 /* globalna premenna na bordeltext :) */
 char text[MAXSTRING];
-int ftis, ttis;
+int ftis, ttis, idle;
 int debug=0;
 int loging=0;
 
@@ -200,7 +200,6 @@ char *argv[];
  int login_mode=1, forking=1, ourtime;
  time_t cas;
 
-
  fprintf(stderr,"\n\n************* Booting GodBot *************\n%s\n\n(c) LONE STAR     __/\\__\n       SOFTWARE   >_><_<\nAll rights reserved \\/\n\n",VERSION);
 
   /* Get the options from the command line */
@@ -239,12 +238,20 @@ if (loging) writelog("BOOTED SUCCESSFULLY");
 
 while (1)
  {
+  idle=1;
   ourtime=CAKAJ+time(&cas);
   while (ourtime > time(&cas))
   {
   check_users();
-  if (isready()) msg=gettis(login_mode);
-  else continue;
+  if (isready())
+  {
+    msg=gettis(login_mode);
+  }
+  else
+  {
+    usleep(500000);
+    continue;
+  }
 
   if (loging) writelog(msg);
   if (debug) fprintf(stderr,"GOT>>%s<<\n",msg);
@@ -261,9 +268,8 @@ while (1)
          }
       break;
       }
-
 /*** Tellovanie ****/
-
+  idle=1;
   if ((!strcmp(curword(msg,3),"povedal:") || !strcmp(curword(msg,3),"povedala:")) && (!strcmp(curword(msg,2),"ti")))
 	{
 	strcpy(username,curword(msg,1));
@@ -688,6 +694,9 @@ if ((!strcmp(curword(msg,2),"zakricala:")||!strcmp(curword(msg,2),"zakrical:")) 
             }
 	break;
 	}
+
+  if (idle == 1) usleep(500000);
+
   } /* while (time) */
  
  if (login_mode) continue;
@@ -735,6 +744,9 @@ if ((!strcmp(curword(msg,2),"zakricala:")||!strcmp(curword(msg,2),"zakrical:")) 
 	case 19: sendtis(".sing Tak proc me nikto nemaaa raaad??",0);
 		break;
 	}
+
+ if(idle == 1) usleep(500000);
+
  }/* while(1) */
 }
 /********************************************************************
@@ -794,6 +806,8 @@ int wt;
   strncpy(buf, msg, BUFSIZ-2);
   strcat (buf, "\n"); 
   len = strlen (buf);
+
+  idle = 0;
 
   if (wt) {
     usleep(rand()%500000+(125000*len));
