@@ -30,9 +30,9 @@ int destroy_libs()
 
 int init_libs()
 {
-	struct stat fst;
+	/*struct stat fst;
 	char s[1024];
-	int i;
+	int i;*/
 
 	this_lib = dlopen(NULL, RTLD_NOW | RTLD_GLOBAL);
 
