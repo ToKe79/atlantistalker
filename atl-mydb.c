@@ -41,7 +41,7 @@ int init_database(void)
 {
 FILE *fp;
 char line[200];
-int i,pos,stage=0;
+/*int i,pos,stage=0;*/
     
    if (!(fp=ropen("atlantis.ini","r"))) return 0;
    fgets(line,199,fp);
@@ -2026,7 +2026,7 @@ PAGER pom;
   	 pos++;
   	 for(i=0;i<NUM_COLS;++i) {
 	   if (row[0][pos]==colcom2[i][0] && row[0][pos+1]==colcom2[i][1]) {
-             if (pos>1!=0 && row[0][pos-2]=='~') {
+             if ((pos>1)!=0 && row[0][pos-2]=='~') {
                if (!silent) *(buff+buffpos)=row[0][pos];
                goto CONT; 
               }
