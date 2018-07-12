@@ -1,4 +1,4 @@
 *
 !.gitignore
-!pos22b-sk.c
-!poseidon-opts.h.sample
+!poseidon.c
+!poseidon.h.sample

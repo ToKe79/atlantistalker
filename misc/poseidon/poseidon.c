@@ -51,7 +51,7 @@ Fix #3  - fixnuta chyba z Tisu -> char(127) (thanx to Dusky!) (R)
 #include <stdlib.h>
 #include <unistd.h>
 #include <time.h>
-#include "poseidon-opts.h"
+#include "poseidon.h"
 
 #define VERSION		"Poseidon v2.2b-sk (C)1998/2002 Rider of LoneStar Software"
 #define MAXSTRING 4096            /* maximalna dlzka stringu */
@@ -307,7 +307,7 @@ while (1)
 		}
 	
 	sprintf(text,".tell %s %s",username,blbec((strchr(msg,':')+2),username));
-	sendtis(text,0);
+	sendtis(text,1);
 	break;
 	}
 
