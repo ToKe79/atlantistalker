@@ -40,7 +40,7 @@ else inpstr=remove_first(inpstr);
 err=parse_ezin(subor,issue,inpstr);
 
 /* fprintf(subor,"*DEBUG* err. level: %d\n",err); */
-fprintf(subor,"\n\n                ~BB~FW~OL   Dakujeme vam, ze citate Stratene dialogy!   ~BK~FW~RS\n");
+if (err == 0) fprintf(subor,"\n\n                ~BB~FW~OL   Dakujeme vam, ze citate Stratene dialogy!   ~BK~FW~RS\n");
 fclose(subor);
 switch(more(user,user->socket,filename)) {
 	case 0: write_user(user,"~FRChyba pri citani suboru!~FW\n"); break;
