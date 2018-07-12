@@ -5754,14 +5754,10 @@ if (user->dhrac>0)
   if (user->dama->disptype[user->dhrac-1]==1) dama_stav(user);
   else dama_stav2(user);
   write_user(user->dama->hrac[2-user->dhrac],"\n");
-  if (user->dama->disptype[2-user->dhrac]==1)
-   dama_stav(user->dama->hrac[2-user->dhrac]);
-  else 
-   dama_stav2(user->dama->hrac[2-user->dhrac]);
-   user->dama->tah++;
-   
-   user->dama->hrac[2-user->dhrac]->dama->tah++; /* toto je KRASNE :>> */
-   
+  if (user->dama->disptype[2-user->dhrac]==1) dama_stav(user->dama->hrac[2-user->dhrac]);
+  else dama_stav2(user->dama->hrac[2-user->dhrac]);
+  user->dama->tah++;
+  user->dama->hrac[2-user->dhrac]->dama->tah++; /* toto je KRASNE :>> */
   if (user->dama->natahu>2)
    {
     u=user->dama->hrac[user->dama->natahu-3];
@@ -5974,9 +5970,9 @@ for (y=0;y<8;++y)
    }
  }
 if (reverse==1)
- sprintf(text,"Straty:                 `-------------------------------'\n%s(~OL~FK0~RS~FW): %-*d       ~FTA   B   C   D   E   F   G   H~FW      %12s(~OLO~RS): %-2d\n",user->name,14-strlen(user->name),12-cierny_count,user->dama->hrac[2-user->dhrac]->name,12-biely_count);
+ sprintf(text,"Straty:                 `-------------------------------'\n%s(~OL~FK0~RS~FW): %-*d       ~FTA   B   C   D   E   F   G   H~FW      %12s(~OLO~RS): %-2d\n",user->name,(int)(14-strlen(user->name)),12-cierny_count,user->dama->hrac[2-user->dhrac]->name,12-biely_count);
 else
- sprintf(text,"Straty:                 `-------------------------------'\n%s(~OLO~RS): %-*d       ~FTA   B   C   D   E   F   G   H~FW      %12s(~OL~FK0~RS~FW): %-2d\n",user->name,14-strlen(user->name),12-biely_count,user->dama->hrac[2-user->dhrac]->name,12-cierny_count);
+ sprintf(text,"Straty:                 `-------------------------------'\n%s(~OLO~RS): %-*d       ~FTA   B   C   D   E   F   G   H~FW      %12s(~OL~FK0~RS~FW): %-2d\n",user->name,(int)(14-strlen(user->name)),12-biely_count,user->dama->hrac[2-user->dhrac]->name,12-cierny_count);
 write_user(user,text);
 oline(user);
 if (biely_count==0) user->dama->natahu=3;
@@ -6048,9 +6044,9 @@ for (y=0;y<8;++y)
  }
 write_user(user,texthb);
 if (reverse==1)
- sprintf(text,"Straty:                         `---------------'\n%s(~OL~FK0~RS~FW): %-*d              ~FTA B C D E F G H~FW             %12s(~OLO~RS): %-2d\n",user->name,14-strlen(user->name),12-cierny_count,user->dama->hrac[2-user->dhrac]->name,12-biely_count);
+ sprintf(text,"Straty:                         `---------------'\n%s(~OL~FK0~RS~FW): %-*d              ~FTA B C D E F G H~FW             %12s(~OLO~RS): %-2d\n",user->name,(int)(14-strlen(user->name)),12-cierny_count,user->dama->hrac[2-user->dhrac]->name,12-biely_count);
 else
- sprintf(text,"Straty:                         `---------------'\n%s(~OLO~RS): %-*d              ~FTA B C D E F G H~FW             %12s(~OL~FK0~RS~FW): %-2d\n",user->name,14-strlen(user->name),12-biely_count,user->dama->hrac[2-user->dhrac]->name,12-cierny_count);
+ sprintf(text,"Straty:                         `---------------'\n%s(~OLO~RS): %-*d              ~FTA B C D E F G H~FW             %12s(~OL~FK0~RS~FW): %-2d\n",user->name,(int)(14-strlen(user->name)),12-biely_count,user->dama->hrac[2-user->dhrac]->name,12-cierny_count);
 write_user(user,text);
 oline(user);
 /*text[0]='\0';
@@ -6584,22 +6580,22 @@ int rec;
 {
 int cnt=0,i,j;
 for(i=0;i<4;++i) 
- if ((user->clovece->figurka[user->clovece->natahu-1][i]-50)-10*(user->clovece->natahu-1)>0
- &&(user->clovece->figurka[user->clovece->natahu-1][i]-50)-10*(user->clovece->natahu-1)<5)
-  cnt++;
- if (cnt==4)
+  if ((user->clovece->figurka[user->clovece->natahu-1][i]-50)-10*(user->clovece->natahu-1)>0
+     &&(user->clovece->figurka[user->clovece->natahu-1][i]-50)-10*(user->clovece->natahu-1)<5)
+     cnt++;
+if (cnt==4)
   user->clovece->kocka=(int) (1+rand()%7);
- else 
+else 
   user->clovece->kocka=(int) (1+rand()%6);
- if (user->clovece->kocka==7) user->clovece->kocka=6;
- if (rec==0) return;
- i=0;
- for(j=0;j<4;++j)
+if (user->clovece->kocka==7) user->clovece->kocka=6;
+if (rec==0) return;
+i=0;
+for(j=0;j<4;++j)
   {
    cnt=user->clovece->figurka[user->clovece->natahu-1][j]-(user->clovece->natahu-1)*10-50;
    if (0<cnt && cnt<9) i++;
   }
- if (i==4 && user->clovece->kocka<6)
+if (i==4 && user->clovece->kocka<6)
   {
    for(j=0;j<4;++j)
     if (user->clovece->hrac[j]!=NULL) clovece_disp(user->clovece->hrac[j]);
