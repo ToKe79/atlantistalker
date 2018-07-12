@@ -156,8 +156,8 @@ struct hostent *he;
 struct timeval timeout;
 register unsigned long inlocal;
 register unsigned long inremote;
-register unsigned short local;
-register unsigned short remote;
+/* register unsigned short local; */
+/* register unsigned short remote; */
 register int fd;
 register int fl;
 unsigned int dummy;                
@@ -178,14 +178,14 @@ if (addr.sin_family != AF_INET) {
 	strcpy(vysledok,"<CHYBA2>");
 	return vysledok;              
         }
-local = ntohs(addr.sin_port);
+/* local = ntohs(addr.sin_port); */
 inlocal = addr.sin_addr.s_addr;
 dummy = sizeof(addr);
 if (getpeername(fd,(struct sockaddr *)&addr,&dummy) == -1) {
 	strcpy(vysledok,"<CHYBA3>");
 	return vysledok;              
 	}
-remote = ntohs(addr.sin_port);
+/* remote = ntohs(addr.sin_port); */
 inremote = addr.sin_addr.s_addr;
                             	            
 sn=gdo->site;
@@ -233,7 +233,7 @@ addr.sin_family=AF_INET;
 addr.sin_port=htons(113);
 addr.sin_addr.s_addr=inremote;
 signal(SIGALRM,SIG_IGN);
-if (!connect(s,(struct sockaddr *)&addr,sizeof(addr))==-1) {
+if (!(connect(s,(struct sockaddr *)&addr,sizeof(addr))==-1)) {
 	reset_alarm();
 	close(s);
 	strcpy(vysledok,"<NO_IDENT2>");
@@ -1308,7 +1308,8 @@ void view_remote(UR_OBJECT user)
 			  }
 		  
 			  if (user->remote_socket[i]==user->ircsocknum) sprintf(text,"~FT[Pripojeny na IRC server ~OL%s~RS~FT]\n", get_ircserv_name(user->irc_serv));
-			  	else sprintf(text,"~FT[Pripojeny na ~OL%s %d~RS~FT]\n",user->remote[i]->name,user->remote[i]->port/*,user->remote_socket[i]*/); break;
+			  	else sprintf(text,"~FT[Pripojeny na ~OL%s %d~RS~FT]\n",user->remote[i]->name,user->remote[i]->port/*,user->remote_socket[i]*/);
+				break;
 //			default:
 			}
 		      if (error!=0) user->remote_socket[slot]=0; //ak nastala chyba
