@@ -56,7 +56,7 @@ if ((fp=ropen(COM_LEVEL,"r"))==NULL) return;
 fscanf(fp,"%s %d", comm, &level);
 while (!feof(fp)) {
 	sprintf(text,"Prikaz: %-10s Level: %d\n", comm, level);
-	if (user==NULL) printf(text);
+	if (user==NULL) printf("%s",text);
 		else write_user(user,text);
 	i=0;
 	while (command[i][0]!='*') {
@@ -1496,7 +1496,7 @@ void global_macros(UR_OBJECT user)
 int i;
 
 sprintf(text,"Vytvaram defaultne makra ... macros.userid=0");
-if (user==NULL) printf(text);
+if (user==NULL) printf("%s",text);
 else write_user(user,text);
 
 if (user!=NULL) free_macrolist(&(defaultmacrolist));
@@ -1504,7 +1504,7 @@ if (user!=NULL) free_macrolist(&(defaultmacrolist));
 defaultmacrolist = NULL;
 i=load_macros(&(defaultmacrolist),0);
 sprintf(text,"OK (%d ks)\n",i);
-if (user==NULL) printf(text);
+if (user==NULL) printf("%s",text);
 else write_user(user,text);
 }
 
@@ -11829,14 +11829,14 @@ switch(rm->access) {
       case FIXED_PRIVATE: strcat(text,langselect(user,"~OL~FRPRIVATNY ~RS~FR(fixne)~FT","fixed to ~OL~FRPRIVATE~RS~FT"));  break;
       case GOD_PRIVATE: strcat(text,langselect(user,"~OL~FYBOZSKY~RS~FT","set to ~OL~FYGODLIKE~RS~FT")); break;
       }
-if (!strcmp(rm->name,"cintorin")) sprintf(temp,langselect(user," a nachadza sa tu tabula s umrtnymi oznameniami."," and there is a funeral noticeboard."));
+if (!strcmp(rm->name,"cintorin")) sprintf(temp,"%s",langselect(user," a nachadza sa tu tabula s umrtnymi oznameniami."," and there is a funeral noticeboard."));
 else switch(rm->mesg_cnt) /* ZMENA */
 {
   case 0:
-    sprintf(temp,langselect(user," a na nastenke nie je ziadna sprava."," and there are no messages on the board."));
+    sprintf(temp,"%s",langselect(user," a na nastenke nie je ziadna sprava."," and there are no messages on the board."));
     break;
   case 1:
-    sprintf(temp,langselect(user," a na nastenke je ~OL~FW1~RS~FT sprava."," and there is ~OL~FW1~RS~FT message on the board."));
+    sprintf(temp,"%s",langselect(user," a na nastenke je ~OL~FW1~RS~FT sprava."," and there is ~OL~FW1~RS~FT message on the board."));
     break;
   case 2:
   case 3:
@@ -16132,7 +16132,7 @@ if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
 	return;
 	}
 
-fprintf(fp,title("~OL~FWTIMEOUTS","~OL~FR"));
+fprintf(fp,"%s",title("~OL~FWTIMEOUTS","~OL~FR"));
 cnt=0;
 for (i=0;i<101;i++) vyskyt[i]=0;
 
@@ -16160,7 +16160,7 @@ for (i=100;i>0;i--) if (vyskyt[i]>0) {
 fprintf(fp,"\n");
 if (cnt%2==0) fprintf(fp,"\n");
 
-fprintf(fp,title("~OL~FWTIMEOUTZ","~OL~FR"));
+fprintf(fp,"%s",title("~OL~FWTIMEOUTZ","~OL~FR"));
 cnt=0;
 for (i=0;i<101;i++) vyskyt[i]=0;
 
@@ -23093,7 +23093,7 @@ if ((fp2=ropen(NOTICE_DIGEST,"r"))==NULL) {
 	fprintf(fp2,"From: Atlantis Talker <atlantis@vps.vudiq.sk>\n");
 	fprintf(fp2,"To: wizzes@vps.vudiq.sk\n");
 	sprintf(text,"Subject: Notice digest (%s)\n\n", zobraz_datum(&akt_cas,4));
-	fprintf(fp2,text);
+	fprintf(fp2,"%s",text);
 	fclose(fp2);
 	}
 else fclose(fp2);
@@ -26355,7 +26355,7 @@ for(rm=room_first;rm!=NULL;rm=rm->next) {
  }
 
 sprintf(text,"  %d skontrolovanych, naslo sa %d prestarnutych sprav.\n",total+deleted,deleted);
-if (vculeky) printf(text);
+if (vculeky) printf("%s",text);
 write_syslog(text,1);
 }
 
@@ -28148,7 +28148,7 @@ oflajn=0;
 if (word_count<2)
  {
   u=user;
-  sprintf(text,title("~OL~FGTvoj status","~FG"));
+  sprintf(text,"%s",title("~OL~FGTvoj status","~FG"));
   write_user(user,text);
  }
 else 

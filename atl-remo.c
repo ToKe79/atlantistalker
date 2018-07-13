@@ -601,7 +601,7 @@ else {
         if (cnt==1) {
           if (word[1][0]=='>') word[1][0]=' ';
           sprintf(texthb,"~FYTvoj poznamkovy blok, strana%s~OL%s~RS",word[1][0]==' '?"":" ",word[1]);
-          sprintf(text,title(texthb,"~OL~FB"));
+          sprintf(text,"%s",title(texthb,"~OL~FB"));
           write_user(user,text);
          }
         sprintf(text,"~OL%2d:~RS %s\n",cnt,row[0]?row[0]:"");
@@ -841,7 +841,7 @@ else {
  }
 for(remote=remote_start;remote!=NULL;remote=remote->next) {
   sprintf(text,"[%c] %s %d %s\n",remote->shortcut,remote->name,remote->port,remote->desc);
-  if (user==NULL) printf(text);
+  if (user==NULL) printf("%s",text);
   else write_user(user,text);
  }
 
