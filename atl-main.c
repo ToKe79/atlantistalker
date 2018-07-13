@@ -25,6 +25,7 @@ Bru:
 #include "atl-list.h" /* Niektore tabulkove konstanty */
 #include "atl-mydb.h" /* yeah! mySQL.. */
 #include "atl-xml.h"
+#include "atl-libs.h"
 
 void logout_user(UR_OBJECT user, char *reason)
 {
@@ -109,7 +110,7 @@ void view_history(user)
 UR_OBJECT user;
 {
 UR_OBJECT u, u1;
-int i,line,cnt;
+int i,line/* ,cnt */;
 char filename[80];
 FILE *fp;
 
@@ -133,7 +134,7 @@ for (u=user_first;u!=NULL;u=u->next) {
           continue;
          }
 	fprintf(fp,"~BB~OL~FY %s ~RS~FW~BK\n", u->name);
-	cnt=0;
+	/* cnt=0; */
 	for(i=0;i<HISTORY_LINES;i++) {      
 	      line=(u->histpos+i)%HISTORY_LINES;
 	      if (u->history[line][0]) {
@@ -4215,7 +4216,7 @@ if (!message && !nukehim) write_user(user,"\n~OL~FBDovidenia nabuduce!\n\n");
 	if (user->newtell) {
 		//if(user->rt_on_exit&4 && user->rt_on_exit&2) send_recent_tells(user,2);	
 		if(user->rt_on_exit&4) send_recent_tells(user,1);
-		if(user->rt_on_exit&2 && !user->rt_on_exit&8) send_recent_tells(user,0);
+		if(user->rt_on_exit&2 && !(user->rt_on_exit&8)) send_recent_tells(user,0);
 	 }
 
 	sprintf(text,"\n~OL~FB.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._~RS\n");
@@ -5198,7 +5199,7 @@ char *inpstr;
 {
 int cnt,line;
 char *edprompt="(~OLU~RS)loz, (~OLO~RS)dloz, o(~OLD~RS)loz&uloz, (~OLP~RS)rerob, u(~OLK~RS)az, (~OLZ~RS)rus: "; /*EDPROMPT*/
-char *ptr, *ptr2,*c;
+char *ptr,/* *ptr2, */*c;
 char *temp; /* (S) - pri operacii s riadkami ... */
 int redoline, linecount,i,webuser=0; /* ^^ detto */
 /*****
@@ -5287,7 +5288,7 @@ if (user->edit_op) {
 
 	    case 'K': 	   
             write_user(user,"\n~RS~FM.=-=-=-=-=-=-=-=-=-=-=-= ~OLTakto vyzera napisana sprava:~RS~FM =-=-=-=-=-=-=-=-=-=-=-=.\n");
-	    ptr2=user->malloc_start;
+	    /* ptr2=user->malloc_start; */
 
 	    /*cnt2=0;
 	    sprintf(filename,"misc/%s.editor_tmp",user->name);
@@ -6401,7 +6402,7 @@ int i,buffpos,num_chars,lines,retval,len,totalines, fperc,buffold=0;
 long fsize;
 char buff[OUT_BUFF_SIZE+8],*str; /* *colour_com_strip() */
 //char text2[83];
-char text4[20],tmptxt[T_SIZE+50],c1[2],*tmp2;
+char /*text4[20],tmptxt[T_SIZE+50],c1[2], */*tmp2;
 int webuser=0,max,silent=0,hajlajt=0,eor=0,pos=0;
 PAGER pom;
 //struct stat stbuf;
@@ -6452,9 +6453,9 @@ fsize=strlen(row[0]);
 if (user!=NULL) pos=user->filepos;
 
 text[0]='\0';
-c1[0]='\0';
-tmptxt[0]='\0';
-text4[0]='\0';
+/* c1[0]='\0'; */
+/* tmptxt[0]='\0'; */
+/* text4[0]='\0'; */
 buffpos=0;
 buffold=0;
 num_chars=0;
@@ -6504,9 +6505,9 @@ if (lines>0 && (lines)%totalines==0 && user!=NULL && user->skip>0) {
   pom->messnum=user->messnum;
   pom->next=user->pager;
   user->pager=pom;
-  c1[0]='\0';
-  tmptxt[0]='\0';
-  text4[0]='\0';
+  /* c1[0]='\0'; */
+  /* tmptxt[0]='\0'; */
+  /* text4[0]='\0'; */
   buffpos=0;
   buffold=0;
   num_chars=0;
@@ -8094,7 +8095,8 @@ switch(com_num) {
       case SHOUT : shout(user,inpstr);  break;
       case TELL  : if (koll==1) tell(user,inpstr,2);
 		   else if (koll==2) tell(user,inpstr,3);
-		   else tell(user,inpstr,0); break;
+		   else tell(user,inpstr,0);
+		   break;
       case REPLY : tell(user,inpstr,1); break;
       case EMOTE : emote(user,inpstr);  break;
       case SEMOTE: semote(user,inpstr); break;
@@ -11060,13 +11062,14 @@ if (!strncmp(word[1],"adv",3)) {
     write_user(user,"~FT.set team1 - team4 <meno> ~FW- nastavi meno teamu na brutalise\n");
     write_user(user,"~FT.set maxsms <pocet>       ~FW- max. pocet SMSiek odoslanych za den\n");
    } 
-  if (user->level>=KIN)
+  if (user->level>=KIN) {
    write_user(user,"~FT.set autocreate           ~FW- nastavi rychlost vytvarania predmetov\n");
    write_user(user,"~FT.set dynamic              ~FW- reakcia rychlosti doplnovania na pocet userov\n");
    write_user(user,"~FT.set timeout <minuty>     ~FW- nastavi cas po ktorom ta odpoji\n");
    write_user(user,"~FT.set wizpass              ~FW- nastavi bezpecnostne heslo proti zneuzitiu\n");
    write_user(user,"~FT.set name2 <user> <2.pad> ~FW- nastavi sklonovane meno uzivatela\n");
-//   write_user(user,"~FT.set mail2sms <on|off>    ~FW- nastavi forwardovanie .smailov na mobil.\n\n");
+/*   write_user(user,"~FT.set mail2sms <on|off>    ~FW- nastavi forwardovanie .smailov na mobil.\n\n"); */
+  }
   return;
  }
 if (!strcmp(word[1],"disp") || !strcmp(word[1],"show")) {
@@ -11438,7 +11441,7 @@ char *auth_sockuser2(s,local,remote,rtimeout)
 	CLORETS(0)
 	    *buf = 0;
     
-    if (sscanf(realbuf, "%hd,%hd: USERID :%*[^:]:%s",
+    if (sscanf(realbuf, "%hu,%hu: USERID :%*[^:]:%s",
 	       &rremote, &rlocal, ruser) < 3)
     {
 	close(s);
@@ -11622,7 +11625,7 @@ UR_OBJECT user;
 {
 RM_OBJECT rm;
 UR_OBJECT u;
-char temp[82],null[1],line[451],filename[81];
+char temp[82],/* null[1], */line[451],filename[81];
 char ptr[10];
 int i,y, exits,users,ap,vel,vec,myp;
 FILE *fp;
@@ -11745,7 +11748,7 @@ if (ap>0) {
  }
 }
 
-exits=0;  null[0]='\0';
+exits=0;  /* null[0]='\0'; */
 if (rm==user->room) strcpy(text,langselect(user,"~FTMozes ist:","~FTExits are:"));
 else strcpy(text,langselect(user,"~FTDa sa ist:","~FTExits are:"));
 for(i=0;i<MAX_LINKS;++i) {
@@ -13785,7 +13788,7 @@ char *inpstr;
 char *lamerize(char buf[]);       /* nadefinovacie fcii, ktore vracaju char */
 char *lame_color(char buf[],int typ);
 char *revert(char vstup[]);
-char *name, vysledok[MAX_LAME+1],temp[MAX_LAME+1];
+char /* *name, */vysledok[MAX_LAME+1],temp[MAX_LAME+1];
 int cislo;
 
 if (word_count<3 || !is_number(word[1])) {
@@ -13822,7 +13825,7 @@ if (!cislo && (strstr(inpstr,"~LB") || strstr(inpstr,"~LI"))) {
 	return;
 	}
 
-if (user->vis) name=user->name; else name=invisname(user);
+/* if (user->vis) name=user->name; else name=invisname(user); */
 inpstr=remove_first(inpstr);
 
 if ((user->level<MOZENADAVAT) && (contains_swearing(inpstr,user)) && (ban_swearing)) {
@@ -14436,7 +14439,7 @@ void pecho(user,inpstr)
 UR_OBJECT user;
 char *inpstr;
 {
-char *name;
+/* char *name; */
 UR_OBJECT u;
 
 if (user->muzzled) {
@@ -14527,7 +14530,7 @@ if ((contains_advert(inpstr) && (user->level<MOZEFARBICKOVAT))) {
       return;
      }
 
-if (user->vis) name=user->name; else name=invisname(user);
+/* if (user->vis) name=user->name; else name=invisname(user); */
 inpstr=remove_first(inpstr);
 if (detect_user(inpstr,user)) { write_user(user,"Nemozes doverne echovat tento text.\n"); return; }
 sprintf(text,"~OL(echo-pre %s)~RS %s\n",sklonuj(u,4),inpstr);
@@ -14586,12 +14589,13 @@ int get_memory_usage(void)
 {
    FILE *meminfofile;
    char znak,filename[100];
-   int tmp,memory;
+   int memory;
+   unsigned int tmp;
 
    sprintf(filename,"/proc/%d/stat",getpid());
    if ((meminfofile=fopen(filename,"r"))==NULL)
       return -1;
-   fscanf(meminfofile,"%d %s %c %d %d %d %d %d %u %u %u %u %u %d %d %d %d %d %d %u %u %d %u %u %u %u %u %u %u %u %d %d %d %d %u",&tmp,filename,&znak,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&memory,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp);
+   fscanf(meminfofile,"%u %s %c %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u %d %u %u %u %u %u %u %u %u %u %u %u %u",&tmp,filename,&znak,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&memory,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp);
    fclose(meminfofile);
    return memory;
 }
@@ -15158,13 +15162,13 @@ void ignore_user(user)
 UR_OBJECT user;
 {
 UR_OBJECT u;
-int n,neni,cnt;
+int n,/* neni, */cnt;
 //char filename[200];
 char tmptxt[200];
 //FILE *fp;
 int je_nahlaseny=0, existuje=0;
 NOTIFY bunka;
-neni=0;
+/* neni=0; */
 
 if (word_count<3) {
 
@@ -15270,13 +15274,13 @@ void notify_user(user)
 UR_OBJECT user;
 {
 UR_OBJECT u;
-int n,neni,cnt;
+int n/* ,neni */,cnt;
 //char filename[200];
 char tmptxt[200];
 //FILE *fp;
 int je_nahlaseny=0, existuje=0;
 NOTIFY bunka;
-neni=0;
+/* neni=0; */
 
 if ((word_count==2) && (!strcmp(word[1],"who"))) {
 	who_from_notify_is_online(user);
@@ -16199,7 +16203,7 @@ FILE *fp;
 char filename[81];
 char line[1001];
 int oflajn=0,profile=100,new_mail=0,err=0,repos=0,vec=-1;
-UR_OBJECT u,u2;
+UR_OBJECT u/* ,u2 */;
 int align,width,len,type,i,ii,pos,wizvar,disablelineifvarempty,nasiel=0;
 char temp[500],var[500],yes[50],no[50],z;
 int mins,idle=0,blik,cols,timelen,days2,hours2,mins2;
@@ -16210,7 +16214,7 @@ char *str;
 
  if (word_count<2) {
    u=user;
-   u2=u;
+   /* u2=u; */
   }
  else {
    if (user->level>=KIN && !strncmp(word[2],"repos",5)) {
@@ -16221,7 +16225,7 @@ char *str;
      vec=expand_predmet(word[1]);
      if ((u=get_user_exact(word[1]))!=NULL) {  
        nasiel=1;
-       u2=u;
+       /* u2=u; */
       }
     }
    if (!nasiel) {
@@ -16235,7 +16239,7 @@ char *str;
      if (db_load_user_details(u,repos)) {
        nasiel=1; 
        oflajn=1;
-       u2=NULL; 
+       /* u2=NULL; */
       }
      else {             
        destruct_user(u);  
@@ -16245,7 +16249,7 @@ char *str;
    if (!nasiel && !repos) {
      if ((u=get_user(word[1]))!=NULL) { 
        nasiel=1;                      
-       u2=u;      	
+       /* u2=u; */
       }      	
     }
       
@@ -16971,7 +16975,7 @@ UR_OBJECT user;
 int people;
 {
 UR_OBJECT u;
-int cnt,total,invis,mins,remote,idle,logins,i;
+int cnt,total,invis,mins/* ,remote */,idle,logins,i;
 char line[USER_NAME_LEN+(COOLBUF_LEN*2)];
 char rname[ROOM_NAME_LEN+1],idlestr[6],sockstr[3];
 FILE *fp;
@@ -16986,7 +16990,7 @@ if (people && (word_count==2) && (!strcmp(word[1],"t"))) {
   show_timeouts(user);
   return;
  }
-total=0;  invis=0;  remote=0;  logins=0;
+total=0;invis=0;/* remote=0; */logins=0;
 
 sprintf(filename,"mailspool/%s.whotmp",user->name);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/	
@@ -17084,7 +17088,7 @@ void who_alt1(user)
 UR_OBJECT user;
 {
 UR_OBJECT u;
-int cnt,total,invis,mins,remote,idle,logins,i;
+int cnt,total,invis,mins/* ,remote,idle,logins */,i;
 char line[USER_NAME_LEN+(COOLBUF_LEN*2)];
 char rname[ROOM_NAME_LEN+1];
 char stav[20];
@@ -17106,7 +17110,7 @@ if ((fp=ropen(filename,"w"))==NULL) { /*APPROVED*/
 	return;
 	}
 
-total=0;  invis=0;  remote=0;  logins=0;
+total=0;invis=0;/* remote=0;logins=0; */
 fprintf(fp,"            ~FT,,                                                   ||\n");
 fprintf(fp,"           ~FY(~OL~FWoo~RS~FY)                                                 ~RS~FY(~OL~FWoo~RS~FY)\n");
 fprintf(fp,"         ~FYooO~OL~FT()~RS~FYOoo            ~OL~FGPrihlaseni uzivatelia~RS            ~FYooO~OL~FT()~RS~FYOoo\n");
@@ -17116,7 +17120,7 @@ fprintf(fp,"          ~OL~FYMENO/POPIS                          MIESTNOST       
 for(u=user_first;u!=NULL;u=u->next) {
       if (u->type!=USER_TYPE || u->login || u->room==NULL) continue;
       mins=(int)(time(0) - u->last_login)/60;
-      idle=(int)(time(0) - u->last_input)/60;
+      /* idle=(int)(time(0) - u->last_input)/60; */
       ++total;
       if (!u->vis) {
             ++invis;
@@ -17199,7 +17203,7 @@ void who_alt2(user)
 UR_OBJECT user;
 {
 UR_OBJECT u;
-int cnt,total,invis,mins,remote,idle,logins;
+int cnt,total,invis,mins/* ,remote */,idle/* ,logins */;
 char line[USER_NAME_LEN+(COOLBUF_LEN*2)];
 char stav[20];
 FILE *fp;
@@ -17221,7 +17225,7 @@ if ((fp=ropen(filename,"w"))==NULL) { /*APPROVED*/
 	return;
 	}
 		
-total=0;  invis=0;  remote=0;  logins=0;
+total=0;invis=0;/* remote=0;logins=0; */
 fprintf(fp,"~OL~FY                    + + +         ~RS~FTCURRENT USERS LOGGED IN\n");
 sprintf(text,"~OL~FM  _______   ________~FY| | |~FM_____________________________________________   ____\n");
 fprintf(fp,"%s",text);
@@ -17311,7 +17315,7 @@ void who_alt3(user)
 UR_OBJECT user;
 {
 UR_OBJECT u;
-int cnt,total,invis,mins,remote,idle,logins,i;
+int cnt,total,invis,mins/* ,remote */,idle/* ,logins */,i;
 char line[USER_NAME_LEN+(COOLBUF_LEN*2)];
 char rname[ROOM_NAME_LEN+1];
 char filename[90];
@@ -17333,7 +17337,7 @@ if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
 	return;
 	}
 	
-total=0;  invis=0;  remote=0;  logins=0;
+total=0;invis=0;/* remote=0;logins=0; */
 fprintf(fp,"~OL~FR,*.,.*'``'*.,.*'``'*.,.*'``'*.,~FM+~FYLOGGED IN USERS~FM+~FR,.*'``'*.,.*'``'*.,.*'``'*.,.*,\n");
 fprintf(fp,"~OL~FR| ~FYLEVEL Meno a charakteristika  ~FR=============== |      ~FYMiesto     ~FR|~FYSex Min/Idl~FR|\n");
 fprintf(fp,"~OL~FR|~RS~FR=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=~OL|~RS~FR=-=-=-=-=-=-=-=-=~OL|~RS~FR=-=-=-=-=-=~OL|\n");
@@ -17404,7 +17408,7 @@ void who_alt4(user)
 UR_OBJECT user;
 {
 UR_OBJECT u;
-int cnt,total,invis,mins,remote,idle,logins;
+int cnt,total,invis,mins/*,remote */,idle/* ,logins */;
 char line[USER_NAME_LEN+(COOLBUF_LEN*2)];
 char stav[20];
 char filename[90];
@@ -17425,7 +17429,7 @@ if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
 	return;
 	}
 		
-total=0;  invis=0;  remote=0;  logins=0;
+total=0;invis=0;/* remote=0;logins=0; */
 
 fprintf(fp,"  /~OL\\,~RS/~OL\\                      ~FYPrihlaseni uzivatelia                         ~FG.-.-\n");
 fprintf(fp,"~FB~OL.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-.~RS~FG_.~FY|~FG-\n");
@@ -17510,7 +17514,7 @@ void who_alt5(user)
 UR_OBJECT user;
 {
 UR_OBJECT u;
-int cnt,total,invis,mins,remote,idle,logins;
+int cnt,total,invis,mins/* ,remote */,idle/* ,logins */;
 char line[USER_NAME_LEN+(COOLBUF_LEN*2)];
 FILE *fp;
 char filename[90];
@@ -17520,7 +17524,7 @@ char filename[90];
 	return;
 	}
 */	
-total=0;  invis=0;  remote=0;  logins=0;
+total=0;invis=0;/* remote=0;logins=0; */
 
 sprintf(filename,"mailspool/%s.whotmp",user->name);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/
@@ -17621,7 +17625,7 @@ void who_alt6(user) /* Volcano */
 UR_OBJECT user;
 {
 UR_OBJECT u;
-int cnt,total,invis,mins,remote,idle,logins;
+int cnt,total,invis,mins/* ,remote */,idle/* ,logins */;
 char line[USER_NAME_LEN+(COOLBUF_LEN*2)];
 FILE *fp;
 char filename[90];
@@ -17631,7 +17635,7 @@ char filename[90];
 	return;
 	}
 */	
-total=0;  invis=0;  remote=0;  logins=0;
+total=0;invis=0;/* remote=0;logins=0; */
 
 sprintf(filename,"mailspool/%s.whotmp",user->name);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/
@@ -17870,7 +17874,7 @@ void who_alt8(user)
 UR_OBJECT user;
 {
 UR_OBJECT u;
-int cnt,total,invis,mins,remote,idle,i;
+int cnt,total,invis,mins/* ,remote */,idle,i;
 char line[USER_NAME_LEN+(COOLBUF_LEN*2)];
 char rname[ROOM_NAME_LEN+1],portstr[5];
 char filename[90];
@@ -17891,7 +17895,7 @@ if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
 	return;
 	}
 
-total=0;  invis=0;  remote=0;
+total=0;invis=0;/* remote=0; */
 
 sprintf(text,"\n~OL~FR=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= ~FMCurrent users ~FR=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
 fprintf(fp,"%s",text);
@@ -20039,9 +20043,12 @@ if (user->examine==1) {
 	   pos++;
 	  }
 	sprintf(text,"~FB\\~OL~FY  Predmety ~RS~FB|~OL~FW %-12.12s~RS~FB|~OL~FW%-12.12s~RS~FB|~OL~FY Mail: ~RS~FW[~LI~OL~FR%c~RS~FW] ~FB|~OL~FY Ignoruje :~OL~FW ",vecd[0],vecd[1],(new_mail>u->read_mail?'N':' '));
-	if (u->igntell)  strcat(text,"TE "); if (u->ignsys) strcat(text,"SY ");
-	if (u->ignshout) strcat(text,"SH "); if (u->ignfun) strcat(text,"FU ");
-	if (u->igngossip) strcat(text,"GO"); strcat(text,"\n");
+	if (u->igntell)  strcat(text,"TE ");
+	if (u->ignsys) strcat(text,"SY ");
+	if (u->ignshout) strcat(text,"SH ");
+	if (u->ignfun) strcat(text,"FU ");
+	if (u->igngossip) strcat(text,"GO");
+	strcat(text,"\n");
 	write_user(user,text);
 	if (pos>2) {
 	  sprintf(text,"~FB >          ~RS~FB|~OL~FW %-12.12s~RS~FB|~OL~FW%-12.12s~RS~FB|           ~FB\\\n",vecd[2],vecd[3]);
@@ -20116,7 +20123,7 @@ UR_OBJECT user;
 {  
 UR_OBJECT u;  
 char temp[400],hp[HOMEPAGE_LEN+20];  
-int new_mail,days,hours,mins,timelen,minstot,hours2,mins2;
+int /* new_mail, */days,hours,mins,timelen,minstot,hours2,mins2;
 int idles,idlem,idlet,percent,avgidle;
 
 if (word_count<2) u=user;
@@ -20129,7 +20136,7 @@ else
 sstrncpy(hp,u->homepage,HOMEPAGE_LEN);
 
 sprintf(query,"select max(UNIX_TIMESTAMP(time)) from mailbox where userid='%d'",u->id);
-new_mail=query_to_int(query);
+/* new_mail=query_to_int(query); */
 
 days=u->total_login/86400;  
 hours=(u->total_login%86400)/3600;  
@@ -20180,7 +20187,7 @@ RM_OBJECT rm;
 UR_OBJECT u;
 char access[20],*pom;
 char nadpis[COOLBUF_LEN+2];
-int cnt,i, ppredm=0,zwjs,rast;
+int cnt,i, ppredm=0,zwjs/* ,rast */;
 FILE *fp;
 char filename[81];
 
@@ -20209,7 +20216,7 @@ for(rm=room_first;rm!=NULL;rm=rm->next) {
            if (u->type!=CLONE_TYPE && !u->login && u->room==rm) ++cnt;
       ppredm=0;
       zwjs=0;
-      rast=0;
+      /* rast=0; */
       for(i=0;i<MPVM;++i) if (rm->predmet[i]>-1) {
         if (predmet[rm->predmet[i]]->type<3) zwjs++;
 	//else if (predmet_type[rm->predmet[i]]==3 || predmet_type[rm->predmet[i]]==4) rast++;
@@ -20440,7 +20447,7 @@ UR_OBJECT user;
 char *inpstr;
 {
 UR_OBJECT victim;
-RM_OBJECT rm;
+/* RM_OBJECT rm; */
 char *name;
 
 if (word_count<2) {
@@ -20464,7 +20471,7 @@ if (word_count>2) sprintf(text,"%s KILLED %s: %s.\n",user->name,victim->name,inp
 else sprintf(text,"%s KILLED %s.\n",user->name,victim->name);
 write_syslog(text,2);
 if (user->vis) name=user->name; else name=invisname(user);
-rm=victim->room;
+/* rm=victim->room; */
 srand(time(0));
 switch (rand()%3) /* Altrenativny KILL - kto ma fantaziu, moze pridat :> */
   {
@@ -22066,7 +22073,7 @@ void send_bomb(user)
 UR_OBJECT user;
 {
 UR_OBJECT u;
-char *name, filename[80];
+char /* *name, */filename[80];
 
 if (word_count<2) {
       write_user(user,"Pouzi: .bomb <uzivatel>\n");  return;
@@ -22112,7 +22119,7 @@ if (((user->room->sndproof) || (u->room->sndproof)) && (user->room!=u->room)) {
       }
 
   
-if (user->vis) name=user->name; else name=invisname(user);  
+/* if (user->vis) name=user->name; else name=invisname(user); */
 sprintf(filename,"misc/bomb");
             switch(more(u,u->socket,filename)) {
                   case 0: write_user(user,"Nenasiel som bombu.\n");  return;
@@ -22409,7 +22416,7 @@ UR_OBJECT user;
 {
 UR_OBJECT u;
 RM_OBJECT odkial, kam;
-char *name;
+/* char *name; */
 int i,cnt=0;
 
 if (user->room->group==4) {
@@ -22511,7 +22518,7 @@ if (!(strcmp(kam->name,"zalar"))) {
 	write_user(user,text);
 	return; }
 
-if (user->vis) name=user->name; else name=invisname(user);
+/* if (user->vis) name=user->name; else name=invisname(user); */
 sprintf(text,"%s sem %s niekoho navstivit.\n",user->name,pohl(user,"prisiel","prisla"));
 if (user->vis) write_room(kam,text);
 sprintf(text,"%s odchadza niekoho navstivit %s.\n",user->name,kam->into);
@@ -23416,7 +23423,7 @@ else sprintf(memu,"%d %03d",memo/1000,memo%1000);
 
 if (!typ) {
   
-  sprintf(text,"Uptime ~OL%d~RSd ~OL%d~RSh,  ~OL%d~RSludi,  ~OL%d~RSrekord, nachamranych ~OL%s~RS bajtov\nRozoznanych ~OL%d~RS adries, Hits ~OL%d~RS, Pos ~OL%d~RS, Timeouts ~OL%d~RS + ~OL%d~RS.\n",days,hours,num_of_users,max_users_was,memu, resc_resolved, resc_cached, rescn,tajmauts,tajmautz);
+  sprintf(text,"Uptime ~OL%d~RSd ~OL%d~RSh,  ~OL%d~RSludi,  ~OL%d~RSrekord, nachamranych ~OL%s~RS bajtov\nRozoznanych ~OL%d~RS adries, Hits ~OL%d~RS, Pos ~OL%d~RS, Timeouts ~OL%lu~RS + ~OL%lu~RS.\n",days,hours,num_of_users,max_users_was,memu, resc_resolved, resc_cached, rescn,tajmauts,tajmautz);
   write_user(user,text);
   return;
  }
@@ -23463,7 +23470,7 @@ sprintf(text,"Standardne charecho    : %s          Systemovy log          : %s\n
 write_user(user,text);
 sprintf(text,"Vynimocny stav sposobi : %s       Objekty spolu alokuju  : %d\n",ca[crash_action],mem);
 write_user(user,text);
-sprintf(text,"Velkost uziv. strukt.  : %-6d       Nachamrana pamat: ~OL%s~RS bajtov\n", sizeof(struct user_struct),memu);
+sprintf(text,"Velkost uziv. strukt.  : %-6lu       Nachamrana pamat: ~OL%s~RS bajtov\n", sizeof(struct user_struct),memu);
 write_user(user,text);
 }
 
@@ -26486,15 +26493,15 @@ long play_nxt(void) /* (S) uprava */
    char filename[MAXSTRING+1], ourtime[MAXSTRING+1], nazov[80];
    long curmin,ourmin;
    int count,poz;
-   int cilhod, cilmin;
+   /* int cilhod, cilmin; */
    int cnt2,cnt3;
    FILE *program;
 
 /* Najskor zistime, kolko mame hodin (resp. minut) */
    play.on=0;
-   cilhod=thour; /* Aky cas je CIL :> */
+   /* cilhod=thour; */ /* Aky cas je CIL :> */
                  /* po Nitriansky: VCULEKY! :> */
-   cilmin=tmin;   
+   /* cilmin=tmin; */
    curmin=thour*60+tmin;      
    if ((program = ropen(KOLOS_PROGRAM,"r")) == NULL) return(ZERO); /*APPROVED*/
    
@@ -27896,7 +27903,7 @@ void sms(UR_OBJECT user,int done_editing)
 FILE *fp;
 char cmd[1000],*c,filename[81],account[100];
 time_t tim;
-int ch,oflajn=0,pos,i;
+int /* ch, */oflajn=0,pos,i;
 UR_OBJECT u;
 //char *help="~FTPouzi: ~FW.sms <cislo v medzinarodnom tvare>  ~FTalebo: ~FW.sms <uzivatel>\n~FTSprava sa pise v editore, po kazdom riadku sa zobrazuje zvysny pocet znakov.\n~FTAk chces zmenit branu cez ktoru sa budu posielat SMS spravy, pouzi: ~FW.sms brana\n";
 char *help="~FTPouzi: ~FW.sms <cislo v medzinarodnom tvare>  ~FTalebo: ~FW.sms <uzivatel>\n~FTSprava sa pise v editore, po kazdom riadku sa zobrazuje zvysny pocet znakov.\n";
@@ -27910,7 +27917,7 @@ if (done_editing==1) {
     if (*c=='\n') cmd[pos]=' ';
     else if (*c=='\'' || *c=='"') cmd[pos]='`';
     else cmd[pos]=*c;
-    ch=*c++;
+    /* ch= *c++; */
     pos++;
    }
   cmd[pos]='\0';
@@ -28110,10 +28117,10 @@ char *title(char *str,char *col)
 {
 char text2[ARR_SIZE+1];
 static char vtext[200];
-int i,cnt,len,spc,odd;
+int i/* ,cnt */,len,spc,odd;
 
 strcpy(vtext,str);
-cnt=colour_com_count(vtext);
+/* cnt=colour_com_count(vtext); */
 len=strlen(colour_com_strip2(vtext,1));
 spc=(39-len/2);
 odd=(spc+spc+len-78);
@@ -28131,7 +28138,7 @@ void statistic(user)
 UR_OBJECT user;
 {
 UR_OBJECT u;
-int oflajn,i,avg,days2,hours2,mins2,vel;
+int oflajn,i,avg,days2,hours2,mins2/* ,vel */;
 float po[11],zvy;
 FILE *fp;
 char filename[81],komand[20],kto[USER_NAME_LEN+5];
@@ -28232,7 +28239,7 @@ if (u->prevname[0]) {
    }
  }
 
-i=0;vel=0;
+i=0;/* vel=0; */
 sprintf(query,"select `cmd`,`banner`,`reason` from `comban` where `userid`='%d';",u->id);
 if ((result=mysql_result(query))) {
   while ((row=mysql_fetch_row(result))) {
@@ -28615,8 +28622,8 @@ int is_ymd_today(unsigned yr, unsigned mo, unsigned dy) {
 
 void calendar(UR_OBJECT user)
 {
-int iday,day_1,numdays,j,daj=0;
-unsigned yr,mo;
+int iday,day_1,numdays,j,daj=0,yr,mo;
+/* unsigned yr,mo; */
 char temp[ARR_SIZE],datumm[10];
 
 if (word_count>3)

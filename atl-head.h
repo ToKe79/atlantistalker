@@ -2048,6 +2048,7 @@ extern void xsay(UR_OBJECT user,char *inpstr);
 extern void record_xannel(XA_OBJECT xannel,char *str);
 extern void add2xannel(UR_OBJECT user,UR_OBJECT u);
 extern void xannel(UR_OBJECT user,char *inpstr);
+extern void cmd_module(UR_OBJECT user, char *inpstr);
 
 char *dbf_string(char *string);
 /***********************************************************/
