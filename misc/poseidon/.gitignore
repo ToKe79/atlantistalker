@@ -2,3 +2,4 @@
 !.gitignore
 !poseidon.c
 !poseidon.h.sample
+!compile.sh
