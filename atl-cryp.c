@@ -755,8 +755,7 @@ void MD5(UINT4 x[15])
 
 #endif
 
-unsigned char *itoa64 =
-  "./0&2#@-,;~+ABcDE|GHIJ^L<N3PQR{T>kWXYZabCd4f[}ijVl]nop%r)tu(wxyz";
+char *itoa64 = "./0&2#@-,;~+ABcDE|GHIJ^L<N3PQR{T>kWXYZabCd4f[}ijVl]nop%r)tu(wxyz";
 
 void to64(s, v, n)
   char *s;
@@ -770,12 +769,12 @@ void to64(s, v, n)
 }
 
 struct pattern {
-  unsigned char *even, *odd;
+  char *even, *odd;
   int len;
 };
 
-unsigned char odd_p[16], odd_s[8], odd_ps[24], odd_pp[32], odd_psp[40];
-unsigned char even_p[44], even_sp[44], even_pp[44], even_spp[44];
+char odd_p[16], odd_s[8], odd_ps[24], odd_pp[32], odd_psp[40];
+char even_p[44], even_sp[44], even_pp[44], even_spp[44];
 int len_p, len_s, len_ps, len_pp, len_psp;
 
 struct pattern patterns[21] = {
@@ -802,7 +801,7 @@ struct pattern patterns[21] = {
   {even_spp, odd_psp, 0}
 };
 
-unsigned char *magic = "SSC";
+char *magic = "SSC";
 
 extern char *md5_crypt(pw, salt)
   char *pw;
