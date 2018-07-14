@@ -4,7 +4,7 @@
 #include "atl-head.h"
 #include "atl-mydb.h"
 
-void test_lynx_done() // vola sa v do_events
+void test_lynx_done() /* vola sa v do_events */
 {
 UR_OBJECT user;
 int status;
@@ -41,7 +41,7 @@ for(user=user_first;user!=NULL;user=user->next) {
  }
 }
 
-void lynx(UR_OBJECT user) // hlavny prikaz
+void lynx(UR_OBJECT user) /* hlavny prikaz */
 {
 int status;
 pid_t pid;
@@ -94,8 +94,7 @@ if (len>4) {
 switch (pid=fork()) {
     case -1: write_user(user,"~FTLynx:~FW lutujem, chyba pri forku...\n");
              return;
-    case  0: setpgid(0,0); /* rodinne meno - vyvrazdime potom vsetko nazraz
-:) */
+    case  0: setpgid(0,0); /* rodinne meno - vyvrazdime potom vsetko nazraz :) */
              sprintf(text,"/usr/bin/lynx -restrictions=all -dump http://%s > mailspool/lynx-%s.tmp 2>> mailspool/lynx-%s.tmp",word[1],user->name, user->name);
              system(text);/* deticko */
              _exit(0);
@@ -400,7 +399,7 @@ zasuva = connecthost (host,80);
   { write_syslog("Nepodarilo sa spojit s pocasim! :>\n",1);
     return;
   }
-//sleep(5);
+  /* sleep(5); */
   if (write (zasuva, reqs, strlen(reqs)) != strlen(reqs))
   { write_syslog("Write failed: webcinci funkcia",1);
     return;
@@ -503,10 +502,10 @@ siglongjmp(save_state,1);
 
 void note(UR_OBJECT user, char *inpstr)
 {
-//char filename[80], line[201];
+/* char filename[80], line[201]; */
 int cnt=0,subs=0,sub=0,num=0;
-//FILE *fp;
-//struct stat statbuf;
+/* FILE *fp; */
+/* struct stat statbuf; */
 char *hlp="~FTPouzi:~FW .note >strana <poznamka> ~FTalebo ~FW.note <poznamka>  ~FTak chces pridat poznamku\n       .note >strana  ~FTak chces zobrazit poznamky na strane\n       .note move >strana <cislo> >strana ~FTak chces presunut poznamku\n";
 
 if (word_count==1) { 
@@ -909,7 +908,7 @@ if (*sn) {
 con_addr.sin_port=htons(def_port);
 con_addr.sin_family=AF_INET;
 
-//signal(SIGALRM,SIG_IGN); /* bolo vypozn. */
+/* signal(SIGALRM,SIG_IGN); */ /* bolo vypozn. */
  
 if (connect(user->remote_socket[slot],(struct sockaddr *)&con_addr,sizeof(con_addr))==-1) {
  	reset_alarm();
@@ -1141,8 +1140,8 @@ void links(UR_OBJECT user)
       }
       write_user(user,"~OL~FB-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=~RS\n");
       
-      //sprintf(text,"~FGPocet spojeni na ine talkre: %d~RS\n",count);
-      //write_user(user,text);		
+      /* sprintf(text,"~FGPocet spojeni na ine talkre: %d~RS\n",count); */
+      /* write_user(user,text); */
     }
 }
 
@@ -1231,7 +1230,7 @@ void view_remote(UR_OBJECT user)
 		write_user(user,"~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
 	
 	      }
-	   // write_user(user,"Pouzi: .remote connect <talker>\n");
+	    /* write_user(user,"Pouzi: .remote connect <talker>\n"); */
 	    return;
 	  }
 	  else
@@ -1280,7 +1279,7 @@ void view_remote(UR_OBJECT user)
 			    if (remote==user->remote[j]) { i=j; break; } /* i je index socketu s danym talkerom */
 	   
 			  if (i==-1) { write_user(user,"Nastala chyba v pripajani.\n"); return; }
-			  //if (!strcmp(user->remote[i]->name,"fornax.elf.stuba.sk"))  write(user->remote_socket[i],"vt100\n",10);
+			  /* if (!strcmp(user->remote[i]->name,"fornax.elf.stuba.sk"))  write(user->remote_socket[i],"vt100\n",10); */
 			  if (!strcmp(user->remote[i]->desc,"IRC")) {
 				user->remote_login_socket=user->remote_socket[i];
 			  	user->remote_login=3;
@@ -1310,10 +1309,10 @@ void view_remote(UR_OBJECT user)
 			  if (user->remote_socket[i]==user->ircsocknum) sprintf(text,"~FT[Pripojeny na IRC server ~OL%s~RS~FT]\n", get_ircserv_name(user->irc_serv));
 			  	else sprintf(text,"~FT[Pripojeny na ~OL%s %d~RS~FT]\n",user->remote[i]->name,user->remote[i]->port/*,user->remote_socket[i]*/);
 				break;
-//			default:
+			/* default: */
 			}
-		      if (error!=0) user->remote_socket[slot]=0; //ak nastala chyba
-		      //reset_alarm();
+		      if (error!=0) user->remote_socket[slot]=0; /* ak nastala chyba*/
+		      /* reset_alarm(); */
 		      write_user(user,text);
 		      if (user->statline==CHARMODE) {
 		      	show_statline(user);
@@ -1483,7 +1482,7 @@ int i;
 	    for (i=0;i<MAX_CONNECTIONS;i++)
 	      if (user->remote_socket[i]!=0 && user->remote_socket[i]!=user->ircsocknum) 
 		write(user->remote_socket[i],"\033[0",4);
-	    //		write(user->remote_socket[i],"\033[0m",4);
+		/* write(user->remote_socket[i],"\033[0m",4); */
 	  }
 }
 
@@ -1649,7 +1648,7 @@ sprintf(smalbuf,"%c%c%c%c%c%c%c%c%c%c",IAC,SB,TELOPT_NEW_ENVIRON,'?',NEW_ENV_VAR
 strteln(inpstr,smalbuf,10)!=NULL) {
    sprintf(smalbuf,"%c%c",IAC,SE);
    if ((ptr=strteln(inpstr,smalbuf,len))!=NULL)
-//     if ((strteln(inpstr,"@",len)!=NULL) && (ptr>(inpstr+10))) {
+     /* if ((strteln(inpstr,"@",len)!=NULL) && (ptr>(inpstr+10))) { */
      if (ptr>(inpstr+10)) {
         int sajze=0;
         char meno[100];
@@ -1690,12 +1689,13 @@ sprintf(smalbuf,"%c%c%c%c%c%c",IAC,SB,TELOPT_NEW_ENVIRON,TELQUAL_SEND,IAC,SE);
     if (user->remtelopt!=(user->remtelopt|1)) return; /* nepoprosili - nedostanu ;-) */
     sprintf(smalbuf,"%c%c%c%c%c%c%c%c%c%c",IAC,SB,TELOPT_NEW_ENVIRON,TELQUAL_IS,
     NEW_ENV_VAR,'U','S','E','R',NEW_ENV_VALUE); sajze=10; /* dlzka smalbuf-u */
-//    strcpy((smalbuf+sajze),user->real_ident); sajze+=strlen(user->real_ident);
-    sprintf(smallerbuf,"%s[%s]",user->name,user->site);
-    strcpy((smalbuf+sajze),smallerbuf); sajze+=strlen(smallerbuf);
+    /* strcpy((smalbuf+sajze),user->real_ident); sajze+=strlen(user->real_ident); */
+    sprintf(smallerbuf,"%s[%s]%c%c",user->name,user->site,IAC,SE);
+    strcpy((smalbuf+sajze),smallerbuf);
+    sajze+=strlen(smallerbuf);
     /* V) CHANGE: ked uz skemraju, poslime im 'Username[site]' */
-    *(smalbuf+sajze)=IAC;
+/*    *(smalbuf+sajze)=IAC;
     *(smalbuf+sajze+1)=SE;
-    sajze+=2;
+    sajze+=2; */
     write(user->remote_socket[wsock],smalbuf,sajze); return; }
 }

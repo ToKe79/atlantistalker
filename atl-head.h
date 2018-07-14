@@ -12,7 +12,6 @@
 #ifdef _AIX
 #include <sys/select.h>
 #endif
-//#include <stdio.h> /* huh, pre istotu 2 krat ? :> (V) */
 #include <fcntl.h>
 #include <time.h>
 
@@ -201,10 +200,10 @@ int writeerror,max_timeouts,max_timeoutz;
 #define RESC_CACHE "misc/resc_cache"        /* cache pre resolvera */
 #define NEWUSER_SITEBAN "newban"            /* misc/newban */
 #define REMOTE_FILE "remote"                /* konfigurak connecticutu :-) */
-//#define REMOTEDIR "remote"                  /* kde budu uzivatelske remote hesla */
+/* #define REMOTEDIR "remote" */                 /* kde budu uzivatelske remote hesla */
 #define NOTESDIR  "notes"                   /* poznamkove bloky uzivatelov */
 #define GOT_AUTH  "misc/users.auth"         /* real identity z forknuteho tisu */
-//#define IRC_DIR "irc"                       /* userovske IRC veci */
+/* #define IRC_DIR "irc" */                      /* userovske IRC veci */
 #define IRC_SERVERS "misc/ircserv"          /* povolene IRC servre */
 #define COM_LEVEL "misc/comlevel"           /* prehodene levely k prikazom */
 #define REVERSIFILE "reversi.top"           /* tabulka reversiarov */
@@ -283,7 +282,7 @@ sigjmp_buf save_state;
 
 extern int h_errno;
 			       
-//#define MACRODIR "macros" 
+/* #define MACRODIR "macros" */
 #define PRIKAZDIR "prikazy"
 #define MACROFILE "macrofile" 
 #define FORTUNE_FILE "misc/fortune" 
@@ -291,9 +290,9 @@ extern int h_errno;
 #define USERLIST "misc/users.old" 
 #define NOEXITS "noexits" 
 #define DATAFILES "datafiles" 
-//#define MAILFILES "userfiles" 
-//#define HELPFILES "helpfiles" 
-//#define PICTURES "pictures" 
+/* #define MAILFILES "userfiles" 
+#define HELPFILES "helpfiles" 
+#define PICTURES "pictures" */
 #define NOTICEBOARD "misc/noticeboard" 
 #define MAILSPOOL "mailspool" 
 #define CONFIGFILE "config.new" 
@@ -434,7 +433,7 @@ typedef struct notify_struct *NOTIFY;
 struct dama_struct {
 	struct user_struct *hrac[2];
         int plocha[8][8],forcejump,remiza[2],monochrom[2];
-	int natahu,lastmove[2],disptype[2]; //posledny tah [x,y],typ zobrazenia
+	int natahu,lastmove[2],disptype[2]; /* posledny tah [x,y],typ zobrazenia */
         int tah;
         };
 typedef struct dama_struct* DAMA_OBJECT;
@@ -451,7 +450,7 @@ typedef struct dama_struct* DAMA_OBJECT;
 /* ..a uz ho dostali. Cest jeho pamiatke. Co myslis, nastahuju sa nam aj na
    Platona? Mozno mame remote exploit v drivery sietovice... juuuuj!! */
 
-//#define DNL 11
+/* #define DNL 11 */
 /* fok DNL, zjadne DNL! MYSQL RULEZ!! */
 
 #define PUBLIC 0
