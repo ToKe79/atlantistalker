@@ -533,6 +533,8 @@ hb_can=1;
 reset_alarm();
 hb_sec=0;
 
+setlocale(LC_NUMERIC,"sk_SK.UTF-8");
+
 /**** Main program loop. *****/
 
 while(1) {
@@ -14600,6 +14602,21 @@ int get_memory_usage(void)
    return memory;
 }
 
+int get_resmem_usage(void)
+{
+   FILE *meminfofile;
+   char znak,filename[100];
+   int memory;
+   unsigned int tmp;
+
+   sprintf(filename,"/proc/%d/stat",getpid());
+   if ((meminfofile=fopen(filename,"r"))==NULL)
+      return -1;
+   fscanf(meminfofile,"%u %s %c %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u %d %u %u %u %u %u %u %u %u %u %u %u",&tmp,filename,&znak,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&memory,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp,&tmp);
+   fclose(meminfofile);
+   return memory*getpagesize();
+}
+
 void go(user)
 UR_OBJECT user;
 {
@@ -23375,9 +23392,8 @@ RM_OBJECT rm;
 UR_OBJECT u;
 char bstr[80],minlogin[10];
 char *ca[]={ "NONE  ","IGNORE","REBOOT" };
-char memu[20];
 int days,hours,mins,secs;
-int rms,num_clones,mem,size,memo;
+int rms,num_clones,mem,size,memo,memr;
 
 if (user->level==GOD && !strcmp(word[1],"backup")) {
   if (backuptime>0) {
@@ -23417,13 +23433,12 @@ for(u=user_first;u!=NULL;u=u->next) {
       mem+=size;
       }
 
+memr=get_resmem_usage();
 memo=get_memory_usage();
-if (memo/1000000) sprintf(memu,"%d %03d %03d",memo/1000000,(memo%1000000)/1000,memo%1000);
-else sprintf(memu,"%d %03d",memo/1000,memo%1000);
 
 if (!typ) {
   
-  sprintf(text,"Uptime ~OL%d~RSd ~OL%d~RSh,  ~OL%d~RSludi,  ~OL%d~RSrekord, nachamranych ~OL%s~RS bajtov\nRozoznanych ~OL%d~RS adries, Hits ~OL%d~RS, Pos ~OL%d~RS, Timeouts ~OL%lu~RS + ~OL%lu~RS.\n",days,hours,num_of_users,max_users_was,memu, resc_resolved, resc_cached, rescn,tajmauts,tajmautz);
+  sprintf(text,"Uptime ~OL%d~RSd ~OL%d~RSh, ~OL%d~RS ludi, ~OL%d~RS rekord, nachamranych ~OL%'d~RS bajtov.\nRozoznanych ~OL%d~RS adries, Hits ~OL%d~RS, Pos ~OL%d~RS, Timeouts ~OL%lu~RS + ~OL%lu~RS.\nVyuzita fyzicka pamat: ~OL%'d~RS bajtov.\n",days,hours,num_of_users,max_users_was,memo,resc_resolved,resc_cached, rescn,tajmauts,tajmautz,memr);
   write_user(user,text);
   return;
  }
@@ -23438,17 +23453,15 @@ if (minlogin_level==-1) strcpy(minlogin,"NONE");
 else strcpy(minlogin,level_name[minlogin_level]);
 
 /* Show header parameters */
-sprintf(text,"~FTID Procesu   : ~FG%d\n~FTSpusteny dna : ~FG%s\n~FTProces bezi  : ~FG%d dni, %d hodin, %d minut a %d sekund\n",getpid(),bstr,days,hours,mins,secs);
-write_user(user,text);
-sprintf(text,"~FTPorty (M/W)  : ~FG%d,  %d\n\n",port[0],port[1]);
+sprintf(text,"~FTID Procesu   : ~FG%d\n~FTSpusteny dna : ~FG%s\n~FTProces bezi  : ~FG%d dni, %d hodin, %d minut a %d sekund\n~FTVyuzita RAM  : ~FG%'d bajtov\n~FTPorty (M/W)  : ~FG%d,  %d\n\n",getpid(),bstr,days,hours,mins,secs,memr,port[0],port[1]);
 write_user(user,text);
 
 /* Show others */
 sprintf(text,"Max uzivatelov         : %-5d        Momentalny pocet uziv. : %d\n",max_users,num_of_users);
 write_user(user,text);
-sprintf(text,"Max write timeouts     : %3d/%-3d      Momentalny pocet klon. : %d\n",max_timeouts,max_timeoutz,num_clones);
+sprintf(text,"Max write timeouts     : %4d/%-4d    Momentalny pocet klon. : %d\n",max_timeouts,max_timeoutz,num_clones);
 write_user(user,text);
-sprintf(text,"Min. pristupovy level  : %-4s         Max. login necinost  .: %d secs.\n",minlogin,login_idle_time);
+sprintf(text,"Min. pristupovy level  : %-4s         Max. login necinost    : %d secs.\n",minlogin,login_idle_time);
 write_user(user,text);
 sprintf(text,"Max. uzivat. necinnost : %-4d secs.   Volanie heartbeatu     : %d\n",user_idle_time,heartbeat);
 write_user(user,text);
@@ -23470,7 +23483,8 @@ sprintf(text,"Standardne charecho    : %s          Systemovy log          : %s\n
 write_user(user,text);
 sprintf(text,"Vynimocny stav sposobi : %s       Objekty spolu alokuju  : %d\n",ca[crash_action],mem);
 write_user(user,text);
-sprintf(text,"Velkost uziv. strukt.  : %-6lu       Nachamrana pamat: ~OL%s~RS bajtov\n", sizeof(struct user_struct),memu);
+sprintf(text,"Velkost uziv. strukt.  : %-6lu       Nachamrana pamat: ~OL%'d~RS bajtov\n", sizeof(struct user_struct),memo);
+
 write_user(user,text);
 }
 

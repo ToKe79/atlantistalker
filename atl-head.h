@@ -41,6 +41,7 @@
 #include <setjmp.h>
 #include <stdarg.h>
 #include <libxml/xmlwriter.h>
+#include <locale.h>
 
 #ifdef HPUX_SB
   #define FD_CAST (int *)
@@ -1875,6 +1876,7 @@ void handle_webinput();
 void write_web(int socket,char *str);
 void eliminate_webuser(int socket);
 int get_memory_usage(void);
+int get_resmem_usage(void);
 void do_nothing();
 void connecthost_timeout();
 void cmon_auth(UR_OBJECT gdo);
