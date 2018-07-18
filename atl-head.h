@@ -1426,7 +1426,7 @@ void write_syslog(char *str,int write_time);
 void record(RM_OBJECT rm,char *str);
 void record_tell(UR_OBJECT user,char *str);
 void record_shout(char *str);
-void record_portalisshout(char *str);
+void record_portalisshout(char *lbl,char *str);
 void record_gossip(char *str);
 void record_quest(char *str);
 void record_wizshout(char *str);

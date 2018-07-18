@@ -5736,11 +5736,11 @@ revsosbuff[revsosline][REVIEW_LEN+1]='\0';
 revsosline=(revsosline+1)%REVIEW_LINES;
 }
 
-void record_portalisshout(char *str)
+void record_portalisshout(char *lbl, char *str)
 {
 wash_bell(str);
-sprintf(revporshbuff[revporshline],"%2d:%02d ",thour,tmin);
-sstrncpy(revporshbuff[revporshline]+6,str,REVIEW_LEN-6);
+sprintf(revporshbuff[revporshline],"%3s%2d:%02d ",lbl,thour,tmin);
+sstrncpy(revporshbuff[revporshline]+9,str,REVIEW_LEN-9);
 revporshbuff[revporshline][REVIEW_LEN]='\n';
 revporshbuff[revporshline][REVIEW_LEN+1]='\0';
 revporshline=(revporshline+1)%REVIEW_LINES;
@@ -12296,13 +12296,13 @@ write_user(user,text);
 sprintf(text,"~OL~FY\252C0%s %s:~RS~FW %s\n",name,pohl(user,"\253S1","\253S2"),inpstr);
 if (user->room->group!=1) { /* ()STROV */
   write_room_except(user->room,text,user); /* do roomy...      */
-  sprintf(texthb,"%s%s",user->room->label,text);
-  record_portalisshout(texthb);
+  /* sprintf(texthb,"%s%s",user->room->label,text); */
+  record_portalisshout(user->room->label,text);
   for(i=0;i<MAX_LINKS;i++) {               /* a vsetkych okolo */
     if (user->room->link[i]!=NULL) {
       write_room_except(user->room->link[i],text,user);
      }
-   }       
+   }
   hesh(user->room);
   return;
  }
@@ -12314,7 +12314,7 @@ if (user->jailed) decrease_pp(user,MAXPP,0);
 	else decrease_pp(user, SHOUTDEC, SHOUTDYN);	
 if (user->level<KIN && swears>1) setpp(user,user->pp/swears);
 /* HEHEHE, vydelime userove PPcka poctom nadavok v shoute (V) */ 
-hesh(user->room);	
+hesh(user->room);
 }
 
 /*** Gossip something - uncenzored Atlantis channel! 
@@ -13374,8 +13374,8 @@ write_user(user,text);
 
 if (user->room->group!=1) {
   write_room_except(user->room,text,user);     /* do roomy...      */
-  sprintf(texthb,"%s%s",user->room->label,text);
-  record_portalisshout(texthb);
+  /* sprintf(texthb,"%s%s",user->room->label,text); */
+  record_portalisshout(user->room->label,text);
   for(i=0;i<MAX_LINKS;i++) {               /* a vsetkych okolo */
     if (user->room->link[i]!=NULL)
      write_room_except(user->room->link[i],text,user);
@@ -14421,8 +14421,8 @@ write_user(user,text);
 
 if (user->room->group!=1) {
    write_room_except(user->room,text,user); /* do roomy...      */
-   sprintf(texthb,"%s%s",user->room->label,text);
-   record_portalisshout(texthb);
+   /* sprintf(texthb,"%s%s",user->room->label,text); */
+   record_portalisshout(user->room->label,text);
    for(i=0;i<MAX_LINKS;i++) {               /* a vsetkych okolo */
        if (user->room->link[i]!=NULL)
           write_room_except(user->room->link[i],text,user);
@@ -19044,9 +19044,9 @@ else kolko=REVIEW_LINES;
 for(i=0;i<REVIEW_LINES;++i) {
   if (revporshbuff[(revporshline+i)%REVIEW_LINES][0]) {
     strcpy(rum,"   ");
-    rum[0]=revporshbuff[(revporshline+i)%REVIEW_LINES][0+6];
-    rum[1]=revporshbuff[(revporshline+i)%REVIEW_LINES][1+6];
-    rum[2]=revporshbuff[(revporshline+i)%REVIEW_LINES][2+6];
+    rum[0]=revporshbuff[(revporshline+i)%REVIEW_LINES][0];
+    rum[1]=revporshbuff[(revporshline+i)%REVIEW_LINES][1];
+    rum[2]=revporshbuff[(revporshline+i)%REVIEW_LINES][2];
     ok=0;
     for(rm=room_first;rm!=NULL;rm=rm->next) 
      if (!strcmp(rm->label,rum)) {
@@ -19065,9 +19065,9 @@ for(i=0;i<REVIEW_LINES;++i) {
   line=(revporshline+i)%REVIEW_LINES;
   if (revporshbuff[line][0]) {
     strcpy(rum,"   ");
-    rum[0]=revporshbuff[line][0+6];
-    rum[1]=revporshbuff[line][1+6];
-    rum[2]=revporshbuff[line][2+6];
+    rum[0]=revporshbuff[line][0];
+    rum[1]=revporshbuff[line][1];
+    rum[2]=revporshbuff[line][2];
     ok=0;
     for(rm=room_first;rm!=NULL;rm=rm->next) 
      if (!strcmp(rm->label,rum)) {
@@ -19094,7 +19094,7 @@ for(i=0;i<REVIEW_LINES;++i) {
         strtolower(pom);
         /* *** */
         if (!strlen(inpstr) || strstr(pom,inpstr)) {
-          write_user(user,(user->timeinrevt)?revporshbuff[line]+9:revporshbuff[line]+3);
+          write_user(user,(user->timeinrevt)?revporshbuff[line]+3:revporshbuff[line]+9);
          }
         free(pom);	   
        }
