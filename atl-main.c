@@ -10428,7 +10428,7 @@ if (!(strncmp(word[1],"col",3))) {
 	 write_user(user,"~FTPouzi:~FW .set color <reset | shout | gossip | say | tell | meno | notify> <c.>~RS\n"); 
 	 sprintf(text,"~FTCisla farieb:~FW");
  	 for (lines=1;lines<16;lines++) {
-	  sprintf(id," %s%d~RS",usercols[lines],lines);
+	  sprintf(id," %s%d~RS",usercolcodes[lines],lines);
 	  strcat (text,id);
 	 }
 	 strcat(text,".\n");
@@ -10437,12 +10437,12 @@ if (!(strncmp(word[1],"col",3))) {
          write_user(user,text);
          i=0;
          sprintf(text," %s\253S1~RS~FW,  %s\253G1~RS~FW,  %s\253P1~RS~FW,  %sNotify~RS~FW / %s\253Im~RS~FW %s\253Ty~RS~FW.\n",
-         user->col[0]?usercols[user->col[0]]:usercols[defaultcols[0]],
-         user->col[1]?usercols[user->col[1]]:usercols[defaultcols[1]],
-         user->col[2]?usercols[user->col[2]]:usercols[defaultcols[2]],
-         user->col[6]?usercols[user->col[6]]:usercols[defaultcols[6]],
-         user->col[3]?usercols[user->col[3]]:usercols[defaultcols[3]],
-         user->col[4]?usercols[user->col[4]]:usercols[defaultcols[4]]);
+         user->col[0]?usercolcodes[user->col[0]]:usercolcodes[defaultcols[0]],
+         user->col[1]?usercolcodes[user->col[1]]:usercolcodes[defaultcols[1]],
+         user->col[2]?usercolcodes[user->col[2]]:usercolcodes[defaultcols[2]],
+         user->col[6]?usercolcodes[user->col[6]]:usercolcodes[defaultcols[6]],
+         user->col[3]?usercolcodes[user->col[3]]:usercolcodes[defaultcols[3]],
+         user->col[4]?usercolcodes[user->col[4]]:usercolcodes[defaultcols[4]]);
 	 write_user(user,text);
          return;
 	}
