@@ -18577,7 +18577,7 @@ write_user(user,text);
 sprintf(text," ~FTLevel ~OL~FM2: VOJAK   ~RS~FW- ~OLvojak, majuci nasu doveru          ~OL~FM%-2d     (%-3d)      ~OL~FR%d~RS~FW\n", soldier, slave+citizen+soldier, tlt4level[2]);
 write_user(user,text);
 
-sprintf(text," ~FTLevel ~OL~FM3: HRDINA  ~RS~FW- ~OLsilny a odvazny vodca bojovnikov   ~OL~FM%-2d     (%-3d)      ~OL~FR%d~RS~FW\n", warrior, slave+citizen+soldier+warrior, tlt4level[3]);
+sprintf(text," ~FTLevel ~OL~FM3: BOJOVNIK~RS~FW- ~OLsilny a odvazny vodca bojovnikov   ~OL~FM%-2d     (%-3d)      ~OL~FR%d~RS~FW\n", warrior, slave+citizen+soldier+warrior, tlt4level[3]);
 write_user(user,text);
 
 sprintf(text," ~FTLevel ~OL~FM4: MUDRC   ~RS~FW- ~OLinteligencia Atlantidy             ~OL~FM%-2d     (%-3d)      ~OL~FR%d~RS~FW\n", sage, slave+citizen+soldier+warrior+sage, tlt4level[4]);
@@ -18586,13 +18586,16 @@ write_user(user,text);
 sprintf(text," ~FTLevel ~OL~FM5: KNAZ    ~RS~FW- ~OLvazena a vplyvna osobnost          ~OL~FM%-2d     (%-3d)      ~OL~FR%d~RS~FW\n", priest, slave+citizen+soldier+warrior+sage+priest, tlt4level[5]);
 write_user(user,text);
 
-//sprintf(text," ~FTLevel ~OL~FY6: CARODEJ ~RS~FW- ~OLcarodejnik ovladajuci vyssiu magiu ~OL~FY%-2d     (%-3d)    ~RS~FR(.faq)~RS~FW\n", wizard, slave+citizen+soldier+warrior+sage+priest+wizard);
-//write_user(user,text);
+sprintf(text," ~FTLevel ~OL~FY6: MAG     ~RS~FW- ~OLcarodejnik ovladajuci vyssiu magiu ~OL~FY%-2d     (%-3d)    ~RS~FR(.faq)~RS~FW\n", wizard, slave+citizen+soldier+warrior+sage+priest+wizard);
+write_user(user,text);
 
 sprintf(text," ~FTLevel ~OL~FY6: KRAL    ~RS~FW- ~OLjeden z vladcov, prava ruka Bohov  ~OL~FY%-2d     (%-3d)    ~RS~FR(.faq)~RS~FW\n", king, slave+citizen+soldier+warrior+sage+priest+wizard+king);
 write_user(user,text);
 
-sprintf(text," ~FTLevel ~OL~FY7: GOD     ~RS~FW- ~OLbozski stvoritelia Atlantidy       ~OL~FY%-2d     (%-3d)    ~RS~FR(.faq)~RS~FW\n", god, slave+citizen+soldier+warrior+sage+priest+wizard+king+god);
+sprintf(text," ~FTLevel ~OL~FY7: BOH     ~RS~FW- ~OLbozski stvoritelia Atlantidy       ~OL~FY%-2d     (%-3d)    ~RS~FR(.faq)~RS~FW\n", god, slave+citizen+soldier+warrior+sage+priest+wizard+king+god);
+write_user(user,text);
+
+sprintf(text," ~FTLevel ~OL~FY7: SASO    ~RS~FW- ~OLdvorny zabavac Atlantidy :-)~RS~FW\n");
 write_user(user,text);
 
 sprintf(text,"\n~RS~FT[=]=[=]=[=]=[=]=[=]=[=]=[=]=[  ~OL~FTSpolu %-3d prikazov  ~RS~FT]=[=]=[=]=[=]=[=]=[=]=[=]=[=]\n",slave+citizen+soldier+warrior+sage+priest+wizard+king+god);
