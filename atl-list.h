@@ -7,7 +7,7 @@
  
 char *level_name[]={ 
 //"SLAVE","CITIZEN","SOLDIER","WARRIOR","SAGE","PRIEST","WIZARD","KING","GOD","GODBOT","*" };
-"OTROK","OBCAN","VOJAK","HRDINA","MUDRC","KNAZ","GOD","KRAL","GOD","GODBOT","OBCAN","*" };
+"OTROK","OBCAN","VOJAK","BOJOVNIK","MUDRC","KNAZ","MAG","KRAL","BOH","SASO","OBCAN","*" };
 
 int tlt4level[]={ 0,0,2,5,10,18,0,0,0,0 };
 
