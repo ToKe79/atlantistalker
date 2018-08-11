@@ -18565,37 +18565,37 @@ while (command[com][0]!='*') {
 
 
 write_user(user,"~RS~FT[=]=[=]=[=]=[=]=[=]=[=]=[ ~OL~FYLevely obyvatelov Atlantidy: ~RS~FT]=[=]=[=]=[=]=[=]=[=]=[=]\n\n");
-write_user(user,"                                                         ~OL~FGPRIKAZY      potrebny\n");
-write_user(user,"                                                      ~OL~FGnove   celkove  cas (dni)\n");
+write_user(user,"                                                          ~OL~FGPRIKAZY      potrebny\n");
+write_user(user,"                                                       ~OL~FGnove   celkove  cas (dni)\n");
 
-sprintf(text," ~FTLevel ~OL~FB0: OTROK   ~RS~FW- ~OLto je bezpravny jedinec            ~OL~FB%-2d     (%-3d)      ~OL~FR%d~RS~FW\n", slave, slave, tlt4level[0]);
+sprintf(text," ~FTLevel ~OL~FB0: OTROK    ~RS~FW- ~OLto je bezpravny jedinec            ~OL~FB%-2d     (%-3d)      ~OL~FR%d~RS~FW\n", slave, slave, tlt4level[0]);
 write_user(user,text);
 
-sprintf(text," ~FTLevel ~OL~FM1: OBCAN   ~RS~FW- ~OLpravoplatny obcan Atlantidy        ~OL~FM%-2d     (%-3d)      ~OL~FR%d~RS~FW\n", citizen, slave+citizen, tlt4level[1]);
+sprintf(text," ~FTLevel ~OL~FM1: OBCAN    ~RS~FW- ~OLpravoplatny obcan Atlantidy        ~OL~FM%-2d     (%-3d)      ~OL~FR%d~RS~FW\n", citizen, slave+citizen, tlt4level[1]);
 write_user(user,text);
 
-sprintf(text," ~FTLevel ~OL~FM2: VOJAK   ~RS~FW- ~OLvojak, majuci nasu doveru          ~OL~FM%-2d     (%-3d)      ~OL~FR%d~RS~FW\n", soldier, slave+citizen+soldier, tlt4level[2]);
+sprintf(text," ~FTLevel ~OL~FM2: VOJAK    ~RS~FW- ~OLvojak, majuci nasu doveru          ~OL~FM%-2d     (%-3d)      ~OL~FR%d~RS~FW\n", soldier, slave+citizen+soldier, tlt4level[2]);
 write_user(user,text);
 
-sprintf(text," ~FTLevel ~OL~FM3: BOJOVNIK~RS~FW- ~OLsilny a odvazny vodca bojovnikov   ~OL~FM%-2d     (%-3d)      ~OL~FR%d~RS~FW\n", warrior, slave+citizen+soldier+warrior, tlt4level[3]);
+sprintf(text," ~FTLevel ~OL~FM3: BOJOVNIK ~RS~FW- ~OLsilny a odvazny vodca bojovnikov   ~OL~FM%-2d     (%-3d)      ~OL~FR%d~RS~FW\n", warrior, slave+citizen+soldier+warrior, tlt4level[3]);
 write_user(user,text);
 
-sprintf(text," ~FTLevel ~OL~FM4: MUDRC   ~RS~FW- ~OLinteligencia Atlantidy             ~OL~FM%-2d     (%-3d)      ~OL~FR%d~RS~FW\n", sage, slave+citizen+soldier+warrior+sage, tlt4level[4]);
+sprintf(text," ~FTLevel ~OL~FM4: MUDRC    ~RS~FW- ~OLinteligencia Atlantidy             ~OL~FM%-2d     (%-3d)      ~OL~FR%d~RS~FW\n", sage, slave+citizen+soldier+warrior+sage, tlt4level[4]);
 write_user(user,text);
 
-sprintf(text," ~FTLevel ~OL~FM5: KNAZ    ~RS~FW- ~OLvazena a vplyvna osobnost          ~OL~FM%-2d     (%-3d)      ~OL~FR%d~RS~FW\n", priest, slave+citizen+soldier+warrior+sage+priest, tlt4level[5]);
+sprintf(text," ~FTLevel ~OL~FM5: KNAZ     ~RS~FW- ~OLvazena a vplyvna osobnost          ~OL~FM%-2d     (%-3d)      ~OL~FR%d~RS~FW\n", priest, slave+citizen+soldier+warrior+sage+priest, tlt4level[5]);
 write_user(user,text);
 
-sprintf(text," ~FTLevel ~OL~FY6: MAG     ~RS~FW- ~OLcarodejnik ovladajuci vyssiu magiu ~OL~FY%-2d     (%-3d)    ~RS~FR(.faq)~RS~FW\n", wizard, slave+citizen+soldier+warrior+sage+priest+wizard);
+sprintf(text," ~FTLevel ~OL~FY6: MAG      ~RS~FW- ~OLcarodejnik ovladajuci vyssiu magiu ~OL~FY%-2d     (%-3d)    ~RS~FR(.faq)~RS~FW\n", wizard, slave+citizen+soldier+warrior+sage+priest+wizard);
 write_user(user,text);
 
-sprintf(text," ~FTLevel ~OL~FY6: KRAL    ~RS~FW- ~OLjeden z vladcov, prava ruka Bohov  ~OL~FY%-2d     (%-3d)    ~RS~FR(.faq)~RS~FW\n", king, slave+citizen+soldier+warrior+sage+priest+wizard+king);
+sprintf(text," ~FTLevel ~OL~FY7: KRAL     ~RS~FW- ~OLjeden z vladcov, prava ruka Bohov  ~OL~FY%-2d     (%-3d)    ~RS~FR(.faq)~RS~FW\n", king, slave+citizen+soldier+warrior+sage+priest+wizard+king);
 write_user(user,text);
 
-sprintf(text," ~FTLevel ~OL~FY7: BOH     ~RS~FW- ~OLbozski stvoritelia Atlantidy       ~OL~FY%-2d     (%-3d)    ~RS~FR(.faq)~RS~FW\n", god, slave+citizen+soldier+warrior+sage+priest+wizard+king+god);
+sprintf(text," ~FTLevel ~OL~FY8: BOH      ~RS~FW- ~OLbozski stvoritelia Atlantidy       ~OL~FY%-2d     (%-3d)    ~RS~FR(.faq)~RS~FW\n", god, slave+citizen+soldier+warrior+sage+priest+wizard+king+god);
 write_user(user,text);
 
-sprintf(text," ~FTLevel ~OL~FY7: SASO    ~RS~FW- ~OLdvorny zabavac Atlantidy :-)~RS~FW\n");
+sprintf(text," ~FTLevel ~OL~FY9: SASO     ~RS~FW- ~OLdvorny zabavac Atlantidy :-)~RS~FW\n");
 write_user(user,text);
 
 sprintf(text,"\n~RS~FT[=]=[=]=[=]=[=]=[=]=[=]=[=]=[  ~OL~FTSpolu %-3d prikazov  ~RS~FT]=[=]=[=]=[=]=[=]=[=]=[=]=[=]\n",slave+citizen+soldier+warrior+sage+priest+wizard+king+god);
@@ -25569,7 +25569,11 @@ if ((ship=get_room(SHIPPING_SHIP,NULL))==NULL) return;
 
 void send_noticeboard_digest(char* komu)
 {
-send_forward_email(komu,NOTICE_DIGEST);
+	FILE *fp;
+	if(fp=ropen(NOTICE_DIGEST,"r")) {
+		fclose(fp);
+		send_forward_email(komu,NOTICE_DIGEST);
+	}
 }
 
 void obnov_statline_userof()
