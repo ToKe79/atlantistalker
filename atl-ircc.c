@@ -725,7 +725,7 @@ user->irc_reg=0;
 for (i=0; i<10; i++) user->channels[i][0]='\0';      
 user->irc_chan[0]='\0';
 if (user->irc_name[0]=='\0') sprintf(user->irc_name,"%s z Atlantidy", user->name);
-sprintf(text,"USER %s atlantis.sk atlantis.sk :%s\n", user->name, user->irc_name);
+sprintf(text,"USER %s %s %s :%s\n", user->name, TALKER_TELNET_HOST, TALKER_TELNET_HOST, user->irc_name);
 write(user->remote_login_socket,text,strlen(text));
 sleep (1);
 if (user->irc_defnick[0]!='\0') {

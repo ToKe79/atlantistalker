@@ -216,6 +216,13 @@ int writeerror,max_timeouts,max_timeoutz;
 #define REVTELL_TMP "mailspool/rt_tmp"      /* revtell tempfile */
 #define CLOVECEFILES "xclosave"             /* clovece */
 #define BACKUP_DIR "backup_db"              /* adresar na zalohy db */
+#define TALKER_TELNET_HOST "vps.vudiq.sk"   /* host, kde bezi talker */
+#define TALKER_EMAIL_HOST "vps.vudiq.sk"    /* e-mailovy host */
+#define WIZZES_EMAIL_ALIAS "wizzes"         /* alias, na ktory sa posieju e-maily pre spravcov */
+#define TALKER_EMAIL_ALIAS "talker"         /* alias, na ktory sa posielaju vseobecne e-maily */
+#define TALKER_WEB_SITE "https://vps.vudiq.sk/talker" /* site, kde bezi web talkera */
+#define TALKER_CITY "Bratislava"            /* mesto, kde talker bezi */
+#define TALKER_COUNTRY "Slovensko"          /* krajina, kde talker bezi */
 
 /* Status line */
 enum statline {NONEMODE,UNKNOWN,LINEMODE,CHARMODE};
@@ -1170,12 +1177,11 @@ int            auth_rtimeout;
    kuknut .... a pripadne zmenit, ale nexajte to tak ako to je, je to dobre
    :> */
 /*   
-#define talker_signature  "===============================================================================\nForwardovana sprava z Atlantis Talkera (telnet vps.vudiq.sk 7000)\n"
-#define talker_signature2 "===============================================================================\nPoslane z Atlantis Talkera (telnet vps.vudiq.sk 7000, www.atlantis.sk)\n"
+#define talker_signature  "===============================================================================\nForwardovana sprava z Atlantis Talkera (telnet %s %d)\n"
+#define talker_signature2 "===============================================================================\nPoslane z Atlantis Talkera (telnet %s %d, %s)\n"
 */
 
-#define talker_signature  "-------\nAtlantis talker (telnet vps.vudiq.sk 7000, http://www.atlantis.sk)\n"
-#define talker_signature2 "-------\nAtlantis talker (telnet vps.vudiq.sk 7000, http://www.atlantis.sk)\n"
+#define talker_signature  "-------\nAtlantis talker (telnet %s %d, %s)\n"
 
 /* Sem, ale to uz fakt presahuje vsetko, neviem preco akurat sem, ale predsa-
    len som sa rozhodol ze sem, aj ked to je uplne f pazi, ale sem, sem, sem,

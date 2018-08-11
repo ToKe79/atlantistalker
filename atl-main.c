@@ -321,9 +321,9 @@ if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
 	}
 	
 inpstr=remove_first(inpstr);	
-fprintf(fp,"Sprava od: %s@vps.vudiq.sk:\n",user->name);
+fprintf(fp,"Sprava od: %s@%s:\n",user->name,TALKER_TELNET_HOST);
 fprintf(fp,"%s\n",inpstr);
-fprintf(fp,"--=[ Atlantis talker (telnet vps.vudiq.sk 7000, http://vps.vudiq.sk ]=--\n");
+fprintf(fp,"--=[ Atlantis talker (telnet %s %d, %s ]=--\n", TALKER_TELNET_HOST,port[0],TALKER_WEB_SITE);
 fclose(fp);
 send_icq_page(user,icq_num,filename);
 return;
@@ -4236,7 +4236,7 @@ if (!message && !nukehim) write_user(user,"\n~OL~FBDovidenia nabuduce!\n\n");
 	  sprintf(text,"~OL~FTCelkovo mas na Atlantise odvisenych ~FW~BB%d~RS~FT~OL dni, ~FW~BB%d~RS~FT~OL hodin a ~FW~BB%d~RS~FT~OL minut.~RS\n",days,hours,minutes);
 	writecent(user,text);
 	write_user(user,"~FR--------------------------------------------------------------------------------~RS\n");
-	  sprintf(text,"~FWToto bol online rozhovor na talkri ~OLvps.vudiq.sk 7000 ~RS~FW- Bratislava, Slovensko~RS\n");
+	  sprintf(text,"~FWToto bol online rozhovor na talkri ~OL%s %d ~RS~FW- %s, %s~RS\n",TALKER_TELNET_HOST,port[0],TALKER_CITY,TALKER_COUNTRY);
 	writecent(user,text);
 	  sprintf(text,"~FW%s nas navstevnik cislo ~BB ~OL%08.0f ~RS~RS~FW, tesime sa na dalsiu navstevu! :)~RS\n",pohl(user,"Bol si","Bola si"),counter(0));
 	writecent(user,text);
@@ -4430,12 +4430,13 @@ int i, line, size,cnt=0;
 FILE *fp;
 time_t akt_cas;
 char *ptr;
+char email[255];
 
 size=0;
 if (sp) {
   if ((fp=ropen(REVTELL_TMP,"w"))==NULL) return; 
   time (&akt_cas);
-  fprintf(fp,"From: Atlantis Talker <atlantis@vps.vudiq.sk>\n");
+  fprintf(fp,"From: Atlantis Talker <%s@%s>\n",TALKER_EMAIL_ALIAS,TALKER_EMAIL_HOST);
   fprintf(fp,"To: %s <%s>\n", user->name,user->email);
   fprintf(fp,"Subject: revtell (%s)\n\n", zobraz_datum(&akt_cas,5));
  }
@@ -4999,7 +5000,7 @@ FILE *fp;
 char filename[80];
 char userheslo[7],usermeno[13], bogus[70];
 char par[200];
-char text[100];
+char text[255];
 time_t t,akt_cas;
 
 strcpy(adr,user->email);
@@ -5058,7 +5059,8 @@ while(!feof(fp)) {
 		return;
 		}
 	if (strstr(adr,bogus)) { /*TAKY EMAIL UZ EXISTUJE !*/
-		write_user(user,"\n~OL~FRPrepac, ale na tuto adresu je uz registrovany iny uzivatel.\nAk si myslis ze to nieje mozne, kontaktuj GODov Atlantisu (atlantis@vps.vudiq.sk)\n");
+		sprintf(text,"\n~OL~FRPrepac, ale na tuto adresu je uz registrovany iny uzivatel.\nAk si myslis ze to nieje mozne, kontaktuj GODov Atlantisu (%s@%s)\n",TALKER_EMAIL_ALIAS,TALKER_EMAIL_HOST);
+		write_user(user,text);
 		strcpy(user->email,"Nema ziadny email");
 		fclose(fp);
                 sprintf(filename,"%s",MULTI_REQUEST);
@@ -8609,6 +8611,7 @@ FILE *fp;
 UR_OBJECT u;
 char filename[80];
 int on=0;
+char signature[255];
 
 if ((u=get_user_exact(name))!=NULL) {
   on=1;
@@ -8642,7 +8645,7 @@ if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
   return;
   }
 
-fprintf(fp,"From: %s <%s@vps.vudiq.sk>\n", from2, from2);
+fprintf(fp,"From: %s <%s@%s>\n",from2,from2,TALKER_EMAIL_HOST);
 fprintf(fp,"To: %s <%s>\n",u->name,u->email);
 fprintf(fp,"X-mailer: Atlantis Talker ver. %s\n",ATLANTIS);
 if (u->autofwd) {
@@ -8661,7 +8664,8 @@ else {
   fprintf(fp,"Na atlantis ti prisla nova posta. Odosielatel: %s\n",from);
  }
   fputs("\n\n",fp);
-  fputs(talker_signature,fp);
+  sprintf(signature, talker_signature,TALKER_TELNET_HOST,port[0],TALKER_WEB_SITE);
+  fputs(signature,fp);
  fclose(fp);
 send_forward_email(u->email,filename);
 if (!on) {
@@ -8679,6 +8683,7 @@ char *to, *message;
 FILE *fp;
 char filename[80];
 time_t akt_cas;
+char signature[255];
 
 sprintf(filename,"%s/%s.EMAIL",MAILSPOOL,user->name);
 if ((fp=ropen(filename,"w"))==NULL) { /*APPROVED*/
@@ -8686,7 +8691,7 @@ if ((fp=ropen(filename,"w"))==NULL) { /*APPROVED*/
   return;
   }
     
-fprintf(fp,"From: %s <%s@vps.vudiq.sk>\n",user->name, user->name);
+fprintf(fp,"From: %s <%s@%s>\n",user->name,user->name,TALKER_EMAIL_HOST);
 fprintf(fp,"To: %s <%s>\n",to,to);
 fprintf(fp,"X-mailer: Atlantis Talker ver. %s\n",ATLANTIS);
 fprintf(fp,"Subject: %s\n", user->subject);
@@ -8694,7 +8699,8 @@ fprintf(fp,"\n");
 colour_com_strip(message);
 fputs(message,fp);
 fputs("\n\n",fp);
-fputs(talker_signature2,fp);
+sprintf(signature, talker_signature,TALKER_TELNET_HOST,port[0],TALKER_WEB_SITE);
+fputs(signature,fp);
 fclose(fp);
 send_forward_email(to,filename);
 user->subject[0]='\0';
@@ -8791,17 +8797,12 @@ if (!mins || mins>4) strcat(text,"minut.\n");
 writecent(user,text);
 
 write_user(user,"~FY     +--------------------------------------------------------------------+\n");
-write_user(user,"~FY     | ~FTHlavny programator   :   ~FWSpartakus (spartak@platon.vps.vudiq.sk)    ~FY|\n");
-write_user(user,"~FY     | ~FTProgram, design, web :   ~FWRider (rider@lonestar.sk)                 ~FY|\n");
-write_user(user,"~FY     | ~FTProgramator          :   ~FWViper (viper@vps.vudiq.sk)                 ~FY|\n");
-write_user(user,"~FY     | ~FTPrve upravy NUTS333  :   ~FWBuko (buko@platon.vps.vudiq.sk), Hruza     ~FY|\n");
-write_user(user,"~FY     | ~FTOtazky na GODov      :   ~FWgods@vps.vudiq.sk                          ~FY|\n");
-write_user(user,"~FY     | ~FTFotky posielajte na  :   ~FWfoto@vps.vudiq.sk                          ~FY|\n");
-write_user(user,"~FY     | ~FTHlasenia o chybach   :   ~FWbugs@vps.vudiq.sk                          ~FY|\n");
-write_user(user,"~FY     | ~FTOficialna homepage   :   ~FWhttp://vps.vudiq.sk                    ~FY|\n");
+write_user(user,"~FY     | ~FTProgram design        :  ~FWRider (rider@lonestar.sk)                 ~FY|\n");
+write_user(user,"~FY     | ~FTPovodni programatori  :  ~FWSpartakus, Viper, Buko, Hruza             ~FY|\n");
+write_user(user,"~FY     | ~FTSucasny \"programator\" :  ~FWVoodoo                                    ~FY|\n");
+write_user(user,"~FY     | ~FTZalozene na NUTS333   :  ~FW.pomoc credits                            ~FY|\n");
 write_user(user,"~FY     +--------------------------------------------------------------------+\n");
 
-//send_noticeboard_digest("gods@vps.vudiq.sk");                                  
 }
 
 void show_user(user,fajl)
@@ -9442,7 +9443,7 @@ if(!(fp2=ropen("fmail.tmp","w"))) { /*APPROVED*/
   return;
  }
 
-fprintf(fp2,"From: %s <%s@vps.vudiq.sk>\n", user->name, user->name);
+fprintf(fp2,"From: %s <%s@%s>\n",user->name,user->name,TALKER_EMAIL_HOST);
 fprintf(fp2,"To: %s\n",word[1]);
 switch (what) {
   case 0: fprintf(fp2,"Subject: Tvoj mailbox z Atlantisu\n"); break;
@@ -10614,7 +10615,8 @@ if (!(strncmp(word[1],"who",3))) {
     if (!strcmp(word[2],"copy")) {
       word[3][0]=toupper(word[3][0]);
       if (!strcmp(user->name,word[3])) {
-        write_user(user,"Skin si mozes editovat pomocou WHO skin editora na adrese ~OLvps.vudiq.sk/who\n");
+        sprintf(text,"Skin si mozes editovat pomocou WHO skin editora na adrese ~OL%s/editor\n",TALKER_WEB_SITE);
+        write_user(user,text);
         return;
        }
       if (word[3][0]=='+') type=0; else type=1;
@@ -10697,7 +10699,8 @@ if (!(strncmp(word[1],"who",3))) {
 	     }
 	   }
         write_user(user,"~FTPouzitie:~FW .set who <n> - nastavi typ ~OL.who~RS urceny cislom <n>\n");
-        write_user(user,"~FTTypy:~FW     ~OL0~OL - definovatelny who skin!  ~FRhttp://vps.vudiq.sk/who\n");
+	sprintf(text,"~FTTypy:~FW     ~OL0~OL - definovatelny who skin!  ~FR%s/editor\n",TALKER_WEB_SITE);
+        write_user(user,text);
         write_user(user,"          ~OL1~RS - basic    (zakladny typ, Atlantis)\n");
         write_user(user,"          ~OL2~RS - nature   (typ ladeny do prirodnych farieb)\n");
         write_user(user,"          ~OL3~RS - cyberia  (mierne avangardny sci-fi typ) \n"); 
@@ -10745,7 +10748,8 @@ if (!(strncmp(word[1],"exa",3))) {
     if (!strcmp(word[2],"copy")) {
       word[3][0]=toupper(word[3][0]);
       if (!strcmp(user->name,word[3])) {
-        write_user(user,"Skin si mozes editovat na adrese ~OLvps.vudiq.sk/examine\n");
+        sprintf(text,"Skin si mozes editovat na adrese ~OL%s/editor\n",TALKER_WEB_SITE);
+        write_user(user,text);
         return;
        }
       if (word[3][0]=='+') type=0; else type=1;
@@ -10815,7 +10819,8 @@ if (!(strncmp(word[1],"exa",3))) {
   write_user(user,"~FTPouzitie:~FW .set examine <n> - nastavi typ ~OL.examine~RS urceny cislom <n>\n");
   write_user(user,"~FTTypy:~FW     ~OL1~RS - novy     (modro-zlte farby)\n");
   write_user(user,"          ~OL2~RS - stary    (zeleno-biele farby)\n");
-  write_user(user,"          ~OL0~RS - definovatelny examine skin   ~OL~FRhttp://vps.vudiq.sk/examine\n");
+  sprintf(text,"          ~OL0~RS - definovatelny examine skin   ~OL~FR%s/editor\n",TALKER_WEB_SITE);
+  write_user(user,text);
   write_user(user,"~FTAk si chces pozriet examine skiny prihlasenych ludi, pouzi:  ~OL~FW.set examine test\n");
   write_user(user,"~FTUkazka skinu: ~OL~FW.set examine test <uzivatel>~RS~FT alebo: ~FW~OL.set examine test +<skin>\n");
   write_user(user,"~FTSkopirovanie: ~OL~FW.set examine copy <uzivatel>~RS~FT alebo: ~FW~OL.set examine copy +<skin>\n");
@@ -18919,7 +18924,7 @@ write_user(user,"Prikazy sa musia zacinat '.' a mozu byt skratene. (Stary vypis:
 void help_credits(user)
 UR_OBJECT user;
 {
-sprintf(text,"\n*** The Credits ***\n\nNUTS version %s, %s, Copyright (C) Neil Robertson 1996.\n\n",VERSION,WORK);
+sprintf(text,"\n*** The Credits ***\n\nNUTS version %s,\n%s,\nCopyright (C) Neil Robertson 1996.\n\n",VERSION,WORK);
 write_user(user,text);
 
 write_user(user,"~BM             ~BB             ~BT             ~BG             ~BY             ~BR             ~RS~BK~FW\n");
@@ -19765,7 +19770,8 @@ char *c;
 
 if (!done_editing) {
       write_user(user,"\n~OL~FK--~RS~FW-=~OL~FW=(*~RS~FW Editacia profilu ~OL~FW*)=~RS~FW=-~OL~FK--\n\n");
-      write_user(user,"~OL~FRProfil si mozes editovat aj cez web na stranke ~FWvps.vudiq.sk/profile\n~OL~FRa to ovela jednoduhsie a s moznostou pouzivania farieb.\n\n");
+      sprintf(text,"~OL~FRProfil si mozes editovat aj cez web na stranke ~FW%s/editor\n~OL~FRa to ovela jednoduhsie a s moznostou pouzivania farieb.\n\n",TALKER_WEB_SITE);
+      write_user(user,text);
       user->misc_op=5;
       editor(user,NULL);
       return;
@@ -21584,7 +21590,7 @@ sprintf(text,"%s BANNED user %s: %s\n",user->name, word[1], inpstr);
 write_syslog(text,1);
 write_syslog(text,2);
 if (u!=NULL) {
-//      sprintf(text,"\n\07~FG%s ti %s konto! Dovod: ~OL%s~RS~FG\n~OL~FWKontaktuj spravcov mailom (atlantis@vps.vudiq.sk), alebo sa obrat priamo\n~OL~FW", user->name, pohl(user,"zablokoval", "zablokovala"), inpstr, sklonuj(user,2), user->name);
+/*      sprintf(text,"\n\07~FG%s ti %s konto! Dovod: ~OL%s~RS~FG\n~OL~FWKontaktuj spravcov mailom (%s@%s), alebo sa obrat priamo\n~OL~FW", user->name, pohl(user,"zablokoval", "zablokovala"), inpstr, sklonuj(user,2), user->name, TALKER_EMAIL_ALIAS, TALKER_EMAIL_HOST); */
       sprintf(text,"\n\07~FG%s ti %s konto! Dovod: ~OL%s~RS~FG\n", user->name, pohl(user,"zablokoval", "zablokovala"), inpstr);
       write_user(u,text);
       disconnect_user(u,1,NULL);
@@ -23110,8 +23116,8 @@ if (!(fp=ropen(NOTICEBOARD,"a"))) return; /*APPROVED*/
 if ((fp2=ropen(NOTICE_DIGEST,"r"))==NULL) {
 	if ((fp2=ropen(NOTICE_DIGEST,"w"))==NULL) { fclose (fp); return; }
 	time(&akt_cas);
-	fprintf(fp2,"From: Atlantis Talker <atlantis@vps.vudiq.sk>\n");
-	fprintf(fp2,"To: wizzes@vps.vudiq.sk\n");
+	fprintf(fp2,"From: Atlantis Talker <%s@%s>\n",TALKER_EMAIL_ALIAS,TALKER_EMAIL_HOST);
+	fprintf(fp2,"To: %s@%s\n",WIZZES_EMAIL_ALIAS,TALKER_EMAIL_HOST);
 	sprintf(text,"Subject: Notice digest (%s)\n\n", zobraz_datum(&akt_cas,4));
 	fprintf(fp2,"%s",text);
 	fclose(fp2);
@@ -23694,7 +23700,8 @@ if ((word_count<2) && ((user->accreq) || (strcmp(user->email,"Nema ziadny email"
 	write_user(user,"~OL~FRUz si podal(a) ziadost o povysenie.~RS Mail s heslom bol odoslany na Tvoju adresu:\n");
 	sprintf(text,"<~OL%s~RS>. Ak uz mas heslo, napis ~OL.request <heslo>~RS.\nV pripade problemov sa obrat na ", user->email);
 	write_user(user,text);
-	write_user(user,"spravcov (GODov) na adresu ~OLatlantis@vps.vudiq.sk~RS,\nalebo kontaktuj GODa priamo na ");
+	sprintf(text,"spravcov (GODov) na adresu ~OL%s@%s~RS,\nalebo kontaktuj GODa priamo na ",TALKER_EMAIL_ALIAS,TALKER_EMAIL_HOST);
+	write_user(user,text);
 	write_user(user,"talkeri.\n");
 	return;
 	}
@@ -23736,7 +23743,8 @@ if (user->request[0]) {
     save_user_details(user,1);
    }
   else {
-    write_user(user,"~OL~FRNespravne request-heslo!~RS~FG Heslo sa dozvies z emailu ktory sme ti poslali\n~FGpri podavani requestu. Ak ti mail neprisiel alebo mas iny problem, kontaktuj\n~FGspravcov na adrese '~OL~FWatlantis@vps.vudiq.sk~RS~FG'.\n");
+    sprintf(text,"~OL~FRNespravne request-heslo!~RS~FG Heslo sa dozvies z emailu ktory sme ti poslali\n~FGpri podavani requestu. Ak ti mail neprisiel alebo mas iny problem, kontaktuj\n~FGspravcov na adrese '~OL~FW%s@%s~RS~FG'.\n",TALKER_EMAIL_ALIAS,TALKER_EMAIL_HOST);
+    write_user(user,text);
     return;
    }			
  }
@@ -25311,11 +25319,13 @@ if ((tmin+1)%5==0) misc_stuff(0);
 
 void daily()
 {
+char email[255];
 if (logcommands) log_commands("DAILY","",0);
 zober_predpoved(NULL,0);
 resc_save();
 save_topic();
-send_noticeboard_digest("wizzes@vps.vudiq.sk");
+sprintf(email,"%s@%s",WIZZES_EMAIL_ALIAS,TALKER_EMAIL_HOST);
+send_noticeboard_digest(email);
 quest.lastquest=0;
 }
 
