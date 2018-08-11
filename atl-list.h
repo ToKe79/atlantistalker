@@ -391,13 +391,12 @@ char *swear_words[]={
 "jebnut","jeblina", "jeblost", "jebem", "jebne", "jebk", "jeba", 
 "curak", "keket", "kokkot", "kokoot", "kurv", "pico","jebe",
 "picovina","k o k o t","k0k0t","kok0t","k0kot","k 0 k 0 t",
-"talker.sk","t a l k e r.sk","www.talker.",".talker.",
 "*" };                                                 
+
 char *exceptions[]={
 "pica","opica","pica","slepica","pica","capica","pica","spica","chuj","sprchuj",
 "picu","topicu","chuj","neechuj","chuj","krachuj","chuj","dychuj",
 "*","*" };
-
 
 char *advert_words[]={"~rs","~ol","~ul","~li","~rv",
 "~fk","~fr","~fg","~fy","~fb","~fm","~ft","~fw",
