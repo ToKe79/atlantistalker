@@ -4236,7 +4236,11 @@ if (!message && !nukehim) write_user(user,"\n~OL~FBDovidenia nabuduce!\n\n");
 	  sprintf(text,"~OL~FTCelkovo mas na Atlantise odvisenych ~FW~BB%d~RS~FT~OL dni, ~FW~BB%d~RS~FT~OL hodin a ~FW~BB%d~RS~FT~OL minut.~RS\n",days,hours,minutes);
 	writecent(user,text);
 	write_user(user,"~FR--------------------------------------------------------------------------------~RS\n");
+	if(user->socket>1000) {
+	  sprintf(text,"~FWToto bol online rozhovor na talkri ~OL%s ~RS~FW- %s, %s~RS\n",TALKER_WEB_SITE,TALKER_CITY,TALKER_COUNTRY);
+	} else {
 	  sprintf(text,"~FWToto bol online rozhovor na talkri ~OL%s %d ~RS~FW- %s, %s~RS\n",TALKER_TELNET_HOST,user->port,TALKER_CITY,TALKER_COUNTRY);
+	}
 	writecent(user,text);
 	  sprintf(text,"~FW%s nas navstevnik cislo ~BB ~OL%08.0f ~RS~RS~FW, tesime sa na dalsiu navstevu! :)~RS\n",pohl(user,"Bol si","Bola si"),counter(0));
 	writecent(user,text);
