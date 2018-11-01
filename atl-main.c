@@ -28853,7 +28853,7 @@ for(u=user_first;u!=NULL;u=u->next) {
  }
 
 if (level && tmin%10==0) {
-  sprintf(query,"insert into `visitors` (`date`,`time`,`males`,`females`) values ('%04d-%02d-%02d','%d','%d','%d')",tyear,tmonth,tmday,thour*10+tmin/10,muzi,zeny);
+  sprintf(query,"insert into `visitors` (`date`,`time`,`males`,`females`) values ('%04d-%02d-%02d','%d','%d','%d')",tyear,tmonth+1,tmday,thour*10+tmin/10,muzi,zeny);
   mysql_kvery(query);
  }
 
