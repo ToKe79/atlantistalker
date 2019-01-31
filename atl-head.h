@@ -628,6 +628,7 @@ typedef struct co_struct* CO_OBJECT;
 
 struct user_struct { 
       int id;
+      float visitor;
       char name[USER_NAME_LEN+1]; 
       char desc[DESC_CHAR_LEN+1];
       char pass[PASS_LEN+50]; 

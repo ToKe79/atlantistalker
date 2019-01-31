@@ -3710,8 +3710,13 @@ vwrite_user(user,"~FB|~FW Notify: ~FT%-3d~FWludi ~FB|~FW Vtipov na jokeboarde: ~
 vwrite_user(user,"~FB|~FW Makier: ~FT%-4d    ~FB|~FW Miestnost: ~FT%-16.16s ~FB|~FT %-28.28s ~FB|\n",user->macro_num, user->room->name, user->last_site);
 write_user(user,"~OL~FB+~RS~FB-----------------~OL+~RS~FB-----------------------------~OL+~RS~FB------------------------------~OL+\n");  
       
-if ((user_counter=counter(1))!=0) sprintf(text,"Si navstevnikom cislo %.0f, gratulujeme!\n",user_counter);
+if ((user_counter=counter(1))!=0)
+{
+	sprintf(text,"Si navstevnikom cislo %.0f, gratulujeme!\n",user_counter);
+	user->visitor=user_counter;
+}
  else sprintf(text,"Vznikla chyba pri inicializovani pocitadla!!!\n");
+write_user(user,text);
 //write_user(user,"\033]0;ATLANTIS Talker\007\r"); /* Titulka :) */
 sprintf(text,"%c%c%c",IAC,DO,TELOPT_NAWS);  /* posli suradnice terminalu */
 write_user(user,text);
@@ -4242,7 +4247,7 @@ if (!message && !nukehim) write_user(user,"\n~OL~FBDovidenia nabuduce!\n\n");
 	  sprintf(text,"~FWToto bol online rozhovor na talkri ~OL%s %d ~RS~FW- %s, %s~RS\n",TALKER_TELNET_HOST,user->port,TALKER_CITY,TALKER_COUNTRY);
 	}
 	writecent(user,text);
-	  sprintf(text,"~FW%s nas navstevnik cislo ~BB ~OL%08.0f ~RS~RS~FW, tesime sa na dalsiu navstevu! :)~RS\n",pohl(user,"Bol si","Bola si"),counter(0));
+	  sprintf(text,"~FW%s nas navstevnik cislo ~BB ~OL%08.0f ~RS~RS~FW, tesime sa na dalsiu navstevu! :)~RS\n",pohl(user,"Bol si","Bola si"),user->visitor);
 	writecent(user,text);
 	  sprintf(text,"~OL~FB-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.~RS\n");
 	write_user(user,text);
@@ -7326,6 +7331,7 @@ user_last=user;
 
 /* initialise user structure */
 user->type=USER_TYPE;
+user->visitor=0;
 user->zaradeny=0;
 user->pp=0; /*PP*/
 user->mana=0; /* SPELL */
