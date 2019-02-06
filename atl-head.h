@@ -76,7 +76,7 @@ int resc_cached;
 
 /* Teraz dake deklaracie, ktore boli tam, kde byt NEMALI! */
 
-float counter(int zobraz);
+int counter(int zobraz);
 
 int pocet_vtipov;
 int newusers;
@@ -628,7 +628,7 @@ typedef struct co_struct* CO_OBJECT;
 
 struct user_struct { 
       int id;
-      float visitor;
+      int visitor;
       char name[USER_NAME_LEN+1]; 
       char desc[DESC_CHAR_LEN+1];
       char pass[PASS_LEN+50]; 

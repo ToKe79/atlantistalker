@@ -1078,7 +1078,7 @@ else {
 sstrncpy(user->site,site,80);
 user->site_port=(int)ntohs(acc_addr.sin_port);
 echo_on(user);
-sprintf(text,"                  %08.0f navstevnikov od 28. Maja 1997\n",counter(0)); 
+sprintf(text,"                  %08d navstevnikov od 28. Maja 1997\n",counter(0)); 
 write_user(user,text);
 if (user->port==port[1]) {
 	write_user(user,"Wizport login: ");
@@ -3432,10 +3432,10 @@ echo_on(user);
 }
 
 /* ZMENA - counter ;) */
-float counter(int zobraz)
+int counter(int zobraz)
 {
 char filename[80], text[100];
-float pocitadlo;
+int pocitadlo;
 FILE *fp;
 
 sprintf(filename,"%s",COUNTERFILE);
@@ -3449,20 +3449,20 @@ if (!(fp=ropen(filename,"r"))) {
   } else {
     // initialize counter with zero
     pocitadlo=0;
-    fprintf(fp,"%.0f",pocitadlo);
+    fprintf(fp,"%d",pocitadlo);
     fclose(fp);
-    sprintf(text, "Subor '%s' s pocitadlom navstev uspesne vytvoreny so stavom %.0f\n", filename, pocitadlo);
+    sprintf(text, "Subor '%s' s pocitadlom navstev uspesne vytvoreny so stavom %d\n", filename, pocitadlo);
     write_syslog(text,1);
   }
 } else {
-  fscanf(fp,"%f",&pocitadlo);
+  fscanf(fp,"%d",&pocitadlo);
   fclose(fp);
 }
 if (zobraz==1) {
  pocitadlo++;
  if (!(fp=ropen(filename,"w")))  return 0;   /*APPROVED*/
  
- fprintf(fp,"%.0f",(float)pocitadlo);
+ fprintf(fp,"%d",pocitadlo);
   fclose(fp);
  }
 return pocitadlo;
@@ -3501,7 +3501,7 @@ UR_OBJECT user;
 UR_OBJECT u,u2;
 RM_OBJECT rm;
 //char temp[100];
-float user_counter;
+int user_counter;
 int ilist;
 char filename[100];
 char newbie[30];
@@ -3712,7 +3712,7 @@ write_user(user,"~OL~FB+~RS~FB-----------------~OL+~RS~FB-----------------------
       
 if ((user_counter=counter(1))!=0)
 {
-	sprintf(text,"Si navstevnikom cislo %.0f, gratulujeme!\n",user_counter);
+	sprintf(text,"Si navstevnikom cislo %d, gratulujeme!\n",user_counter);
 	user->visitor=user_counter;
 }
  else sprintf(text,"Vznikla chyba pri inicializovani pocitadla!!!\n");
@@ -3778,7 +3778,7 @@ if (user->level) {
 	     }
 
 /* write to syslog and set up some vars */
-sprintf(text,"%s %s logged in from %s (#%.0f)\n",level_name[user->level],user->name,user->site,user_counter);
+sprintf(text,"%s %s logged in from %s (#%d)\n",level_name[user->level],user->name,user->site,user_counter);
 write_syslog(text,1);
 
 if (num_of_users>max_users_was) max_users_was=num_of_users;
@@ -4247,7 +4247,7 @@ if (!message && !nukehim) write_user(user,"\n~OL~FBDovidenia nabuduce!\n\n");
 	  sprintf(text,"~FWToto bol online rozhovor na talkri ~OL%s %d ~RS~FW- %s, %s~RS\n",TALKER_TELNET_HOST,user->port,TALKER_CITY,TALKER_COUNTRY);
 	}
 	writecent(user,text);
-	  sprintf(text,"~FW%s nas navstevnik cislo ~BB ~OL%08.0f ~RS~RS~FW, tesime sa na dalsiu navstevu! :)~RS\n",pohl(user,"Bol si","Bola si"),user->visitor);
+	  sprintf(text,"~FW%s nas navstevnik cislo ~BB ~OL%d ~RS~RS~FW, tesime sa na dalsiu navstevu! :)~RS\n",pohl(user,"Bol si","Bola si"),user->visitor);
 	writecent(user,text);
 	  sprintf(text,"~OL~FB-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.~RS\n");
 	write_user(user,text);
@@ -25590,7 +25590,7 @@ if ((ship=get_room(SHIPPING_SHIP,NULL))==NULL) return;
 void send_noticeboard_digest(char* komu)
 {
 	FILE *fp;
-	if(fp=ropen(NOTICE_DIGEST,"r")) {
+	if((fp=ropen(NOTICE_DIGEST,"r"))) {
 		fclose(fp);
 		send_forward_email(komu,NOTICE_DIGEST);
 	}

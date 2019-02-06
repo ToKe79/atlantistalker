@@ -1257,7 +1257,7 @@ FILE *fp;
    sstrncpy(user->site,site,80);
    user->site_port=port;
    echo_on(user);
-   sprintf(text,"~FW                  %08.0f navstevnikov od 28. Maja 1997\n",counter(0)); 
+   sprintf(text,"~FW                  %08d navstevnikov od 28. Maja 1997\n",counter(0)); 
    write_user(user,text);
    sprintf(text,"%c%c",222,200);
    write_web(id+1000,text);
