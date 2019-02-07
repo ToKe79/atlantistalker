@@ -9629,8 +9629,8 @@ UR_OBJECT user;
 char *inpstr; 
 {  
 FILE *fp;
-int lines,type,r,i,year=0,mon=0,day=0;
-char id[10],serv[40],port[10],filename[81],line[4096];
+int lines,type,r,i,year=0,mon=0,day=0,lev;
+char id[10],serv[40],port[10],filename[81],line[4096],levstr[10];
 UR_OBJECT u;
 
 if (user->level>=GOD && !strncmp(word[1],"brutal",6)) {
@@ -10237,7 +10237,118 @@ if (user->level>=GOD && !(strcmp(word[1],"logging"))) {
   else 
    write_user(user,"Logovanie je prave ~FRVYPNUTE.\n");
   return;
- } 
+}
+
+if (user->level>=GOD && !(strcmp(word[1],"wplevel"))) {
+  if (word_count!=3) {
+    if (wizport_level==-1) strcpy(levstr,"NONE");
+    else strcpy(levstr,level_name[wizport_level]);
+    write_user(user,"Pouzi: .set wplevel <NONE|level_name>\n");
+    sprintf(text,"Momentalne nastavene na: ~OL%s~RS.\n",levstr);
+    write_user(user,text);
+    return;
+  }
+  strtoupper(word[2]);
+  if ((lev=get_level(word[2]))==-1) {
+    if (strcmp(word[2],"NONE")) {
+      write_user(user,"Takyto level tu nevedieme...\n");
+      return;
+    }
+    strcpy(levstr,"NONE");
+  } else {
+    strcpy(levstr,level_name[lev]);
+  }
+  if (lev>user->level) {
+    write_user(user,"Nemozes nastavit na vyssi level, ako mas sam.\n");
+    return;
+  }
+  if(wizport_level==lev) {
+    write_user(user,"Ved to je tak nastavene.\n");
+    return;
+  }
+  wizport_level=lev;
+  sprintf(text,"V poriadku, nastavene na level ~OL%s~RS.\n",levstr);
+  write_user(user,text);
+  sprintf(text,"%s %s wizport od levelu ~OL%s~RS.\n",user->name,pohl(user,"nastavil","nastavila"),levstr);
+  write_level(GOD,1,text,user);
+  sprintf(text,"%s set wizport_level to '%s'\n",user->name,levstr);
+  write_syslog(text,1);
+  return;
+}
+
+if (user->level>=GOD && !(strcmp(word[1],"timeoutmaxlvl"))) {
+  if (word_count!=3) {
+    if (time_out_maxlevel==-1) strcpy(levstr,"NONE");
+    else strcpy(levstr,level_name[time_out_maxlevel]);
+    write_user(user,"Pouzi: .set timeoutmaxlevel <NONE|level_name>\n");
+    sprintf(text,"Momentalne nastavene na: ~OL%s~RS.\n",levstr);
+    write_user(user,text);
+    return;
+  }
+  strtoupper(word[2]);
+  if ((lev=get_level(word[2]))==-1) {
+    if (strcmp(word[2],"NONE")) {
+      write_user(user,"Takyto level tu nevedieme...\n");
+      return;
+    }
+    strcpy(levstr,"NONE");
+  } else {
+    strcpy(levstr,level_name[lev]);
+  }
+  if (lev>user->level) {
+    write_user(user,"Nemozes nastavit na vyssi level, ako mas sam.\n");
+    return;
+  }
+  if(time_out_maxlevel==lev) {
+    write_user(user,"Ved to je tak nastavene.\n");
+    return;
+  }
+  time_out_maxlevel=lev;
+  sprintf(text,"V poriadku, nastavene na level ~OL%s~RS.\n",levstr);
+  write_user(user,text);
+  sprintf(text,"%s %s max. uzivat. necinnost na level ~OL%s~RS.\n",user->name,pohl(user,"nastavil","nastavila"),levstr);
+  write_level(GOD,1,text,user);
+  sprintf(text,"%s set time_out_maxlevel to '%s'\n",user->name,levstr);
+  write_syslog(text,1);
+  return;
+}
+
+if (user->level>=GOD && !(strcmp(word[1],"timeoutafks"))) {
+  if (!strcmp(word[2],"on")) {
+    if (time_out_afks==0) {
+      time_out_afks=1;
+      write_user(user,"Max. AFK necinnost ~FGZAPNUTA.\n");
+      sprintf(text,"%s ZAPOL max. AFK necinnost.\n",user->name);
+      write_syslog(text,1);
+      write_level(GOD,1,text,user);
+      return;
+    } else {
+      write_user(user,"Viac to uz zapnut nepojde...\n");
+      return;
+    }
+  }
+  if (!strcmp(word[2],"off")) {
+    if (time_out_afks==1) {
+      time_out_afks=0;
+      write_user(user,"Max. AFK necinnost ~FRVYPNUTA.\n");
+      sprintf(text,"%s VYPOL max. AFK necinnost.\n",user->name);
+      write_syslog(text,1);
+      write_level(GOD,1,text,user);
+      return;
+    } else {
+      write_user(user,"Co blaznis, ved to nie je zapnute.\n");
+      return;
+    }
+  }
+  write_user(user,"Pouzi: .set timeoutafks [on|off]\nMomentalny stav: ");
+  if(time_out_afks) {
+    write_user(user,"zapnute\n");
+  } else {
+    write_user(user,"vypnute\n");
+  }
+  return;
+}
+
 if (user->level>=KIN && !strncmp(word[1],"autocre",7)) {
   if (word_count==3) {
     r=atoi(word[2]);
@@ -11078,6 +11189,11 @@ if (!strncmp(word[1],"adv",3)) {
     write_user(user,"~FT.set minlogin <NONE|level>~FW- nastavi minlogin\n");
     write_user(user,"~FT.set team1 - team4 <meno> ~FW- nastavi meno teamu na brutalise\n");
     write_user(user,"~FT.set maxsms <pocet>       ~FW- max. pocet SMSiek odoslanych za den\n");
+    write_user(user,"~FT.set timeoutafks [on|off] ~FW- max. AFK necinnost\n");
+    write_user(user,"~FT.set useridle <sekundy>   ~FW- max. uzivatelska necinnost\n"); /* TODO user_idle_time */
+    write_user(user,"~FT.set loginidle <sekunkdy> ~FW- kedy ukonci spojenie pri prihlasovani\n"); /* TODO login_idle_time */
+    write_user(user,"~FT.set timeoutmaxlvl <level>~FW- level pre max. uzivatelsku necinnost\n");
+    write_user(user,"~FT.set wplevel <ievel>      ~FW- min. level pre prihlasenie cez wizport\n");
    } 
   if (user->level>=KIN) {
    write_user(user,"~FT.set autocreate           ~FW- nastavi rychlost vytvarania predmetov\n");
