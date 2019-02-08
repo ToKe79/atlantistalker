@@ -10243,8 +10243,7 @@ if (user->level>=GOD && !(strcmp(word[1],"wplevel"))) {
   if (word_count!=3) {
     if (wizport_level==-1) strcpy(levstr,"NONE");
     else strcpy(levstr,level_name[wizport_level]);
-    write_user(user,"Pouzi: .set wplevel <NONE|level_name>\n");
-    sprintf(text,"Momentalne nastavene na: ~OL%s~RS.\n",levstr);
+    sprintf(text,"Pouzi: .set wplevel <NONE|level_name>\nMomentalne nastavene na: ~OL%s~RS.\n",levstr);
     write_user(user,text);
     return;
   }
@@ -10280,8 +10279,7 @@ if (user->level>=GOD && !(strcmp(word[1],"timeoutmaxlvl"))) {
   if (word_count!=3) {
     if (time_out_maxlevel==-1) strcpy(levstr,"NONE");
     else strcpy(levstr,level_name[time_out_maxlevel]);
-    write_user(user,"Pouzi: .set timeoutmaxlevel <NONE|level_name>\n");
-    sprintf(text,"Momentalne nastavene na: ~OL%s~RS.\n",levstr);
+    sprintf(text,"Pouzi: .set timeoutmaxlvl <NONE|level_name>\nMomentalne nastavene na: ~OL%s~RS.\n",levstr);
     write_user(user,text);
     return;
   }
@@ -10340,12 +10338,8 @@ if (user->level>=GOD && !(strcmp(word[1],"timeoutafks"))) {
       return;
     }
   }
-  write_user(user,"Pouzi: .set timeoutafks [on|off]\nMomentalny stav: ");
-  if(time_out_afks) {
-    write_user(user,"zapnute\n");
-  } else {
-    write_user(user,"vypnute\n");
-  }
+  sprintf(text,"Pouzi: .set timeoutafks [on|off]\nMomentalny stav: %s\n",time_out_afks?"zapnute":"vypnute");
+  write_user(user,text);
   return;
 }
 
