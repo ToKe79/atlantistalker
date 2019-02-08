@@ -41,6 +41,9 @@ int main(int argc,char *argv[]) {
 		return 1;
 	}
 
+	/* Nickname must begin with an uppercase letter */
+	argv[2][0]=toupper(argv[2][0]);
+
 	fgets(line,199,fp);
 	line[strlen(line)-1]='\0';
 	strncpy(adb_name,line,29);
