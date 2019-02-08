@@ -1,4 +1,4 @@
 *
 !.gitignore
-!passcrypt.c
+!passcheck.c
 !compile.sh
