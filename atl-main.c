@@ -10239,6 +10239,27 @@ if (user->level>=GOD && !(strcmp(word[1],"logging"))) {
   return;
 }
 
+if (user->level>=GOD && !(strcmp(word[1],"useridle"))) {
+  if (word_count!=3) {
+    sprintf(text,"Pouzi: .set useridle <sekundy>\nMomentalne nastavene na: ~OL%d~RS %s.\n",user_idle_time,skloncislo(user_idle_time,"sekundu","sekundy","sekund"));
+    write_user(user,text);
+    return;
+  }
+  type=atoi(word[2]);
+  if (type<30 || 3600<type) {
+    write_user(user,"Zadaj cas v rozmedzi od 30 do 3600 sekund.\n");
+    return;
+  }
+  user_idle_time=type;
+  sprintf(text,"%s si user_idle_time na %d %s.\n",pohl(user,"Nastavil","Nastavila"),type,skloncislo(type,"sekundu","sekundy","sekund"));
+  write_user(user,text);
+  sprintf(text,"%s %s user_idle_time na %d %s.\n",user->name,pohl(user,"nastavil","nastavila"),type,skloncislo(type,"sekundu","sekundy","sekund"));
+  write_level(GOD,1,text,user);
+  sprintf(text,"%s set user_idle_time to %d second(s).\n",user->name,type);
+  write_syslog(text,1);
+  return;
+}
+
 if (user->level>=GOD && !(strcmp(word[1],"wplevel"))) {
   if (word_count!=3) {
     if (wizport_level==-1) strcpy(levstr,"NONE");
@@ -11184,7 +11205,7 @@ if (!strncmp(word[1],"adv",3)) {
     write_user(user,"~FT.set team1 - team4 <meno> ~FW- nastavi meno teamu na brutalise\n");
     write_user(user,"~FT.set maxsms <pocet>       ~FW- max. pocet SMSiek odoslanych za den\n");
     write_user(user,"~FT.set timeoutafks [on|off] ~FW- max. AFK necinnost\n");
-    write_user(user,"~FT.set useridle <sekundy>   ~FW- max. uzivatelska necinnost\n"); /* TODO user_idle_time */
+    write_user(user,"~FT.set useridle <sekundy>   ~FW- max. uzivatelska necinnost\n");
     write_user(user,"~FT.set loginidle <sekunkdy> ~FW- kedy ukonci spojenie pri prihlasovani\n"); /* TODO login_idle_time */
     write_user(user,"~FT.set timeoutmaxlvl <level>~FW- level pre max. uzivatelsku necinnost\n");
     write_user(user,"~FT.set wplevel <ievel>      ~FW- min. level pre prihlasenie cez wizport\n");
