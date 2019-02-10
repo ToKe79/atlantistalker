@@ -2348,7 +2348,7 @@ char *str;
 */
 void write2sock_ex(UR_OBJECT user,int sock,char *str,size_t count)
 {
-int ret;
+/* int ret; */
  
  if (sock>1000) {
    if (count>0) *(str+count)='\0';
@@ -2364,9 +2364,9 @@ int ret;
   /* .to user uz ti niekto povedal ze si brzda ludstva ? (V) */
   }
  if (count==0)
-  ret=twrite(sock,str,strlen(str));
+  twrite(sock,str,strlen(str));
  else
-  ret=twrite(sock,str,count);
+  twrite(sock,str,count);
 
  if (user!=NULL && writeerror==1) user->hangups++;
  if (user!=NULL && writeerror==2) user->hangupz++; 
@@ -2412,7 +2412,7 @@ write2sock (UR_OBJECT user, int sock, const char *str, size_t count)
 		return 0;
 	}
 	else {
-		write2sock_ex(user, sock,(const char*) str, count);
+		write2sock_ex(user, sock,(char*) str, count);
 	}
 
 	return 0;
@@ -3504,7 +3504,7 @@ UR_OBJECT u,u2;
 RM_OBJECT rm;
 /* char temp[100]; */
 int user_counter;
-int ilist;
+/* int ilist; */
 char filename[100];
 char newbie[30];
 /* struct stat statbuf; */
@@ -3582,7 +3582,7 @@ user->notifylist=NULL;
 user->notify_num=load_notifylist(&(user->notifylist),user->id,1);
 
 user->ignorelist=NULL;
-ilist=load_notifylist(&(user->ignorelist),user->id,0);
+load_notifylist(&(user->ignorelist),user->id,0);
 
 user->combanlist=NULL;
 load_notifylist(&(user->combanlist),user->id,2);
@@ -4422,7 +4422,7 @@ int i, line, size,cnt=0;
 FILE *fp;
 time_t akt_cas;
 char *ptr;
-char email[255];
+/* char email[255]; */
 
 size=0;
 if (sp) {
@@ -11520,7 +11520,7 @@ char *auth_sockuser2(s,local,remote,rtimeout)
     unsigned short rremote;
     register int fl;
     fd_set wfds;
-    void *old_sig;
+    __sighandler_t old_sig;
     struct timeval rtv;
     
     old_sig = signal(SIGPIPE, SIG_IGN);
@@ -18863,7 +18863,7 @@ while(command[i][0]!='*') {
  }
 if (!found) {
   i=0;
-  while (command_sk[i]!="*") {
+  while (command_sk[i][0]!='*') {
     if (!strncasecmp(word[1],command_sk[i],len)) {
       com_num=sk_to_en_com[i];
       strcpy(name,command[com_num]);

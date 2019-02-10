@@ -6,7 +6,7 @@ PROJECT = runtime/atlantis
 LIBS    = -lmysqlclient -ldl -rdynamic -Wl,--version-script=$(PROJECT_VERSION_SCRIPT) $(XMLLIBS)
 XMLLIBS	= $(shell xml2-config --libs)
 XMLFLAGS= $(shell xml2-config --cflags)
-CCFLAGS = -Wall -ggdb -pedantic -I. $(XMLFLAGS)
+CCFLAGS = -Wall -ggdb -I. $(XMLFLAGS)
 DEPENDS = make.depend
 SRCS    = ${wildcard *.c}
 TODO    = $(patsubst %.c,%.o,$(SRCS))

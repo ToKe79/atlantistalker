@@ -91,7 +91,7 @@ int dump_user_data_xml(UR_OBJECT user)
 	if ((user != NULL) && (user->xml_writer != NULL)) {
 		xmlTextWriterEndElement(user->xml_writer); /* uzavrieme 'data' document element */
 		xmlTextWriterFlush(user->xml_writer);
-		write2sock_ex(user, user->socket, (const char *) (user->xml_buffer->content), strlen((const char *) (user->xml_buffer->content)));
+		write2sock_ex(user, user->socket, (char *) (user->xml_buffer->content), strlen((const char *) (user->xml_buffer->content)));
 		reset_user_xml(user);
 		return 0;
 	}
