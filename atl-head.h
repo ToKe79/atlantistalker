@@ -76,7 +76,7 @@ int resc_cached;
 
 /* Teraz dake deklaracie, ktore boli tam, kde byt NEMALI! */
 
-int counter(int zobraz);
+int counter_db(int add);
 
 int pocet_vtipov;
 int newusers;
@@ -194,7 +194,6 @@ int writeerror,max_timeouts,max_timeoutz;
 #define LEVLOG "log/level.log"              /* log promotes/demotes */
 #define HINT_FILE "misc/hints"              /* zoznam hintov */
 #define COMMLOG "log/commlog2.log"          /* command debug log */
-#define COUNTERFILE "misc/counter"          /* pocitadlo pristupov */
 #define WHO_FOR_WEB "../public_html/who.raw"/* who pre web - surovy fajl */
 #define TLT_LOG "log/tlt.log"               /* TLT +, - log */
 #define NICKBLOCK  "misc/nickblock"         /* vyblokovane nicky */                                               

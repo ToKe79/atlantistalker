@@ -1080,7 +1080,7 @@ else {
 sstrncpy(user->site,site,80);
 user->site_port=(int)ntohs(acc_addr.sin_port);
 echo_on(user);
-sprintf(text,"                  %08d navstevnikov od 28. Maja 1997\n",counter(0)); 
+sprintf(text,"                  %08d navstevnikov od 28. Maja 1997\n",counter_db(0)); 
 write_user(user,text);
 if (user->port==port[1]) {
 	write_user(user,"Wizport login: ");
@@ -3433,43 +3433,6 @@ if (user->port==port[1]) write_user(user,"Wizport login: ");
 echo_on(user);
 }
 
-/* ZMENA - counter ;) */
-int counter(int zobraz)
-{
-char filename[80], text[100];
-int pocitadlo;
-FILE *fp;
-
-sprintf(filename,"%s",COUNTERFILE);
-if (!(fp=ropen(filename,"r"))) {
-  sprintf(text,"Neexistuje subor '%s' s pocitadlom navstev - pokusim sa ho vytvorit\n",filename);
-  write_syslog(text,1);
-  if(!(fp=ropen(filename,"w"))) {
-    sprintf(text, "Neda sa vytvorit subor pocitadla navstev '%s'!\n", filename);
-    write_syslog(text,1);
-    return 0;
-  } else {
-    /* initialize counter with zero */
-    pocitadlo=0;
-    fprintf(fp,"%d",pocitadlo);
-    fclose(fp);
-    sprintf(text, "Subor '%s' s pocitadlom navstev uspesne vytvoreny so stavom %d\n", filename, pocitadlo);
-    write_syslog(text,1);
-  }
-} else {
-  fscanf(fp,"%d",&pocitadlo);
-  fclose(fp);
-}
-if (zobraz==1) {
- pocitadlo++;
- if (!(fp=ropen(filename,"w")))  return 0;   /*APPROVED*/
- 
- fprintf(fp,"%d",pocitadlo);
-  fclose(fp);
- }
-return pocitadlo;
-}
-
 /* Tuto je endstring co by to mal vylepsit ;) ;) */
 void endstring(inpstr)
 char *inpstr;
@@ -3686,7 +3649,7 @@ vwrite_user(user,"~FB|~FW Notify: ~FT%-3d~FWludi ~FB|~FW Vtipov na jokeboarde: ~
 vwrite_user(user,"~FB|~FW Makier: ~FT%-4d    ~FB|~FW Miestnost: ~FT%-16.16s ~FB|~FT %-28.28s ~FB|\n",user->macro_num, user->room->name, user->last_site);
 write_user(user,"~OL~FB+~RS~FB-----------------~OL+~RS~FB-----------------------------~OL+~RS~FB------------------------------~OL+\n");  
       
-if ((user_counter=counter(1))!=0)
+if ((user_counter=counter_db(1))!=0)
 {
 	sprintf(text,"Si navstevnikom cislo %d, gratulujeme!\n",user_counter);
 	user->visitor=user_counter;

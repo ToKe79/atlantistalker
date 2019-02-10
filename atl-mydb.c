@@ -2840,3 +2840,27 @@ else {
   write_user(user,text);
  }
 }
+
+int counter_db(int add) {
+
+	int cntr;
+
+	sprintf(query,"select `value` from `config` where `parameter` = 'counter'");
+
+	if ((result=mysql_result(query))) {
+		row=mysql_fetch_row(result);
+		mysql_free_result(result);
+		cntr=atoi(row[0]);
+	} else {
+		return 0;
+	}
+
+	if (add) {
+		cntr++;
+		sprintf(query,"update `config` set `value` = '%d' where `parameter` = 'counter'",cntr);
+		mysql_kvery(query);
+		return cntr;
+	} else {
+		return cntr;
+	}
+}
