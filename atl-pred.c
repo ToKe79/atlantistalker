@@ -311,8 +311,8 @@ int maxbefore=0,index;
      convert[total]->heal=atoi(row[14]);
   
      if (convert[total]->product==-1) {
-//      || (convert[total]->component[0]==-1 && convert[total]->component[1]==-1
-//          && convert[total]->component[2]==-1 && convert[total]->component[3]==-1)) {
+      /* || (convert[total]->component[0]==-1 && convert[total]->component[1]==-1
+          && convert[total]->component[2]==-1 && convert[total]->component[3]==-1)) { */
        destruct_convert(convert[total]);
        convert[total]=NULL;
       }
@@ -356,23 +356,23 @@ if (tsec%15==0)
     if (ran==pocet) {
       vec=user->room->predmet[i];
       switch (abs(predmet[vec]->attack)) {
-        case 1://macka
+        case 1:/* macka */
          sprintf(texthb,"~FT~OL%s~RS~FT ta doskriabal%s.\n",predmet[vec]->name,zwjpohl(vec,"","a","o","i"));
          sprintf(text,"~FY%s doskriabal%s %s.\n",predmet[vec]->name,zwjpohl(vec,"","a","o","i"),sklonuj(user,4));
          break;
-        case 2://had
+        case 2:/* had */
          sprintf(texthb,"~FT~OL%s~RS~FT ta ustip%s do nohy. Zacala sa ti tocit hlava.\n",predmet[vec]->name,zwjpohl(vec,"ol","la","lo","li"));
          sprintf(text,"~FY%s ustip%s %s do nohy.\n",predmet[vec]->name,zwjpohl(vec,"ol","la","lo","li"),sklonuj(user,4));
          break;
-        case 3://squirrel
+        case 3:/* squirrel */
          sprintf(texthb,"~FT~OL%s~RS~FT ti hodil%s orech rovno do hlavy.\n",predmet[vec]->name,zwjpohl(vec,"","a","o","i"));
          sprintf(text,"~FY%s hodil%s %s orech do hlavy.\n",predmet[vec]->name,zwjpohl(vec,"","a","o","i"),sklonuj(user,3));
          break;
-        case 4://topier
+        case 4:/* topier */
          sprintf(texthb,"~FT~OL%s~RS~FT sa ti zahryz%s do krku a cicia ti krv.\n",predmet[vec]->name,zwjpohl(vec,"ol","la","lo","li"));
          sprintf(text,"~FY%s sa zahryz%s %s do krku a cicia %s krv.\n",predmet[vec]->name,zwjpohl(vec,"ol","la","lo","li"),sklonuj(user,3),pohl(user,"mu","jej"));
          break;
-        case 5://kon
+        case 5:/* kon */
          sprintf(texthb,"~FT~OL%s~RS~FT ti tak kop%s do hlavy ze vidis same ***.\n",predmet[vec]->name,zwjpohl(vec,"ol","la","lo","li"));
          sprintf(text,"~FY%s tak kop%s %s do hlavy ze vidi same ***.\n",predmet[vec]->name,zwjpohl(vec,"ol","la","lo","li"),sklonuj(user,4));
          break;
@@ -1083,7 +1083,7 @@ if (predmet[vec]->function==24) {  /* zombie-like entities */
   return;
  }
 
-if ((pos==-1) && (predmet[vec]->function!=1) && (predmet[vec]->function!=16) // VEHICLE
+if ((pos==-1) && (predmet[vec]->function!=1) && (predmet[vec]->function!=16) /* VEHICLE */
 && (predmet[vec]->function!=20) && (predmet[vec]->function!=21) && (predmet[vec]->function!=22)) { 
   if (where>-1 && predmet[vec]->function==5) {
     for(i=0;i<MPVM;i++)
@@ -1151,7 +1151,7 @@ if (word_count>2) {
   u=get_user(word[2]);
  }
  
-if (word_count>2) switch (predmet[vec]->function) { // ine parametre
+if (word_count>2) switch (predmet[vec]->function) { /* ine parametre */
   case 14:
     if ((user->level<MOZENADAVAT) && (contains_swearing(inpstr,user)) && (ban_swearing)) {
       write_user(user,noswearing);
@@ -1205,7 +1205,7 @@ if (word_count>2) switch (predmet[vec]->function) { // ine parametre
  }
 
 if (word_count>2) {
- if (((u==NULL && vec2>-1)) || ((u!=NULL) && (kder>-1 || kdeh>-1))) { // 2 parametre - predmet, predmet  
+ if (((u==NULL && vec2>-1)) || ((u!=NULL) && (kder>-1 || kdeh>-1))) { /* 2 parametre - predmet, predmet */
   if (kder==-1 && kdeh==-1) {
     if (predmet[vec2]->type<3)
      sprintf(text,"Ziadn%s %s sa tu momentalne nenachadza%s.\n",zwjpohl(vec2,"y","a","e","e"),predmet[vec2]->name,zwjpohl(vec2,"","","","ju"));
@@ -1261,7 +1261,7 @@ if (word_count>2) {
     else vec2=-1;
     if (vec2>-1 && predmet[vec2]->type<3) {
       if (is_in_room(user->room,vec2)>-1) {
-        if (predmet[vec2]->function==24) { // mlatenie ZOMBIKA
+        if (predmet[vec2]->function==24) { /* mlatenie ZOMBIKA */
           if (user->attacking) {
             sprintf(text,"Este si nedokoncil%s utok.\n",pohl(user,"","a"));
             write_user(user,text);
@@ -1380,7 +1380,7 @@ if (word_count>2) {
      }
    }
  }
-else { // 2 parametre - predmet, user
+else { /* 2 parametre - predmet, user */
   if (u==NULL) {
     write_user(user,notloggedon);
     return;
@@ -1642,8 +1642,8 @@ else { // 2 parametre - predmet, user
 }
 
 
-if (word_count==2) { // 1 parameter - predmet
-  //tunelovanie dvoma krtkami
+if (word_count==2) { /* 1 parameter - predmet */
+  /* tunelovanie dvoma krtkami */
   if (!strcmp(predmet[vec]->name,"krtko") && tunelik>0 && (!strcmp(user->room->name,"pohorie")
   || !strcmp(user->room->name,"vrchol") || !strcmp(user->room->name,"husty_les"))) {
     vec2=0;
@@ -1662,7 +1662,7 @@ if (word_count==2) { // 1 parameter - predmet
    } 
 
   switch (predmet[vec]->function) {
-    case 1: // zviachacka
+    case 1: /* zviachacka */
       if (user->zuje && user->zuje_t==vec) {
         if (is_free_in_hands(user)>-1) {
           show_pict_on_event(user,32,vec,0);
@@ -1707,7 +1707,7 @@ if (word_count==2) { // 1 parameter - predmet
        }
       do_alt_funct(user,vec);
       return;
-    case 2: // refolfer
+    case 2: /* refolfer */
       show_pict_on_event(user,32,vec,0);
       if (dur>1) {
         user->dur[is_in_hands(user,vec)]-=1;
@@ -1725,11 +1725,11 @@ if (word_count==2) { // 1 parameter - predmet
       write_room_except(user->room,text,user);
       disconnect_user(user, 3, NULL);
       return;
-    case 3:  // zuby
+    case 3:  /* zuby */
       sprintf(text,"Pouzi: .use %s <obet>\n",predmet[vec]->name);
       write_user(user,text);
       return;
-    case 4: // premena na iny predmet pri pouziti
+    case 4: /*  premena na iny predmet pri pouziti */
       show_pict_on_event(user,32,vec,0);
       if (predmet[vec]->ustart!=NULL) {
         sprintf(text,"%s\n",parse_phrase(predmet[vec]->ustart,user,NULL,NULL,0));
@@ -1750,7 +1750,7 @@ if (word_count==2) { // 1 parameter - predmet
          }
        }
       return;
-    case 5: // vehikel
+    case 5: /* vehikel */
       if (is_free_in_room(user->room)==-1) {
         sprintf(text,"%s uz nie je miesto.\n",user->room->where);
         text[0]=toupper(text[0]);
@@ -1761,7 +1761,7 @@ if (word_count==2) { // 1 parameter - predmet
       remove_from_hands(user,vec,0);
       use_predmet(user,"");
       return;
-    case 8: // zbran pouzitelna aj na sebe.
+    case 8: /* zbran pouzitelna aj na sebe. */
       if (predmet[vec]->ustart!=NULL) {
         if (predmet[vec]->restrikt & 128 && !(predmet[vec]->restrikt & 1) && user->muzzled) {
           sprintf(text,"Ved uz si umlcan%s, naco ti je %s ?\n",pohl(user,"y","a"),predmet[vec]->name);
@@ -1784,8 +1784,8 @@ if (word_count==2) { // 1 parameter - predmet
         write_user(user,text);
        }
       return;
-    case 7: // long range weapon - nastavenie primarnej zbrani
-    case 9: // close combat weapon - detto
+    case 7: /* long range weapon - nastavenie primarnej zbrani */
+    case 9: /* close combat weapon - detto */
       if (user->weapon!=vec) {
         show_pict_on_event(user,32,vec,0);
         sprintf(text,"Odteraz budes pouzivat %s pri boji aj ak mas viac zbrani.\n",predmet[vec]->akuzativ);
@@ -1798,7 +1798,7 @@ if (word_count==2) { // 1 parameter - predmet
         write_user(user,text);
        }
       return;
-    case 10: // consumable / predmet pouzitelny iba na sebe.
+    case 10: /* consumable / predmet pouzitelny iba na sebe. */
       if (forbidden(user,NULL,vec)) return;
       show_pict_on_event(user,32,vec,0);
       remove_from_hands(user,vec,1);
@@ -1820,17 +1820,17 @@ if (word_count==2) { // 1 parameter - predmet
 	if (user->heal>100-user->health) user->heal=100-user->health;
        }
       return;
-    case 11: // kniha
+    case 11: /* kniha */
       show_pict_on_event(user,32,vec,0);
       user->dur[is_in_hands(user,vec)]--;
       show_kniha_kuziel(user,dur);
       do_alt_funct(user,vec);
       return;
-    case 14: // telefon
+    case 14: /* telefon */
       sprintf(text,"Pouzi: .use %s <sprava>!\n",predmet[vec]->name);
       write_user(user,text);
       return;
-    case 15: // explosive
+    case 15: /* explosive */
       if (user->dur[is_in_hands(user,vec)]>0 && predmet[vec]->error!=NULL) {
         sprintf(text,"%s\n",parse_phrase(predmet[vec]->error,user,NULL,NULL,0));
         write_user(user,text);
@@ -1844,7 +1844,7 @@ if (word_count==2) { // 1 parameter - predmet
        }
       do_alt_funct(user,vec);
       return;
-    case 16: //kridla
+    case 16: /* kridla */
       if (user->lieta) {
         if (user->lieta>1 && is_free_in_hands(user)>-1) {
           show_pict_on_event(user,32,vec,0);
@@ -1891,7 +1891,7 @@ if (word_count==2) { // 1 parameter - predmet
       sprintf(text,"Nemas %s!\n",predmet[vec]->akuzativ);
       write_user(user,text);
       return;	
-    case 17: //satka
+    case 17: /* satka */
       if (user->level<WAR) {
      	write_user(user,"Bohuzial, takyto druh utoku ma silu a schopnosti az level HRDINA!\n");
   	return;
@@ -1899,7 +1899,7 @@ if (word_count==2) { // 1 parameter - predmet
       sprintf(text,"Pouzi: .use %s <obet>\n",predmet[vec]->name);
       write_user(user,text);
       return;
-    case 19: // zapisovaci predmet
+    case 19: /* zapisovaci predmet */
       if (predmet[vec]->restrikt & 16 && !(predmet[vec]->restrikt & 1) && user->afro) {
         sprintf(text,"Ale no tak, jedno afrodiziakum ti nestaci ?!\n");
         write_user(user,text);
@@ -2163,7 +2163,7 @@ if (word_count==3) {
     if (user->level==GOD) ok=1;
    }
   if (ok==0) {
-    if (u!=NULL) { // heh, hadzeme do usera
+    if (u!=NULL) { /* heh, hadzeme do usera */
       if (u==user) {
         sprintf(text,"Nemas take dlhe hnaty aby si moh%s hadzat do seba.\n",pohl(user,"ol","la"));
         write_user(user,text);
@@ -2174,15 +2174,15 @@ if (word_count==3) {
         write_user(user,text);
         return;
        }
-      if (u->room==user->room && !(predmet[vec]->altfunct & 2)) { // inac by sme mohli hadzat a dvihat doblba..
+      if (u->room==user->room && !(predmet[vec]->altfunct & 2)) { /* inac by sme mohli hadzat a dvihat doblba.. */
         sprintf(text,"Nehanbis sa hadzat takto z blizka ?!\n");
         write_user(user,text); 
         return;
        }
-      ok=0; // dohodime ?
+      ok=0; /* dohodime ? */
       for(i=0;i<MAX_LINKS;++i) if (u->room->link[i]==user->room) ok=1;
-      if (user->room==u->room || user->level==GOD) ok=1;// ujo god dohodi sade ;)
-      if (ok==0) { // nedohodime ;(
+      if (user->room==u->room || user->level==GOD) ok=1;/* ujo god dohodi sade ;) */
+      if (ok==0) { /* nedohodime ;( */
         sprintf(text,"%s nedohodis, je to prilis daleko!\n",u->room->into);
         text[0]=toupper(text[0]);
         write_user(user,text); 
@@ -4288,8 +4288,8 @@ for (i=0;i<word_count;i++) {
     strcat(ret,tmp);
    }
   else strcat(ret,word[i]);
-//  sprintf (text,"%d word[i]: %s  ret: %s\n",i,word[i],ret);
-//  write_room(testroom,text);
+/*  sprintf (text,"%d word[i]: %s  ret: %s\n",i,word[i],ret);
+  write_room(testroom,text); */
  }
 return ret;
 }

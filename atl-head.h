@@ -507,11 +507,12 @@ typedef struct dama_struct* DAMA_OBJECT;
 #define CLONE_HEAR_ALL 2
 
 /* ourSQL .. the future is our world, the future is our time .. */
-#define HOSTNAME	"localhost"
-#define USER		"atlantis"
-#define PASSWORD	"datlanbaza"
-//#define PASSWORD	""
-#define DATABASE	"atlantis"
+/* now defined in atlantis.ini file
+#define HOSTNAME	""
+#define USER		""
+#define PASSWORD	""
+#define DATABASE	""
+*/
 
 int resolve_ip; /* ci ma resolvovat tu IPcku alebo nema resolvovat tu IPcku
                    ... "Byt .... ci nebyt . ... TO JE OTAZKA!!!!!!!!!!!!"
@@ -759,11 +760,11 @@ struct user_struct {
       int gold,swapped,shoutswears,sayswears,hangups,hangupz;
       int ignxannel,ignnongreenhorn,multiply,lastrevt,lastrevs,lastrevi;
       struct xa_struct *xannel;
-      struct user_struct *invite2xannel,*nox; // next on xannel
+      struct user_struct *invite2xannel,*nox; /* next on xannel */
       int sell_price,sell_what,ep_line,affected,affecttime,affpermanent;
       int smsssent,smsday,allowsms,smswait,smsgate,smschars;
       char mobile[21],logoutmsg[61];
-      int team,way,weapon,hidden,reveal,attacking; //atlantis wars stuff
+      int team,way,weapon,hidden,reveal,attacking; /* atlantis wars stuff */
       int kills,deaths,health,heal,deathtype,head,body,feets,target;
       int switches,shortcutwarning,temp,wizactivity,age,agecode;
       int longestsession,mail2sms,timeinrevt,miscoptime;
@@ -1360,7 +1361,7 @@ void got_line(UR_OBJECT user,char *inpstr);
 /* definicia funkcii pre notify */
 
 void free_notifylist(NOTIFY *list);
-//int save_notifylist(NOTIFY *list, char *filename);
+/* int save_notifylist(NOTIFY *list, char *filename); */
 int load_notifylist(NOTIFY *list,int id,int noti);
 int delete_notify(NOTIFY *list, char *meno);
 void add_notify(NOTIFY *list, char *name);
@@ -1867,7 +1868,7 @@ void remote_connect(UR_OBJECT user);
 void remote_disconnect(UR_OBJECT user);
 void view_remote(UR_OBJECT user);
 void edit_remote_servers(UR_OBJECT user);
-//void check_anti_idle();
+/* void check_anti_idle(); */
 int UPDATE_FDS();
 int ADD_FDS();
 void zazabuj(char *inpstr, int ok);
@@ -1996,7 +1997,7 @@ extern char *clovece_saved_opponent(UR_OBJECT);
 extern void add_cloveceplayer(UR_OBJECT,UR_OBJECT);
 extern void hod_kockou(UR_OBJECT, int);
 extern void clovece_next(UR_OBJECT);
-//void clovece(UR_OBJECT,char*);
+/* void clovece(UR_OBJECT,char*); */
 
 extern FR_OBJECT create_farar();
 extern void destruct_farar(UR_OBJECT);

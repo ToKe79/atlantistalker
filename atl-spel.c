@@ -209,7 +209,7 @@ switch (mword[0]) /* hlavny vypinac (switch) */
                     write_user(user,"~FGKulzo sa zhulilo, zakruzilo dookola, spadlo na zem a rozbilo si hlavu..\n");
                     return;
                   }
- 		 //remove_from_hands(target,24);
+ 		 /* remove_from_hands(target,24); */
 		 write_user(user,"~FGOooopsss... Kuzlo sa ti podarilo!\n");
                  target=leave_me_alone(user,target);
 		 put_in_hands(target,expand_predmet(word[2]),default_dur(expand_predmet(word[2])));
@@ -344,7 +344,7 @@ switch (mword[0]) /* hlavny vypinac (switch) */
 	        }
 	     else if (target!=NULL && !strcmp(ptr,"lgw")) { /* zmena na zabu */
 		if (mana_check(user,20,expand_predmet("zaba"),-1)) return;
-//		if (mana_check(user,20,24,23)) return;
+		/* if (mana_check(user,20,24,23)) return; */
 	        write_user(user,"~FGPodarilo sa ti zabacie kuzlo!\n");
                 target=leave_me_alone(user,target);
 	        write_user(target,"~FGKva, citis sa akosi nazelenalo, kva...!!\n");
@@ -353,7 +353,7 @@ switch (mword[0]) /* hlavny vypinac (switch) */
 	        }
 	     else if (target!=NULL && !strcmp(ptr,"lana")) { /* zmena na sliepku */
 		if (mana_check(user,20,expand_predmet("sliepka"),-1)) return;
-//		if (mana_check(user,20,expand_predmet("pupava"),expand_predmet("skorocel"))) return;
+		/* if (mana_check(user,20,expand_predmet("pupava"),expand_predmet("skorocel"))) return; */
 	        write_user(user,"~FGPodarilo sa ti slepacie kuzlo!\n");
                 target=leave_me_alone(user,target);
 	        write_user(target,"~FGPraa..papapa...kotkodaak! Menis sa na sliepku, kotkodaak...!!\n");
@@ -549,7 +549,7 @@ int cnt=0;
 void xannel(UR_OBJECT user,char *inpstr)
 {
 UR_OBJECT u,uu;
-int type=1; // 0 public, 1 closed, 2 private
+int type=1; /* 0 public, 1 closed, 2 private */
 int i,cnt=0,line=0,kolko,total=0,len=0;
 char *pom;
 

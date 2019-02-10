@@ -67,7 +67,7 @@ int user_shrink_xml(UR_OBJECT user)
 int dump_user_data(UR_OBJECT user)
 {
 	if (user != NULL) {
-		xmlTextWriterEndElement(user->xml_writer); // uzatvarame documentelement
+		xmlTextWriterEndElement(user->xml_writer); /* uzatvarame documentelement */
 
 		user_shrink_xml(user);
 
@@ -116,10 +116,9 @@ int dump_user_data_plain(UR_OBJECT user)
 			printf("dump_user_data_plain: Error creating reader\n");
 			return 0;
 		}
-		// precitame cele xml
-		//xmlTextReaderExpand(reader);
+		/* precitame cele xml */
+		/* xmlTextReaderExpand(reader); */
 
-		//*
 		while (xmlTextReaderRead(reader) == 1) {
 			if (!xmlTextReaderIsEmptyElement(reader) && xmlTextReaderHasValue(reader)) {
 				s = xmlTextReaderConstValue(reader);
@@ -140,7 +139,6 @@ int dump_user_data_plain(UR_OBJECT user)
 				}
 			}
 		}
-		//*/
 
 		xmlFreeTextReader(reader);
 		reset_user_xml(user);

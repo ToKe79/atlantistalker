@@ -22,7 +22,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-//#define HTML
+/* #define HTML */
 
 #define title_path "issues"
 #define WEB_CGI_PATH "http://www.atlantis.sk/cgy/magazine.cgi"
@@ -284,10 +284,10 @@ while ((c=fgetc(file))!=EOF)
 
 	  case 9: /* author */
 #ifdef HTML
-		  //fprintf(subor,"<div align=\"right\"><strong>=");
+		  /* fprintf(subor,"<div align=\"right\"><strong>="); */
 	            fprintf(subor,"<div align=\"left\">");
 #else
-		  // fprintf(subor,"                                                 ~OL~FY=");
+		  /* fprintf(subor,"                                                 ~OL~FY="); */
 		   fprintf(subor,"~FG");
 		   waspace=1; howmuch=0; author=1;
 #endif
@@ -295,10 +295,10 @@ while ((c=fgetc(file))!=EOF)
 
 	  case 10: /* /author */
 #ifdef HTML
-		  // fprintf(subor,"=</strong></div><p>\n");
+		  /* fprintf(subor,"=</strong></div><p>\n"); */
 		  fprintf(subor,"</div><p>\n");
 #else
-		   //fprintf(subor,"=~RS~FW\n\n");
+		   /* fprintf(subor,"=~RS~FW\n\n"); */
 		   fprintf(subor,"~RS~FW\n\n");
 		   waspace=1; howmuch=0; author=0;
 #endif

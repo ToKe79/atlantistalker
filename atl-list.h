@@ -6,7 +6,7 @@
 /* Wow, a toto su levely, vecna to tema ... */
  
 char *level_name[]={ 
-//"SLAVE","CITIZEN","SOLDIER","WARRIOR","SAGE","PRIEST","WIZARD","KING","GOD","GODBOT","*" };
+/* "SLAVE","CITIZEN","SOLDIER","WARRIOR","SAGE","PRIEST","WIZARD","KING","GOD","GODBOT","*" }; */
 "OTROK","OBCAN","VOJAK","BOJOVNIK","MUDRC","KNAZ","MAG","KRAL","BOH","SASO","OBCAN","*" };
 
 int tlt4level[]={ 0,0,2,5,10,18,0,0,0,0 };
@@ -335,7 +335,7 @@ char *usercols[16]={   /* pastelky ocislovane podla textoveho modu */
 "\033[0m\033[34m","\033[0m\033[32m","\033[0m\033[35m","\033[0m\033[31m",
 "\033[0m\033[36m","\033[0m\033[33m","\033[0m\033[37m","\033[1m\033[30m",
 "\033[1m\033[34m","\033[1m\033[32m","\033[1m\033[35m","\033[1m\033[31m",
-"\033[1m\033[36m","\033[1m\033[33m","\033[1m\033[37m" }; //zwj
+"\033[1m\033[36m","\033[1m\033[33m","\033[1m\033[37m" }; /* zwj */
 
 char *usercolcodes[16]={
 "",

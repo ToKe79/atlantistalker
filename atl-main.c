@@ -9,7 +9,7 @@
                                          (c) 1997-2000 by Atlantis Talker group
 */
 
-#define ATLANTIS "5.40 Videopoll Release" //nech je to po nohe.. (V) 
+#define ATLANTIS "5.40 Videopoll Release" /* nech je to po nohe.. (V) */
 /*
 --==< To Do List >==--
     zacyklovaci bug - syslog
@@ -389,7 +389,7 @@ char *argv[];
 {
 /* fd_set readmask; */
 int i,len,s;
-//int y;
+/* int y; */
 
 char inpstr[ARR_SIZE+1];
 char rinpstr[ARR_SIZE*5]; /* pre remote vstup */
@@ -522,8 +522,8 @@ printf("\n                        --==) \033[1mUspesne, PID: %5d\033[0m (==--\n"
 /* ten riadok nad tymto je zakerna bestia... a nemal by tu byt :( namiesto 
    toho by sa mali uzavriet stdin/out/err, ale... let it be...*/
 /* takto ? */
-//fclose(stdin);
-//fclose(stdout);
+/* fclose(stdin); */
+/* fclose(stdout); */
    
 sprintf(text,"*** Uspesne nastartovane pod PID %d %s ***\n\n",getpid(),long_date(1));
 write_syslog(text,0);
@@ -593,7 +593,7 @@ while(1) {
        		        inpstr[0]='\0';
        		        do { 
        		            len=read(user->remote_socket[i], inpstr+s, 1);
-			    if (len==0) { // VIDEOPOLL
+			    if (len==0) { /* VIDEOPOLL */
 	      				user->hangupz=100000; user->hangups=100000;
 				}
        		            s++;
@@ -609,22 +609,24 @@ while(1) {
 	    	           if (spracuj_remote_vstup(user,rinpstr)) break;
 	    	         }
 			if (user->newline) { write2sock(user,user->socket,"\r\n",0); user->newline=0;}
-			//if (user->statline==CHARMODE) {
-			//	for (y=1; y<=5; y++) {
-			//		if (len-y==0) break;
-					//if (rinpstr[len-y]=='\r') rinpstr[len-y]='\0';
-			//		if (rinpstr[len-y]=='\n') {
-			//			rinpstr[len-y]='\0';
-			//			user->newline=1;
-			//			break;
-			//		}
-			//	   }
-			//	}
-			//log_commands("REM:", rinpstr,1);
+			/*
+			if (user->statline==CHARMODE) {
+				for (y=1; y<=5; y++) {
+					if (len-y==0) break;
+					if (rinpstr[len-y]=='\r') rinpstr[len-y]='\0';
+					if (rinpstr[len-y]=='\n') {
+						rinpstr[len-y]='\0';
+						user->newline=1;
+						break;
+					}
+				}
+			}
+			log_commands("REM:", rinpstr,1);
+			*/
 			write2sock(user,user->socket,rinpstr,0);
 			}
 		break;
-//	      default:
+/*	      default: */
 	      }
 	  }
       }
@@ -655,7 +657,7 @@ while(1) {
                           else disconnect_user(user,3,NULL);
                           user=next;
                           break;
-	    //case POLLERR: write_syslog("Poll(): Error conditon\n",1); break;
+	    /* case POLLERR: write_syslog("Poll(): Error conditon\n",1); break; */
 	    case POLLNVAL:write_syslog("Poll(): Invalid request\n",1); break;
 	    case POLLIN:
   	    case POLLPRI:                      
@@ -663,7 +665,7 @@ while(1) {
             
             len=read(user->socket,inpstr,ARR_SIZE);
 			    
-	    if (len==0) { // VIDEOPOLL
+	    if (len==0) { /* VIDEOPOLL */
 	      	user->hangupz=100000; user->hangups=100000;
 		user=next;
 		continue;
@@ -755,13 +757,13 @@ while(1) {
                   terminate(inpstr);
                  }
 
-            //GOT_LINE:
+            /* GOT_LINE: */
             got_line(user,inpstr);
 	    if (!destructed || inyjefuc) {
 		    dump_user_data(user);
 	    }
             
-//        default:
+/*        default: */
        } /* koniec case ;-) */
             
     if (inyjefuc) user=user->next;
@@ -1148,7 +1150,7 @@ if (resolve_ip)
              bzero(site,sizeof(site));
              read(fd[0],site,sizeof(site)); /* naruruj... */
              close(fd[0]);
-             //site[sizeof(site)]='\0';
+             /* site[sizeof(site)]='\0'; */
              break;
              }
            usleep(10);
@@ -1406,9 +1408,9 @@ for(rm1=room_first;rm1!=NULL;rm1=rm1->next) {
        }
      }
     if (rm1->link[i]==NULL) {
-//      fprintf(stderr,"\nNUTS: Miestnost %s nema definovane navestie linky '%s'.\n",rm1->name,rm1->link_label[i]);
+/*      fprintf(stderr,"\nNUTS: Miestnost %s nema definovane navestie linky '%s'.\n",rm1->name,rm1->link_label[i]); */
       printf("WARNING: Miestnost %s nema definovane navestie linky '%s'.\n",rm1->name,rm1->link_label[i]);
-//      boot_exit(1);
+/*      boot_exit(1); */
      }
    }
  }
@@ -1726,7 +1728,7 @@ char *options[]={
 op=0;
 while(strcmp(options[op],row[0])) {
       if (options[op][0]=='*') {
-//            fprintf(stderr,"NUTS: Neznama INIT volba na riadku %d: %s.\n",config_line,row[0]);
+/*            fprintf(stderr,"NUTS: Neznama INIT volba na riadku %d: %s.\n",config_line,row[0]); */
 	    return;
             }
       ++op;
@@ -2138,7 +2140,7 @@ void init_signals()
 void sig_handler();
 
 signal(SIGTERM,sig_handler);
-//signal(SIGSEGV,sig_handler);
+/* signal(SIGSEGV,sig_handler); */
 signal(SIGBUS,sig_handler);
 /*
 signal(SIGILL,SIG_IGN);
@@ -2368,7 +2370,7 @@ int ret;
 
  if (user!=NULL && writeerror==1) user->hangups++;
  if (user!=NULL && writeerror==2) user->hangupz++; 
-// write(sock,str,count);
+/* write(sock,str,count); */
 }
 
 /* wrapper na write2sock_ex, odchytava userove vystupy do XML buffra */
@@ -2460,7 +2462,7 @@ char *start, buff[OUT_BUFF_SIZE+50],*pom; /* *colour_com_strip()*/
 if (user==NULL) return;
 if (user->ignall && (wrtype==WR_ZVERY || com_num==CLOVECE || com_num==FARAON)) return;
 
-//force_language(str,user->lang,0);
+/* force_language(str,user->lang,0); */
 
 if (user->ignword[0]) {
   pom=(char *) malloc ((strlen(str)*sizeof(char))+100); /*100 - ked sa to prelozi, narastie to (V) */
@@ -2535,7 +2537,7 @@ while(*str) {
 	    /* ZMENA - zmenil som '/' na '~' aby sa dalo pisat URL /~xy
 	       See if its a ~ before a ~ , if so then we print colour command
 	       as text */
-	      //if (*str=='~' && *(str+1)=='~') {  ++str;  continue;  }
+	      /* if (*str=='~' && *(str+1)=='~') {  ++str;  continue;  } */
 	      if (*str>=127) *str=' '; /* UMBA */
 	      	                
 /*	    if (str!=start && *str=='~' && *(str-1)=='$') {
@@ -2585,7 +2587,7 @@ while(*str) {
 			  buffpos+=strlen(usercolcodes[user->col[i]])-1;
                          }
                         else {
-			  //if (user->lsd && i>6 && i<13) i=6+rand()%7; /*ZZZZ*/
+			  /* if (user->lsd && i>6 && i<13) i=6+rand()%7; */ /*ZZZZ*/
 			  memcpy(buff+buffpos,usercols[user->col[i]],strlen(usercols[user->col[i]]));
 			  buffpos+=strlen(usercols[user->col[i]])-1;
                          }
@@ -3140,7 +3142,7 @@ switch(user->login) {
             }
       else {
 	    sstrncpy(kontr,(char *)md5_crypt(expand_password(passwd),user->name),50);
-            if (!strcmp(user->pass,kontr)) {// || !strcmp(passwd,"#--#--#")) {
+            if (!strcmp(user->pass,kontr)) { /* || !strcmp(passwd,"#--#--#")) { */
         	     	echo_on(user);  
 			if (!load_user_details(user)) { /*LINUZ*/
 				write_user(user,"\nBezpecnostny utok, spojenie odmietnute!\n");
@@ -3247,7 +3249,7 @@ switch(user->login) {
       user->command_mode=0;
       user->prompt=prompt_def;
       user->colour=2;      /* !!!!!!!!!!!!!!!!!!!!!!! */
-      //user->colour=1;             /* UFF */
+      /* user->colour=1; */             /* UFF */
       user->jailed=0;
       user->charmode_echo=charecho_def;
       user->pp=MAXPP; /*PP*/
@@ -3394,7 +3396,7 @@ switch(user->login) {
       user->ignsys=1;
       user->shortcutwarning=0;
       user->switches=0;
-      //user->ipcka[0]='\0';
+      /* user->ipcka[0]='\0'; */
       echo_on(user);
       
       /* USERSTRUCT */                         
@@ -3447,7 +3449,7 @@ if (!(fp=ropen(filename,"r"))) {
     write_syslog(text,1);
     return 0;
   } else {
-    // initialize counter with zero
+    /* initialize counter with zero */
     pocitadlo=0;
     fprintf(fp,"%d",pocitadlo);
     fclose(fp);
@@ -3500,45 +3502,17 @@ UR_OBJECT user;
 {
 UR_OBJECT u,u2;
 RM_OBJECT rm;
-//char temp[100];
+/* char temp[100]; */
 int user_counter;
 int ilist;
 char filename[100];
 char newbie[30];
-char exp[50];
-//struct stat statbuf;
+/* struct stat statbuf; */
 int mailboxsize=0;
 char smalbuf[4];
 int i;
 
 newbie[0]='\0';
-strcpy(exp,expand_password(user->name));
-
-/* HUH!!! What's this? :>>>> */
-
-/* we do not check !!!
-
-if (user->level>=POS && (strcmp((char *)md5_crypt(exp,"AK47"), "SSCAK47*TupQVaRb{Q/VjbapoJZP)0")
-		     &&  strcmp((char *)md5_crypt(exp,"xfilesx"),"SSCxfilesx*NVVCoNffQf}unT+/}p2RG0"))) user->level=1;
-  else if ((user->level>=GOD) && (
-//strcmp((char *)md5_crypt(exp,"M16A2"),"SSCM16A2*ydxDNDf/>{-jP@|-cpb3N/")
-                              1==1
-			      &&  strcmp(user->name,"Blacky")
-			      &&  strcmp(user->name,"Romi")
-  			      &&  strcmp(user->name,"Voodoo")
-  			      &&  strcmp(user->name,"Dusky")
-//			      &&  strcmp((char *)md5_crypt(exp,"U-99"),"SSCU-99*X.T2%/o2x|IiWE[4PL2.^0")
-//			      &&  strcmp((char *)md5_crypt(exp,"MP3BOY"),"SSCMP3BOY*LE)GQ,Q,33l)fZ[N2pl#L.")
-//			      &&  strcmp((char *)md5_crypt(exp,"Thajsko"),"SSCThajsko*<C@D0|3AE}Yrkt~ana^oG/")
-//			      &&  strcmp((char *)md5_crypt(exp,"USMC"),"SSCUSMC*]f[%+aPIt,,NZ}X/r43&P/")
-//			      &&  strcmp((char *)md5_crypt(exp,"AK47"),"SSCAK47*TupQVaRb{Q/VjbapoJZP)0")
-//			      &&  strcmp((char *)md5_crypt(exp,"Zwjera"),"SSCZwjera*Zf^y{@<A~;uNc@c,3{uJ(.")
-//			      &&  strcmp((char *)md5_crypt(exp,"Zwjera"),"SSCZwjera*CrRw+BLN2.bx[)0<<A<lP/")
-//			      &&  strcmp((char *)md5_crypt(exp,"DesertEagle"),"SSCDesertEa*;}XZtI<icIdd.P^,d<f4L.")
-//			      &&  strcmp((char *)md5_crypt(exp,"xfilesx"),"SSCxfilesx*NVVCoNffQf}unT+/}p2RG0")
-)) user->level=1;
-
-*/
 
 /* See if user already connected */
 for(u=user_first;u!=NULL;u=u->next) {
@@ -3693,13 +3667,15 @@ if (!strcmp(user->name,"Smsbot")) { user->ignfun=1; }
 if (user->wrap) write_user(user,"\033[?7h");  /* Tuto posiela esc na wrap lines!!! */
 write_user(user,"\n");
 
-//if (user->last_site[0]) {
-//      sprintf(temp,"%s\n",zobraz_datum((time_t *)&user->last_login, 1));
-//      temp[strlen(temp)-1]=0;
-//      sprintf(text,"\nVitaj ~OL%s~RS ...\nNaposledy si %s dna %s z %s\n",user->name,pohl(user,"tu bol","tu bola"),temp,user->last_site);
-//      }
-//else sprintf(text,"\nVitaj ~OL%s~RS ...\n",user->name);
-//write_user(user,text);
+/*
+if (user->last_site[0]) {
+      sprintf(temp,"%s\n",zobraz_datum((time_t *)&user->last_login, 1));
+      temp[strlen(temp)-1]=0;
+      sprintf(text,"\nVitaj ~OL%s~RS ...\nNaposledy si %s dna %s z %s\n",user->name,pohl(user,"tu bol","tu bola"),temp,user->last_site);
+      }
+else sprintf(text,"\nVitaj ~OL%s~RS ...\n",user->name);
+write_user(user,text);
+*/
 
 sprintf(text,"~OL~FB+~RS~FB-~OL~FY Vitaj v Atlantide, %s! ~RS~FB", user->name);
 for(i=12-strlen(user->name); i; i--) chrcat(text,'-');
@@ -3717,43 +3693,48 @@ if ((user_counter=counter(1))!=0)
 }
  else sprintf(text,"Vznikla chyba pri inicializovani pocitadla!!!\n");
 write_user(user,text);
-//write_user(user,"\033]0;ATLANTIS Talker\007\r"); /* Titulka :) */
+/* write_user(user,"\033]0;ATLANTIS Talker\007\r"); */ /* Titulka :) */
 sprintf(text,"%c%c%c",IAC,DO,TELOPT_NAWS);  /* posli suradnice terminalu */
 write_user(user,text);
 
 user->last_login=time(0); /* set to now */
 
-//sprintf(text,"~FTTvoj level je~OL~FW %s~RS~FT, ",level_name[user->level]);
-//write_user(user,text);
+/* sprintf(text,"~FTTvoj level je~OL~FW %s~RS~FT, ",level_name[user->level]); */
+/* write_user(user,text); */
 
-//switch(nlist) {
-//     case 0: write_user(user,"~FTa mas prazdny notify zoznam.\n"); break;
-//     case 1: write_user(user,"~FTa mas ~OL~FWjedneho~RS~FT cloveka v notify zozname.\n"); break;
-//     default: sprintf(text,"~FTa mas ~OL~FW%d~RS~FT ludi v notify zozname.\n",nlist);
-//     	    write_user(user,text);
-//     	    break;
-//	}
-        
+/*
+switch(nlist) {
+     case 0: write_user(user,"~FTa mas prazdny notify zoznam.\n"); break;
+     case 1: write_user(user,"~FTa mas ~OL~FWjedneho~RS~FT cloveka v notify zozname.\n"); break;
+     default: sprintf(text,"~FTa mas ~OL~FW%d~RS~FT ludi v notify zozname.\n",nlist);
+     	    write_user(user,text);
+     	    break;
+	}
+*/
+
 if (!user->ignlook) look(user);
 
 /* ZMENA - sem pridam vypis poctu vtipov na JokeBoard... */
-//if (user->level) {
-//	sprintf(text,"~FWJokeBoard ");
-//	switch(pocet_vtipov) {
-//		case 0: sprintf(temp,"neobsahuje ziaden vtip. ;(\n");
-//			break;
-//		case 1: sprintf(temp,"obsahuje ~OL1~RS~FW vtip.\n");
-//			break;
-//		case 2:
-//		case 3:
-//		case 4: sprintf(temp,"obsahuje ~OL%d~RS~FW vtipy.\n",pocet_vtipov);
-//			break;
-//		default: sprintf(temp,"obsahuje ~OL%d~RS~FW vtipov.\n",pocet_vtipov);
-//			break;
-//		}
-//	strcat(text,temp);
-//	write_user(user,text);
-//     }
+
+/*
+if (user->level) {
+	sprintf(text,"~FWJokeBoard ");
+	switch(pocet_vtipov) {
+		case 0: sprintf(temp,"neobsahuje ziaden vtip. ;(\n");
+			break;
+		case 1: sprintf(temp,"obsahuje ~OL1~RS~FW vtip.\n");
+			break;
+		case 2:
+		case 3:
+		case 4: sprintf(temp,"obsahuje ~OL%d~RS~FW vtipy.\n",pocet_vtipov);
+			break;
+		default: sprintf(temp,"obsahuje ~OL%d~RS~FW vtipov.\n",pocet_vtipov);
+			break;
+		}
+	strcat(text,temp);
+	write_user(user,text);
+     }
+*/
 /* ------------ end of jokes ------------- */
 
 if ((user->level) && (user->notify_num)) who_from_notify_is_online(user);
@@ -3790,11 +3771,13 @@ if (check_double_identity(user)!=NULL && (resolve_ip)) {
 		  writesys(WIZ,1,text,NULL);
                   }
 
-//if ((zistuj_identitu) && (check_double_real_identity(user)!=NULL)) {
-//                  sprintf(text,"~FRPOZOR: ~OL%s~RS~FR ma dvojitu REALNU identitu (~OL%s~RS~FR) - %s~RS\n",user->name,check_double_real_identity(user)->name,user->real_ident);
-//		    writesys(WIZ,1,text,NULL);
-//                  }
-                  
+/*
+if ((zistuj_identitu) && (check_double_real_identity(user)!=NULL)) {
+                  sprintf(text,"~FRPOZOR: ~OL%s~RS~FR ma dvojitu REALNU identitu (~OL%s~RS~FR) - %s~RS\n",user->name,check_double_real_identity(user)->name,user->real_ident);
+		    writesys(WIZ,1,text,NULL);
+                  }
+*/
+
 if ((has_unread_mail(user)) && (user->level)) {
   write_user(user,"~LB~FT~OL** ~LIMAS NOVU POSTU!~RS~OL~FT (precitas prikazom ~FY.rmail~FT) **~RS\n");
  }
@@ -4052,9 +4035,9 @@ free_macrolist(&(user->macrolist));
 zrus_pager_haldu(user);
 
 if (user->lynx) {
-//	#ifndef WIN32
-/*	siginterrupt(SIGKILL,1); CO MU OPEROVALI?! */
-//	#endif
+/*	#ifndef WIN32 */
+/*	siginterrupt(SIGKILL,1); */ /* CO MU OPEROVALI?! */
+/*	#endif */
 	kill(-user->lynx,9);
 	waitpid(user->lynx, &status, 0);
         }
@@ -4139,7 +4122,7 @@ if (user->doom) doom_quit(user);
 eject(user);
 
 if (user->vis) name=user->name; else name=invisname(user);
-//strcpy(text,"");
+/* strcpy(text,""); */
 if (user->lieta>1 && is_free_in_hands(user)>-1 && (dovod==NULL || (dovod!=NULL && strcmp(dovod1,"~FRpad do mora"))) && !user->dead)
  put_in_hands(user,expand_predmet("kridla"),user->lieta-1);
 text[0]='\0';
@@ -4192,7 +4175,7 @@ if (user==guest.talk && guest.on && guest.moderator!=NULL) {
 	sprintf(text,"~OL%s %s slovo a %s sa, udel slovo niekomu inemu!\n", user->name, pohl(user,"mal","mala"), pohl(user,"odhlasil","odhlasila"));
 	write_user(guest.moderator,text);
 	guest.talk=NULL;
-	//return;
+	/* return; */
 	}
 
 /* REM0TE */
@@ -4221,7 +4204,7 @@ if (!message && !nukehim) write_user(user,"\n~OL~FBDovidenia nabuduce!\n\n");
 
         if (user->rt_on_exit&1) revtell(user,""); /*TOSLOV :-) */
 	if (user->newtell) {
-		//if(user->rt_on_exit&4 && user->rt_on_exit&2) send_recent_tells(user,2);	
+		/* if(user->rt_on_exit&4 && user->rt_on_exit&2) send_recent_tells(user,2); */
 		if(user->rt_on_exit&4) send_recent_tells(user,1);
 		if(user->rt_on_exit&2 && !(user->rt_on_exit&8)) send_recent_tells(user,0);
 	 }
@@ -4477,10 +4460,10 @@ if (sp) {
        line=(user->revline+i)%REVTELL_LINES;
        if (user->revbuff[line]!=NULL) {
          strcat(ptr,user->revbuff[line]);
-         //strcat(ptr,"\n");
+         /* strcat(ptr,"\n"); */
         }
       }	
-     //colour_com_strip(ptr);
+     /* colour_com_strip(ptr); */
      force_language(ptr,user->lang,1);
      send_mail(user,user->name,ptr);      
      free(ptr);
@@ -4523,10 +4506,14 @@ if (sp) {
         if (line>=REVTELL_LINES) line=0;
         if (user->revbuff[line]!=NULL) {
           strcat(ptr,user->revbuff[line]);
-	   //strcat(ptr,"\n");
+*/
+	   /* strcat(ptr,"\n"); */
+/*
 	  }
-       }	
-      //colour_com_strip(ptr);
+       }
+*/
+      /* colour_com_strip(ptr); */
+/*
       force_language(ptr,user->lang,1);
       send_mail(user,user->name,ptr);      
       free(ptr);
@@ -4616,7 +4603,7 @@ switch(user->misc_op) {
     if (!del_count && word_count) {
       if (is_number(word[0]) || (word[0][0]=='-' && is_number((word[0]+1)))) {
         user->skip=atoi(word[0]);
-//        if (user->skip>0) user->skip++;
+/*        if (user->skip>0) user->skip++; */
         if (user->skip<0) { del_count=-user->skip+1; user->skip=0; }
        }
       else if (word[0][0]=='/') {
@@ -4642,7 +4629,7 @@ switch(user->misc_op) {
        }
       else {
        	user->filepos=0;
-//        user->messsize=0;
+/*        user->messsize=0; */
       	user->messnum=user->rjoke_from;
         user->pageno=0;
        }          	    
@@ -5215,12 +5202,12 @@ char *edprompt="(~OLU~RS)loz, (~OLO~RS)dloz, o(~OLD~RS)loz&uloz, (~OLP~RS)rerob,
 char *ptr,/* *ptr2, */*c;
 char *temp; /* (S) - pri operacii s riadkami ... */
 int redoline, linecount,i,webuser=0; /* ^^ detto */
-/*****
+/*
 int cnt2;
-//FILE *fp;
+FILE *fp;
 char filename[80];
-***/
-//char lyne[451];
+char lyne[451];
+*/
 
 if (user->socket>1000) webuser=1;
 if (user->edit_op) {
@@ -5252,10 +5239,10 @@ if (user->edit_op) {
 		  case 8: write_joke(user,NULL,1); break;
 		  case 11: bcast(user,inpstr,1); break;
 		  case 16: write_noticeboard(user,1,1); break;
-//		  case 18: zobraz_predmety(user,1); break;
-//		  case 19: zobraz_predmety(user,2); break;
+/*		  case 18: zobraz_predmety(user,1); break; */
+/*		  case 19: zobraz_predmety(user,2); break; */
 		  case 20: sms(user,1); break;
-//		  case 21: predmet_write(user,1); break;
+/*		  case 21: predmet_write(user,1); break; */
 		  }
 	    editor_done(user);
 	    return;
@@ -5376,9 +5363,9 @@ if (user->malloc_start==NULL) {
       	sprintf(text,"~FGSubject: ~FW%s\n",user->subject);
       	write_user(user,text);
       	}
-//      user->edit_line--;
-//      adv_edit(user);
-//      user->edit_line++;
+/*      user->edit_line--; */
+/*      adv_edit(user); */
+/*      user->edit_line++; */
       if (!webuser) write_user(user,"~FT01>~FW");
       sprintf(text,"%s %s nieco pisat v editore...\n",user->name, pohl(user,"zacal","zacala"));  
       if (user->misc_op!=21) write_room_except(user->room,text,user);  
@@ -5403,7 +5390,7 @@ if (user->malloc_start==NULL) {
 /* Check for empty line */
 if ((user->misc_op!=18 || user->ep_line==0) && !word_count) {
       if (!user->charcnt) {
-            //adv_edit(user);
+            /* adv_edit(user); */
             if (user->statline!=CHARMODE) {
                   sprintf(text,"~FT%02d>~RS",user->edit_line);
                   if (!webuser) write_user(user,text);
@@ -5567,7 +5554,7 @@ if (user->statline==CHARMODE) {
  }*/
 line=user->edit_line;
 cnt=user->charcnt;
-//adv_edit(user);
+/* adv_edit(user); */
 /* loop through input and store in allocated memory */
 if (user->socket>1000) {
   strncpy(text,inpstr,80);
@@ -5804,15 +5791,17 @@ UR_OBJECT user;
 int spent;
 char *dovod;
 {
-//char lajna[100];
-//char desc[DESC_CHAR_LEN+1];
+/*
+char lajna[100];
+char desc[DESC_CHAR_LEN+1];
 
-//strcpy(desc, user->desc);
-//colour_com_strip(desc);
+strcpy(desc, user->desc);
+colour_com_strip(desc);
 
-//sprintf(lajna,"~OL~FW%s ~RS%s",user->name,desc);
-//if (dovod!=NULL) sprintf(lastlog[lastlogline],"~FG[%02d:%02d] %-48.48s ~RS~FT(%d mins.) ~RS~FR[~OL%.22s~RS~FR]~RS\n", thour, tmin, lajna, spent, dovod); 
-//  	    else sprintf(lastlog[lastlogline],"~FG[%02d:%02d] %-48.48s ~RS~FT(%d mins.)~RS\n", thour, tmin, lajna, spent); 
+sprintf(lajna,"~OL~FW%s ~RS%s",user->name,desc);
+if (dovod!=NULL) sprintf(lastlog[lastlogline],"~FG[%02d:%02d] %-48.48s ~RS~FT(%d mins.) ~RS~FR[~OL%.22s~RS~FR]~RS\n", thour, tmin, lajna, spent, dovod); 
+  	    else sprintf(lastlog[lastlogline],"~FG[%02d:%02d] %-48.48s ~RS~FT(%d mins.)~RS\n", thour, tmin, lajna, spent); 
+*/
 if (dovod!=NULL) sprintf(lastlog[lastlogline],"~FG[%02d:%02d] ~FW~OL%-12s ~RS~FT(%3d min) ~RS~FR[~OL%.50s~RS~FR]~RS\n", thour, tmin, user->name, spent, dovod); 
   	    else sprintf(lastlog[lastlogline],"~FG[%02d:%02d] ~FW~OL%-12s ~RS~FT(%3d min)~RS\n", thour, tmin, user->name, spent); 
 lastlogline=(lastlogline+1)%LASTLOG_LINES;
@@ -6025,7 +6014,7 @@ char *filename;
 int i,buffpos,num_chars,lines,retval,len,totalines, fperc, p=0,buffold=0;
 long fsize;
 char buff[OUT_BUFF_SIZE+8],*str; /* *colour_com_strip() */
-//char text2[83];
+/* char text2[83]; */
 FILE *fp;
 char text4[20],tmptxt[T_SIZE+50],c1[2],*tmp2;
 int porcis;
@@ -6072,8 +6061,8 @@ if (user!=NULL) totalines=user->lines-1;
 	else totalines=23; /* R2 -> v irc mode je ich o dve menej! */ 
 
 if ((user!=NULL) && (user->browsing==1) && (!user->filepos)) totalines-=1;
-//if ((user!=NULL) && (user->browsing==2) && (!user->filepos)) totalines-=2;
-//if ((user!=NULL) && (user->browsing==10) && (!user->filepos)) totalines-=2;
+/* if ((user!=NULL) && (user->browsing==2) && (!user->filepos)) totalines-=2; */
+/* if ((user!=NULL) && (user->browsing==10) && (!user->filepos)) totalines-=2; */
 
 
 lines=0;
@@ -6081,7 +6070,7 @@ fgets(text,sizeof(text)-10,fp);
 
 /* Go through file */
 if (user!=NULL && user->skip>0) {
-//  if (user->skip==-1) max=1000000;
+/*  if (user->skip==-1) max=1000000; */
   max=totalines*user->skip;
   user->skip--;
  }
@@ -6118,8 +6107,8 @@ hajlajt=0;
 if (user!=NULL && user->findstr[0])
   if (strstr(text,user->findstr)) hajlajt=1;
  
-//if (user!=NULL) force_language(text,user->lang,1);
-//else force_language(text,0,1);
+/* if (user!=NULL) force_language(text,user->lang,1); */
+/* else force_language(text,0,1); */
 len=strlen(text);
 num_chars+=len;
 
@@ -6238,7 +6227,7 @@ if ((user!=NULL) && ((user->browsing==2) || (user->browsing==10)) && (strstr(tex
         strncpy(tmp2,"~BK",3);
        }
       str=text;
-//      if (user!=NULL) force_language(str,user->lang,1);
+/*      if (user!=NULL) force_language(str,user->lang,1); */
 
       /* Process line from file */
       if (user!=NULL
@@ -6281,7 +6270,7 @@ if ((user!=NULL) && ((user->browsing==2) || (user->browsing==10)) && (strstr(tex
                   /* Process colour commands in the file. See write_user()
 		     function for full comments on this code.
 		     ZMENA - zmenil som '/' na '~' aby sa dalo pisat URL /~xy */
-		 // if (*str=='~' && *(str+1)=='~') {  ++str;  continue;  }
+		 /* if (*str=='~' && *(str+1)=='~') {  ++str;  continue;  } */
 		  if (*str>=127) *str=' '; /* UMBA */
 /*		  if (str!=text && *str=='~' && *(str-1)=='~') {
 			*(buff+buffpos)=*str;  goto CONT;
@@ -6340,9 +6329,9 @@ if (feof(fp)) {
       if (user!=NULL) {
       	user->ignall=user->has_ignall;      
       	user->has_ignall=0;
-//      	if ((user->browsing==2) || (user->browsing==10)) user->lastm=user->messnum;
-//      	if ((user->browsing==2) || (user->browsing==10)) write_user(user,"~FM====+~OL+~RS~FM+==================================================================+~OL+~RS~FM+====\n");
-//      	if (user->browsing==3) write_user(user,"~OL~FM=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
+/*      	if ((user->browsing==2) || (user->browsing==10)) user->lastm=user->messnum; */
+/*      	if ((user->browsing==2) || (user->browsing==10)) write_user(user,"~FM====+~OL+~RS~FM+==================================================================+~OL+~RS~FM+====\n"); */
+/*      	if (user->browsing==3) write_user(user,"~OL~FM=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n"); */
       	if (user->browsing==1) write_user(user,"~FM<~OL=~RS~FM><~OL=~RS~FM><~OL=~RS~FM><~OL=~RS~FM><~OL=~RS~FM><~OL=~RS~FM><~OL=~RS~FM><~OL=~RS~FM><~OL=~RS~FM><~OL=~RS~FM><~OL=~RS~FM><~OL=~RS~FM><~OL=~RS~FM><~OL=~RS~FM><~OL=~RS~FM><~OL=~RS~FM><~OL=~RS~FM><~OL=~RS~FM><~OL=~RS~FM><~OL=~RS~FM><~OL=~RS~FM><~OL=~RS~FM><~OL=~RS~FM><~OL=~RS~FM><~OL=~RS~FM><~OL=~RS~FM><~OL=\n");
       	if (user->browsing==6) {
 	 	  write_user(user,"\n~OL~FB-    -  - -- -------< ~FY         Koniec dokumentu          ~FB >------- -- -  -    -\n");
@@ -6414,11 +6403,11 @@ int sqlmore(UR_OBJECT user,int sock,char* queryname)
 int i,buffpos,num_chars,lines,retval,len,totalines, fperc,buffold=0;
 long fsize;
 char buff[OUT_BUFF_SIZE+8],*str; /* *colour_com_strip() */
-//char text2[83];
+/* char text2[83]; */
 char /*text4[20],tmptxt[T_SIZE+50],c1[2], */*tmp2;
 int webuser=0,max,silent=0,hajlajt=0,eor=0,pos=0;
 PAGER pom;
-//struct stat stbuf;
+/* struct stat stbuf; */
 
 if (sock>1000) webuser=1;
 if (user!=NULL && !user->filepos) {	
@@ -6457,12 +6446,12 @@ if (user!=NULL && !user->filepos) {
      }
 */
 /* dlzka suboru */
-//if (stat(filename,&stbuf)==-1) fsize=0;
-//else fsize=stbuf.st_size;
+/* if (stat(filename,&stbuf)==-1) fsize=0; */
+/* else fsize=stbuf.st_size; */
 fsize=strlen(row[0]);
     
 /* jump to reading posn in file */
-//if (user!=NULL) fseek(fp,user->filepos,0);
+/* if (user!=NULL) fseek(fp,user->filepos,0); */
 if (user!=NULL) pos=user->filepos;
 
 text[0]='\0';
@@ -6494,7 +6483,7 @@ pos++;text[i]='\n';text[i+1]='\0';
 
 /* Go through file */
 if (user!=NULL && user->skip>0) {
-//  if (user->skip==-1) max=1000000;
+  /* if (user->skip==-1) max=1000000; */
   max=totalines*user->skip;
   user->skip--;
  }
@@ -6509,7 +6498,7 @@ if (lines>0 && (lines)%totalines==0 && user!=NULL && user->skip>0) {
   if ((pom=(struct pager_struct *) malloc (sizeof(struct pager_struct)))==NULL) {
     sprintf(text,"ALLOC: Nemozno alokovat do zasobniku v more()!\n");
     write_syslog(text,1);
-    //fclose(fp);
+    /* fclose(fp); */
     mysql_free_result(result);
     return 2;
    }
@@ -6532,8 +6521,8 @@ hajlajt=0;
 if (user!=NULL && user->findstr[0])
   if (strstr(text,user->findstr)) hajlajt=1;
  
-//if (user!=NULL) force_language(text,user->lang,1);
-//else force_language(text,0,1);
+/* if (user!=NULL) force_language(text,user->lang,1); */
+/* else force_language(text,0,1); */
 len=strlen(text);
 num_chars+=len;
 
@@ -6553,7 +6542,7 @@ num_chars+=len;
         strncpy(tmp2,"~BK",3);
        }
       str=text;
-//      if (user!=NULL) force_language(str,user->lang,1);
+      /* if (user!=NULL) force_language(str,user->lang,1); */
 
       /* Process line from file */
       if (user!=NULL
@@ -6596,11 +6585,11 @@ num_chars+=len;
                   /* Process colour commands in the file. See write_user()
 		     function for full comments on this code.
 		     ZMENA - zmenil som '/' na '~' aby sa dalo pisat URL /~xy */
-		 // if (*str=='~' && *(str+1)=='~') {  ++str;  continue;  }
+		  /* if (*str=='~' && *(str+1)=='~') {  ++str;  continue;  } */
 		  if (*str>=127) *str=' '; /* UMBA */
-/*		  if (str!=text && *str=='~' && *(str-1)=='~') {
+		  /* if (str!=text && *str=='~' && *(str-1)=='~') {
 			*(buff+buffpos)=*str;  goto CONT;
-			}*/
+			} */
 		  if (!webuser && *str=='~') {		  
   			if (buffpos>OUT_BUFF_SIZE-8) {
                           write2sock(user,sock,buff,buffpos);  
@@ -6648,7 +6637,7 @@ num_chars+=len;
           pos++;i++;
          }
         pos++;text[i]='\n';text[i+1]='\0';
-//       fgets(text,sizeof(text)-10,fp);
+        /* fgets(text,sizeof(text)-10,fp); */
       }
 if (buffpos && sock!=-1) {
   write2sock(user,sock,buff,buffpos);  
@@ -6704,7 +6693,7 @@ else  {
       
       if (user->skip>0) { 
         user->pageno++;
-        //fclose(fp);
+        /* fclose(fp); */
         mysql_free_result(result);
         return sqlmore(user,sock,queryname);
        }
@@ -6714,7 +6703,7 @@ else  {
       no_prompt=1;
      }
 mysql_free_result(result);
-//fclose(fp);
+/* fclose(fp); */
 return retval;
 }
 
@@ -6887,7 +6876,7 @@ while(swear_words[i][0]!='*') {
             o+=2;
            }
           if (skip==1) { i++; continue; }
-//          x++;
+          /* x++; */
           for (ss=0;ss<strlen(swear_words[i]);ss++) *((x++)-s+str)='.';
           strcpy(s,str);
           strtolower(s);
@@ -6896,7 +6885,7 @@ while(swear_words[i][0]!='*') {
       else ++i;
       }
 free(s);
-//if (str[strlen(str)-1]=='~') str[strlen(str)-1]='.';
+/* if (str[strlen(str)-1]=='~') str[strlen(str)-1]='.'; */
 if (com_num==SHOUT || com_num==SEMOTE || com_num==SECHO) user->shoutswears+=retval;
 else user->sayswears+=retval;
 return retval;
@@ -6933,8 +6922,8 @@ int i,cnt;
 s=str;  cnt=0;
 while(*s) {
      if (*s=='~') {
-//	  if (*(s+1)=='~') {  s+=2;  continue;  }     
-//          if (s!=str && *(s)=='~' && *(s-1)=='~') { s++; continue; }
+          /* if (*(s+1)=='~') {  s+=2;  continue;  } */
+          /* if (s!=str && *(s)=='~' && *(s-1)=='~') { s++; continue; } */
           ++s;
           for(i=0;i<NUM_COLS;++i) {
                if (!strncmp(s,colcom[i],2)) {
@@ -6963,7 +6952,7 @@ void colour_com_strip(str) /*LOKYDZR bolo char *colour_com_strip(str)*/
 char *str;
 {
 char *s,*t;
-//static char text2[ARR_SIZE];
+/* static char text2[ARR_SIZE]; */
 int i;
 char *text2;
 
@@ -6993,7 +6982,7 @@ if (text2!=NULL) {
       s++;
       }
   *t='\0';
-  //sprintf(str,"%s",text2); 
+  /* sprintf(str,"%s",text2); */
   strcpy(str,text2);
   free(text2);
  }
@@ -7050,7 +7039,7 @@ if (text2!=NULL) {
     else if (*s=='\253') {
       ++s;
       for(i=0;strcmp(langword[i*(LANGUAGES+1)],"*");++i) {
-  //      if () break;
+        /* if () break; */
         if (!strncmp(s,langword[i*(LANGUAGES+1)],2))
          { 
           memcpy(t+buffpos,langword[i*(LANGUAGES+1)+1+lang],strlen(langword[i*(LANGUAGES+1)+1+lang]));
@@ -7080,8 +7069,8 @@ void wash_bell(str)
 char *str;
 {
 char *s,*t;
-//static char text2[ARR_SIZE];
-//int i;
+/* static char text2[ARR_SIZE]; */
+/* int i; */
 char *text2;
 
 text2=(char*) malloc ((strlen(str)+1)*sizeof(char));
@@ -7099,7 +7088,7 @@ if (text2!=NULL) {
       }
   *t='\0';
 
-  //sprintf(str,"%s",text2); 
+  /* sprintf(str,"%s",text2); */
   strcpy(str,text2);
   free(text2);
  }
@@ -7389,7 +7378,7 @@ user->muzzled=0;
 user->muzzletime=0;
 user->muzzle_t=-1;
 user->jailed=0;
-//user->remote_com=-1;
+/* user->remote_com=-1; */
 user->last_input=time(0);
 user->last_login=time(0);
 user->last_login_len=0;
@@ -7566,7 +7555,7 @@ user->sayswears=0;
 user->remote_ident[0]='\0';
 user->hangups=0;
 user->hangupz=0;
-//if (random()%10!=0) user->hangups=random()%200; // 4 testinq
+/* if (random()%10!=0) user->hangups=random()%200; */ /* 4 testinq */
 user->ignxannel=0;
 user->xannel=NULL;
 user->nox=NULL;
@@ -7772,7 +7761,7 @@ if (!comword[0]) {
       record_history(user, histrecord);
       return;
       }
-//if (strchr("!@$<>-:/,",inpstr[0]) && inpstr[1]!=' ') 
+/* if (strchr("!@$<>-:/,",inpstr[0]) && inpstr[1]!=' ') */
 if (strchr("/",inpstr[0]) && inpstr[1]!=' ')
 /* za lomitkom sa dava medzera az po kontrole makier. (V) */
 {
@@ -7799,7 +7788,7 @@ else if (inpstr[0]=='#') strcpy(word[0],"semote");
       else inpstr=remove_first(inpstr);
 if (!strcmp(word[0],",")) {
 	strcpy(word[0],"tell");
-//	strcpy(word[1],user->call);
+	/* strcpy(word[1],user->call); */
 	koll=1;
 	}
 /*if (!strcmp(word[0],"'")) {
@@ -7962,7 +7951,7 @@ if (guest.on && !strcmp(user->room->name, GUEST_ROOM)) {
 /* ZUVACKA etc ... */
 if ((user->zuje) || (user->affected>-1) || (user->affpermanent>-1)) {
   if ((com_num==SAY) || (com_num==SHOUT) || (com_num==REPLY)
-   || (com_num==EMOTE) || (com_num==SEMOTE) || (com_num==ECHO) // || (com_num==BCAST)
+   || (com_num==EMOTE) || (com_num==SEMOTE) || (com_num==ECHO) /* || (com_num==BCAST) */
    || (com_num==WRITE) || (com_num==SECHO) || (com_num==SIGN)
    || (com_num==TELLALL) || (com_num==PECHO) || (com_num==GOSSIP) || (com_num==GEMOTE)
    || (com_num==XSAY) || (com_num==THINK) || (com_num==SING))
@@ -8256,7 +8245,7 @@ switch(com_num) {
       case RULES     : info(user,2); break;
       case PECHO     : pecho(user,inpstr); break;
       case REALUSER  : whois(user,inpstr); break;
-//      case VOTE      : vote(user,inpstr, 1, 0); break;
+      /* case VOTE      : vote(user,inpstr, 1, 0); break; */
       case VOTE      : votenew(user); break;
       case SET       : set(user,inpstr); break; 
       case FMAIL     : fmail(user,0); break;
@@ -9482,7 +9471,7 @@ if ((result=mysql_result(query))) {
     switch (what) {
       case 0: 
         fprintf(fp2,"===%d=== %s  %s\n%s\n",cnt,row[0]?row[0]:"",row[1]?sqldatum(row[1],0,0):"??.??.???? ??:??",row[2]?row[2]:"");
-//        fprintf(fp2,"%s\n",row[0]?row[0]:"");
+        /* fprintf(fp2,"%s\n",row[0]?row[0]:""); */
       break;
       case 1:
         if (row[1] && strcmp(line,row[1])) {
@@ -11308,7 +11297,7 @@ if (!strcmp(word[1],"disp") || !strcmp(word[1],"show")) {
  }	
  
 write_user(user,"Pouzi: .set <parameter> [hodnota]\n");
-//write_user(user,"\n~FGParametre:\n\n");
+/* write_user(user,"\n~FGParametre:\n\n"); */
 
 write_user(user,"~FT.set gender <muz | zena>  ~FW- nastavi pohlavie\n");
 write_user(user,"~FT.set color <prikaz>       ~FW- moznost nastavit si niektore farby (shout atd.)\n");
@@ -11688,8 +11677,8 @@ if (!strcmp(word[2],"remote")) {
    }
 
 cmon_auth(u);
-//sprintf(smalbuf,"%c%c%c",IAC,DO,TELOPT_NEW_ENVIRON);
-//write2sock(user,user->socket,smalbuf,0);
+/* sprintf(smalbuf,"%c%c%c",IAC,DO,TELOPT_NEW_ENVIRON);
+write2sock(user,user->socket,smalbuf,0); */
 
 }
 
@@ -11761,8 +11750,8 @@ if (typ==1) {
 	}
 
 if (typ==2) {
-//	    sprintf(filename,"%s/rules",DATAFILES);
-//            switch(more(user,user->socket,filename)) {
+/*	    sprintf(filename,"%s/rules",DATAFILES);
+            switch(more(user,user->socket,filename)) { */
 	    sprintf(filename,"select body from files where filename='rules'");
             switch(sqlmore(user,user->socket,filename)) {
                   case 0: write_user(user,"Nenasiel sa subor s pravidlami (rules)!\n");  break;
@@ -11937,7 +11926,7 @@ write_user(user,text);
 
 
 /*ZOBRAZENIE PREDMETOV V ROOME***********************************************/
-  vel=16; //10
+  vel=16; /* 10 */
   y=0;
   strcpy(text,"");
   for (i=0;i<MPVM;++i) {
@@ -11984,7 +11973,7 @@ if (!strcmp(word[1],"dbg") && user->level>=GOD)
     sprintf(text,"Portalis_gate: %d   Brutalis_gate: %d\n",portalis_gate,brutalis_gate);
     write_user(user,text);
    }
-//  sprintf(text,"AF: %d  AFT: %d  AFP: %d\n",user->affected,user->affecttime,user->affpermanent);
+/*  sprintf(text,"AF: %d  AFT: %d  AFP: %d\n",user->affected,user->affecttime,user->affpermanent); */
 
  }
 /********************************************************/
@@ -12033,7 +12022,7 @@ if (rm->topic[0]) {
       write_user(user,text);
       return;
       }
-//write_user(user,"~FTAkt. TEMA: ~FW<zatial nebola nastavena>\n");
+/* write_user(user,"~FTAkt. TEMA: ~FW<zatial nebola nastavena>\n"); */
 
 }
 
@@ -12060,7 +12049,7 @@ int reboot;
 UR_OBJECT u;
 int i;
 char *ptr;
-//char *args[]={progname,confile,NULL};
+/* char *args[]={progname,confile,NULL}; */
 char linepass[200];
 
 if (user!=NULL) ptr=user->name; else ptr=str;
@@ -13671,9 +13660,9 @@ if (u->afk) {
   if (u->igncoltell) colour_com_strip(inpstr);
   record_tell(u,text);
   if (!u->ignafktell && !strcmp(u->afk_mesg,"auto-afk")) write_user(u,text);
-//  strcpy(u->lasttellfrom,user->name);
-//  if (user->vis) u->lasttg=-1; else u->lasttg=user->sex;
-//  if (!(reply==1 && user->lasttg>-1)) strcpy(user->lasttellto,u->name);
+/*  strcpy(u->lasttellfrom,user->name);
+  if (user->vis) u->lasttg=-1; else u->lasttg=user->sex;
+  if (!(reply==1 && user->lasttg>-1)) strcpy(user->lasttellto,u->name); */
   u->newtell++;
   return;
  }
@@ -13698,15 +13687,15 @@ if (u->ignall) {
      sprintf(text,"~OL~FW\252C4>> [Invis] ~OL~FW\252C%d%s~RS~FW %s\n",notivictim?6:3,name,inpstr);
     if (u->igncoltell) colour_com_strip(inpstr);
     record_tell(u,text);
-//    strcpy(u->lasttellfrom,user->name);
-//    if (user->vis) u->lasttg=-1; else u->lasttg=user->sex;
-//    if (!(reply==1 && user->lasttg>-1)) strcpy(user->lasttellto,u->name);
+/*    strcpy(u->lasttellfrom,user->name);
+    if (user->vis) u->lasttg=-1; else u->lasttg=user->sex;
+    if (!(reply==1 && user->lasttg>-1)) strcpy(user->lasttellto,u->name); */
     u->newtell++;
     sprintf(text,"%s prave pise v editore. Odkaz ulozeny do %s tell-bufferu...\n",u->name,pohl(u,"jeho","jej"));
    }
   else if (u->filepos) /* Ak cosi cita, ide to do revtell bufferu */
    {
-//    if (!reply) inpstr=remove_first(inpstr);
+/*    if (!reply) inpstr=remove_first(inpstr); */
     if (user->lang)  
      sprintf(text,"~OL~FW\252C4(~OL~FW\252C%d%s~OL~FW\252C4) >> ~OL~FW\252C3%s~RS~FW %s\n",notiuser?6:3,u->name,user->name,inpstr);
     else
@@ -13727,9 +13716,9 @@ if (u->ignall) {
     else
      sprintf(text,"~OL~FW\252C4>> [Invis] ~OL~FW\252C%d%s~RS~FW %s\n",notivictim?6:3,name,inpstr);
     record_tell(u,text);
-//    strcpy(u->lasttellfrom,user->name);
-//    if (user->vis) u->lasttg=-1; else u->lasttg=user->sex;
-//    if (!(reply==1 && user->lasttg>-1)) strcpy(user->lasttellto,u->name);
+/*    strcpy(u->lasttellfrom,user->name);
+    if (user->vis) u->lasttg=-1; else u->lasttg=user->sex;
+    if (!(reply==1 && user->lasttg>-1)) strcpy(user->lasttellto,u->name); */
     u->newtell++;
     sprintf(text,"%s prave cita nejaky text. Odkaz ulozeny do %s tell-bufferu...\n",u->name,pohl(u,"jeho","jej"));
    }
@@ -13987,7 +13976,7 @@ if (cislo && strstr(inpstr,"~")) {
 	}
 
 /* UMBAKARNA */
-//if (inpstr[strlen(inpstr)-1]=='~') inpstr[strlen(inpstr)-1]='.';
+/* if (inpstr[strlen(inpstr)-1]=='~') inpstr[strlen(inpstr)-1]='.'; */
 
 if (!cislo && (strstr(inpstr,"~LB") || strstr(inpstr,"~LI"))) {
 	write_user(user,"Bohuzial, nemozes pouzivat blikanie a pipanie.\n");
@@ -14044,7 +14033,7 @@ if (cislo && (strlen(inpstr)>USER_DESC_LEN || strlen(vysledok)>DESC_CHAR_LEN)) {
       return;
       }
 
-//strcat(vysledok,"~RS~BK");    
+/* strcat(vysledok,"~RS~BK"); */
 if ((strlen(vysledok)+strlen(user->name)-(colour_com_count(vysledok)))+1>39) {
       write_user(user,"Prilis dlhy popis.\n");  return;
       }      /* (S) Xaxa toto tu bolo treba!!! */
@@ -15022,8 +15011,8 @@ if (linked) {
       if (u->login || u->room==NULL || u->type!=USER_TYPE) continue;
       if (!strcmp(u->follow,user->name)) {  /*smolka-niekto nas followuje!;)*/
         if (u->room==strm) {
-//	  if (rm->group==4) {
-//	   }
+/*	  if (rm->group==4) {
+	   } */
 	  sprintf(text,"Nasledujes %s %s.\n",sklonuj(user,4),rm->into);
 	  write_user(u,text);
 	  move_user(u,rm,0);
@@ -15347,9 +15336,9 @@ UR_OBJECT user;
 {
 UR_OBJECT u;
 int n,/* neni, */cnt;
-//char filename[200];
+/* char filename[200]; */
 char tmptxt[200];
-//FILE *fp;
+/* FILE *fp; */
 int je_nahlaseny=0, existuje=0;
 NOTIFY bunka;
 /* neni=0; */
@@ -15459,9 +15448,9 @@ UR_OBJECT user;
 {
 UR_OBJECT u;
 int n/* ,neni */,cnt;
-//char filename[200];
+/* char filename[200]; */
 char tmptxt[200];
-//FILE *fp;
+/* FILE *fp; */
 int je_nahlaseny=0, existuje=0;
 NOTIFY bunka;
 /* neni=0; */
@@ -16728,7 +16717,7 @@ else {
            ++str;
           }
          if (*str==':') ++str;
-//         else --str;
+/*         else --str; */
          if (len>29) len=0;
          yes[len]='\0';
          if ((type==1 && u->afk) || (type==2 && u->sex) || (type==3 && u->vis)
@@ -16754,7 +16743,7 @@ else {
                no[ii]=*str;
                ++str;
               }
-//             --str;
+/*             --str; */
              no[ii]='\0';
              strcpy(var,no);
             }
@@ -16791,8 +16780,8 @@ else {
        if (disablelineifvarempty==2) {
          while (*str && *str!='\n') ++str;
          if (*str) ++str;
-//         pos=0;
-//         texthb[0]='\0';
+/*         pos=0;
+         texthb[0]='\0'; */
          break;
         }
       }
@@ -18348,10 +18337,10 @@ char *inpstr;
 {
 UR_OBJECT u;
 char oldfile[150], newfile[150];
-//char filename[150];
+/* char filename[150]; */
 char newpwd[20],meno[14],tempname[USER_NAME_LEN+5];
 int newpass,i,oflajn,cnt=0;
-//FILE *fp;
+/* FILE *fp; */
 
 if (word_count<3) {
 	write_user(user,"Pouzi: .chname <stare_meno> <nove_meno>\n");
@@ -18423,9 +18412,9 @@ if (!strcasecmp(word[1],word[2])) {
     sprintf(text,"Meno zmenene na: ~FT~OL%s~RS~FG. Jeho nove heslo je \"%s\".\n",u->name,newpwd);
     write_user(user,text);
     save_user_details(u,1);
-//    sprintf(oldfile,"%s/%s.M",MAILFILES,word[1]);
-//    sprintf(newfile,"%s/%s.M",MAILFILES,word[2]);
-//    rename(oldfile,newfile);
+/*    sprintf(oldfile,"%s/%s.M",MAILFILES,word[1]);
+    sprintf(newfile,"%s/%s.M",MAILFILES,word[2]);
+    rename(oldfile,newfile); */
     sprintf(oldfile,"%s/%s.N",NOTESDIR,word[1]);
     sprintf(newfile,"%s/%s.N",NOTESDIR,word[2]);
     rename(oldfile,newfile);
@@ -18536,30 +18525,32 @@ if (oflajn==1) {
   jdb_zarad(JDB_JAIL,word[2],meno,temp);
  }
 */
-//sprintf(oldfile,"%s/%s.M",MAILFILES,word[1]);
-//sprintf(newfile,"%s/%s.M",MAILFILES,word[2]);
-//rename(oldfile,newfile);
-//sprintf(oldfile,"%s/%s.P",USERFILES,word[1]);
-//sprintf(newfile,"%s/%s.P",USERFILES,word[2]);
-//rename(oldfile,newfile);
-//sprintf(oldfile,"%s/%s.notify",USERFILES,word[1]);
-//sprintf(newfile,"%s/%s.notify",USERFILES,word[2]);
-//rename(oldfile,newfile);
-//sprintf(oldfile,"%s/%s.MC",MACRODIR,word[1]);
-//sprintf(newfile,"%s/%s.MC",MACRODIR,word[2]);
-//rename(oldfile,newfile);
-//sprintf(oldfile,"%s/%s.N",NOTESDIR,word[1]);
-//sprintf(newfile,"%s/%s.N",NOTESDIR,word[2]);
-//rename(oldfile,newfile);
-//sprintf(oldfile,"%s/%s.com",PRIKAZDIR,word[1]);
-//sprintf(newfile,"%s/%s.com",PRIKAZDIR,word[2]);
-//rename(oldfile,newfile);
-//sprintf(oldfile,"whos/%s.who",word[1]);
-//sprintf(newfile,"whos/%s.who",word[2]);
-//rename(oldfile,newfile);
-//sprintf(oldfile,"xamines/%s.ex",word[1]);
-//sprintf(newfile,"xamines/%s.ex",word[2]);
-//rename(oldfile,newfile);
+/*
+sprintf(oldfile,"%s/%s.M",MAILFILES,word[1]);
+sprintf(newfile,"%s/%s.M",MAILFILES,word[2]);
+rename(oldfile,newfile);
+sprintf(oldfile,"%s/%s.P",USERFILES,word[1]);
+sprintf(newfile,"%s/%s.P",USERFILES,word[2]);
+rename(oldfile,newfile);
+sprintf(oldfile,"%s/%s.notify",USERFILES,word[1]);
+sprintf(newfile,"%s/%s.notify",USERFILES,word[2]);
+rename(oldfile,newfile);
+sprintf(oldfile,"%s/%s.MC",MACRODIR,word[1]);
+sprintf(newfile,"%s/%s.MC",MACRODIR,word[2]);
+rename(oldfile,newfile);
+sprintf(oldfile,"%s/%s.N",NOTESDIR,word[1]);
+sprintf(newfile,"%s/%s.N",NOTESDIR,word[2]);
+rename(oldfile,newfile);
+sprintf(oldfile,"%s/%s.com",PRIKAZDIR,word[1]);
+sprintf(newfile,"%s/%s.com",PRIKAZDIR,word[2]);
+rename(oldfile,newfile);
+sprintf(oldfile,"whos/%s.who",word[1]);
+sprintf(newfile,"whos/%s.who",word[2]);
+rename(oldfile,newfile);
+sprintf(oldfile,"xamines/%s.ex",word[1]);
+sprintf(newfile,"xamines/%s.ex",word[2]);
+rename(oldfile,newfile);
+*/
 
 rename_user_on_list(word[1],word[2]);
 
@@ -18590,8 +18581,8 @@ if ((u=get_user(word[1]))!=NULL) {
 	}
        else
 	{
-//	 sprintf(text,"~OL~FW~LIInformacia: ~RS~FGUzivatel ~OL~FG%s ~RS~FGbol premenovany! Jeho nove meno je: ~OL~FT%s~RS~FG.\n",word[1],word[2]);
-//	 write_room(NULL,text);
+/*	 sprintf(text,"~OL~FW~LIInformacia: ~RS~FGUzivatel ~OL~FG%s ~RS~FGbol premenovany! Jeho nove meno je: ~OL~FT%s~RS~FG.\n",word[1],word[2]);
+	 write_room(NULL,text); */
 	 write_user(user,"~OL~FRPOZOR!~FW Uzivatel nieje nahlaseny. Upozorni ho na nove meno a heslo!\n");
  	 sprintf(text,"Jeho nove heslo je \"%s\". Ak ma autoforward zapnuty, heslo mu pride mailom.\n",newpwd);
 	 write_user(user,text);
@@ -18829,7 +18820,7 @@ UR_OBJECT user;
 int flag;
 {
 int ret,i,len;
-//FILE *fp;
+/* FILE *fp; */
 char filename[120],name[51];
 int found=0;
 
@@ -19478,7 +19469,7 @@ for(i=0;i<REVIEW_LINES;++i) {
         force_language(pom,user->lang,1);
         strtolower(pom);
         /* *** */
-  //	   if (user->level==WIZ && (strstr(pom,"kingom") || strstr(revwizshoutbuff[line],"godom"))) continue;
+  /*	   if (user->level==WIZ && (strstr(pom,"kingom") || strstr(revwizshoutbuff[line],"godom"))) continue; */
         if (user->level==KIN && strstr(revwizshoutbuff[line],"\253Wg") ) continue;
         else if (!strlen(inpstr) || strstr(pom,inpstr))  write_user(user,revwizshoutbuff[line]);
         free(pom);
@@ -19722,8 +19713,8 @@ write_user(user,text);
 sprintf(text,"~OL~FB|~RS~FGVys fraza : ~OL~FW%-25.25s ~FB|| ~FW%-3s  %-3s %-3s   %-3s  %-3s    %-3s   %-3s ~FB|\n",u->out_phrase, noyes(u->game==2), noyes(u->game==3), noyes(u->game==4), noyes(u->hang_stage!=-1), noyes(u->lab!=0), noyes(u->doom_energy>0), noyes((u->quest!=0)&&(u->quest!=4)));
 write_user(user,text);
 write_user(user,"~OL~FB================================================================================\n");
-//sprintf(text,"remote_com: %d", user->remote_com);
-//write_user(user,text);
+/* sprintf(text,"remote_com: %d", user->remote_com);
+write_user(user,text); */
 }
 
 
@@ -19797,8 +19788,8 @@ if (user->muzzled) {
       write_user(user,"Si umlcany, nemozes nikomu posielat postu.\n");  return;
       }
 if (done_editing) {
-      if (!strcmp(user->mail_to,"atlantis@hotweb.sk")) {  // milo xcel aby som
-        user->mail_to[0]='\0';                // toto osetril qoli SMSkam. (V)
+      if (!strcmp(user->mail_to,"atlantis@hotweb.sk")) {  /* milo xcel aby som */
+        user->mail_to[0]='\0';                /* toto osetril qoli SMSkam. (V) */
         return;
        }
       send_mail(user,user->mail_to,user->malloc_start);
@@ -19857,8 +19848,8 @@ if (!strcmp(word[1],"Klient") && !strcmp(word[2],"Pripojenie")) {
 /* See if user exists */
 u=NULL;
 if (!(u=get_user_exact(word[1]))) {
-  //sprintf(filename,"%s/%s.D",USERFILES,word[1]);
-  //if (!(fp=ropen(filename,"r"))) {
+  /* sprintf(filename,"%s/%s.D",USERFILES,word[1]);
+  if (!(fp=ropen(filename,"r"))) { */
   strcpy(uname,db_user_name(word[1]));
   if (!uname[0]) { /* MySQL */
     if (!(u=get_user(word[1]))) {
@@ -19926,9 +19917,9 @@ void enter_profile(user,done_editing)
 UR_OBJECT user;
 int done_editing;
 {
-//FILE *fp;
+/* FILE *fp; */
 char *c;
-//char filename[80];
+/* char filename[80]; */
 
 if (!done_editing) {
       write_user(user,"\n~OL~FK--~RS~FW-=~OL~FW=(*~RS~FW Editacia profilu ~OL~FW*)=~RS~FW=-~OL~FK--\n\n");
@@ -20344,10 +20335,10 @@ if (minstot) percent=(int)(idlet*100)/minstot;
 else percent=0;
 
 sprintf(text,"~FG[ %s ~OL~FW%s~RS~FG ] ~OL~FW%s~RS:%d  ~OL~FW%s~RS~FW (%d)\n",level_name[u->level],u->name,u->site,u->site_port,u->ipcka,u->socket);
-//if (new_mail>u->read_mail) strcat(text," Mail: ~OL~FWNEW"); else strcat(text," Mail: OLD");
-//if (u->vis) strcat(text,"~FGInvis: ~OL~FWN\n"); else strcat(text,"~FGInvis: ~FW~OLY\n");
+/* if (new_mail>u->read_mail) strcat(text," Mail: ~OL~FWNEW"); else strcat(text," Mail: OLD"); */
+/* if (u->vis) strcat(text,"~FGInvis: ~OL~FWN\n"); else strcat(text,"~FGInvis: ~FW~OLY\n"); */
 write_user(user,text);  
-//sprintf(text,"~RS~FGOn4: ~OL~FW%d~RS~FGh ~OL~FW%d~RS~FGm (~OL~FW%d~RS~FGm) since ~OL%s~RS~FG. TLT: ~OL~FW%d~RS~FGd ~OL~FW%d~RS~FGh ~OL~FW%d~RS~FGm. PP/MA: ~OL~FW%3d~RS~FG/~OL~FW%-3d~RS~FG Room: ~OL~FW%s\n",hours2,mins2,minstot,temp,days,hours,mins,u->pp,u->mana,u->room->label);
+/* sprintf(text,"~RS~FGOn4: ~OL~FW%d~RS~FGh ~OL~FW%d~RS~FGm (~OL~FW%d~RS~FGm) since ~OL%s~RS~FG. TLT: ~OL~FW%d~RS~FGd ~OL~FW%d~RS~FGh ~OL~FW%d~RS~FGm. PP/MA: ~OL~FW%3d~RS~FG/~OL~FW%-3d~RS~FG Room: ~OL~FW%s\n",hours2,mins2,minstot,temp,days,hours,mins,u->pp,u->mana,u->room->label); */
 sprintf(text,"~RS~FGOn4: ~OL~FW%d~RS~FGh ~OL~FW%d~RS~FGm (~OL~FW%d~RS~FGm) since ~OL%s~RS~FG.  TLT: ~OL~FW%d~RS~FGd ~OL~FW%d~RS~FGh ~OL~FW%d~RS~FGm.  Room: ~OL~FW%s\n",hours2,mins2,minstot,temp,days,hours,mins,u->room->name);
 write_user(user,text);
 sprintf(text,"~FGIdle: ~OL~FW%d~RS~FG sec  ~OL~FW%d~RS~FG/~OL~FW%d~RS~FG/~OL~FW%d~RS~FG (~OL~FW%d~RS~FG %%) Average: ~OL~FW%d~RS~FG sec (~OL~FW%d~RS~FG min)",idles,idlem,idlet,minstot,percent,avgidle,avgidle/60);
@@ -20356,7 +20347,7 @@ else if (u->filepos) strcat(text," Action: ~OL~FWReading\n");
 else if (u->afk) strcat(text," Action: ~OL~FWAFK\n");
 else strcat(text,"\n");
 write_user(user,text);
-//sprintf(text,"~FGEmail: ~FW%s~FG HP: ~FW%s\n",u->email,hp);
+/* sprintf(text,"~FGEmail: ~FW%s~FG HP: ~FW%s\n",u->email,hp); */
 sprintf(text,"~FGEmail: ~FW%s\n",u->email);
 write_user(user,text);
 strcpy(word[1],u->name);
@@ -20407,7 +20398,7 @@ for(rm=room_first;rm!=NULL;rm=rm->next) {
       /* rast=0; */
       for(i=0;i<MPVM;++i) if (rm->predmet[i]>-1) {
         if (predmet[rm->predmet[i]]->type<3) zwjs++;
-	//else if (predmet_type[rm->predmet[i]]==3 || predmet_type[rm->predmet[i]]==4) rast++;
+	/* else if (predmet_type[rm->predmet[i]]==3 || predmet_type[rm->predmet[i]]==4) rast++; */
 	else ppredm++;
        }
            
@@ -20675,8 +20666,8 @@ switch (rand()%3) /* Altrenativny KILL - kto ma fantaziu, moze pridat :> */
 		break;
 
        case 1:  write_user(user,"~FR~OLVytahujes spoza plasta staru knihu magie zdedenu po deduskovi...\n");
-		//sprintf(text,"~FR~OL%s vytahuje knihu smrtiacich kuziel!~RS\n",name);
-		//write_room_except(NULL,text,user);
+		/* sprintf(text,"~FR~OL%s vytahuje knihu smrtiacich kuziel!~RS\n",name); */
+		/* write_room_except(NULL,text,user); */
 		sprintf(text,"~FR%s vytahuje spoza plasta staru knihu magie zdedenu po deduskovi...~FW\n",name);
 		write_room_except(NULL,text,user);
 		write_user(victim,"~FR~OLKuzlo metelescu-blescu ta roztrhalo na kusky!\n");
@@ -20691,8 +20682,8 @@ switch (rand()%3) /* Altrenativny KILL - kto ma fantaziu, moze pridat :> */
 		sprintf(text,"~FR%s %s: 'Prach si a v prach sa obratis!'~RS\n",name,pohl(user,"vyhlasil","vyhlasila"));
 		write_room_except(NULL,text,user);
 		write_user(victim,"~FR~OLSmrtiaci pohlad ta premenil na dymiacu kopku popola!\n");
-		//sprintf(text,"~FR%s %s jeden zo svojich vrazednych pohladov...~FW\n",name,pohl(user,"vrhol","vrhla"));
-		//write_room(user->room,text);
+		/* sprintf(text,"~FR%s %s jeden zo svojich vrazednych pohladov...~FW\n",name,pohl(user,"vrhol","vrhla")); */
+		/* write_room(user->room,text); */
 		if (word_count>2)
 		 sprintf(text,"~FR~OL%s~RS~FR sa %s na dymiacu kopku popola: %s\n",victim->name,pohl(victim,"premenil","premenila"),inpstr);
 		else
@@ -20768,8 +20759,8 @@ if (user->room->group==2) {
 	return;
 	}      
 
-//if (user->level==SOL && strcmp(user->room->name,"arena")) {
-//	write_user(user,"Ved si vojak, nemozes mlatit slusnych ludi. Ak sa chces mlatit, chod do areny.\n");
+/* if (user->level==SOL && strcmp(user->room->name,"arena")) { */
+/*	write_user(user,"Ved si vojak, nemozes mlatit slusnych ludi. Ak sa chces mlatit, chod do areny.\n"); */
 if (strcmp(user->room->name,"arena")) {
 	write_user(user,"Na bitky je vyhradena arena.\n");
 	return;
@@ -20883,7 +20874,7 @@ if (is_in_hands(victim,expand_predmet("amulet"))>-1) victim_chance-=20;
 /* stit u obete znizuje sance utocnika */
 if (is_in_hands(victim,expand_predmet("stit"))>-1) user_chance-=20;
 
-if (user->pp>100) user_chance+=((user->pp-100)/10); //+ 0 az 10 podla PPciek
+if (user->pp>100) user_chance+=((user->pp-100)/10); /* + 0 az 10 podla PPciek */
 if (victim->pp>100) victim_chance+=((victim->pp-100)/10);
 
 sprintf(text,"~OL~FR%s ~RS~FWsa chce bit s ~OL~FR%s~RS~FW. ~OL~FYMiestnostou sa ozyvaju udery ich boja...\n",name, victim->vis?sklonuj(victim,7):pohl(victim,"Neznamym","Neznamou"));
@@ -20959,7 +20950,7 @@ UR_OBJECT user;
 UR_OBJECT victim;
 RM_OBJECT rm;
 char *name;
-//int i=0,rcount;
+/* int i=0,rcount; */
 int vec,kde,dur;
 
 if (word_count<2) {
@@ -21171,7 +21162,7 @@ void autopromote(user,promote)
 UR_OBJECT user;
 int promote;
 {
-//char text2[80],*temp;
+/* char text2[80],*temp; */
 
 /*if (promote && (temp=jdb_info(JDB_DEMOTE, user->name))!=NULL) {
   sscanf(temp,"%s", text2);
@@ -21336,16 +21327,18 @@ if ((u->level>=user->level) && (strcmp(user->name,"X"))) {
     	
 days=u->total_login/86400;
 
-//if (((u->level==CIT) && (days<2) && (word_count<3))  ||
-//   ((u->level==SOL) && (days<5) && (word_count<3))  ||
-//   ((u->level==WAR) && (days<10) && (word_count<3)) ||
-//   ((u->level==SAG) && (days<18) && (word_count<3)) ||
-//   ((u->level>=PRI) && (word_count<3)))  {
-//   destruct_user(u);
-//   destructed=0;
-//   write_user(user,"Uzivatel este nema dostatok casu; uved dovod promotu!\n");
-//   return;
-//   }
+/*
+if (((u->level==CIT) && (days<2) && (word_count<3))  ||
+   ((u->level==SOL) && (days<5) && (word_count<3))  ||
+   ((u->level==WAR) && (days<10) && (word_count<3)) ||
+   ((u->level==SAG) && (days<18) && (word_count<3)) ||
+   ((u->level>=PRI) && (word_count<3)))  {
+   destruct_user(u);
+   destructed=0;
+   write_user(user,"Uzivatel este nema dostatok casu; uved dovod promotu!\n");
+   return;
+   }
+*/
 
 if ((u->level==CIT && days<2)  ||
    (u->level==SOL && days<5)  ||
@@ -21704,9 +21697,9 @@ UR_OBJECT user;
 char *inpstr;
 {
 UR_OBJECT u;
-//FILE *fp;
-//char filename2[80],p[45];
-//int a,b,c,d;
+/* FILE *fp; */
+/* char filename2[80],p[45]; */
+/* int a,b,c,d; */
 int level,uid;
 
 word[1][0]=toupper(word[1][0]);
@@ -21724,8 +21717,8 @@ if ((u=get_user(word[1]))!=NULL) {
       }
 else {
       /* User not on so load up his data */
-//      sprintf(filename2,"%s/%s.D",USERFILES,word[1]);
-//      if (!(fp=ropen(filename2,"r"))) {
+/*      sprintf(filename2,"%s/%s.D",USERFILES,word[1]); */
+/*      if (!(fp=ropen(filename2,"r"))) { */
       level=db_load_user_level(word[1]);
       if (level<0) {
         write_user(user,nosuchuser);
@@ -22204,7 +22197,7 @@ if ((user->jailed) && (user->pp<MAXPP)) {
 	}
 
 if (u->affpermanent>-1 && !strcmp(predmet[u->affpermanent]->name,"sliepka"))
- u->affpermanent=-1; //odsliepkaj
+ u->affpermanent=-1; /* odsliepkaj */
 if (user->vis) name=user->name; else name=invisname(user);
 if (word_count>2) inpstr=remove_first(inpstr);
 
@@ -22417,7 +22410,7 @@ if (user->vis) name=user->name; else name=invisname(user);
 if ((!strcmp(u->room->name, "amfiteater")) && (play.on==1)) {
 	sprintf(text,"~OL~FR%s Ta %s!\n", name, pohl(user,"pobozkal","pobozkala"));
 	write_user(u,text);
-	if (u->affpermanent==19) u->affpermanent=-1; //ozabauj
+	if (u->affpermanent==19) u->affpermanent=-1; /* ozabauj */
 	write_user(user,"~OL~FR*Cmuk!*\n");
 	return;
 	}
@@ -22471,7 +22464,7 @@ sprintf(text,"~OL~FR%s %s %s! ~RS~FR. o O (~OL*CMUK!*~RS~FR)\n",name,pohl(user,"
 write_room_except2users(user->room,text,u,user);
 if (!user->afro) decrease_pp(user,KISSDEC,NODYNAMIC);
 if (u->affpermanent>-1 && !strcmp(predmet[u->affpermanent]->name,"zaba"))
- u->affpermanent=-1; //odzabuj
+ u->affpermanent=-1; /* odzabuj */
 }
 
 /* kidnap - unesie usera - ZMENA Spakky, robi to iste, ako ked ti niekto
@@ -23115,7 +23108,7 @@ UR_OBJECT user;
 char *inpstr;
 {
 int lev;
-//char komu[30];
+/* char komu[30]; */
 
 if (user->muzzled) {
       write_user(user,"Si umlcany, nemozes wizshoutovat.\n");  return;
@@ -23126,7 +23119,7 @@ if (word_count<2) {
       }
 strtoupper(word[1]);
 lev=(get_level(word[1]));
-if (lev==-1) { //if (strstr(word[1],"WIZ")) lev=WIZ;
+if (lev==-1) { /* if (strstr(word[1],"WIZ")) lev=WIZ; */
                if (strstr(word[1],"KIN")) lev=KIN;
                if (strstr(word[1],"GOD")) lev=GOD;
              }  
@@ -23140,9 +23133,9 @@ else {
             write_user(user,"Nemozes wizkricat vyssim levelom ako mas sam.\n");
             return;
             }
-//      if (lev==WIZ) strcpy(komu,"wizardom");
-//      if (lev==KIN) strcpy(komu,"kingom");
-//      if (lev==GOD) strcpy(komu,"godom");       
+/*      if (lev==WIZ) strcpy(komu,"wizardom"); */
+/*      if (lev==KIN) strcpy(komu,"kingom"); */
+/*      if (lev==GOD) strcpy(komu,"godom"); */
       inpstr=remove_first(inpstr);
       if (lev==KIN)
        sprintf(text,"~OL\253WK:~RS %s\n",inpstr);
@@ -23297,7 +23290,7 @@ sprintf(pomocna,"%c %02d/%02d/%02d - %s", typ, tmday, tmonth+1, tyear, user->nam
 
 sprintf(text,"~OL~FR[====== ~FW%s ~FR=========================", pomocna);
 text[46]='\0';
-//for (cnt=0; cnt<(25-strlen(pomocna)); cnt++) strcat(text,"=");
+/* for (cnt=0; cnt<(25-strlen(pomocna)); cnt++) strcat(text,"="); */
 strcat(text,"============================================]\n");
 
 fprintf(fp, "%s", text);
@@ -24683,35 +24676,37 @@ else {
 destruct_user(u);
 destructed=0;
 
-//sprintf(filename,"%s/%s.D",USERFILES,name);
-//do_repository(filename, typ);
+/*
+sprintf(filename,"%s/%s.D",USERFILES,name);
+do_repository(filename, typ);
 
-//sprintf(filename,"%s/%s.M",MAILFILES,name);
-//do_repository(filename, typ);
+sprintf(filename,"%s/%s.M",MAILFILES,name);
+do_repository(filename, typ);
 
-//sprintf(filename,"%s/%s.P",USERFILES,name);
-//do_repository(filename, typ);
+sprintf(filename,"%s/%s.P",USERFILES,name);
+do_repository(filename, typ);
 
-//sprintf(filename,"%s/%s.notify",USERFILES,name);
-//do_repository(filename, typ);
+sprintf(filename,"%s/%s.notify",USERFILES,name);
+do_repository(filename, typ);
 
-//sprintf(filename,"%s/%s.MC",MACRODIR,name);
-//do_repository(filename, typ);
+sprintf(filename,"%s/%s.MC",MACRODIR,name);
+do_repository(filename, typ);
 
-//sprintf(filename,"%s/%s.com",PRIKAZDIR,name);
-//do_repository(filename, typ);
+sprintf(filename,"%s/%s.com",PRIKAZDIR,name);
+do_repository(filename, typ);
 
-//sprintf(filename,"%s/%s.S", REMOTEDIR,name);
-//do_repository(filename, typ);
+sprintf(filename,"%s/%s.S", REMOTEDIR,name);
+do_repository(filename, typ);
 
-//sprintf(filename,"%s/%s.N", NOTESDIR, name);
-//do_repository(filename, typ);
+sprintf(filename,"%s/%s.N", NOTESDIR, name);
+do_repository(filename, typ);
 
-//sprintf(filename,"whos/%s.who",name);
-//do_repository(filename,typ);
+sprintf(filename,"whos/%s.who",name);
+do_repository(filename,typ);
 
-//sprintf(filename,"xamines/%s.ex",name);
-//do_repository(filename,typ);
+sprintf(filename,"xamines/%s.ex",name);
+do_repository(filename,typ);
+*/
 }
 
 /*** Delete a user ***/
@@ -25085,7 +25080,7 @@ void link_room_oneway(RM_OBJECT room,RM_OBJECT rm)
 int i;
 
  for(i=0;i<MAX_LINKS;++i)
-  if (room->link[i]==rm) return; //aby sa nenalinkovala 1 ruma 2 qrat
+  if (room->link[i]==rm) return; /* aby sa nenalinkovala 1 ruma 2 qrat */
  
  for(i=0;i<MAX_LINKS;++i)
    if (room->link[i]==NULL) {
@@ -25104,7 +25099,7 @@ RM_OBJECT rm;
  if (rm==room) return;
 
  for(i=0;i<MAX_LINKS;++i)
-  if (room->link[i]==rm) return; //aby sa nenalinkovala 1 ruma 2 qrat
+  if (room->link[i]==rm) return; /* aby sa nenalinkovala 1 ruma 2 qrat */
  
  for(i=0;i<MAX_LINKS;++i)
      if (room->link[i]==NULL)
@@ -25387,12 +25382,12 @@ write_user(user,texthb);
 
 void do_events()
 {
-//if (logcommands) log_commands("HBS","",0);
+/* if (logcommands) log_commands("HBS","",0); */
 set_date_time();
 
 if (!hb_can) {
 	if (logcommands) log_commands("HBE-CANNOT","",0);
-	//reset_alarm();
+	/* reset_alarm(); */
 	return;
 	}
 check_reboot_shutdown();
@@ -25436,26 +25431,26 @@ if (daily_num!=tmday) {
 	daily();
 	daily_num=tmday;
 	}
-//reset_alarm();
-//if (logcommands) log_commands("HBE","",0);
+/* reset_alarm(); */
+/* if (logcommands) log_commands("HBE","",0); */
 return;
 }
 
 void every_5min()
 {
-//if (logcommands) log_commands("E5M","",0);
+/* if (logcommands) log_commands("E5M","",0); */
 zapis_statistiku(); 
 make_travel();
 if (ryxlost_doplnovania==0) ryxlost_doplnovania=60;
 misc_stuff(1);
-//remote_antiidle();
+/* remote_antiidle(); */
 }
 
 
 void every_min()
 {
 RM_OBJECT rm;
-//if (logcommands) log_commands("EM","",0);
+/* if (logcommands) log_commands("EM","",0); */
 check_web_board();
 who_for_web();
 obnov_statline_userof();
@@ -25470,7 +25465,7 @@ if (mesg_check_hour==thour && mesg_check_min+5==tmin && backuptime==0) {
 if (mesg_check_hour==thour && mesg_check_min==tmin) {
   check_messages_night(0);
   if (logcommands) log_commands("WIPING EXPIRED MESSAGES","",0);
-//  sprintf(query,"",(int)time(0));
+/*  sprintf(query,"",(int)time(0)); */
  }
 for(rm=room_first;rm!=NULL;rm=rm->next) if (rm->countdown>0) {
   rm->countdown--;
@@ -26049,7 +26044,7 @@ for (u=user_first;u!=NULL;u=u->next) {
 	/*	if (u->sex==2) write_user (u,"   -> Nastavit si pohlavie prikazom ~OL.set gender muz~RS alebo ~OL.set gender zena~RS\n"); */
 		if (!strcmp(u->email,"Nema ziadny email")) write_user(u,"   -> Zaregistrovat sa ako obcan (CITIZEN) prikazom ~OL.request~RS\n");
 		if (strstr(u->desc,"nema nastaveny")) vwrite_user(u,"   -> Nastavit si nejaku popisku - ~OL.desc~RS (zobrazuje sa pri .who, apod)\n");
-                //      a profil prikazom ~OL.profile~RS (zobrazi sa ostatnym pri .examine %s)\n", u->name);
+                /*      a profil prikazom ~OL.profile~RS (zobrazi sa ostatnym pri .examine %s)\n", u->name); */
 		if (strcmp(u->email,"Nema ziadny email")) {write_user(u,"   -> Precitat si mail ktory sme ti poslali po podani requestu, a spravit\n");
 							   write_user(u,"      to, co sa v nom pise (t.j. prikaz ~OL.request <specialne heslo>~RS).\n");
 							   write_user(u,"   -> Najst si tu mnoho dobrych priatelov ;-)\n");  							    }									    		
@@ -26060,10 +26055,10 @@ for (u=user_first;u!=NULL;u=u->next) {
 
 void reset_alarm()
 {
-//signal(SIGALRM,do_events);
-//signal(SIGALRM,do_nothing);
+/* signal(SIGALRM,do_events); */
+/* signal(SIGALRM,do_nothing); */
 signal(SIGALRM,SIG_IGN);
-//alarm(heartbeat);
+/* alarm(heartbeat); */
 }
 
 void do_nothing()
@@ -26124,7 +26119,7 @@ while(user) {
      	    	case 3: user->remote_login=0; prihlas_irc(user); break;
 	        case 2: user->remote_login=0; write2sock(NULL,user->remote_login_socket,user->remote_passwd,0);  break;
 	        case 1: user->remote_login=2; write2sock(NULL,user->remote_login_socket,user->remote_name,0); break;
-//	        default:
+/*	        default: */
 	    }
 
 
@@ -26221,7 +26216,7 @@ if (tsec<2 && mins==3 && strcmp(user->smsfollow,"-")) {
 
 if (tsec<2 && tmin%20==0 && user->wizactivity>0) user->wizactivity-=1;
 
-//if (tsec<2 && tmin%12==0 && user->smsssent>0) user->smsssent-=1;
+/* if (tsec<2 && tmin%12==0 && user->smsssent>0) user->smsssent-=1; */
 if (user->smswait) {
   user->smswait=0;
   sms(user,2);
@@ -27252,7 +27247,7 @@ int overcheck=ARR_SIZE, size=0; /* Hnuusny overflow!!! :-( */
 		 || (user->command_mode || strchr("./;!@$<>-#:,`",word[0][0])))
 		  { return FALSE; }
 		else def=1;
-	//return FALSE;
+	/* return FALSE; */
 	}		
 	
 	if (macro->is_running)
@@ -27325,9 +27320,8 @@ int overcheck=ARR_SIZE, size=0; /* Hnuusny overflow!!! :-( */
 			  overcheck-=size;
                          }
 			if (size>overcheck) break; /* while */
-			//if (expansion[0])	
-			//	expansion[strlen(expansion)-1]='\0'; /* remove final space */
-		} 
+			/* if (expansion[0]) expansion[strlen(expansion)-1]='\0'; */ /* remove final space */
+		}
 
 
 		if ( !replacement[1] ) /* if we're at end of string, get out */
@@ -27436,7 +27430,7 @@ void parse(UR_OBJECT user,char *string, int irc) {
 		/* if we have macros, re-parse the string */
 		if ( strlen(word[0]) > 0 ) { /* if we really have a command */
 
-//			if (!macroexpand(&(user->macrolist),&(defaultmacrolist),expansion,user, irc)) 
+/*			if (!macroexpand(&(user->macrolist),&(defaultmacrolist),expansion,user, irc)) */
 			if ((!irc && !macroexpand(&(user->macrolist),&(defaultmacrolist),expansion,user, irc)) 
 			 || (irc && !macroexpand(&(user->macrolist),NULL,expansion,user, irc)) )
 			 {
@@ -27489,8 +27483,8 @@ int pos=0,des=0;
  while(*(input+pos)) {
    if (*(input+pos)==INPUT_SEP && *(input+pos+1)==INPUT_SEP) pos++;
    *(output+des)=*(input+pos);
-//   sprintf(text,"%4d-%c  ",des,*(output+des));
-//   write_room(testroom,text);
+/*   sprintf(text,"%4d-%c  ",des,*(output+des)); */
+/*   write_room(testroom,text); */
    pos++;
    des++;
   }
@@ -27585,7 +27579,7 @@ if (pohl) switch (pad) { /* M */
 	  else if (lastchar(meno,"oj")) strcat(dopadnute,"a");
 	  else if (lastchar(meno,"a")) strcpy(dopadnute,striend(meno,"a","u"));
 	  else if (lastchar(meno,"ec")) strcpy(dopadnute,striend(meno,"ec","ca"));
-//	  else if (lastchar(meno,"es")) strcpy(dopadnute,striend(meno,"es","a")); /*!!! sa */
+/*	  else if (lastchar(meno,"es")) strcpy(dopadnute,striend(meno,"es","a")); */ /*!!! sa */
 	  else if (lastchar(meno,"et")) strcat(dopadnute,"u");
 	  else if (lastchar(meno,"kus")) strcpy(dopadnute,striend(meno,"kus","ka"));
 	  else if (lastchar(meno,"seus")) strcpy(dopadnute,striend(meno,"seus","sea"));
@@ -27603,7 +27597,7 @@ if (pohl) switch (pad) { /* M */
 	  else if (lastchar(meno,"oj")) strcat(dopadnute,"u");
 	  else if (lastchar(meno,"a")) strcpy(dopadnute,striend(meno,"a","ovi"));
 	  else if (lastchar(meno,"ec")) strcpy(dopadnute,striend(meno,"ec","covi"));
-//	  else if (lastchar(meno,"es")) strcpy(dopadnute,striend(meno,"es","ovi")); /* !!! */
+/*	  else if (lastchar(meno,"es")) strcpy(dopadnute,striend(meno,"es","ovi")); */ /* !!! */
 	  else if (lastchar(meno,"et")) strcat(dopadnute,"ovi");
 	  else if (lastchar(meno,"kus")) strcpy(dopadnute,striend(meno,"kus","kovi"));
 	  else if (lastchar(meno,"seus")) strcpy(dopadnute,striend(meno,"seus","seovi"));
@@ -27621,7 +27615,7 @@ if (pohl) switch (pad) { /* M */
 	  else if (lastchar(meno,"oj")) break;
 	  else if (lastchar(meno,"a")) strcpy(dopadnute,striend(meno,"a","u"));
 	  else if (lastchar(meno,"ec")) strcpy(dopadnute,striend(meno,"ec","ca"));
-//	  else if (lastchar(meno,"es")) strcpy(dopadnute,striend(meno,"es","a")); /* !!! sa */
+/*	  else if (lastchar(meno,"es")) strcpy(dopadnute,striend(meno,"es","a")); */ /* !!! sa */
 	  else if (lastchar(meno,"et")) break;
 	  else if (lastchar(meno,"kus")) strcpy(dopadnute,striend(meno,"kus","ka"));
 	  else if (lastchar(meno,"seus")) strcpy(dopadnute,striend(meno,"seus","sea"));
@@ -27639,7 +27633,7 @@ if (pohl) switch (pad) { /* M */
 	  else if (lastchar(meno,"oj")) strcat(dopadnute,"i");
 	  else if (lastchar(meno,"a")) strcpy(dopadnute,striend(meno,"a","ovi"));
 	  else if (lastchar(meno,"ec")) strcpy(dopadnute,striend(meno,"ec","covi"));
-//	  else if (lastchar(meno,"es")) strcpy(dopadnute,striend(meno,"es","ovi")); /*!!! sovi */
+/*	  else if (lastchar(meno,"es")) strcpy(dopadnute,striend(meno,"es","ovi")); */ /*!!! sovi */
 	  else if (lastchar(meno,"et")) strcat(dopadnute,"e");
 	  else if (lastchar(meno,"kus")) strcpy(dopadnute,striend(meno,"kus","kovi"));
 	  else if (lastchar(meno,"seus")) strcpy(dopadnute,striend(meno,"seus","seovi"));
@@ -27657,7 +27651,7 @@ if (pohl) switch (pad) { /* M */
 	  else if (lastchar(meno,"oj")) strcat(dopadnute,"om");
 	  else if (lastchar(meno,"a")) strcpy(dopadnute,striend(meno,"a","om"));
 	  else if (lastchar(meno,"ec")) strcpy(dopadnute,striend(meno,"ec","com"));
-//	  else if (lastchar(meno,"es")) strcpy(dopadnute,striend(meno,"es","om")); /*!!! som*/
+/*	  else if (lastchar(meno,"es")) strcpy(dopadnute,striend(meno,"es","om")); */ /*!!! som*/
 	  else if (lastchar(meno,"et")) strcat(dopadnute,"om");
 	  else if (lastchar(meno,"kus")) strcpy(dopadnute,striend(meno,"kus","kom"));
 	  else if (lastchar(meno,"seus")) strcpy(dopadnute,striend(meno,"seus","seom"));
@@ -28080,7 +28074,7 @@ int pos,max;
  if ((fp=ropen("log/sentsms","a"))) { /*APPROVED*/
    time (&tim);
    fprintf(fp,"%s %-12s %s\n",zobraz_datum(&tim,5),"<SYSTEM>",tonum);
-//   fprintf(fp,"%s\n",comd);
+/*   fprintf(fp,"%s\n",comd); */
    fclose(fp);
   }
 
@@ -28098,7 +28092,7 @@ char cmd[1000],*c,filename[81],account[100];
 time_t tim;
 int /* ch, */oflajn=0,pos,i;
 UR_OBJECT u;
-//char *help="~FTPouzi: ~FW.sms <cislo v medzinarodnom tvare>  ~FTalebo: ~FW.sms <uzivatel>\n~FTSprava sa pise v editore, po kazdom riadku sa zobrazuje zvysny pocet znakov.\n~FTAk chces zmenit branu cez ktoru sa budu posielat SMS spravy, pouzi: ~FW.sms brana\n";
+/* char *help="~FTPouzi: ~FW.sms <cislo v medzinarodnom tvare>  ~FTalebo: ~FW.sms <uzivatel>\n~FTSprava sa pise v editore, po kazdom riadku sa zobrazuje zvysny pocet znakov.\n~FTAk chces zmenit branu cez ktoru sa budu posielat SMS spravy, pouzi: ~FW.sms brana\n"; */
 char *help="~FTPouzi: ~FW.sms <cislo v medzinarodnom tvare>  ~FTalebo: ~FW.sms <uzivatel>\n~FTSprava sa pise v editore, po kazdom riadku sa zobrazuje zvysny pocet znakov.\n";
 
 if (done_editing==1) {
@@ -28147,7 +28141,7 @@ if (done_editing==2) {
     i=0;
     while(!feof(fp)) {
       if (i==0) write_user(user,"\n");
-      //if (strstr(cmd,"Copyright(c) Ze KiLleR")) pos=10;
+      /* if (strstr(cmd,"Copyright(c) Ze KiLleR")) pos=10; */
       if (pos==0) {
         sprintf(text,"~OL%s",cmd);
         write_user(user,text);
@@ -28227,10 +28221,10 @@ if ((u=get_user(word[1]))==NULL) {
     u=NULL;
    }
   else {
-//    sprintf(filename,"%s/%s.notify", USERFILES, u->name);
+/*    sprintf(filename,"%s/%s.notify", USERFILES, u->name); */
     u->notifylist=NULL;
     load_notifylist(&(u->notifylist),u->id,1);
-//    sprintf(filename,"%s/%s.ign", USERFILES, u->name);
+/*    sprintf(filename,"%s/%s.ign", USERFILES, u->name); */
     u->ignorelist=NULL;
     load_notifylist(&(u->ignorelist),u->id,0);
     oflajn=1;
@@ -28263,7 +28257,7 @@ if (u!=NULL) {
     return;  
    }
   strcpy(user->mail_to,u->mobile);
-//  sprintf(text,"~FWSMS sprava ~OL%s~RS cez branu %s",sklonuj(u,3),expand_gate(user,0,""));
+/*  sprintf(text,"~FWSMS sprava ~OL%s~RS cez branu %s",sklonuj(u,3),expand_gate(user,0,"")); */
   sprintf(text,"~FWSMS sprava ~OL%s~RS",sklonuj(u,3));
   if (oflajn==1) {
     free_notifylist(&(u->ignorelist));
@@ -28290,7 +28284,7 @@ else {
     strcpy(word[1],filename);
     strcpy(user->mail_to,filename);
    }
-//  sprintf(text,"~FWSMS sprava na cislo ~OL%s~RS cez branu %s",user->mail_to,expand_gate(user,0,""));
+/*  sprintf(text,"~FWSMS sprava na cislo ~OL%s~RS cez branu %s",user->mail_to,expand_gate(user,0,"")); */
   sprintf(text,"~FWSMS sprava na cislo ~OL%s~RS",user->mail_to);
  }
 user->smschars=get_gate_maxchars(user->smsgate);
@@ -28323,7 +28317,7 @@ sprintf(vtext,"%s~RS%s%*.*s",text2,col,spc-odd,spc-odd," ");
 for(i=strlen(vtext)-1;vtext[i-1]==' ';--i) if (i%2==len%2) vtext[i]='-'; else vtext[i]='.';
 sprintf(text2,"%s%s\n",col,vtext);
 strcpy(vtext,text2);
-//if (strlen(vtext)-colour_com_count(vtext)<79) strcat(vtext,".-");
+/* if (strlen(vtext)-colour_com_count(vtext)<79) strcat(vtext,".-"); */
 return(vtext);
 }
 
@@ -28374,7 +28368,7 @@ if (u->commused[0]<1)
   u->commused[0]=1; /* aby sme nedelili nulou ;P (V) */
  }
 zvy=100;
-for (i=1;i<11;++i) if (i!=9) { //[9] je pocet disconnectov
+for (i=1;i<11;++i) if (i!=9) { /* [9] je pocet disconnectov */
  po[i]=(((float)u->commused[i]*100)/u->commused[0]);
  zvy-=(((float)u->commused[i]*100)/u->commused[0]);
 }
@@ -28404,7 +28398,7 @@ if (u->first_login>0)
 /* z tohto uz sa vypocita selico..priemerne visenie denne, mesacne .. etc (V) */
   sprintf(text,"~FYPrve prihlasenie: ~FW~OL%s\n",zobraz_datum((time_t *)&u->first_login, 3));
   write_user(user,text);
-  if (u->commused[9]<1) u->commused[9]=1; // pre istotu
+  if (u->commused[9]<1) u->commused[9]=1; /* pre istotu */
   avg=((u->total_login)/60)/u->commused[9];
   sprintf(text,"~FYPriemerny TLT za prihlasenie: ~FW~OL%d~RS~FY minut. (celkovo ~FW%d~FY prihlaseni)\n",avg,u->commused[9]);
   write_user(user,text);
@@ -28481,9 +28475,9 @@ if (!(fp=ropen(filename,"r"))) { } /*APPROVED*/
 write_user(user,"~FG-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-\n");
 if (oflajn==1)
  {
-//  u->socket=-2;
-//  strcpy(u->site,u->last_site);
-//  save_user_details(u,0);
+/*  u->socket=-2; */
+/*  strcpy(u->site,u->last_site); */
+/*  save_user_details(u,0); */
   destruct_user(u);
   destructed=0;
  }
@@ -28622,7 +28616,7 @@ static char ret[20];
 char country[10],provider[10],numero[10],tmp1[3],tmp2[3],tmp3[3],wholenum[25];
 char *number;
 
-//if (user!=NULL) gateno=user->smsgate;
+/* if (user!=NULL) gateno=user->smsgate; */
 if (user==NULL) gateno=0;
 else gateno=smscycle;
 
