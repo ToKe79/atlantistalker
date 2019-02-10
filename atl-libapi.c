@@ -105,7 +105,7 @@ int api_room_destroy(char *name, char *qmsg) {
     }
     u=n;
   }
-  //destruct_room(rm); // oops nemame
+  /* destruct_room(rm); */ /* oops nemame */
   return 0;
 }
 
@@ -376,8 +376,8 @@ int api_user_set_dead(char *name, char *text) {
 		return -1;
 	}
 
-	//u->dead = DEAD_CUSTOM_MESSAGE;
-	//snprintf(u->death_custom_message, 255, "%s", text);
+	/* u->dead = DEAD_CUSTOM_MESSAGE; */
+	/* snprintf(u->death_custom_message, 255, "%s", text); */
 	quit_user(u, text);
 	
 	return 0;

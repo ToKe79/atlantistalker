@@ -181,7 +181,7 @@ sprintf(sequencia,"\0337\033[%d;1H",(user->statlcount)-1); /* save+goto Y,1 */
 write2sock(user,user->socket,sequencia,0);
 user->newline=0;
 
-//sprintf(sequencia,"~BB    ~OL~FW%-12.12s      [ ~FYATLANTIS talker~FW ]                 %-16.16s      ",user->name,user->room->name);
+/* sprintf(sequencia,"~BB    ~OL~FW%-12.12s      [ ~FYATLANTIS talker~FW ]                 %-16.16s      ",user->name,user->room->name); */
 mins=(int)(time(0) - user->last_login)/60;      
 if (user->actual_remote_socket && user->actual_remote_socket==user->ircsocknum) {
 	sprintf(sequencia,"~BB~OL~FW %-12.12s ~FR * ~FG%02d:%02d %03d ~FY%3dpp ~FR* ~OL~FW%-16.16s ~FR* ~FY    Atlantis TALKER       ", user->irc_nick, thour, tmin, mins, user->pp, user->irc_chan);
@@ -205,7 +205,7 @@ RN_OBJECT remote;
 
 sprintf(sequencia,"\0337\033[%d;1H",user->statlcount); /* save+goto Y,1 */
 write2sock(user,user->socket,sequencia,0);
-//write_sock(user->socket,"[TTT] ");
+/* write_sock(user->socket,"[TTT] "); */
 
 i=0;
 text[0]='\0';
@@ -213,7 +213,7 @@ if (user->buffpos && !isalpha(user->buff[0]) && !isdigit(user->buff[0]) && !strc
 	for (remote=remote_start;remote!=NULL;remote=remote->next) {
 		if (remote->shortcut==user->buff[0]) {
 			for (j=0;j<MAX_CONNECTIONS;j++) if (user->remote[j]==remote) {
-				//i=j; break;
+				/* i=j; break; */
 				sprintf(text,"[%-3.3s] ", remote->desc);
 				write2sock(user,user->socket,text,0);
 				i=1; 
@@ -346,8 +346,8 @@ endstring(inpstr);
 inpstr[500]='\0';
 sstrncpy(out,inpstr, 512);
 
-//clear_words();
-//wc=wordfind(inpstr);
+/* clear_words(); */
+/* wc=wordfind(inpstr); */
 wc=word_count;
 if (!wc) return;
 
@@ -585,7 +585,7 @@ if (!strncmp(word[0],"/pa",3) || !strncmp(word[0],"/le",3)) {
 		sprintf(out,"PART %s :%s\n", user->irc_chan, inpstr);
 		}
 	
-	//user->irc_chan[0]='\0';
+	/* user->irc_chan[0]='\0'; */
 	}
 
 
@@ -738,7 +738,7 @@ if (user->irc_defnick[0]!='\0') {
 	}
 write(user->remote_login_socket,text,strlen(text));
 if (user->statline==CHARMODE) show_statline(user);
-//strcpy(user->irc_nick, user->name);
+/* strcpy(user->irc_nick, user->name); */
 return;
 }
 
@@ -750,13 +750,13 @@ char text2[2500];
 char rnick[20], rident[200];
 char *tmp;
 int i;
-//int y;
+/* int y; */
 
 inpstr[512]='\0';
 clear_irc_words();
 wc=irc_wordfind(inpstr);
 lastw=wc-1;
-//endstring(lastw);
+/* endstring(lastw); */
 if (!wc) return;
 curw=0;
 
@@ -804,7 +804,7 @@ if (!strcmp(irc_word[curw],"NICK")) {
 	}
 
 if (!strncmp(irc_word[curw],"00",2) || !strncmp(irc_word[curw],"25",2)) {
-	//curw++;
+	/* curw++; */
 	user->irc_reg=1;
 	sprintf(text,"~FB[~OL~FY*~RS~FB] ~FW%s\n", irc_word[lastw]);
 	}
@@ -839,9 +839,11 @@ if (!strcmp(irc_word[curw],"TOPIC")) {
 	}
 	
 /* po JOINe */
-//if (!strcmp(irc_word[curw],"353")) {
-//	sprintf(text,"~OL~FB=~FW*~FB= ~FYUsers on %s: ~RS~FG%s\n", irc_word[curw+3], irc_word[lastw]);
-//	}
+/*
+if (!strcmp(irc_word[curw],"353")) {
+	sprintf(text,"~OL~FB=~FW*~FB= ~FYUsers on %s: ~RS~FG%s\n", irc_word[curw+3], irc_word[lastw]);
+	}
+*/
 
 /* WHO */
 if (!strcmp(irc_word[curw],"352")) {       

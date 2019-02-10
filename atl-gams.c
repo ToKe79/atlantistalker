@@ -1120,12 +1120,12 @@ if ((u=get_user(word[1]))!=NULL) {
   if ((user->game!=0) || (u->game!=0)) {
  	write_user(user,"Ty alebo tvoj partner uz hra inu hru!\n");
  	return;
- 	}
+  }
   if (u==user) {
 	  sprintf(text,"Nemozes hrat %s so sebou.\n",pohl(user,"sam","sama"));
 	  write_user(user,text);
 	  return;
-	}
+  }
 
   if (u->afk) {
 	if (u->afk_mesg[0])
@@ -1133,30 +1133,28 @@ if ((u=get_user(word[1]))!=NULL) {
 	else sprintf(text,"%s je prave mimo klavesnice.\n",u->name);
 	write_user(user,text);
 	return;
-	}
- if (u->ignall) {
+  }
+  if (u->ignall) {
 	if (u->malloc_start!=NULL)
 		sprintf(text,"%s prave nieco pise v editore.\n",u->name);
 	else sprintf(text,"%s prave ignoruje vsetky hlasky.\n",u->name);
 	write_user(user,text);
 	return;
-	}
-
- if (u->igngames) {
-   sprintf(text,"%s si tu visi a vsetky hry ma na haku.\n",u->name);
-   write_user(user,text);
-   return;
   }
-//	sprintf(text,"%s sa Ta %s vyzvat do piskvorkoveho duelu!\n",user->name,pohl(user,"pokusil","pokusila"));
-/*
- if (strcmp(user->room->name,u->room->name))
-   {
+  if (u->igngames) {
+    sprintf(text,"%s si tu visi a vsetky hry ma na haku.\n",u->name);
+    write_user(user,text);
+    return;
+  }
+  /* sprintf(text,"%s sa Ta %s vyzvat do piskvorkoveho duelu!\n",user->name,pohl(user,"pokusil","pokusila")); */
+  /*
+  if (strcmp(user->room->name,u->room->name)) {
     sprintf(text,"%s je v inej miestnosti.\n",u->name);
     write_user(user,text);
     return;
-   }
-*/
-if (!(strcmp(u->room->name,"amfiteater")) && (play.on==1)) {
+  }
+  */
+  if (!(strcmp(u->room->name,"amfiteater")) && (play.on==1)) {
 	write_user(user,"Pocas predstavenia nemozes hrat piskvorky.\n");
 	return;
 	}
@@ -2383,13 +2381,15 @@ if (user->hang_stage==-1) {
   write_user(user,"Este nehras, pouzi .hangman start\n");
   return;
   }
-//if (strlen(word[1])>1) {
-//  write_user(user,"Mozes hadat len jedno pismeno!\n");
-//  return;
-//  }
+/*
+if (strlen(word[1])>1) {
+  write_user(user,"Mozes hadat len jedno pismeno!\n");
+  return;
+  }
+*/
 
-//strtolower(inpstr); strtolower(user->hang_word);
-if (strlen(inpstr)>3) { // Plne hadanie!
+/* strtolower(inpstr); strtolower(user->hang_word); */
+if (strlen(inpstr)>3) { /* Plne hadanie! */
         if (strlen(inpstr)!=strlen(user->hang_word)-1) {
           write_user(user,"Pozor, dlzka zadaneho slova nie je rovnaka ako dlzka hadaneho slova.\n");
           return;
@@ -3835,7 +3835,7 @@ void play_blackjack(UR_OBJECT user)
     }
     write_user(user,"~FY~OLYou stand, and the dealer takes their turn...\n");
     user_total=check_blackjack_total(user,0);
-//  CARD_SKIP:
+    /* CARD_SKIP: */
     cnt=blank=0;
     for (i=0;i<5;i++) {
       if (user->bj_game->dealer_hand[i]==-1) blank++;
@@ -4638,11 +4638,13 @@ UR_OBJECT user;
         for(j = 0;j < M_Y; j++){
             sprintf(buff,"~FG%2d ", j);
             for(i = 0;i < M_X; i++)
-              //  if(M_TAB(j,i) >= M_HIDDEN)
-              //      sprintf(buff+6+(i*8), "~OL~FK# ");
-              //  else
-              //      sprintf(buff+6+(i*8), "~OL~FB%c ", (M_TAB(j,i) == M_THERE) ? '*' :
-              //                                               ((M_TAB(j,i) == 0) ? ' ' : (M_TAB(j,i)+'0') ));
+                  /*
+                  if(M_TAB(j,i) >= M_HIDDEN)
+                      sprintf(buff+6+(i*8), "~OL~FK# ");
+                  else
+                      sprintf(buff+6+(i*8), "~OL~FB%c ", (M_TAB(j,i) == M_THERE) ? '*' :
+                                                               ((M_TAB(j,i) == 0) ? ' ' : (M_TAB(j,i)+'0') ));
+                  */
 	          if(M_TAB(j,i) >= M_FLAG)
 	              sprintf(buff+6+(i*8), "~OL~FMF ");
 	          else if(M_TAB(j,i) >= M_HIDDEN)
@@ -4723,7 +4725,7 @@ int miny_init(user)
 UR_OBJECT user;
 {
     int i,j;
-//    time_t t;
+    /* time_t t; */
     
     /* Memory Allocation */
     user->miny_tab = (unsigned char **) malloc(sizeof(unsigned char *)*M_Y);
@@ -4742,17 +4744,18 @@ UR_OBJECT user;
             M_TAB(j,i) = M_HIDDEN;
 
     /* Placing Miny & Numbers */
-  //  srand((unsigned) time(&t));
-  //  for(total = 0;total < HOW_MINES;){
-  //      j = rand() % M_Y;
-  //      i = rand() % M_X;
-  //      if((M_TAB(j,i) != M_THERE + M_HIDDEN)){
-  //          M_TAB(j,i) = M_THERE + M_HIDDEN;
-  //          total++;
-  //          miny_numbering(user,j,i);
-  //      }
-  //  }
-
+    /*
+    srand((unsigned) time(&t));
+    for(total = 0;total < HOW_MINES;){
+        j = rand() % M_Y;
+        i = rand() % M_X;
+        if((M_TAB(j,i) != M_THERE + M_HIDDEN)){
+            M_TAB(j,i) = M_THERE + M_HIDDEN;
+            total++;
+            miny_numbering(user,j,i);
+        }
+    }
+    */
      M_TAB(0,0) = (char)M_HIDDEN+9;  /* zaznacim si ze pole este nie je ocislovane */    
 
     return 0;
@@ -4989,12 +4992,12 @@ char *inpstr;
                     if (M_X==22) add_point(user,DB_MINY,40,0);
                     miny_done(user);
 		} else {
-		   // if(!(buff = (char *)malloc(42))){   /*  answer is 42 ? :) */
-		   //	write_user(user,miny_alloc_msg);
-		   //	return;
-		   // }
-		    //sprintf(buff,"  ~FBMin: ~FY%d ~FBNeodkryte: ~FY%d\n", HOW_MINES, (M_X*M_Y)-b);
-		    //write_user(user, buff);
+		    /* if(!(buff = (char *)malloc(42))){ */  /*  answer is 42 ? :) */
+		   	/* write_user(user,miny_alloc_msg); */
+		   	/* return; */
+		    /* } */
+		    /* sprintf(buff,"  ~FBMin: ~FY%d ~FBNeodkryte: ~FY%d\n", HOW_MINES, (M_X*M_Y)-b); */
+		    /* write_user(user, buff); */
 		}
 		
             } else
@@ -5096,7 +5099,7 @@ UR_OBJECT user;
 {
 FILE *fp;
 char filename[80];
-//int x,y;
+/* int x,y; */
 sprintf(filename,"%s/%s.sav",DAMAFILES,user->name);
 if (!(fp=fopen(filename,"r")))
  {
@@ -5153,8 +5156,8 @@ UR_OBJECT user;
 UR_OBJECT u;
 RM_OBJECT rm;
 int i,biely,chr,dlx=0,dly=0,figurka[7],j,smer,ok,minx=0,miny=0,x=0,y=0,oldsmer=0/*,check[7]*/;
-int tah[7][2]; // postup tahu [x][y]
-int vymaz[3][2]; //[x][y] preskocenych figuriek v jednom tahu
+int tah[7][2]; /* postup tahu [x][y] */
+int vymaz[3][2]; /* [x][y] preskocenych figuriek v jednom tahu */
 if (word_count==1) 
  {
   write_user(user,"Pouzi: .dama <user>   vyzves niekoho na partiu damy\n");
@@ -5203,13 +5206,13 @@ if (!strcmp (word[1],"stop"))
      } 
     u->dama=NULL;
     destruct_dama(user);
-    //user->damaloose++;
-    //u->damawin++;
+    /* user->damaloose++; */
+    /* u->damawin++; */
     user->dhrac=0;
     u->dhrac=0;
-   // u->dama->tah=0; user->dama->tah=0;
+    /* u->dama->tah=0; user->dama->tah=0; */
     user->dama_opp=NULL; 
-    u->dama_opp=NULL;//ak je zaREMovane, ten kto sa vzdal ma pravo na odvetu ;)
+    u->dama_opp=NULL; /* ak je zaREMovane, ten kto sa vzdal ma pravo na odvetu ;) */
     sprintf(text,"Dama: %s/%s stop\n",u->name,user->name); 
     log_game(text);
     return;
@@ -5784,11 +5787,11 @@ if (user->dhrac>0)
      } 
     u->dama=NULL;
     destruct_dama(user);
-    //user->damawin++;
-    //u->damaloose++;
+    /* user->damawin++; */
+    /* u->damaloose++; */
     user->dhrac=0;
     u->dhrac=0;
-    //user->dama_opp=NULL;// ak je zaREMovane, porazeny ma pravo na odvetu ;)
+    /* user->dama_opp=NULL; */ /* ak je zaREMovane, porazeny ma pravo na odvetu ;) */
     u->dama_opp=NULL;
     return;
    }
@@ -5812,7 +5815,7 @@ if (!strcmp(word[1],"load") || !strcmp(word[1],"pokracuj"))
 if (!(u=get_user(word[1])))
  {
   write_user(user,notloggedon);
-  //user->dhrac=0;
+  /* user->dhrac=0; */
   return;
  }
 if (user==u) 
@@ -5888,11 +5891,11 @@ else
     u->dama->tah=0; user->dama->tah=0;
     for (i=0;i<4;++i) 
      {
-      user->dama->plocha[i*2+1][0]=1;  // plocha:
-      user->dama->plocha[i*2][1]=1;    //  1 - biely, 2 - biela  dama
-      user->dama->plocha[i*2+1][2]=1;  // plocha:
+      user->dama->plocha[i*2+1][0]=1;  /* plocha: */
+      user->dama->plocha[i*2][1]=1;    /*  1 - biely, 2 - biela  dama */
+      user->dama->plocha[i*2+1][2]=1;  /* plocha: */
       user->dama->plocha[i*2][5]=-1;
-      user->dama->plocha[i*2+1][6]=-1;  //  -1 - cierny, -2 - cierna dama
+      user->dama->plocha[i*2+1][6]=-1;  /*  -1 - cierny, -2 - cierna dama */
       user->dama->plocha[i*2][7]=-1;
      }
     user->dama->natahu=1;
@@ -5912,7 +5915,7 @@ UR_OBJECT user;
 {
 int x,y,reverse,biely_count,cierny_count,figurkax,figurkay;
 char dispf[5][20];
-//char stav[20];
+/* char stav[20]; */
 if (user->colour && user->dama->monochrom[user->dhrac-1]==0)
  {
   strcpy(dispf[0],"| ~OL~FKQ~RS ");
@@ -5977,7 +5980,7 @@ write_user(user,text);
 oline(user);
 if (biely_count==0) user->dama->natahu=3;
 if (cierny_count==0) user->dama->natahu=4;
-//vwrite_user(user,"~OL~FR%d\n", user->dama->tah);
+/* vwrite_user(user,"~OL~FR%d\n", user->dama->tah); */
 }
 
 void dama_stav2(user)
@@ -5985,7 +5988,7 @@ UR_OBJECT user;
 {
 int x,y,reverse,biely_count,cierny_count,figurkax,figurkay;
 char dispf[5][20];
-//char stav[20];
+/* char stav[20]; */
 if (user->colour && user->dama->monochrom[user->dhrac-1]==0)
  {
   strcpy(dispf[0],"~OL~FKQ~RS");
@@ -6067,9 +6070,9 @@ char *header(char *str)
 {
 char /*poml[40],*/text2[ARR_SIZE*2];
 int i,len,spc,odd;
-//int cnt;
+/* int cnt; */
 strcpy(texthb,str);
-//cnt=colour_com_count(texthb);
+/* cnt=colour_com_count(texthb); */
 colour_com_strip(texthb);
 len=strlen(texthb);
 spc=(int)((33)-(len/2));
@@ -6573,7 +6576,7 @@ int i,j=0,cnt,o;
  write_user(user,text);
 }
 
-// socialne orientovana kocka (ak su 4 ks figurky doma na starte, hadze sa 1 az 7, 7 -> 6.
+/* socialne orientovana kocka (ak su 4 ks figurky doma na starte, hadze sa 1 az 7, 7 -> 6. */
 void hod_kockou(user, rec)
 UR_OBJECT user;
 int rec;
@@ -6622,7 +6625,7 @@ for(i=0;i<4;++i)
  if (user->clovece->kocka==7) user->clovece->kocka=6;
 }
 */
-// bezohladna kocka
+/* bezohladna kocka */
 /*hod_kockou(user)
 UR_OBJECT user;
 {
@@ -6668,7 +6671,7 @@ UR_OBJECT u=NULL;
 int i,j=0,cnt,tah,tahable[5],x,y,pl,line;
 char *pom;
 
-//thiz is only for testing, do not include
+/* thiz is only for testing, do not include */
 /*
 if (!strcmp (word[1],"xxx"))
  {
@@ -6882,7 +6885,7 @@ if (!strcmp (word[1],"koniec"))
  {
   if (user->chrac>0)
    {
-// PRIDANE
+/* PRIDANE */
     if (user->clovece->loadlock>0)
      {
       sprintf(text,"~FTPoskladal%s si hraciu plochu, nema to vyznam.\n",pohl(user,"","a"));
@@ -6899,7 +6902,7 @@ if (!strcmp (word[1],"koniec"))
       destruct_clovece(user);
       return;
      }
-//KONIEC   
+/* KONIEC */
     cnt=0;
     for(j=0;j<4;++j) user->clovece->figurka[user->chrac-1][j]=0;
     if (user->clovece->natahu==user->chrac)
@@ -6961,7 +6964,7 @@ if (!strcmp (word[1],"koniec"))
       write_user(user,text);
       user->chrac=0;
       destruct_clovece(user);
-      //user->clovece_starter=NULL;
+      /* user->clovece_starter=NULL; */
      }
     return;
    }
@@ -7340,7 +7343,7 @@ if (word_count==2)
          {
           clovece_next(user);
          }
-// ZMeNA
+/* ZMeNA */
         y=0;
         for(j=0;j<4;++j)
          {
@@ -7349,7 +7352,7 @@ if (word_count==2)
          }
         if (y==4) hod_kockou(user,0); else hod_kockou(user,1);
        }
-// KONIEC       
+/* KONIEC */
      }
     for(i=0;i<4;++i)
      for(j=0;j<4;++j)
@@ -8206,8 +8209,8 @@ if (word_count>1)
        }
       y=0;
       if (hold[tah[0]]/4==5) y=1;
-      if (hold[tah[0]]==16) y=1; // Ide zel. dolnik na vsetko? ano ak aktivovane.
-//      if (oznac==4 && farba==0) y=1; //Ide na zel. dolnika setko? ano ak aktivovane.
+      if (hold[tah[0]]==16) y=1; /* Ide zel. dolnik na vsetko? ano ak aktivovane. */
+      /* if (oznac==4 && farba==0) y=1; */ /* Ide na zel. dolnika setko? ano ak aktivovane. */
       if (hold[tah[0]]/4==oznac) y=1;
       if (user->farar->action>200)
        {

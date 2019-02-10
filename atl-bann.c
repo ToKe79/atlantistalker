@@ -173,7 +173,7 @@ FILE *fp;
 void getparams(fontsubor)
 char *fontsubor;
 {
-/*  int c; *//* "Should" be a char -- need int for "!= -1" test*/
+/*  int c; */ /* "Should" be a char -- need int for "!= -1" test*/
 /*  int columns,        */
     int firstfont;
 /*  char *controlname;  */
@@ -1134,8 +1134,8 @@ no++;if(type==no) strcpy(meno_fontu,"binary.flf");
 no++;if(type==no) strcpy(meno_fontu,"block.flf"); 
 no++;if(type==no) strcpy(meno_fontu,"bubble.flf"); 
 no++;if(type==no) strcpy(meno_fontu,"bulbhead.flf"); 
-//no++;if(type==no) strcpy(meno_fontu,"calgphy2.flf"); 
-//no++;if(type==no) strcpy(meno_fontu,"caligraphy.flf"); 
+/* no++;if(type==no) strcpy(meno_fontu,"calgphy2.flf"); */
+/* no++;if(type==no) strcpy(meno_fontu,"caligraphy.flf"); */
 no++;if(type==no) strcpy(meno_fontu,"catwalk.flf"); 
 no++;if(type==no) strcpy(meno_fontu,"chartri.flf"); 
 no++;if(type==no) strcpy(meno_fontu,"chunky.flf"); 
@@ -1152,7 +1152,7 @@ no++;if(type==no) strcpy(meno_fontu,"cybermedium.flf");
 no++;if(type==no) strcpy(meno_fontu,"cybersmall.flf"); 
 no++;if(type==no) strcpy(meno_fontu,"diamond.flf"); 
 no++;if(type==no) strcpy(meno_fontu,"digital.flf"); 
-//no++;if(type==no) strcpy(meno_fontu,"doh.flf"); 
+/* no++;if(type==no) strcpy(meno_fontu,"doh.flf"); */
 no++;if(type==no) strcpy(meno_fontu,"doom.flf"); 
 no++;if(type==no) strcpy(meno_fontu,"dotmatrix.flf"); 
 no++;if(type==no) strcpy(meno_fontu,"drpepper.flf"); 

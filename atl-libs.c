@@ -38,7 +38,7 @@ int init_libs()
 
 	return 1;
 
-// autoload nemame
+/* autoload nemame */
 }
 
 int try_to_load(const char *fname) {

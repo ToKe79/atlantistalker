@@ -105,7 +105,7 @@ void shutdown_database(void)
 
 char *dbf_string(char *string)
 {
-//        char *ptr=string;
+        /* char *ptr=string; */
 	int poz=0;
         parsed[0]='\0';
 
@@ -130,8 +130,8 @@ char *dbf_string(char *string)
 		string++;
 	}
 	*(parsed+poz)='\0';
-//	strcpy(ptr,parsed);
-//	return ptr;
+	/* strcpy(ptr,parsed); */
+	/* return ptr; */
         return parsed;
 }
 
@@ -205,7 +205,7 @@ extern int db_save_user_details(UR_OBJECT user, int save_current)
    strcpy(wizshmsg  ,dbf_string(user->wizshmsg  ));
    strcpy(wizshmsg2 ,dbf_string(user->wizshmsg2 ));
 
-//   strcpy(,dbf_string());
+   /* strcpy(,dbf_string()); */
    if (user->type==CLONE_TYPE) return 0;
 
    /* Zlozi ignore cislo */
@@ -310,8 +310,8 @@ extern int db_save_user_details(UR_OBJECT user, int save_current)
       );
 
    if (mysql_query(&mysql,query)) {
-//      sprintf(text,"%s: nepodarilo sa ulozit tvoje data.\n",syserror);
-//      write_user(user,text);
+      /* sprintf(text,"%s: nepodarilo sa ulozit tvoje data.\n",syserror); */
+      /* write_user(user,text); */
       sprintf(text,"~OL~FR~BBSAVE_USER_STATS: Nepodarilo sa ulozit data uzivatela \"%s\":%s ~BK\n",user->name,mysql_error(&mysql));
       write_level(KIN,1,text,NULL); 
       colour_com_strip(text);
@@ -537,7 +537,7 @@ int i;
       strcpy(user->desc,"spekuluje s .desc");
    }
 
-//   user->pagewho=1;
+   /* user->pagewho=1; */
    return 1;
 }
 
@@ -634,7 +634,7 @@ static char name[USER_NAME_LEN+2];
 
 extern int db_deluser(char *username)
 {
-int ok=0,i;//,id=0;
+int ok=0,i; /* ,id=0; */
    
    username[USER_NAME_LEN]='\0';
    for (i=0;i<USER_NAME_LEN;i++)
@@ -962,7 +962,7 @@ if (type_def==0) {
   if (!strncmp(word[1],"qu",2)) { type=DB_QUEST; strcpy(label,"questerov"); } 
   if (!strncmp(word[1],"do",2)) { type=DB_DOOM; strcpy(label,"zabijakov"); } 
   if (!strncmp(word[1],"le",2)) { type=DB_LETUN; strcpy(label,"pilotov"); } 
-  //if (!strncmp(word[1],"le",2)) { fly_sort(user,kolko); return; } 
+  /* if (!strncmp(word[1],"le",2)) { fly_sort(user,kolko); return; } */
   if (!strncmp(word[1],"re",2)) { type=DB_REVERSI; strcpy(label,"reverzistov"); } 
   if (!strncmp(word[1],"da",2)) { type=DB_DAMA; strcpy(label,"hracov damy"); } 
   if (!strncmp(word[1],"mi",2)) { type=DB_MINY; strcpy(label,"hladacov"); } 
@@ -1042,8 +1042,8 @@ else {
        if (mode==1) sprintf(text,"~OL~FB|     | ~FR%-12s~FB | ~FW%7s~FB    |\n~OL~FB|=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=|\n",user->name,row[0]);
        else if (mode==2) sprintf(text,"~OL~FB|     | ~FR%-12s~FB |~RS~FW%6s~OL~FB  |~RS~FW%7s~OL~FB   |~RS~FW%5s~OL~FB |~FW%6s ~FB|\n~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n",user->name,row[0],row[1],row[2],row[3]);
        else sprintf(text,"~OL~FB|     | ~FR%-12s~FB |~RS~FW%6s~OL~FB |~RS~FW%7s~OL~FB |~FW%6d~FB |\n~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n",user->name,row[0],row[1],atoi(row[0])-atoi(row[1]));
-//       if (type==DB_ARENA || type==DB_QUEST) sprintf(text,"~OL~FB|~RS~FW     ~OL~FB| ~FR%-12s~FB |       ~FW%6s~FB           |\n",row[0],row[1]);
-//       else sprintf(text,"~OL~FB|~RS~FW     ~OL~FB| ~FR%-12s~FB |~RS~FW%6s~OL~FB |~RS~FW%7s~OL~FB |~FW%6d~FB |\n",row[0],row[1],row[2],atoi(row[1])-atoi(row[2]));
+       /* if (type==DB_ARENA || type==DB_QUEST) sprintf(text,"~OL~FB|~RS~FW     ~OL~FB| ~FR%-12s~FB |       ~FW%6s~FB           |\n",row[0],row[1]); */
+       /* else sprintf(text,"~OL~FB|~RS~FW     ~OL~FB| ~FR%-12s~FB |~RS~FW%6s~OL~FB |~RS~FW%7s~OL~FB |~FW%6d~FB |\n",row[0],row[1],row[2],atoi(row[1])-atoi(row[2])); */
        write_user(user,text);
       }
      mysql_free_result(result);
@@ -1176,7 +1176,7 @@ void write_web(int socket,char *str)
 void eliminate_webuser(int socket)
 {
  sprintf(text,"%c",223);
- write_web(socket,text); // chcipni web klient
+ write_web(socket,text); /* chcipni web klient */
  sprintf(query,"update `web_index` set `status`=3 where `id`='%d';",socket-1000);
  mysql_kvery(query);
 }
@@ -1276,14 +1276,14 @@ void kick_webusers()
 int cnt=0;
 UR_OBJECT user,next;
 int id[50],i;
-//int kick[50];
+/* int kick[50]; */
 
  sprintf(query,"select `id` from `web_index` where `idle`>1 limit 50;");
  if (!(result=mysql_result(query))) return;
  cnt=0;
  while ((row=mysql_fetch_row(result))) {
    id[cnt]=atoi(row[0]);
-//   kick[cnt]=atoi(row[1]);
+   /* kick[cnt]=atoi(row[1]); */
    cnt++;
   } 
  mysql_free_result(result);
@@ -1828,7 +1828,7 @@ PAGER pom;
 
    if (pos==0) { /* tekvice (hlavicky) */
        *(buff+buffpos)='\0';
-//       if (lines==0 || (lines)%totalines!=0) {
+       /* if (lines==0 || (lines)%totalines!=0) { */
         {
          if (!silent) {
            switch(user->browsing) {
@@ -2695,7 +2695,7 @@ else write_user(user,"~OL~FWPosta odoslana.~RS~FW\n");
 
 u=get_user_exact(to);
 if (u!=NULL) write_user(u,"~LB~FT~OL** ~LIPRISLA TI NOVA POSTA!~RS~OL~FT (pouzi: ~FY.rmail new~FT) **\n");
-//else forward_smail2sms(to,sklonuj(user,2),ptr);
+/* else forward_smail2sms(to,sklonuj(user,2),ptr); */
 sprintf(header,"%s [%s, %02d:%02d]",user->name, long_date(4),thour,tmin);
 forward_email(to,header,user->name,ptr);
 return;
@@ -2823,7 +2823,7 @@ if (toid==0) {
   return;
  }
 
-sprintf(query,"delete from `jokes` where %d<=`id` and `id`<=%d",toid,fromid); //sorted descending
+sprintf(query,"delete from `jokes` where %d<=`id` and `id`<=%d",toid,fromid); /* sorted descending */
 mysql_kvery(query);
 vyfluslo=mysql_affected_rows(&mysql);
 sprintf(query,"select count(`id`) from jokes");
