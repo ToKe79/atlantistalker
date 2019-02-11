@@ -10767,6 +10767,7 @@ if (!(strncmp(word[1],"who",3))) {
    }
   if (word_count==3) {
     if (!strcmp(word[2],"test")) {
+      word_count=1;
       testwho(user);
       return;
      }
@@ -16798,22 +16799,26 @@ else {
 
 void testwho(UR_OBJECT user)
 {
-FILE *infp,*fp;
-char filename[81],filename2[81];
-char line[511];
-int stage=0;
+/* FILE *infp,*fp; */
+/* char filename[81],filename2[81]; */
+/* char line[511]; */
+/* int stage=0; */
 UR_OBJECT u;
 
- sprintf(filename,"mailspool/%s.whotmp",user->name);
- if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
-   write_user(user,"Chyba! Nepodarilo sa otvorit docasny subor pre zakladne .who!\n");
+/* sprintf(filename,"mailspool/%s.whotmp",user->name);
+ if (!(fp=ropen(filename,"w"))) { */ /*APPROVED*/
+/*   write_user(user,"Chyba! Nepodarilo sa otvorit docasny subor pre zakladne .who!\n");
    return;
-  }
+  }*/
  for(u=user_first;u!=NULL;u=u->next) {
    if (u->type==CLONE_TYPE || u->login) continue;
    if (!u->vis && u->level>user->level) continue;
    if (u->who_type>0) continue;
-   sprintf(filename2,"whos/%s.who",u->name);
+   if (!strcmp(u->name,user->name)) continue; /* naco budeme ukazovat vlastny skin */
+   sprintf(text,"Who skin %s ~OL%s~RS:\n",pohl(u,"uzivatela","uzivatelky"),u->name);
+   write_user(user,text);
+   newwho(user,u->name);
+   /* sprintf(filename2,"whos/%s.who",u->name);
    if (!(infp=ropen(filename2,"r"))) continue;
    stage=0;
    fgets(line,500,infp);
@@ -16822,16 +16827,16 @@ UR_OBJECT u;
      fgets(line,500,infp);
     }
    fclose(infp);
-   fputs(parse_who_line(u,line,0,0,user->level),fp);
+   fputs(parse_who_line(u,line,0,0,user->level),fp);*/
   }
- fclose(fp);
+ /* fclose(fp);
  if (user->pagewho) {
    switch(more(user,user->socket,filename)) {
      case 0: write_user(user,"Chyba pri citani who!\n");  break;
      case 1: user->misc_op=2;
     }
   }
- else showfile(user,filename);		
+ else showfile(user,filename); */
 }
 
 char *parse_who_line(UR_OBJECT u,char *line,int wizzes,int users,int userlevel)
