@@ -137,6 +137,8 @@ char *dbf_string(char *string)
 
 MYSQL_RES *mysql_result(char *select)
 {
+   MYSQL_RES *loc_result;
+
    if (mysql_query(&mysql,select)) {
       sprintf(text,"~OL~FRMYSQL RESULT ERROR: %s\n",mysql_error(&mysql));
       write_level(KIN,1,text,NULL);
@@ -147,14 +149,14 @@ MYSQL_RES *mysql_result(char *select)
       return NULL;
    }
    
-   if ((result=mysql_store_result(&mysql))==NULL) {
+   if ((loc_result=mysql_store_result(&mysql))==NULL) {
       sprintf(text,"~OL~FRMYSQL RESULT ERROR: Unable to store result!\n");
       write_level(KIN,1,text,NULL);
       colour_com_strip(text);
       write_syslog(text,1);
       return NULL;
    }
-   return result;
+   return loc_result;
 }
 
 int mysql_kvery(char *select)
@@ -2844,13 +2846,15 @@ else {
 int counter_db(int add) {
 
 	int cntr;
+	MYSQL_RES *loc_result;
+	MYSQL_ROW loc_row;
 
 	sprintf(query,"select `value` from `config` where `parameter` = 'counter'");
 
-	if ((result=mysql_result(query))) {
-		row=mysql_fetch_row(result);
-		mysql_free_result(result);
-		cntr=atoi(row[0]);
+	if ((loc_result=mysql_result(query))) {
+		loc_row=mysql_fetch_row(loc_result);
+		mysql_free_result(loc_result);
+		cntr=atoi(loc_row[0]);
 	} else {
 		return 0;
 	}
