@@ -223,12 +223,12 @@ int api_room_set_desc(char *name, int lng, char *desc) {
  *    * -1 - ak nastala chyba
  *****/
 int api_room_get_first(char *dst) {
-	RM_OBJECT rm;
+	/* RM_OBJECT rm; */
 
 	if (room_first == NULL) {
 		return -1;
 	}
-	strncpy(dst, rm->name, ROOM_NAME_LEN);
+	strncpy(dst, room_first->name, ROOM_NAME_LEN);
 
 	return 0;
 }
