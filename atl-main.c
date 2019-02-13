@@ -16799,25 +16799,31 @@ else {
 
 void testwho(UR_OBJECT user)
 {
-/* FILE *infp,*fp; */
-/* char filename[81],filename2[81]; */
+FILE /* *infp, */ *fp;
+char filename[81]; /* ,filename2[81]; */
 /* char line[511]; */
+char query[255];
+MYSQL_RES *result;
+MYSQL_ROW row;
 /* int stage=0; */
 UR_OBJECT u;
 
-/* sprintf(filename,"mailspool/%s.whotmp",user->name);
- if (!(fp=ropen(filename,"w"))) { */ /*APPROVED*/
-/*   write_user(user,"Chyba! Nepodarilo sa otvorit docasny subor pre zakladne .who!\n");
+ sprintf(filename,"mailspool/%s.whotmp",user->name);
+ if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
+   write_user(user,"Chyba! Nepodarilo sa vytvorit docasny subor!\n");
+   sprintf(text,"~OL~FW~BRVarovanie:~RS ~OLNepodarilo sa vytvorit docasny subor '%s'!\n",filename);
+   write_level(KIN,1,text,NULL);
    return;
-  }*/
+  }
  for(u=user_first;u!=NULL;u=u->next) {
    if (u->type==CLONE_TYPE || u->login) continue;
    if (!u->vis && u->level>user->level) continue;
    if (u->who_type>0) continue;
-   if (!strcmp(u->name,user->name)) continue; /* naco budeme ukazovat vlastny skin */
-   sprintf(text,"Who skin %s ~OL%s~RS:\n",pohl(u,"uzivatela","uzivatelky"),u->name);
-   write_user(user,text);
-   newwho(user,u->name);
+   sprintf(query,"select `body` from `who` where `username`='%s'",u->name);
+   if((result=mysql_result(query))) {
+     row=mysql_fetch_row(result);
+     fputs(parse_who_line(u,row[0],0,0,user->level),fp);
+   }
    /* sprintf(filename2,"whos/%s.who",u->name);
    if (!(infp=ropen(filename2,"r"))) continue;
    stage=0;
@@ -16829,14 +16835,18 @@ UR_OBJECT u;
    fclose(infp);
    fputs(parse_who_line(u,line,0,0,user->level),fp);*/
   }
- /* fclose(fp);
+ fclose(fp);
  if (user->pagewho) {
    switch(more(user,user->socket,filename)) {
      case 0: write_user(user,"Chyba pri citani who!\n");  break;
      case 1: user->misc_op=2;
     }
   }
- else showfile(user,filename); */
+ else showfile(user,filename);
+ if((remove(filename))!=0) {
+   sprintf(text,"~OL~FW~BRVarovanie:~RS ~OLNepodarilo sa vymazat docasny subor '%s'!\n",filename);
+   write_level(KIN,1,text,NULL);
+ }
 }
 
 char *parse_who_line(UR_OBJECT u,char *line,int wizzes,int users,int userlevel)
