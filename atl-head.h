@@ -1503,6 +1503,7 @@ void who(UR_OBJECT user,int people);
 char *parse_who_line(UR_OBJECT u,char *line,int wizzes,int users,int userlevel);
 void newwho(UR_OBJECT user,char *username);
 void testwho(UR_OBJECT user);
+void testwhoall(UR_OBJECT user);
 void customexamine(UR_OBJECT user,char *username,int testall);
 char *parse_ex_line(UR_OBJECT u,char *line,int profile,int userlevel,int oflajn);
 int search_success(UR_OBJECT user,UR_OBJECT u,char *lookat,int words);

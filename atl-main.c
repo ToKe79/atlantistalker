@@ -10779,6 +10779,11 @@ if (!(strncmp(word[1],"who",3))) {
       testwho(user);
       return;
      }
+    if (!strcmp(word[2],"testall") && user->level>=KIN) {
+      word_count=1;
+      testwhoall(user);
+      return;
+     }
     switch(toupper(word[2][0])) {
 	     case '0': user->who_type=0;
   		       write_user(user,"Vypis .who je nastavny na volitelny who skin.\n");
@@ -16842,6 +16847,46 @@ UR_OBJECT u;
     }
    fclose(infp);
    fputs(parse_who_line(u,line,0,0,user->level),fp);*/
+  }
+ fclose(fp);
+ if (user->pagewho) {
+   switch(more(user,user->socket,filename)) {
+     case 0: write_user(user,"Chyba pri citani who!\n");  break;
+     case 1: user->misc_op=2;
+    }
+  }
+ else showfile(user,filename);
+}
+
+void testwhoall(UR_OBJECT user)
+{
+FILE /* *infp, */ *fp;
+char filename[81]; /* ,filename2[81]; */
+/* char line[511]; */
+char query[255];
+MYSQL_RES *result;
+MYSQL_ROW row;
+
+ sprintf(filename,"mailspool/%s.whotmp",user->name);
+ if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
+   write_user(user,"Chyba! Nepodarilo sa vytvorit docasny subor!\n");
+   sprintf(text,"~OL~FW~BRVarovanie:~RS ~OLNepodarilo sa vytvorit docasny subor '%s'!\n",filename);
+   write_level(KIN,1,text,NULL);
+   return;
+  }
+ sprintf(query,"select `username`,`body` from `who`");
+ if ((result=mysql_result(query))) {
+   while((row=mysql_fetch_row(result))) {
+     if (row[0][0] != '+') { /* nie je to preddefinovany skin */
+       sprintf(text,"%s:\n",row[0]);
+       fputs(text,fp);
+       fputs(parse_who_line(user,row[1],0,0,user->level),fp);
+      }
+    }
+  } else {
+   write_user(user,"Chyba! Nepodarilo sa nacitat uzivatelske who skiny z databazy!\n");
+   fclose(fp);
+   return;
   }
  fclose(fp);
  if (user->pagewho) {
