@@ -52,7 +52,15 @@ int i;
 char comm[20];
 int level;
 
-if ((fp=ropen(COM_LEVEL,"r"))==NULL) return;
+if ((fp=ropen(COM_LEVEL,"r"))==NULL) {
+	sprintf(text,"Subor '%s' neexistuje.\n",COM_LEVEL);
+	if (user==NULL) {
+		printf("%s",text);
+	} else {
+		write_user(user,text);
+	}
+	return;
+}
 fscanf(fp,"%s %d", comm, &level);
 while (!feof(fp)) {
 	sprintf(text,"Prikaz: %-10s Level: %d\n", comm, level);
