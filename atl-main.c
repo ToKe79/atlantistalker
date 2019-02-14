@@ -16843,10 +16843,6 @@ UR_OBJECT u;
     }
   }
  else showfile(user,filename);
- if((remove(filename))!=0) {
-   sprintf(text,"~OL~FW~BRVarovanie:~RS ~OLNepodarilo sa vymazat docasny subor '%s'!\n",filename);
-   write_level(KIN,1,text,NULL);
- }
 }
 
 char *parse_who_line(UR_OBJECT u,char *line,int wizzes,int users,int userlevel)
