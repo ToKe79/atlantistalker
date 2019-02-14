@@ -674,7 +674,7 @@ int num;
     }
    strtoupper(word[1]);
    if (strcmp(word[1],"SELECT")) {
-     write_user(user,"~OL~FRObmedzeneSELECa 'SELECT'!\n");
+     write_user(user,"~OL~FRObmedzene na 'SELECT'!\n");
      return;
     }
    sprintf(filename,"mailspool/%s.whotmp",user->name);
@@ -685,14 +685,17 @@ int num;
    if (mysql_query(&mysql,inpstr)) {
      sprintf(text,"~OL~FRMySQL error: %s\n",mysql_error(&mysql));
      write_user(user,text);
+     fclose(fp);
      return;
     }
    if ((result=mysql_store_result(&mysql))==NULL) {
      write_user(user,"~OL~FRMySQL error: Nemozno ulozit vysledok query!\n");
+     fclose(fp);
      return;
     }
    if (mysql_num_rows(result)==0) {
      write_user(user,"~OLPrazdny vysledok.\n");
+     fclose(fp);
      return;
     }
 
