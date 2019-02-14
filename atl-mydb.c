@@ -660,10 +660,23 @@ int ok=0,i; /* ,id=0; */
 void query_com(UR_OBJECT user,char *inpstr)
 {
 FILE *fp;
+MYSQL_RES *result;
+MYSQL_ROW row;
+MYSQL_FIELD *field;
 char filename[81];
-int i,num;
+int i;
+int num;
 
  if (user!=NULL) {
+   if (word_count<2) {
+     write_user(user,"Pouzi: .query SELECT ...\n");
+     return;
+    }
+   strtoupper(word[1]);
+   if (strcmp(word[1],"SELECT")) {
+     write_user(user,"~OL~FRObmedzeneSELECa 'SELECT'!\n");
+     return;
+    }
    sprintf(filename,"mailspool/%s.whotmp",user->name);
    if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
      write_user(user,"Chyba: problem s otvaranim docasneho suboru.\n");
@@ -671,35 +684,47 @@ int i,num;
     }
    if (mysql_query(&mysql,inpstr)) {
      sprintf(text,"~OL~FRMySQL error: %s\n",mysql_error(&mysql));
-     if (user==NULL) write_syslog(text,1);
-     else write_user(user,text);
+     write_user(user,text);
      return;
     }
    if ((result=mysql_store_result(&mysql))==NULL) {
-     sprintf(text,"~OL~FRMySQL error: Nemozno ulozit vysledok query!\n");
-     if (user==NULL) write_syslog(text,1);
-     else write_user(user,text);
+     write_user(user,"~OL~FRMySQL error: Nemozno ulozit vysledok query!\n");
      return;
     }
-   
+   if (mysql_num_rows(result)==0) {
+     write_user(user,"~OLPrazdny vysledok.\n");
+     return;
+    }
+
+   fputs("~OL",fp);
+   while ((field=mysql_fetch_field(result))) {
+     fputs(field->name,fp);
+     fputs("\t",fp);
+    }
+
+   fputs("\n",fp);
+
    while ((row=mysql_fetch_row(result))) {
      num=mysql_num_fields(result);
-     text[0]='\0';
      i=0;
      while (row[i]!=NULL && i<num) {
        fputs(row[i],fp);
-       fputs(" ",fp);
+       fputs("\t",fp);
        i++;
       }
      fputs("\n",fp);
     }
+
+   num=mysql_num_rows(result);
+   sprintf(text,"~OL%d %s.\n",num,skloncislo(num,"riadok","riadky","riadkov"));
+   fputs(text,fp);
    fclose(fp);
    mysql_free_result(result);
 
    switch(more(user,user->socket,filename)) {
      case 0: write_user(user,"Chyba pri citani resultu!\n");  break;
      case 1: user->misc_op=2;
-    }	
+    }
   }
 }
 
