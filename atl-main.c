@@ -12058,7 +12058,7 @@ if (reboot) sprintf(text,"*** RESTART ukonceny %s, max. pocet %d uzivatelov onli
 else sprintf(text,"*** SHUTDOWN ukonceny %s, max. pocet %d uzivatelov online. ***\n\n",long_date(1),max_users_was);
 write_syslog(text,0);
 
-sprintf(linepass,"./%s", progname);
+sprintf(linepass,"%s%s", (strncmp(progname,EXECPREFIX,2) ? EXECPREFIX : ""),progname);
 if (reboot) switch(fork()) {
       case -1: _exit(1);  /* fork failure */
       case  0: sleep(1); system(linepass); break; /* child */

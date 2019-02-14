@@ -103,6 +103,7 @@ int writeerror,max_timeouts,max_timeoutz;
 #define MOZENADAVAT GOD  /* Ze ktory level mozenadavat */
 #define MOZEFARBICKOVAT KIN  /* Ze ktory level pouzivat farbicky */
 #define TIMEOUT 3
+#define EXECPREFIX "./"
 
 /* Zabezpecenie otvarania suborov (ropen) */
 
