@@ -210,7 +210,7 @@ int writeerror,max_timeouts,max_timeoutz;
 #define REVERSIFILE "reversi.top"           /* tabulka reversiarov */
 #define DAMAFILE "dama.top"                 /* tabulka damy! */
 #define DAMAFILES "dama-save"               /* save adresar pre dddamu :> */
-#define REPOSITORY "repository"             /* adresar pre repository */
+/* #define REPOSITORY "repository" */            /* adresar pre repository */
 #define TMPSUFFIX ".talkertmp"                 /* koncovka docasnych suborov pre vypisy who, boardov a podobne */
 #define TMPFOLDER "temp/"                   /* adresar na docasne subory */
 #define MINYTOP "miny.top"                  /* tabulka min! */
@@ -1964,7 +1964,7 @@ void dama_stav(UR_OBJECT);
 void dama_stav2(UR_OBJECT);
 char *header(char *str);
 void oline(UR_OBJECT);
-void do_repository(char *subor, int typ);
+/* void do_repository(char *subor, int typ); */
 void repository(char *name, int typ);
 void rebirth(UR_OBJECT user);
 void miny_placing(UR_OBJECT,int,int);

@@ -24676,7 +24676,8 @@ write_syslog(text,2);
 
 }
 
-
+/* UNUSED */
+/*
 void do_repository(char *subor, int typ) 
 {
 FILE *fp;
@@ -24700,6 +24701,7 @@ if (typ==2) {
 	return;
 	}
 }
+*/
 
 void repository(char *name, int typ)
 {
