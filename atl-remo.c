@@ -7,6 +7,7 @@
 void test_lynx_done() /* vola sa v do_events */
 {
 UR_OBJECT user;
+FILE *fp;
 int status;
 char filename[256];
 
@@ -15,9 +16,12 @@ for(user=user_first;user!=NULL;user=user->next) {
 !user->lynx) continue;
   if (waitpid (user->lynx, &status, WNOHANG) == user->lynx) {
     user->lynx=0;
-    sprintf(filename,"mailspool/lynx-%s.tmp",user->name);
+    sprintf(filename,"%s%s-lynx%s",TMPFOLDER,user->name,TMPSUFFIX);
     if (user->misc_op) {
-      unlink(filename);
+      if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/
+        fclose(fp);
+          deltempfile(filename);
+       }
       continue;
      }
     write_user(user,"\n~OL~FB-    -  - -- -------< ~FYLynx ukoncil nacitavanie dokumentu!~FB >------- -- -  -    -\n");
@@ -30,10 +34,10 @@ for(user=user_first;user!=NULL;user=user->next) {
      }              
    }
   else {
-    sprintf(filename,"mailspool/lynx-%s.tmp",user->name);    
+    sprintf(filename,"%s%s-lynx%s",TMPFOLDER,user->name,TMPSUFFIX);
     if (filesize(filename)>200000) {
       kill(-user->lynx,9);
-      waitpid(user->lynx, &status, 0);          
+      waitpid(user->lynx, &status, 0);
       user->lynx=0;
       unlink(filename);
      }
@@ -48,18 +52,20 @@ pid_t pid;
 FILE *fp;
 int len=0;
 char *str;
+char filename[81];
 
 if (word_count!=2) {
    write_user(user,"Pouzitie: .lynx <adresa|stop> (protokol je vzdy http://)\n");
    return;
    }
 
+sprintf(filename,"%s%s-lynx%s",TMPFOLDER,user->name,TMPSUFFIX);
+
 if (!strcmp(word[1],"stop")) {
    if (user->lynx) {
        kill(-user->lynx,9);
        waitpid(user->lynx, &status, 0);
-       sprintf(text,"mailspool/lynx-%s.tmp", user->name);
-       if ((fp=ropen(text,"r"))!=NULL) { fclose(fp); unlink(text); }
+       if ((fp=ropen(filename,"r"))!=NULL) { fclose(fp); deltempfile(filename); }
        write_user(user,"~FTLynx:~FW Stahovanie suboru bolo zrusene...\n");
        user->lynx=0;
        return;
@@ -95,7 +101,7 @@ switch (pid=fork()) {
     case -1: write_user(user,"~FTLynx:~FW lutujem, chyba pri forku...\n");
              return;
     case  0: setpgid(0,0); /* rodinne meno - vyvrazdime potom vsetko nazraz :) */
-             sprintf(text,"/usr/bin/lynx -restrictions=all -dump http://%s > mailspool/lynx-%s.tmp 2>> mailspool/lynx-%s.tmp",word[1],user->name, user->name);
+             sprintf(text,"/usr/bin/lynx -restrictions=all -dump http://%s > %s 2>> %s",word[1],filename,filename);
              system(text);/* deticko */
              _exit(0);
     }

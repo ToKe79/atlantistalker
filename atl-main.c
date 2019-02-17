@@ -1,10 +1,10 @@
 /*) Atlantis Talker (----------------------------------------------------------
-   ____   ____                  .__           ______                     
-   \   \ /   /__________________|__|____     |  ____|                  
-    \   Y   // __ \_  __ \___   /  \__  \    |___  \      \\//         
-     \     /\  ___/|  | \//    /|  |/ __ \_   ___>  | _  ==**==        
-      \___/  \___  >__|  /_____ \__(____  /  <_____/ |_|  //\\          
-                                
+   ____   ____                  .__           ______
+   \   \ /   /__________________|__|____     |  ____|
+    \   Y   // __ \_  __ \___   /  \__  \    |___  \      \\//
+     \     /\  ___/|  | \//    /|  |/ __ \_   ___>  | _  ==**==
+      \___/  \___  >__|  /_____ \__(____  /  <_____/ |_|  //\\
+
 ----------------------------------------------------------) hadiq relase (-----
                                          (c) 1997-2000 by Atlantis Talker group
 */
@@ -122,10 +122,10 @@ int i,line/* ,cnt */;
 char filename[80];
 FILE *fp;
 
-sprintf(filename,"mailspool/%s.whotmp",user->name);
+sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/	
   fclose(fp);
-  unlink(filename);
+  deltempfile(filename);
  }
 if ((fp=ropen(filename,"w"))==NULL) { /*APPROVED*/
   write_user(user,"Chyba: Nastal problem so zapisovanim docasneho suboru.\n");
@@ -4013,10 +4013,10 @@ if (user->lynx) {
 	waitpid(user->lynx, &status, 0);
         }
         
-sprintf(tempfilename,"mailspool/lynx-%s.tmp", user->name);        
-if ((fp=ropen(text,"r"))!=NULL) { fclose(fp); unlink(tempfilename); }
+sprintf(tempfilename,"%s%s-lynx%s",TMPFOLDER,user->name,TMPSUFFIX);
+if ((fp=ropen(text,"r"))!=NULL) { fclose(fp); deltempfile(tempfilename); }
 
-if (user->hang_stage!=-1) { 
+if (user->hang_stage!=-1) {
   add_point(user,DB_HANGMAN,-1,0);
  }
 
@@ -4289,10 +4289,15 @@ free_notifylist(&(user->combanlist));
 
 save_irc_details(user);
                  
-sprintf(tempfilename,"mailspool/%s.whotmp",user->name);
+sprintf(tempfilename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+if ((fp=ropen(tempfilename,"r"))!=NULL) { /*APPROVED*/
+	fclose(fp);
+	deltempfile(tempfilename);
+	}
+sprintf(tempfilename,"%s%s-lynx%s",TMPFOLDER,user->name,TMPSUFFIX);
 if ((fp=ropen(tempfilename,"r"))!=NULL) { /*APPROVED*/	
 	fclose(fp);
-	unlink(tempfilename);
+	deltempfile(tempfilename);
 	}
 
 if (nukehim) {	
@@ -4393,11 +4398,14 @@ int i, line, size,cnt=0;
 FILE *fp;
 time_t akt_cas;
 char *ptr;
+char filename[81];
 /* char email[255]; */
 
 size=0;
+sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+
 if (sp) {
-  if ((fp=ropen(REVTELL_TMP,"w"))==NULL) return; 
+  if ((fp=ropen(filename,"w"))==NULL) return;
   time (&akt_cas);
   fprintf(fp,"From: Atlantis Talker <%s@%s>\n",TALKER_EMAIL_ALIAS,TALKER_EMAIL_HOST);
   fprintf(fp,"To: %s <%s>\n", user->name,user->email);
@@ -4436,15 +4444,15 @@ if (sp) {
       }	
      /* colour_com_strip(ptr); */
      force_language(ptr,user->lang,1);
-     send_mail(user,user->name,ptr);      
+     send_mail(user,user->name,ptr);
      free(ptr);
     }
   }
  if (sp) {
    fclose(fp);
-   if (cnt) send_forward_email(user->email,REVTELL_TMP);
+   if (cnt) send_forward_email(user->email,filename);
+   deltempfile(filename);
   }
-
 
 /*
  for(i=0;i<(user->newtell+1);++i) {
@@ -4492,7 +4500,7 @@ if (sp) {
    }
   if (sp) {
     fclose(fp);
-    send_forward_email(user->email,REVTELL_TMP);
+    send_forward_email(user->email,filename);
    }
 */
 }
@@ -4550,6 +4558,7 @@ switch(user->misc_op) {
             user->misc_op=0;
             user->filepos=0;
             user->messsize=0;
+            deltempfile(user->page_file);
             user->page_file[0]='\0';
             user->subject[0]='\0';
             zrus_pager_haldu(user);
@@ -6366,7 +6375,20 @@ else  {
       no_prompt=1;
      }
 fclose(fp);
+if (retval == 2) { /* finished */
+	if (strlen(filename) >= strlen(TMPSUFFIX)) {
+		if (!strcmp(strchr(filename,'\0')-strlen(TMPSUFFIX),TMPSUFFIX)) deltempfile(filename);
+	}
+}
 return retval;
+}
+
+void deltempfile(char *filename)
+{
+	if(remove(filename)) {
+		sprintf(text,"~BR~OL~FW VAROVANIE: ~RS Nepodarilo sa vymazat docasny subor '%s'!\n",filename);
+		write_level(GOD,1,text,NULL);
+	}
 }
 
 int sqlmore(UR_OBJECT user,int sock,char* queryname)
@@ -10885,7 +10907,7 @@ if (!(strncmp(word[1],"exa",3))) {
       if (!(row=mysql_fetch_row(result))) {
         if (type==1)
           sprintf(text,"%s nema definovany examine skin.\n",word[3]);
-        else 
+        else
           sprintf(text,"Examine skin '%s' neexistuje.\n",word[3]);
         write_user(user,text);
         mysql_free_result(result);
@@ -10908,15 +10930,17 @@ if (!(strncmp(word[1],"exa",3))) {
    }
   if (word_count==3) {
     if (!strcmp(word[2],"test")) {
-      sprintf(filename,"mailspool/%s.whotmp",user->name);
-      unlink(filename);
+      sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+      if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/
+        fclose(fp);
+        deltempfile(filename);
+       }
       word_count=2;
       for(u=user_first;u!=NULL;u=u->next) {
         if (u->type!=USER_TYPE || u->login || u->examine>0) continue;
         strcpy(word[1],u->name);
         customexamine(user,u->name,1);
        }
-      sprintf(filename,"mailspool/%s.whotmp",user->name);
       switch(more(user,user->socket,filename)) {
         case 0: write_user(user,"Nastal problem s citanim docasneho suboru.\n");  break;
         case 1: user->misc_op=2;
@@ -16272,10 +16296,10 @@ FILE *fp;
 char filename[90];
 int vyskyt[101],cnt,i;
 
-sprintf(filename,"mailspool/%s.whotmp",user->name);
+sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/	
-	 fclose(fp);
-	unlink(filename);
+	fclose(fp);
+	deltempfile(filename);
 	}
 if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
 	write_user(user,"Prepac, nepodarilo sa otvorit docasny subor pre zakladne .who!\n");
@@ -16534,7 +16558,7 @@ else {
     }
   }
 
- sprintf(filename,"mailspool/%s.whotmp",user->name);
+ sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
  if (!(fp=ropen(filename,testall?"a":"w"))) { /*APPROVED*/
    if (!testall) write_user(user,"Chyba! Nepodarilo sa otvorit docasny subor!\n");
    mysql_free_result(result);
@@ -16806,7 +16830,9 @@ else {
    destruct_user(u);
    destructed=0;
   }
- if (!testall) showfile(user,filename);		
+ if (!testall) {
+   showfile(user,filename);
+  }
 }
 
 
@@ -16821,7 +16847,7 @@ MYSQL_ROW row;
 /* int stage=0; */
 UR_OBJECT u;
 
- sprintf(filename,"mailspool/%s.whotmp",user->name);
+ sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
  if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
    write_user(user,"Chyba! Nepodarilo sa vytvorit docasny subor!\n");
    sprintf(text,"~OL~FW~BRVarovanie:~RS ~OLNepodarilo sa vytvorit docasny subor '%s'!\n",filename);
@@ -16867,7 +16893,7 @@ char query[255];
 MYSQL_RES *result;
 MYSQL_ROW row;
 
- sprintf(filename,"mailspool/%s.whotmp",user->name);
+ sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
  if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
    write_user(user,"Chyba! Nepodarilo sa vytvorit docasny subor!\n");
    sprintf(text,"~OL~FW~BRVarovanie:~RS ~OLNepodarilo sa vytvorit docasny subor '%s'!\n",filename);
@@ -17127,7 +17153,7 @@ UR_OBJECT u;
    return;
   }
  */
- sprintf(filename,"mailspool/%s.whotmp",user->name);
+ sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
  if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
    write_user(user,"Chyba! Nepodarilo sa otvorit docasny subor!\n");
    mysql_free_result(result);
@@ -17192,10 +17218,10 @@ if (people && (word_count==2) && (!strcmp(word[1],"t"))) {
  }
 total=0;invis=0;/* remote=0; */logins=0;
 
-sprintf(filename,"mailspool/%s.whotmp",user->name);
+sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/	
-	 fclose(fp);
-	unlink(filename);
+	fclose(fp);
+	deltempfile(filename);
 	}
 if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
 	write_user(user,"Prepac, nepodarilo sa otvorit docasny subor pre zakladne .who!\n");
@@ -17300,10 +17326,10 @@ char filename[90];
 	return;
 	}
 */
-sprintf(filename,"mailspool/%s.whotmp",user->name);
-if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/	
-	 fclose(fp);
-	unlink(filename);
+sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/
+	fclose(fp);
+	deltempfile(filename);
 	}
 if ((fp=ropen(filename,"w"))==NULL) { /*APPROVED*/
 	write_user(user,"Prepac, nemozno otvorit docasny subor v NATURE .who!\n");
@@ -17415,10 +17441,10 @@ char filename[90];
 	return;
 	}
 */	
-sprintf(filename,"mailspool/%s.whotmp",user->name);
+sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/	
-	 fclose(fp);
-	unlink(filename);
+	fclose(fp);
+	deltempfile(filename);
 	}
 if ((fp=ropen(filename,"w"))==NULL) { /*APPROVED*/
 	write_user(user,"Prepac, nemozno otvorit docasny subor pre CYBERIA .who!\n");
@@ -17527,10 +17553,10 @@ FILE *fp;
 	return;
 	}
 */	
-sprintf(filename,"mailspool/%s.whotmp",user->name);
+sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/	
-	 fclose(fp);
-	unlink(filename);
+	fclose(fp);
+	deltempfile(filename);
 	}
 if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
 	write_user(user,"Prepac, nemozno otvorit docasny subor pre CARNEVAL .who!\n");
@@ -17619,10 +17645,10 @@ FILE *fp;
 	return;
 	}
 */	
-sprintf(filename,"mailspool/%s.whotmp",user->name);
+sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/	
-	 fclose(fp);
-	unlink(filename);
+	fclose(fp);
+	deltempfile(filename);
 	}
 if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
 	write_user(user,"Prepac, nemozno otvorit docasny subor pre OCEAN .who!\n");
@@ -17726,11 +17752,10 @@ char filename[90];
 */	
 total=0;invis=0;/* remote=0;logins=0; */
 
-sprintf(filename,"mailspool/%s.whotmp",user->name);
+sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/
-	
-	 fclose(fp);
-	unlink(filename);
+	fclose(fp);
+	deltempfile(filename);
 	}
 	
 if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
@@ -17837,11 +17862,10 @@ char filename[90];
 */	
 total=0;invis=0;/* remote=0;logins=0; */
 
-sprintf(filename,"mailspool/%s.whotmp",user->name);
+sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/
-	
-	 fclose(fp);
-	unlink(filename);
+	fclose(fp);
+	deltempfile(filename);
 	}
 if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
 	write_user(user,"Prepac, nemozno otvorit docasny subor pre VOLCANO .who!\n");
@@ -17958,10 +17982,10 @@ wizzes=0;
 	return;
 	}
 */
-sprintf(filename,"mailspool/%s.whotmp",user->name);
+sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/	
-	 fclose(fp);
-	unlink(filename);
+	fclose(fp);
+	deltempfile(filename);
 	}
 if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
 	write_user(user,"Prepac, nemozno otvorit docasny subor pre HELL .who!\n");
@@ -18085,10 +18109,10 @@ FILE *fp;
 	return;
 	}
 */
-sprintf(filename,"mailspool/%s.whotmp",user->name);
+sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/	
-	 fclose(fp);
-	unlink(filename);
+	fclose(fp);
+	deltempfile(filename);
 	}
 if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
 	write_user(user,"Prepac, nemozno otvorit docasny subor pre OLD .who!\n");
@@ -18178,10 +18202,10 @@ char filename[90];
 */	
 total=0; 
 
-sprintf(filename,"mailspool/%s.whotmp",user->name);
+sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/
 	fclose(fp);
-	unlink(filename);
+	deltempfile(filename);
 	}
 if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
 	write_user(user,"Prepac, nemozno otvorit docasny subor pre WINAMP .who!\n");
@@ -18912,7 +18936,7 @@ if (found && com_level[com_num]>user->level) {
  if (!(result=mysql_result(query)))
   { write_user(user,"Chyba: Nastal problem s citanim helpu.\n"); return; }
  if ((row=mysql_fetch_row(result))) {
-   sprintf(filename,"mailspool/%s.whotmp",user->name);
+   sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
    if (!(fp=ropen(filename,"w"))) {
      mysql_free_result(result);
      write_user(user,"Chyba: Nastal problem s citanim helpu.\n");
@@ -20397,10 +20421,10 @@ int cnt,i, ppredm=0,zwjs/* ,rast */;
 FILE *fp;
 char filename[81];
 
-sprintf(filename,"mailspool/%s.whotmp",user->name);
+sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/	
   fclose(fp);
-  unlink(filename);
+  deltempfile(filename);
  }
 if ((fp=ropen(filename,"w"))==NULL) { /*APPROVED*/
   write_user(user,"Chyba: Nastal problem so zapisovanim docasneho suboru.\n");
@@ -26966,10 +26990,10 @@ MACRO macro;
 FILE *fp;
 char filename[81];
 
- sprintf(filename,"mailspool/%s.whotmp",user->name);
+ sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
  if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/	
    fclose(fp);
-   unlink(filename);
+   deltempfile(filename);
   }
  if ((fp=ropen(filename,"w"))==NULL) { /*APPROVED*/
    write_user(user,"Chyba: Nastal problem so zapisovanim docasneho suboru.\n");
@@ -27553,6 +27577,9 @@ while (!feof(fp)) {
 	fgets(linaj, 500, fp);
 	}
 fclose(fp);
+if (strlen(filename) >= strlen(TMPSUFFIX)) {
+	if (!strcmp(strchr(filename,'\0')-strlen(TMPSUFFIX),TMPSUFFIX)) deltempfile(filename);
+}
 return 1;
 }
 

@@ -17,7 +17,7 @@ if (word_count < 2) {
    return;
    }
 
-sprintf(filename, "mailspool/%s.whotmp",user->name);
+sprintf(filename, "%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
 if ((subor=ropen(filename,"w"))==NULL) { /*APPROVED*/
    write_user(user,"~OL~FRNepodarilo sa zapisat docasny subor pre citanie casopisu!~RS~FW\n");
    return;

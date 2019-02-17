@@ -677,7 +677,7 @@ int num;
      write_user(user,"~OL~FRObmedzene na 'SELECT'!\n");
      return;
     }
-   sprintf(filename,"mailspool/%s.whotmp",user->name);
+   sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
    if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
      write_user(user,"Chyba: problem s otvaranim docasneho suboru.\n");
      return;
