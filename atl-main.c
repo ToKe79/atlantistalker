@@ -18687,7 +18687,7 @@ if ((u=get_user_exact(word[1]))!=NULL) {
 if ((u=create_user())==NULL) {
   sprintf(text,"%s: nemozno vytvorit docsasny user object.\n",syserror);
   write_user(user,text);
-  write_syslog("CHYBA: Nemozno vytvorit docasny user object v chname().\n",0);
+  write_syslog("CHYBA: Nemozno vytvorit docasny user object v sclerotic().\n",0);
   return;
  }
 sstrncpy(u->name,word[1],12);
