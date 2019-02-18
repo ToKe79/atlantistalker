@@ -770,30 +770,6 @@ INSERT INTO `rooms` VALUES ('krcma','pub','~OL~FY    X~FR___~FYX~FW~RS   Si v mi
 UNLOCK TABLES;
 
 --
--- Table structure for table `securepwd`
---
-
-DROP TABLE IF EXISTS `securepwd`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `securepwd` (
-  `username` varchar(15) NOT NULL DEFAULT '',
-  `hour` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `count` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`username`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `securepwd`
---
-
-LOCK TABLES `securepwd` WRITE;
-/*!40000 ALTER TABLE `securepwd` DISABLE KEYS */;
-/*!40000 ALTER TABLE `securepwd` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `users`
 --
 
