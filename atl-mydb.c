@@ -696,6 +696,7 @@ int num;
    if (mysql_num_rows(result)==0) {
      write_user(user,"~OLPrazdny vysledok.\n");
      fclose(fp);
+     mysql_free_result(result);
      return;
     }
 
@@ -2881,8 +2882,8 @@ int counter_db(int add) {
 
 	if ((loc_result=mysql_result(query))) {
 		loc_row=mysql_fetch_row(loc_result);
-		mysql_free_result(loc_result);
 		cntr=atoi(loc_row[0]);
+		mysql_free_result(loc_result);
 	} else {
 		return 0;
 	}
