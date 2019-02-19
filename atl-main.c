@@ -19054,17 +19054,39 @@ void help_fonts(user)
 
 	int rows=mysql_num_rows(result);
 	char **fontids;
-	fontids=malloc(sizeof(char*)*rows);
+	if ((fontids=malloc(sizeof(char*)*rows))==NULL) {
+		write_user(user,"Prepacte poruchu, zavada nie je vo vasom prijimaci.\n");
+		write_level(KIN,1,"~OL~FRVAROVANIE: ~FWNepodarilo sa alokovat pamat pre zoznam fontov!\n",NULL);
+		return;
+	}
 	char **fontnames;
-	fontnames=malloc(sizeof(char*)*rows);
+	if ((fontnames=malloc(sizeof(char*)*rows))==NULL) {
+		write_user(user,"Prepacte poruchu, zavada nie je vo vasom prijimaci.\n");
+		write_level(KIN,1,"~OL~FRVAROVANIE: ~FWNepodarilo sa alokovat pamat pre zoznam fontov!\n",NULL);
+		free(fontids);
+		return;
+	}
+
 	int i=0;
 
 	while((row=mysql_fetch_row(result))) {
-		i++;
-		fontids[i]=malloc(sizeof(char)*(strlen(row[0])+1));
-		fontnames[i]=malloc(sizeof(char)*(strlen(row[1])+1));
+		if ((fontids[i]=malloc(sizeof(char)*(strlen(row[0])+1)))==NULL) {
+			write_user(user,"Prepacte poruchu, zavada nie je vo vasom prijimaci.\n");
+			write_level(KIN,1,"~OL~FRVAROVANIE: ~FWNepodarilo sa alokovat pamat pre zoznam fontov!\n",NULL);
+			free(fontids);
+			free(fontnames);
+			return;
+		}
+		if ((fontnames[i]=malloc(sizeof(char)*(strlen(row[1])+1)))==NULL) {
+			write_user(user,"Prepacte poruchu, zavada nie je vo vasom prijimaci.\n");
+			write_level(KIN,1,"~OL~FRVAROVANIE: ~FWNepodarilo sa alokovat pamat pre zoznam fontov!\n",NULL);
+			free(fontids);
+			free(fontnames);
+			return;
+		}
 		strcpy(fontids[i],row[0]);
 		strcpy(fontnames[i],row[1]);
+		i++;
 	}
 
 	mysql_free_result(result);
@@ -19081,18 +19103,21 @@ void help_fonts(user)
 
 	/* Zapise vsetko do suboru */
 	while (i<fonts_per_column) {
-		i++;
 		for (int j=0; j<columns; j++) {
 			/* fonty zapisujeme pod seba, t. j. prvy stlpec 1, 2, 3, ... n, druhy stlpec n+1, n+2, n+3 ... n+n atd*/
 			curid=i+j*fonts_per_column;
-			if (curid>rows) break;
+			if (curid>=rows) break;
 			fprintf(fp,"%*s. %-*s",longest_fontid,fontids[curid],longest_fontname,fontnames[curid]);
 			if (j<(columns-1)) fprintf(fp,"  ");
 		}
 		fprintf(fp,"\n");
+		i++;
 	}
 
 	fclose(fp);
+
+	free(fontnames);
+	free(fontids);
 
 	/* zobrazime subor userkovi */
 	if (user->pagewho) {
