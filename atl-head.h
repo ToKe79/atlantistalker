@@ -1799,6 +1799,7 @@ int get_vehicle(UR_OBJECT user);
 void rename_user_on_list(char meno[], char novemeno[]);
 void help_commands(UR_OBJECT user,int engl);
 void help_credits(UR_OBJECT user);
+void help_fonts(UR_OBJECT user);
 
 void ban_site(UR_OBJECT user);
 void ban_user(UR_OBJECT user, char *inpstr);

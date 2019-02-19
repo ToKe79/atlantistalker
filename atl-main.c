@@ -19033,8 +19033,8 @@ void help_fonts(user)
 	}
 
 	row=mysql_fetch_row(result);
-	mysql_free_result(result);
 	int longest_fontname=atoi(row[0]);
+	mysql_free_result(result);
 
 	/* Zistime dlzku najdlhsieho id fontu - kvoli zarovnavaniu stlpcov */
 	if (!(result=mysql_result(querylongestid))) {
@@ -19043,8 +19043,8 @@ void help_fonts(user)
 	}
 
 	row=mysql_fetch_row(result);
-	mysql_free_result(result);
 	int longest_fontid=atoi(row[0]);
+	mysql_free_result(result);
 
 	/* Nacitame zoznam fontov z databazy a zapiseme do array */
 	if (!(result=mysql_result(query))) {
@@ -19053,14 +19053,16 @@ void help_fonts(user)
 	}
 
 	int rows=mysql_num_rows(result);
-	char fontids[rows][longest_fontid+1];
-	char fontnames[rows][longest_fontname+1];
-	fontids[0][0]='\0';
-	fontnames[0][0]='\0';
+	char **fontids;
+	fontids=malloc(sizeof(char*)*rows);
+	char **fontnames;
+	fontnames=malloc(sizeof(char*)*rows);
 	int i=0;
 
 	while((row=mysql_fetch_row(result))) {
 		i++;
+		fontids[i]=malloc(sizeof(char)*(strlen(row[0])+1));
+		fontnames[i]=malloc(sizeof(char)*(strlen(row[1])+1));
 		strcpy(fontids[i],row[0]);
 		strcpy(fontnames[i],row[1]);
 	}
