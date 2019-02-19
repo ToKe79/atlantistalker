@@ -18892,12 +18892,47 @@ if (strlen(word[1])>50) {
 	return;
 	}
 
+if
+	(
+	 !strcasecmp(word[1],"c") ||
+	 !strcasecmp(word[1],"commands") ||
+	 !strcasecmp(word[1],"p") ||
+	 !strcasecmp(word[1],"prikazy")
+	)
+	{
+		help_commands(user,word[1][0]=='p'?0:1);
+		return;
+	}
+
+if
+	(
+	 !strcasecmp(word[1],"credits") ||
+	 !strcasecmp(word[1],"kredit")
+	)
+	{
+		help_credits(user);
+		return;
+	}
+
+/*
  if (!strcasecmp(word[1],"commands")) {  help_commands(user,1);  return;  }
  if (!strcasecmp(word[1],"c"))        {  help_commands(user,1);  return;  }
  if (!strcasecmp(word[1],"credits"))  {  help_credits(user);  return;  }
  if (!strcasecmp(word[1],"prikazy")) {  help_commands(user,0);  return;  }
  if (!strcasecmp(word[1],"p"))       {  help_commands(user,0);  return;  }
  if (!strcasecmp(word[1],"kredit"))  {  help_credits(user);  return;  }
+*/
+
+if
+	 (
+	  !strcasecmp(word[1],"font") ||
+	  !strcasecmp(word[1],"fonty") ||
+	  !strcasecmp(word[1],"fonts")
+	 )
+	 {
+		 help_fonts(user);
+		 return;
+	 }
 
 strncpy(name,word[1],50);
 name[50]='\0';
@@ -18970,6 +19005,103 @@ if (found && com_level[com_num]>user->level) {
    sprintf(text,"~RS~FWTento prikaz ma level ~OL%s ~RS~FWa vyssie.\n\n",level_name[com_level[com_num]]);
    write_user(user,text);
   }          
+}
+
+/* Vypise zoznam fontov z databazy */
+void help_fonts(user)
+	UR_OBJECT user;
+{
+	FILE *fp;
+	char filename[81];
+	char query[]="SELECT `fontid`, `fontname` FROM `fonts` WHERE `enabled`='Y' ORDER BY `fontid`";
+	char querylongestname[]="SELECT MAX(LENGTH(`fontname`)) as `longestname` FROM `fonts` WHERE `enabled`='Y'";
+	char querylongestid[]="SELECT LENGTH(MAX(`fontid`)) as `longestid` FROM `fonts` WHERE `enabled`='Y'";
+	MYSQL_RES *result;
+	MYSQL_ROW row;
+
+	sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+
+	if (!(fp=ropen(filename,"w"))) {
+		write_user(user,"Nepodarilo sa vytvorit docasny subor!\n");
+		return;
+	}
+
+	/* Zistime dlzku najdlhsieho nazvu fontu - kvoli zarovnavaniu stlpcov */
+	if (!(result=mysql_result(querylongestname))) {
+		write_user(user,"Nepodarilo sa nacitat zoznam fontov!\n");
+		return;
+	}
+
+	row=mysql_fetch_row(result);
+	mysql_free_result(result);
+	int longest_fontname=atoi(row[0]);
+
+	/* Zistime dlzku najdlhsieho id fontu - kvoli zarovnavaniu stlpcov */
+	if (!(result=mysql_result(querylongestid))) {
+		write_user(user,"Nepodarilo sa nacitat zoznam fontov!\n");
+		return;
+	}
+
+	row=mysql_fetch_row(result);
+	mysql_free_result(result);
+	int longest_fontid=atoi(row[0]);
+
+	/* Nacitame zoznam fontov z databazy a zapiseme do array */
+	if (!(result=mysql_result(query))) {
+		write_user(user,"Nepodarilo sa nacitat zoznam fontov!\n");
+		return;
+	}
+
+	int rows=mysql_num_rows(result);
+	char fontids[rows][longest_fontid+1];
+	char fontnames[rows][longest_fontname+1];
+	fontids[0][0]='\0';
+	fontnames[0][0]='\0';
+	int i=0;
+
+	while((row=mysql_fetch_row(result))) {
+		i++;
+		strcpy(fontids[i],row[0]);
+		strcpy(fontnames[i],row[1]);
+	}
+
+	mysql_free_result(result);
+
+	/* Kolko stlpcov a riadkov bude mat vystup */
+	int columns=(int)(80/(longest_fontid+longest_fontname+2));
+	if (columns==0) columns=1;
+	if (columns>1) if (columns*(longest_fontid+longest_fontname+2)+(columns-1)*2 > 80) columns--;
+	int fonts_per_column=(int)(rows/columns);
+	if (fonts_per_column*columns!=rows) fonts_per_column++;
+
+	i=0;
+	int curid=0;
+
+	/* Zapise vsetko do suboru */
+	while (i<fonts_per_column) {
+		i++;
+		for (int j=0; j<columns; j++) {
+			/* fonty zapisujeme pod seba, t. j. prvy stlpec 1, 2, 3, ... n, druhy stlpec n+1, n+2, n+3 ... n+n atd*/
+			curid=i+j*fonts_per_column;
+			if (curid>rows) break;
+			fprintf(fp,"%*s. %-*s",longest_fontid,fontids[curid],longest_fontname,fontnames[curid]);
+			if (j<(columns-1)) fprintf(fp,"  ");
+		}
+		fprintf(fp,"\n");
+	}
+
+	fclose(fp);
+
+	/* zobrazime subor userkovi */
+	if (user->pagewho) {
+		switch(more(user,user->socket,filename)) {
+			case 0: write_user(user,"Chyba pri citani zoznamu fontov!\n");  break;
+			case 1: user->misc_op=2;
+		}
+	} else {
+		showfile(user,filename);
+	}
+	return;
 }
 
 /* Cita spravy, ktore uzivatelia pisu do suborov... ZMENA */
