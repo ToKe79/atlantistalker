@@ -1,10 +1,10 @@
 /**********************  Buko:  B A N N E R  stuff  ************************/  
 /**************************************************************************/  
 #include "atl-head.h"
+#include "atl-mydb.h"
 
 /* HNUSNE BANNERY! */ 
  
-#define BANNER_NUM 144          /* kolik fontof mame k dispozicii ;) */ 
 #define MAX_BANNER_LEN 40       /* max dlzka banneru */ 
 #define MAX_BANNER_LEN_LUSER 20 /* max dlzka banneru pre luzrof (<WIZ) ;) */ 
 
@@ -12,9 +12,8 @@
 #define MYSTRLEN(x) ((int)strlen(x)) /* Eliminate ANSI problem */  
 #define DIRSEP '/' /* E.g., make this '\\' for an MS-DOS port. */  
 		   /* Note: '/' also used in filename in get_columns(). */  
-#define FONTFILESUFFIX ".flf"  
 #define FONTFILEMAGICNUMBER "flf2"  
-#define FSUFFIXLEN MYSTRLEN(FONTFILESUFFIX)  
+#define FSUFFIXLEN MYSTRLEN(TMPSUFFIX)
 #define DEFAULTCOLUMNS 80  
   
 /*********** deklaracie internych funkcii banneru ************/
@@ -44,7 +43,6 @@ int x;
 #define M 30 /* 28 vyska fontu   ->> dalej alokovane v strukture fcharnode! */
 #define N 30 /* 28 sirka fontu       cim vacsi rozmer, tym vasciu cast pamate zaberie */
 
-#define DEFAULTFONTDIR "fonts"  /* defaultna kniznica */  
 #define DEFAULTFONTFILE "small.flf" /* defaultny font ;) */  
   
 /* Globalne procedurky... */  
@@ -178,12 +176,12 @@ char *fontsubor;
     int firstfont;
 /*  char *controlname;  */
 
-  fontdirname = DEFAULTFONTDIR;
+  fontdirname = TMPFOLDER;
   firstfont = 1;
   fontname = (char*)myalloc(sizeof(char)*(MYSTRLEN(DEFAULTFONTFILE)+1));
   strcpy(fontname,DEFAULTFONTFILE); /* Some systems don't have strdup() */
   if ((MYSTRLEN(fontname)>=FSUFFIXLEN)?
-    !strcmp(fontname+MYSTRLEN(fontname)-FSUFFIXLEN,FONTFILESUFFIX):0) {
+    !strcmp(fontname+MYSTRLEN(fontname)-FSUFFIXLEN,TMPSUFFIX):0) {
     fontname[MYSTRLEN(fontname)-FSUFFIXLEN]='\0';
     }
   smushmode = -2; /* default -2 - berie smushing nastavenia z fontfile
@@ -202,7 +200,7 @@ char *fontsubor;
 	  }
   fontname = fontsubor;
   if ((MYSTRLEN(fontname)>=FSUFFIXLEN)?
-    !strcmp(fontname+MYSTRLEN(fontname)-FSUFFIXLEN,FONTFILESUFFIX):0) {
+    !strcmp(fontname+MYSTRLEN(fontname)-FSUFFIXLEN,TMPSUFFIX):0) {
     fontname[MYSTRLEN(fontname)-FSUFFIXLEN] = '\0';
     }
 
@@ -304,13 +302,13 @@ int readfont()
     fontpath[namelen] = DIRSEP; 
     fontpath[namelen+1] = '\0'; 
     strcat(fontpath,fontname); 
-    strcat(fontpath,FONTFILESUFFIX); 
+    strcat(fontpath,TMPSUFFIX);
     fontfile = ropen(fontpath,"r"); 
     
     } 
   if (fontfile==NULL) { 
     strcpy(fontpath,fontname); 
-    strcat(fontpath,FONTFILESUFFIX); 
+    strcat(fontpath,TMPSUFFIX);
     fontfile = ropen(fontpath,"r"); 
     
     if (fontfile==NULL) { 
@@ -336,7 +334,7 @@ int readfont()
   for (i=1;i<=cmtlines;i++) {
     skiptoeol(fontfile);
     }
-  free(fontpath);
+  /*free(fontpath);*/
 
   if (numsread<6) {
     ffright2left = 0;
@@ -374,7 +372,9 @@ int readfont()
   for (theord=' ';theord<='~';theord++) {
     readfontchar(fontfile,theord,fileline,maxlen);
     }
-   fclose(fontfile);  
+   fclose(fontfile);
+   deltempfile(fontpath); /* vymazanie docasneho suboru s fontom */
+   free(fontpath);
   free(fileline);  
   
 return 1;  
@@ -778,29 +778,29 @@ extern void banner(user,inpstr)
 UR_OBJECT user;  
 char *inpstr;  
 {  
-  
-char name[15],filename[80];
+char name[15];
 int type;  
+int max_font_id;
+int min_font_id;
   
+max_font_id=getfontid(1);
+min_font_id=getfontid(0);
+
 if (user->muzzled) {  
       write_user(user,"Si umlcany - nemozes pouzivat banner.\n");  return;  
       }
 if (!strcmp(word[1],"-h")) {
-       sprintf(filename,"%s/fonts_help",DEFAULTFONTDIR);
-                  switch(more(user,user->socket,filename)) {
-                    case 0: write_user(user,"Zoznam fontov nebol najdeny.\n"); break;
-                    case 1: user->misc_op=2;
-                    }
-                  return; 
-      }       
+	help_fonts(user);
+	return;
+}
 if (word_count<3 || !is_number(word[1])) {  
       write_user(user,"Pouzi: .banner <typ> <sprava>");
-      sprintf(text,"          Dostupne typy: ~OL1-%d~RS\n",BANNER_NUM);
+      sprintf(text,"          Dostupne typy: ~OL%d-%d~RS\n",min_font_id,max_font_id);
       write_user(user,text);  return;  
       }  
 type=atoi(word[1]);  
-if (type<1 || type>BANNER_NUM) {  
-      sprintf(text,"Typ musi byt cele kladne cislo a musi byt z rozsahu 1-%d.\n",BANNER_NUM);  
+if (type<min_font_id || type>max_font_id) {
+      sprintf(text,"Typ musi byt cele kladne cislo a musi byt z rozsahu %d-%d.\n",min_font_id,max_font_id);
       write_user(user,text);      return;  
       }  
   if ((user->level<MOZENADAVAT) && (contains_swearing(inpstr,user)) && (ban_swearing)) {
@@ -838,10 +838,11 @@ write_user(user,text);  */
 sprintf(text,"~FR%s ~RS~FW%s banner[~OL%d~RS]:\n",name,pohl(user,"napisal","napisala"),type);
 write_room(user->room,text);
  
-decrease_pp(user,BANNERDEC,0); 
- 
 if (!create_banner(user, NULL, type,inpstr,1)) { write_user(user,"Chyba pri nacitavani fontu! ;(\n");
 					return; }
+
+decrease_pp(user,BANNERDEC,0);
+
 freefont();
 clrline();
 
@@ -857,21 +858,22 @@ UR_OBJECT user;
 char *inpstr;
 {
 
-char name[15],filename[80];
+int max_font_id;
+int min_font_id;
+char name[15];
 int type;
 UR_OBJECT u;
+
+max_font_id=getfontid(1);
+min_font_id=getfontid(0);
 
 if (user->muzzled) {
       write_user(user,"Si umlcany - nemozes pouzivat tbanner.\n");  return;
       }
 if (!strcmp(word[1],"-h")) {
-       sprintf(filename,"%s/fonts_help",DEFAULTFONTDIR);
-                  switch(more(user,user->socket,filename)) {
-                    case 0: write_user(user,"Zoznam fontov nebol najdeny.\n"); break;
-                    case 1: user->misc_op=2;
-                    }
-                  return; 
-      }          
+	help_fonts(user);
+	return;
+}
 
 if (is_number(word[1]) && word_count>2) {
 	u=user;
@@ -880,9 +882,9 @@ if (is_number(word[1]) && word_count>2) {
 else   {
 	if (word_count<4 || !is_number(word[2])) {
 	      write_user(user,"Pouzi: .tbanner [user] <typ> <sprava>");
-	      sprintf(text,"          Dostupne typy: ~OL1-%d~RS\n",BANNER_NUM);
+	      sprintf(text,"          Dostupne typy: ~OL%d-%d~RS\n",min_font_id,max_font_id);
 	      write_user(user,text);  return;  
-	      }  
+	      }
       
 	type=atoi(word[2]);      
 
@@ -892,8 +894,8 @@ else   {
 	inpstr=remove_first(inpstr);  	      
         }
             
-if (type<1 || type>BANNER_NUM) {
-      sprintf(text,"Typ musi byt cele kladne cislo a musi byt z rozsahu 1-%d.\n",BANNER_NUM);
+if (type<min_font_id || type>max_font_id) {
+      sprintf(text,"Typ musi byt cele kladne cislo a musi byt z rozsahu %d-%d.\n",min_font_id,max_font_id);
       write_user(user,text);      return;
       }
 if (user->vis) strcpy(name,user->name); else strcpy(name,invisname(user));
@@ -987,28 +989,29 @@ UR_OBJECT user;
 char *inpstr;
 {
 
-char name[15],filename[80];
+int max_font_id;
+int min_font_id;
+char name[15];
 int type,i;
+
+max_font_id=getfontid(1);
+min_font_id=getfontid(0);
 
 if (user->muzzled) {
       write_user(user,"Si umlcany - nemozes pouzivat sbanner.\n");  return;
       }
 if (!strcmp(word[1],"-h")) {
-       sprintf(filename,"%s/fonts_help",DEFAULTFONTDIR);
-                  switch(more(user,user->socket,filename)) {
-                    case 0: write_user(user,"Zoznam fontov nebol najdeny.\n"); break;
-                    case 1: user->misc_op=2;
-                    }
-                  return; 
-      }             
+	help_fonts(user);
+	return;
+}
 if (word_count<3 || !is_number(word[1])) {
       write_user(user,"Pouzi: .sbanner <typ> <sprava>");
-      sprintf(text,"           Dostupne typy: ~OL1-%d~RS\n",BANNER_NUM);
+      sprintf(text,"           Dostupne typy: ~OL%d-%d~RS\n",min_font_id,max_font_id);
       write_user(user,text);  return;  
       }
 type=atoi(word[1]);
-if (type<1 || type>BANNER_NUM) {
-      sprintf(text,"Typ musi byt cele kladne cislo a musi byt z rozsahu 1-%d.\n",BANNER_NUM);
+if (type<min_font_id || type>max_font_id) {
+      sprintf(text,"Typ musi byt cele kladne cislo a musi byt z rozsahu %d-%d.\n",min_font_id,max_font_id);
       write_user(user,text);      return;
       }
   if ((user->level<MOZENADAVAT) && (contains_swearing(inpstr,user)) && (ban_swearing)) {
@@ -1062,7 +1065,7 @@ else {
 if (!create_banner(user, NULL, type,inpstr,3)) { write_user(user,"Chyba pri nacitavani fontu! ;(\n");
 					return; }
 
-decrease_pp(user,SBANNERDEC,SBANNERDYN);					
+decrease_pp(user,SBANNERDEC,SBANNERDYN);
 
 freefont();
 clrline();
@@ -1102,160 +1105,25 @@ int output;
 ---------------------------------------------------------------------------*/
   int wordbreakmode;
   int char_not_added;
-  int flag=0,no;
+  int flag=0;
 
- /* Tutok priradujeme cednotlivym cisielkam
-   jednotlive fonticky z nasej kniznicky ;) */
-  
-strcpy(meno_fontu,DEFAULTFONTFILE);
-no=0;
-no++;if(type==no) strcpy(meno_fontu,"3-d.flf");
-no++;if(type==no) strcpy(meno_fontu,"3x5.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"5lineoblique.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"5x7.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"5x8.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"6x10.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"6x9.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"acrobatic.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"alligator.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"alligator2.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"alphabet.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"avatar.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"banner.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"banner3-D.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"banner3.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"banner4.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"barbwire.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"basic.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"bell.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"big.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"bigchief.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"binary.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"block.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"bubble.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"bulbhead.flf"); 
-/* no++;if(type==no) strcpy(meno_fontu,"calgphy2.flf"); */
-/* no++;if(type==no) strcpy(meno_fontu,"caligraphy.flf"); */
-no++;if(type==no) strcpy(meno_fontu,"catwalk.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"chartri.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"chunky.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"clb6x10.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"coinstak.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"colossal.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"computer.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"contessa.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"contrast.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"cosmic.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"cricket.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"cyberlarge.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"cybermedium.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"cybersmall.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"diamond.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"digital.flf"); 
-/* no++;if(type==no) strcpy(meno_fontu,"doh.flf"); */
-no++;if(type==no) strcpy(meno_fontu,"doom.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"dotmatrix.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"drpepper.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"eftichess.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"eftifont.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"eftipiti.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"eftirobot.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"eftitalic.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"eftiwall.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"eftiwater.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"epic.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"fender.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"fourtops.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"fuzzy.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"goofy.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"gothic.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"graffiti.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"hollywood.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"invita.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"isometric1.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"isometric2.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"isometric3.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"isometric4.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"italic.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"jazmine.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"katakana.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"kban.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"larry3d.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"lcd.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"lean.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"letters.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"linux.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"lockergnome.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"madrid.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"marquee.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"maxfour.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"mike.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"mini.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"mirror.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"morse.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"moscow.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"nancyj-fancy.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"nancyj-underlined.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"nancyj.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"nipples.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"o8.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"ogre.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"pawp.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"peaks.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"pebbles.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"pepper.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"poison.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"puffy.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"pyramid.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"rectangles.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"relief.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"relief2.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"rev.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"roman.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"rot13.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"rounded.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"rowancap.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"rozzo.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"sblood.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"script.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"serifcap.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"shadow.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"short.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"slant.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"slide.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"slscript.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"small.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"smisome1.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"smkeyboard.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"smscript.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"smshadow.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"smslant.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"speed.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"stampatello.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"standard.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"starwars.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"stellar.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"stop.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"straight.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"tanja.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"term.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"thick.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"thin.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"threepoint.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"ticks.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"ticksslant.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"times.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"tinker-toy.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"tombstone.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"trek.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"tty.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"ttyb.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"twopoint.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"univers.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"usaflag.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"weird.flf"); 
-no++;if(type==no) strcpy(meno_fontu,"xttyb.flf"); 
-		
+
+/* font tahame z DB, zapiseme do docasneho suboru, nakoniec zmazeme */
+  char query[100];
+  sprintf(query,"SELECT `fontbody` FROM `fonts` where `fontid`=%d and `enabled`='Y'",type);
+  MYSQL_RES *result;
+  if (!(result=mysql_result(query))) return 0;
+  if (mysql_num_rows(result)!=1) return 0;
+  MYSQL_ROW row;
+  row=mysql_fetch_row(result);
+  sprintf(meno_fontu,"%s-font%s",user1->name,TMPSUFFIX);
+  char tempfontfilename[80];
+  sprintf(tempfontfilename,"%s%s",TMPFOLDER,meno_fontu);
+  FILE *fptff;
+  if ((fptff=ropen(tempfontfilename,"w"))==NULL) return 0;
+  fprintf(fptff,row[0]);
+  mysql_free_result(result);
+  fclose(fptff);
   getparams(meno_fontu); /* Nastavenia parametrov - dolezite!!! */
 /*  write_user(user,"Banner, version for Atlantis by Buko\n"); */
   if (!readfont()) return 0; /* neuspesne nacitanie fontov!!!
@@ -1382,3 +1250,25 @@ fcharlist=NULL;
 return 1;
 }
 
+/* getfontid(type)
+ * type:
+ * 	0 = najnizsie fontid
+ * 	1 = najvyssie fontid
+ */
+int getfontid(int type) {
+	int id;
+	MYSQL_RES *result;
+	MYSQL_ROW row;
+	char query[100];
+
+	sprintf(query,"SELECT %s(`fontid`) FROM `fonts` WHERE `enabled`='Y'",type?"MAX":"MIN");
+
+	if(!(result=mysql_result(query))) {
+		return 0;
+	}
+
+	row=mysql_fetch_row(result);
+	id=atoi(row[0]);
+	mysql_free_result(result);
+	return id;
+}

@@ -2038,6 +2038,7 @@ extern void banner(UR_OBJECT user, char *inpstr);
 extern void tbanner(UR_OBJECT user,char *inpstr);
 extern void sbanner(UR_OBJECT user,char *inpstr);
 extern void magazin(UR_OBJECT user,char *inpstr);
+int getfontid(int type);
 
 extern void note(UR_OBJECT user,char *inpstr);
 extern void dnote(UR_OBJECT user);
