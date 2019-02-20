@@ -1,9 +1,6 @@
 /* Hlavne definicie */
 #include <mysql/mysql.h>
 
-#define DBHOSTNAME	"localhost"
-#define DBUSER		"atlantis"
-
 /* Globalne premenne */
 
 MYSQL mysql;

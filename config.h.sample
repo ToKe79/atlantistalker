@@ -1,0 +1,5 @@
+#define TMPFOLDER	"temp/"				/* adresar na docasne subory */
+#define DBHOST		"localhost"			/* host pre MySQL */
+#define DBUSER		"talker"			/* user pre MySQL */
+#define DBPASS		"secret"			/* heslo pre MySQL */
+#define DBNAME		"atlantis"			/* nazov databazy MySQL */

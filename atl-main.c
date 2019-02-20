@@ -29243,7 +29243,6 @@ void do_db_backup(int full)
 {
 char filename[80],store[80];
 FILE *fp;
-extern char adb_name[30],adb_user[30],adb_pass[30];
 
  switch(double_fork()) {
    case -1: return;
@@ -29256,12 +29255,12 @@ extern char adb_name[30],adb_user[30],adb_pass[30];
       }
      if (full) {
        sprintf(store,"f%0dh-%02dd-%02dm",thour,tmday,tmonth);
-       fprintf(fp,"mysqldump -B %s -a -u %s --password=%s >%s/%s.dump\n",adb_name,adb_user,adb_pass,BACKUP_DIR,store);
+       fprintf(fp,"mysqldump -h %s -B %s -a -u %s --password=%s >%s/%s.dump\n",DBHOST,DBNAME,DBUSER,DBPASS,BACKUP_DIR,store);
        write_syslog("Dumping database..\n",1);
       }
      else {
        sprintf(store,"u%0dh-%02dd-%02dm",thour,tmday,tmonth);
-       fprintf(fp,"mysqldump -B %s -a --tables users -u %s --password=%s >%s/%s.dump\n",adb_name,adb_user,adb_pass,BACKUP_DIR,store);
+       fprintf(fp,"mysqldump -h %s -B %s -a --tables users -u %s --password=%s >%s/%s.dump\n",DBHOST,DBNAME,DBUSER,DBPASS,BACKUP_DIR,store);
        write_syslog("Dumping usertable..\n",1);
       }
      fprintf(fp,"rm %s\n",filename);

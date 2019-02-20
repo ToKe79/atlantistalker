@@ -42,6 +42,7 @@
 #include <stdarg.h>
 #include <libxml/xmlwriter.h>
 #include <locale.h>
+#include "config.h"
 
 #ifdef HPUX_SB
   #define FD_CAST (int *)
@@ -212,7 +213,6 @@ int writeerror,max_timeouts,max_timeoutz;
 #define DAMAFILES "dama-save"               /* save adresar pre dddamu :> */
 /* #define REPOSITORY "repository" */            /* adresar pre repository */
 #define TMPSUFFIX ".talkertmp"                 /* koncovka docasnych suborov pre vypisy who, boardov a podobne */
-#define TMPFOLDER "temp/"                   /* adresar na docasne subory */
 #define MINYTOP "miny.top"                  /* tabulka min! */
 #define NOTICE_DIGEST "misc/notice_digest"  /* digest z noticof */
 /* #define REVTELL_TMP "mailspool/rt_tmp" */     /* revtell tempfile */
