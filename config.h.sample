@@ -3,3 +3,4 @@
 #define DBUSER		"talker"			/* user pre MySQL */
 #define DBPASS		"secret"			/* heslo pre MySQL */
 #define DBNAME		"atlantis"			/* nazov databazy MySQL */
+#define DATESINCE	"vzniku sveta"			/* datum, ktory sa doplni na prihlasovaciu obrazovku */

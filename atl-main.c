@@ -1088,7 +1088,7 @@ else {
 sstrncpy(user->site,site,80);
 user->site_port=(int)ntohs(acc_addr.sin_port);
 echo_on(user);
-sprintf(text,"                  %08d navstevnikov od 28. Maja 1997\n",counter_db(0)); 
+sprintf(text,"                  %08d navstevnikov od %s\n",counter_db(0),DATESINCE); 
 write_user(user,text);
 if (user->port==port[1]) {
 	write_user(user,"Wizport login: ");
