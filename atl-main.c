@@ -23827,7 +23827,7 @@ if (minlogin_level==-1) strcpy(minlogin,"NONE");
 else strcpy(minlogin,level_name[minlogin_level]);
 
 /* Show header parameters */
-sprintf(text,"~FTID Procesu   : ~FG%d\n~FTSpusteny dna : ~FG%s\n~FTProces bezi  : ~FG%d dni, %d hodin, %d minut a %d sekund\n~FTVyuzita RAM  : ~FG%'d bajtov\n~FTPorty (M/W)  : ~FG%d,  %d\n\n",getpid(),bstr,days,hours,mins,secs,memr,port[0],port[1]);
+sprintf(text,"~FTID Procesu   : ~FG%d\n~FTSpusteny dna : ~FG%s\n~FTProces bezi  : ~FG%d dni, %d hodin, %d minut a %d sekund\n~FTVyuzita RAM  : ~FG%'d bajtov\n~FTPorty (M/W)  : ~FG%d, %d\n~FTCesta pre docasne subory: ~FG%s\n\n",getpid(),bstr,days,hours,mins,secs,memr,port[0],port[1],TMPFOLDER);
 write_user(user,text);
 
 /* Show others */
