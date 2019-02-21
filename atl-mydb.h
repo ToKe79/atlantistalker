@@ -13,19 +13,19 @@ char query[8192],parsed[8192];
 extern MYSQL_RES *mysql_result(char *select);
 extern int init_database(void);
 extern void shutdown_database(void);
-extern int  db_save_user_details(UR_OBJECT user, int save_current);
-extern int  db_load_user_details(UR_OBJECT user, int repository);
+extern int db_save_user_details(UR_OBJECT user, int save_current);
+extern int db_load_user_details(UR_OBJECT user, int repository);
 extern char *db_user_name(char *username);
 extern char *db_username_by_id(int uid);
-extern int  db_user_exists(char *username);
-extern int  db_deluser(char *username);
-char       *dbf_string(char *string);
-int         db_load_user_password(UR_OBJECT user);
-int         db_load_user_level(char *username);
-int         mysql_kvery(char *select);
-int         db_userid(char *username);
-int         query_to_int(char *kvery);
-int         db_user_switch(int uid,int svitch);
+extern int db_user_exists(char *username);
+extern int db_deluser(char *username);
+char *dbf_string(char *string);
+int db_load_user_password(UR_OBJECT user);
+int db_load_user_level(char *username);
+int mysql_kvery(char *select);
+int db_userid(char *username);
+int query_to_int(char *kvery);
+int db_user_switch(int uid,int svitch);
 
 /*********************[ CO TO ROBI? ] ***************************
  * MYSQL_RES *mysql_result -> spravi select a vrati result
@@ -37,4 +37,3 @@ int         db_user_switch(int uid,int svitch);
  * db_deluser -> vrati 0 ak bol user zmazany, 1 ak cosi kdesi...
  * db_load_user_level -> vycucne level usera, -1 ak neexistuje
  ****************************************************************/
-
