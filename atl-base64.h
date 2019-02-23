@@ -16,15 +16,5 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _ATL_BASE64_H
-#define _ATL_BASE64_H
-
-#define CVS_ID_ATL_BASE64_H "$Id: atl-base64.h 704 2009-02-12 23:31:48Z wolcano $"
-#define CVS_REV_ATL_BASE64_H "$Rev: 704 $"
-
-int   decode_base64(unsigned char *dest, const char *src);
+int decode_base64(unsigned char *dest, const char *src);
 char *encode_base64(int size, unsigned char *src);
-
-#endif
-
-
