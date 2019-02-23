@@ -1,6 +1,3 @@
-const char *CVS_ID_ATL_XML_CPP="$Id: atl-xml.cpp 704 2009-02-12 23:31:48Z wolcano $";
-const char *CVS_REV_ATL_XML_CPP="$Rev: 704 $";
-
 #include <libxml/xmlreader.h>
 
 #include "atl-head.h"
@@ -157,4 +154,3 @@ int dump_all_users_data()
 
 	return 0;
 }
-
