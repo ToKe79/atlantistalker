@@ -89,7 +89,7 @@ CREATE TABLE `config` (
 
 LOCK TABLES `config` WRITE;
 /*!40000 ALTER TABLE `config` DISABLE KEYS */;
-INSERT INTO `config` VALUES ('mainport','7000'),('wizport','7001'),('max_users','500'),('max_clones','4'),('disable_web','NO'),('login_idle_time','180'),('user_idle_time','600'),('time_out_afks','YES'),('ban_swearing','NO'),('password_echo','NO'),('ignore_sigterm','NO'),('allow_caps_in_name','YES'),('system_logging','ON'),('colour_def','OFF'),('prompt_def','OFF'),('charecho_def','OFF'),('minlogin_level','NONE'),('mesg_life','7'),('mesg_check_time','04:40'),('min_private','2'),('ignore_mp_level','GOD'),('wizport_level','GOD'),('gatecrash_level','GOD'),('time_out_maxlevel','GOD'),('crash_action','NONE');
+INSERT INTO `config` VALUES ('mainport','7000'),('wizport','7001'),('max_users','500'),('max_clones','4'),('disable_web','NO'),('login_idle_time','180'),('user_idle_time','600'),('time_out_afks','YES'),('ban_swearing','NO'),('password_echo','NO'),('ignore_sigterm','NO'),('allow_caps_in_name','YES'),('system_logging','ON'),('colour_def','OFF'),('prompt_def','OFF'),('charecho_def','OFF'),('minlogin_level','NONE'),('mesg_life','7'),('mesg_check_time','04:40'),('min_private','2'),('ignore_mp_level','GOD'),('wizport_level','GOD'),('gatecrash_level','GOD'),('time_out_maxlevel','GOD'),('crash_action','NONE'),('counter','0');
 /*!40000 ALTER TABLE `config` ENABLE KEYS */;
 UNLOCK TABLES;
 
