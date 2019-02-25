@@ -42,18 +42,22 @@
 #include <stdarg.h>
 #include <libxml/xmlwriter.h>
 #include <locale.h>
+#if defined(HAVE_CONFIG)
 #include "config.h"
+#else
+#include "config.h.sample"
+#endif
 
 #ifdef HPUX_SB
-  #define FD_CAST (int *)
+#define FD_CAST (int *)
 #else
-  #define FD_CAST (fd_set *)
+#define FD_CAST (fd_set *)
 #endif
 
 #ifdef GLIBC207
-  #define SIGNAL(x,y) sysv_signal(x,y)
+#define SIGNAL(x,y) sysv_signal(x,y)
 #else
-  #define SIGNAL(x,y) signal(x,y)
+#define SIGNAL(x,y) signal(x,y)
 #endif
 
 

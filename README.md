@@ -32,7 +32,7 @@ On Debian based systems install these packages:
 ## compilation
 
 ```
-make
+make HAVE_CONFIG=1 DEBUG=1
 ```
 
 ## run

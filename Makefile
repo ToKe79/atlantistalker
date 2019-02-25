@@ -7,15 +7,24 @@ VERSION   = $(PROJECT).version
 XMLLIBS   = $(shell xml2-config --libs)
 XMLCFLAGS = $(shell xml2-config --cflags)
 LIBS      = -lmysqlclient -ldl -rdynamic -Wl,--version-script=$(VERSION) $(XMLLIBS)
-CFLAGS    = -Wall -ggdb -I. $(XMLCFLAGS)
+CFLAGS    = -Wall -I. $(XMLCFLAGS)
 DEPENDS   = make.depend
 SRCS      = ${wildcard *.c}
 TODO      = $(patsubst %.c,%.o,$(SRCS))
+DEFINES   =
+
+ifeq ($(HAVE_CONFIG), 1)
+DEFINES += -DHAVE_CONFIG
+endif
+
+ifeq ($(DEBUG), 1)
+CFLAGS += -ggdb
+endif
 
 .PHONY: clean libs
 
 $(PROJECT): $(TODO) $(DEPENDS) $(VERSION)
-	$(CC) $(CFLAGS) -o $(PROJECT) $(TODO) $(LIBS)
+	$(CC) $(CFLAGS) $(DEFINES) -o $(PROJECT) $(TODO) $(LIBS)
 
 $(VERSION): atl-libapi.o
 	@echo "Creating version script $(VERSION)"
@@ -24,7 +33,7 @@ $(VERSION): atl-libapi.o
 libs: libs/liblog.so
 
 libs/liblog.so: libs/lib_log.c
-	$(CC) $(CFLAGS) -fPIC -shared $< -o $@
+	$(CC) $(CFLAGS) $(DEFINES) -fPIC -shared $< -o $@
 
 clean:
 	@echo -n "Deleting all object files..."
@@ -32,7 +41,7 @@ clean:
 	@echo "OK"
 
 %.o:
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(DEFINES) -c $< -o $@
 
 $(DEPENDS):
 	@echo "Building dependencies"
