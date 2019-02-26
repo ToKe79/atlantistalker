@@ -852,7 +852,7 @@ extern int create_banner(UR_OBJECT user1,UR_OBJECT user2,int type,char *inpstr,i
 	sprintf(meno_fontu,"%s-font%s",user1->name,TMPSUFFIX);
 	sprintf(tempfontfilename,"%s%s",TMPFOLDER,meno_fontu);
 	if ((fptff=ropen(tempfontfilename,"w"))==NULL) return 0;
-	fprintf(fptff,row[0]);
+	fprintf(fptff,"%s",row[0]);
 	mysql_free_result(result);
 	fclose(fptff);
 	getparams(meno_fontu); /* Nastavenia parametrov - dolezite!!! */
