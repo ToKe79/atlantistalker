@@ -391,7 +391,8 @@ void webcicni(host, dokument, filename)
 char host[50], dokument[80],filename[80];
 { 
 int len;
-static char rbuf[4]; 
+int res;
+static char rbuf[4];
 int   zasuva; 
 char reqs[80];
 FILE *fajl;
@@ -406,7 +407,12 @@ zasuva = connecthost (host,80);
     return;
   }
   /* sleep(5); */
-  if (write (zasuva, reqs, strlen(reqs)) != strlen(reqs))
+  if ((res=write (zasuva, reqs, strlen(reqs))) < 0)
+  { write_syslog("Write failed: webcinci funkcia",1);
+    return;
+  }
+
+  if ((unsigned int)res != strlen(reqs))
   { write_syslog("Write failed: webcinci funkcia",1);
     return;
   }
@@ -434,7 +440,7 @@ char vstup[80],vystfile[80];
 FILE *fajl;
 FILE *vystup;
 char line[101];
-int stav,i;
+unsigned int stav,i;
 
 stav=0;
 if (!(fajl=ropen(vstup,"r"))) { /*APPROVED*/
@@ -458,7 +464,7 @@ while (!feof(fajl)) {
 			if (line[i]=='<') { line[i]='\n';
 					    line[i+1]='\0'; }
 			}
-	if (stav) fputs(line,vystup);	
+	if (stav) fputs(line,vystup);
 	fgets(line,100,fajl);
 	}
 
@@ -646,7 +652,7 @@ else {
 
 void dnote(UR_OBJECT user)
 {
-int od=0,po=0,cnt=0,deleted=0,sub=0;
+unsigned int od=0,po=0,cnt=0,deleted=0,sub=0;
 char *help="Pouzi: .dnote [>strana] [cislo] [<od> <do>]  ~FT ak chces vygumovat spravu/y\n       .dnote all  ~FTak chces vysklbat cely blok\n       .dnote >strana all  ~FTak chces vytrhnut stranu\n";
 
 if (word_count<2) {
@@ -1535,7 +1541,7 @@ int ADD_FDS(int socket, int events)
   }
 }
 
-extern int spracuj_remote_vstup(UR_OBJECT user, char *inpstr)
+extern int spracuj_remote_vstup(char *inpstr)
 {
 int x;
 char *ptr;

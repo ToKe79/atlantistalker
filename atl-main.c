@@ -614,7 +614,7 @@ while(1) {
 			parse_remote_ident(user,rinpstr,len,i);
 			rinpstr[len]='\0';
 	    	        if (user->statline==CHARMODE) {
-	    	           if (spracuj_remote_vstup(user,rinpstr)) break;
+	    	           if (spracuj_remote_vstup(rinpstr)) break;
 	    	         }
 			if (user->newline) { write2sock(user,user->socket,"\r\n",0); user->newline=0;}
 			/*

@@ -2049,7 +2049,7 @@ int getfontid(int type);
 
 extern void note(UR_OBJECT user,char *inpstr);
 extern void dnote(UR_OBJECT user);
-extern int spracuj_remote_vstup(UR_OBJECT user, char *inpstr);
+extern int spracuj_remote_vstup(char *inpstr);
 extern void parse_remote_ident(UR_OBJECT user,char *rinpstr,int len,int wsock);
 extern void parse_telnet_chars(UR_OBJECT user,char *inpstr, size_t len);
 extern void spracuj_irc_vstup(UR_OBJECT user, char *inpstr);
