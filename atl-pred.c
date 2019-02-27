@@ -476,9 +476,9 @@ FILE *fp;
  fclose(fp);
 }
 
-void pohaluz_predmetom(char *inpstr,int ok,int vec)
+void pohaluz_predmetom(char *inpstr,unsigned int ok,int vec)
 {
-int i,which=0,pos=0,cnt=0;
+unsigned int i,which=0,pos=0,cnt=0;
 char *newimpstr;
 char ins[10][21],tmp[WORD_LEN+1];
 
@@ -4188,7 +4188,7 @@ return (muz);
 
 char *parse_phrase(char *str,UR_OBJECT user,UR_OBJECT u,RM_OBJECT rm,int whichtype)
 {
-int i,pos,cnt,where,sex;
+unsigned int i,pos,cnt,where,sex;
 char tmp[100],tmp2[50],ammo[10];
 static char ret[200];
 char *teamcolor[]={ "","~OL~FB","~OL~FR","~OL~FG","~OL~FK" }; 

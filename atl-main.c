@@ -1259,10 +1259,9 @@ str[i-1]=0;
 /*** Get words from sentence. This function prevents the words in the
      sentence from writing off the end of a word array element. This is
      difficult to do with sscanf() hence I use this function instead. ***/
-int wordfind(inpstr)
-char *inpstr;
+unsigned int wordfind(char *inpstr)
 {
-int wn,wpos;
+unsigned int wn,wpos;
 
 wn=0; wpos=0;
 do {
