@@ -662,7 +662,8 @@ struct user_struct {
       char mail_to[WORD_LEN+1], *revbuff[REVTELL_LINES+1]; /* (S) -> DYNAMICKY */
       char afk_mesg[AFK_MESG_LEN+1],inpstr_old[REVIEW_LEN+2]; 
       struct room_struct *room,*invite_room,*into,*from; 
-      int type,port,site_port,login,socket,attempts,buffpos,filepos; 
+      int type,port,site_port,login,socket,attempts;
+      unsigned int buffpos,filepos; 
       int vis,ignall,prompt,command_mode,muzzled,muzzletime,charmode_echo; 
       int level,cloak,misc_op,/*remote_com,*/edit_line,charcnt,warned; 
       int accreq,last_login_len,ignall_store,clone_hear,afk; 
@@ -1561,7 +1562,7 @@ int double_fork();
 void write_board(UR_OBJECT user,char *inpstr,int done_editing);
 void smail(UR_OBJECT user,char *inpstr,int done_editing);
 void enter_profile(UR_OBJECT user,int done_editing);
-void write_joke(UR_OBJECT user,char *inpstr,int done_editing);
+void write_joke(UR_OBJECT user,int done_editing);
 void vote(UR_OBJECT user, char *inpstr, int done_editing,int zedit);
 void votenew(UR_OBJECT user);
 int note_vote(UR_OBJECT user);

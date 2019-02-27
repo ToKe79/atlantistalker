@@ -5216,7 +5216,7 @@ if (user->edit_op) {
 		  case 3: write_board(user,NULL,1);  break;
 		  case 4: smail(user,NULL,1);  break;
 		  case 5: enter_profile(user,1);  break;
-		  case 8: write_joke(user,NULL,1); break;
+		  case 8: write_joke(user,1); break;
 		  case 11: bcast(user,inpstr,1); break;
 		  case 16: write_noticeboard(user,1,1); break;
 /*		  case 18: zobraz_predmety(user,1); break; */
@@ -8226,7 +8226,7 @@ switch(com_num) {
       case UNFOLLOW  : follow(user,1); break;
       case RANKS     : ranks(user); break;
       case SECHO     : secho(user,inpstr); break;
-      case WJOKE     : write_joke(user,inpstr,0); break;
+      case WJOKE     : write_joke(user,0); break;
       case RJOKE     : read_joke(user); break;
       case DJOKE     : delete_joke(user); break;
       case SIGN      : sign(user,inpstr); break;

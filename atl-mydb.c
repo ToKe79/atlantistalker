@@ -2008,7 +2008,7 @@ int mailmore(UR_OBJECT user)
 							}
 							break;
 					}
-					if (buffpos>OUT_BUFF_SIZE-strlen(text)-1) {
+					if (buffpos>(int)(OUT_BUFF_SIZE-strlen(text)-1)) {
 						highlight_write2sock(user,buff,OUT_BUFF_SIZE);
 						buffpos=0;
 						buffold=0;
@@ -2426,7 +2426,7 @@ void search_boards(UR_OBJECT user)
 	if (ret==1) user->misc_op=223;
 }
 
-void write_joke(UR_OBJECT user,char *inpstr,int done_editing)
+void write_joke(UR_OBJECT user,int done_editing)
 {
 	int max;
 	char *ptr;
@@ -2675,7 +2675,7 @@ void send_mail(UR_OBJECT user,char *to, char *ptr)
 	char rov[60];
 	char header[100];
 	UR_OBJECT u;
-	int i,max=0,uid=0;
+	unsigned int i,max=0,uid=0;
 
 	sstrncpy(emailadr, to, 100);
 	if (strstr(emailadr,"@")) { /* Je to E-MAIL sprava. */
