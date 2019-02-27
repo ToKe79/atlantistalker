@@ -21,6 +21,10 @@ ifeq ($(DEBUG), 1)
 CFLAGS += -ggdb
 endif
 
+ifeq ($(MOREWARN), 1)
+CFLAGS += -pedantic -Wextra -Wformat=2
+endif
+
 .PHONY: clean libs
 
 $(PROJECT): $(TODO) $(DEPENDS) $(VERSION)
