@@ -51,7 +51,7 @@ int parse_ezin(FILE *subor,int issue,char *string)
 {
 	int qm,i,tagmode,count,howmuch=0;
 	char c,filename[256],tagcache[128],buffer[4096],tmp[100];
-	int buffer_size, italic, bold, author;
+	unsigned int buffer_size, italic, bold, author;
 	char *p1, *p2;
 	FILE *file;
 
