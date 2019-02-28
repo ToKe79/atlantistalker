@@ -8274,14 +8274,14 @@ switch(com_num) {
       case SNDPROOF  : set_room_access(user); break;
       case JOIN      : join(user); break;
       case NUKE      : nuke_user(user); break;
-      case PISKVORKY : piskvorky(user,inpstr);break;
+      case PISKVORKY : piskvorky(user);break;
       case ALARM     : alarm_clock(user); break;
       case NOTIFY_CMD    : notify_user(user); break;
       case COPIES    : copies_to(user); break;
       case SAVE      : save_users(user); break;
       case HANGMAN   : play_hangman(user,inpstr); break;
       case WIZZES    : wizzes(user); break;
-      case GEO       : play_geo(user, inpstr); break;
+      case GEO       : play_geo(user); break;
       case GET       : get_predmet(user); break;
       case PUT       : put_predmet(user); break;
       case SELL      : sell(user); break;
@@ -8332,7 +8332,7 @@ switch(com_num) {
       case BJACK     : play_blackjack(user); break;
       case COMLEVEL  : poprehadzuj_prikazy(user); break;  
       case REVERSI   : reversi(user); break;
-      case MINY      : miny(user,inpstr); break;
+      case MINY      : miny(user); break;
       case DAMA      : dama(user); break;
       case REBIRTH   : rebirth(user); break;
       case GAMES     : games(user); break;

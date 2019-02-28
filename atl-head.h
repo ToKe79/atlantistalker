@@ -1708,13 +1708,13 @@ void kick(UR_OBJECT user);
 void ignore(UR_OBJECT user, char *inpstr);
 void join(UR_OBJECT user);
 void nuke_user(UR_OBJECT user);
-extern void piskvorky(UR_OBJECT user, char *inpstr);
+extern void piskvorky(UR_OBJECT user);
 void alarm_clock(UR_OBJECT user);
 void copies_to(UR_OBJECT user);
 void save_users(UR_OBJECT user);
 extern void play_hangman(UR_OBJECT user, char *inpstr);
 void wizzes(UR_OBJECT user);
-extern void play_geo(UR_OBJECT user,char *inpstr);
+extern void play_geo(UR_OBJECT user);
 
 void get_predmet(UR_OBJECT user);
 void put_predmet(UR_OBJECT user);
@@ -1955,11 +1955,11 @@ int reversi_mozetahat(UR_OBJECT user);
 void reversi_tah(UR_OBJECT user, int y, int x);
 
 void miny_draw(UR_OBJECT user);
-void miny_numbering(UR_OBJECT, int , int);
+void miny_numbering(UR_OBJECT, unsigned int , unsigned int);
 int miny_init(UR_OBJECT);
-void miny_zero_show(UR_OBJECT, int, int);
+void miny_zero_show(UR_OBJECT, unsigned int, unsigned int);
 void miny_done(UR_OBJECT);
-void miny(UR_OBJECT, char *inpstr);
+void miny(UR_OBJECT);
 
 DAMA_OBJECT create_dama();
 void destruct_dama(UR_OBJECT);
@@ -1975,7 +1975,7 @@ void oline(UR_OBJECT);
 /* void do_repository(char *subor, int typ); */
 void repository(char *name, int typ);
 void rebirth(UR_OBJECT user);
-void miny_placing(UR_OBJECT,int,int);
+void miny_placing(UR_OBJECT,unsigned int,unsigned int);
 void wash_bell(char*);
 void send_noticeboard_digest(char*);
 void send_recent_tells(UR_OBJECT user, int sp);
@@ -2002,7 +2002,7 @@ void free_stuff();
 
 extern CL_OBJECT create_clovece();
 extern void destruct_clovece(UR_OBJECT);
-extern void record_clovece(char *str,CL_OBJECT clovece);
+extern void record_clovece(CL_OBJECT clovece);
 extern void clovece_save(UR_OBJECT);
 extern void clovece_load(UR_OBJECT);
 extern char *clovece_saved_opponent(UR_OBJECT);
@@ -2015,7 +2015,7 @@ extern FR_OBJECT create_farar();
 extern void destruct_farar(UR_OBJECT);
 extern void add_fararplayer(UR_OBJECT,UR_OBJECT);
 extern void farar_disp(UR_OBJECT,int);
-extern void record_farar(char *str,FR_OBJECT farar);
+extern void record_farar(FR_OBJECT farar);
 extern void farar(UR_OBJECT,char*);
 
 extern void log_game(char*);

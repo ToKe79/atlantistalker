@@ -914,9 +914,8 @@ if ((!user->lab) && (!st)) {
   return;
 }
 
-void piskvorky(user,inpstr)
+void piskvorky(user)
 UR_OBJECT user;
-char *inpstr;
 {
  UR_OBJECT u,u2;
  int x,y;
@@ -1289,11 +1288,11 @@ if (!(strcmp(word[1],"Pass"))) {
 	}
 
 
-for (x=0; x<strlen(word[1]); ++x) if (isalpha(word[1][x])) {
+for (x=0; x<(int)strlen(word[1]); ++x) if (isalpha(word[1][x])) {
 	write_user(user,"Suradnice musia byt zadane ako cisla!\n");
 	return;
 	}
-for (x=0; x<strlen(word[2]); ++x) if (isalpha(word[2][x])) {
+for (x=0; x<(int)strlen(word[2]); ++x) if (isalpha(word[2][x])) {
 	write_user(user,"Suradnice musia byt zadane ako cisla!\n");
 	return;
 	}
@@ -1840,9 +1839,8 @@ UR_OBJECT user2;
     }
 }
 
-extern void play_geo(user,inpstr)
+extern void play_geo(user)
 UR_OBJECT user;
-char *inpstr;
 {
  UR_OBJECT u,u2;
  int x,y;
@@ -2201,7 +2199,7 @@ if (!(strcmp(word[1],"Pass"))) {
 	}
 
 
-for (x=0; x<strlen(word[1]); ++x) if (isalpha(word[1][x])) {
+for (x=0; x<(int)strlen(word[1]); ++x) if (isalpha(word[1][x])) {
 	write_user(user,"Stlpec musi byt zadany ako cislo!\n");
 	return;
 	}
@@ -2299,7 +2297,8 @@ extern void play_hangman(user,inpstr)
 UR_OBJECT user;
 char *inpstr;
 {
-int i,count,blanks;
+int count,blanks;
+unsigned int i;
 char *get_hang_word();
 
 if (word_count<2) {
@@ -2320,8 +2319,8 @@ if (!strcmp("status",word[1])) {
     return;
     }
   write_user(user,"Toto je stav Tvojej hry:\n");
-  if (strlen(user->hang_guess)<1) sprintf(text,hanged[user->hang_stage],user->hang_word_show,"zatial ziadne");
-  else sprintf(text,hanged[user->hang_stage],user->hang_word_show,user->hang_guess);
+  if (strlen(user->hang_guess)<1) sprintf(text,"%s%s%s",hanged[user->hang_stage],user->hang_word_show,"zatial ziadne");
+  else sprintf(text,"%s%s%s",hanged[user->hang_stage],user->hang_word_show,user->hang_guess);
   write_user(user,text);
   write_user(user,"\n");
   return;
@@ -2370,7 +2369,7 @@ if (!strcmp("start",word[1])) {
   	}
   user->hang_stage=0;
   write_user(user,"Zacinas hrat ...\n");
-  sprintf(text,hanged[user->hang_stage],user->hang_word_show,"zatial ziadne");
+  sprintf(text,"%s%s%s",hanged[user->hang_stage],user->hang_word_show,"zatial ziadne");
   write_user(user,text);
   return;
   }
@@ -2426,7 +2425,7 @@ if (strstr(user->hang_guess,word[1])) {
   user->hang_stage++;
   sprintf(text,"~OLToto pismeno si uz %s! \n",pohl(user,"hadal","hadala"));
   write_user(user,text);
-  sprintf(text,hanged[user->hang_stage],user->hang_word_show,user->hang_guess);
+  sprintf(text,"%s%s%s",hanged[user->hang_stage],user->hang_word_show,user->hang_guess);
   write_user(user,text);
   if (user->hang_stage>=7) {
     sprintf(text,"~OL~FRAAAaaaaargh!! ~FY%s na sibenici!\n",pohl(user,"Neuhadol si slovo a odvisol si","Neuhadla si slovo a odvisla si"));
@@ -2452,7 +2451,7 @@ if (!count) {
   user->hang_stage++;
   sprintf(text,"~OLPismeno sa nenachadza v hadanom slove, ~FY%d. ~FWkrok k odvisnutiu!\n",user->hang_stage);
   write_user(user,text);
-  sprintf(text,hanged[user->hang_stage],user->hang_word_show,user->hang_guess);
+  sprintf(text,"%s%s%s",hanged[user->hang_stage],user->hang_word_show,user->hang_guess);
   write_user(user,text);
   if (user->hang_stage>=7) {
     sprintf(text,"~OL~FRAAAaaaaargh!! ~FY%s na sibenici!\n",pohl(user,"Neuhadol si slovo a odvisol si","Neuhadla si slovo a odvisla si"));
@@ -2469,7 +2468,7 @@ if (!count) {
 if (count==1) sprintf(text,"~OL~FTDobre, pismeno '~FY%s~FT' sa nachadza v slove jeden krat.\n",word[1]);
 else sprintf(text,"~OL~FTDobre, pismeno '~FY%s~FT' sa nachadza v slove %d krat.\n",word[1],count);
 write_user(user,text);
-sprintf(text,hanged[user->hang_stage],user->hang_word_show,user->hang_guess);
+sprintf(text,"%s%s%s",hanged[user->hang_stage],user->hang_word_show,user->hang_guess);
 write_user(user,text);
 if (!blanks) {
   sprintf(text,"~FY~OLVYBORNE!~RS ~FY%s si slovo bez odvisnutia na sibenici!\n",pohl(user,"Uhadol","Uhadla"));
@@ -4610,7 +4609,7 @@ char *miny_alloc_msg = "~FRProblemy s pametou, kontaktuj spravcov\n";
 void miny_draw(user)
 UR_OBJECT user;
 {
-        int i,j;
+        unsigned int i,j;
         char *buff;
         int Hidden=0, Mines=0;
 
@@ -4694,20 +4693,19 @@ free(buff);
 /* ocislujem policka okolo miny */
 void miny_numbering(user,j,i)
 UR_OBJECT user;
-int j;
-int i;
+unsigned int j,i;
 {
         if(i+1 < M_X){
                 M_TAB(j,i+1) += (M_TAB(j,i+1) != M_HIDDEN+M_THERE) ? 1 : 0;
-                if(j-1 >= 0)
+                if(j-1 != 0)
                         M_TAB(j-1,i+1) += (M_TAB(j-1,i+1) != M_HIDDEN+M_THERE) ? 1 : 0;
                 if(j+1 < M_Y)
                         M_TAB(j+1,i+1) += (M_TAB(j+1,i+1) != M_HIDDEN+M_THERE) ? 1 : 0;
         }
 
-        if(i-1 >= 0){
+        if(i-1 != 0){
                 M_TAB(j,i-1) += (M_TAB(j,i-1) != M_HIDDEN+M_THERE) ? 1 : 0;
-                if(j-1 >= 0)
+                if(j-1 != 0)
                         M_TAB(j-1,i-1) += (M_TAB(j-1,i-1) != M_HIDDEN+M_THERE) ? 1 : 0;
                 if(j+1 < M_Y)
                         M_TAB(j+1,i-1) += (M_TAB(j+1,i-1) != M_HIDDEN+M_THERE) ? 1 : 0;
@@ -4716,7 +4714,7 @@ int i;
         if(j+1 < M_Y)
                 M_TAB(j+1,i) += (M_TAB(j+1,i) != M_HIDDEN+M_THERE) ? 1 : 0;
                 
-        if(j-1 >= 0)
+        if(j-1 != 0)
                 M_TAB(j-1,i) += (M_TAB(j-1,i) != M_HIDDEN+M_THERE) ? 1 : 0;
 }
 
@@ -4724,7 +4722,7 @@ int i;
 int miny_init(user)
 UR_OBJECT user;
 {
-    int i,j;
+    unsigned int i,j;
     /* time_t t; */
     
     /* Memory Allocation */
@@ -4764,10 +4762,10 @@ UR_OBJECT user;
 /* Placing Miny & Numbers */
 void miny_placing(user,oj,oi)
 UR_OBJECT user;
-int oj;
-int oi;
+unsigned int oj;
+unsigned int oi;
 {
-    int i,j,total;
+    unsigned int i,j,total;
     time_t t;
     
     srand((unsigned) time(&t));
@@ -4782,9 +4780,9 @@ int oi;
     }
 }
 
-#define CHECK_MINA_ZERO_IJ(a,b) if((b < M_X) && (b >= 0) && (a < M_Y) && (a >= 0) && (M_TAB(j,i) == 0) && ((M_TAB(a,b) == M_HIDDEN) || ((M_TAB(a,b) >= M_HIDDEN) && (M_TAB(a,b) < M_THERE+M_HIDDEN))))miny_zero_show(user,a,b);
-#define CHECK_MINA_ZERO_J(a,b) if((a < M_Y) && (a >= 0) && (M_TAB(j,i) == 0) && ((M_TAB(a,b) == M_HIDDEN) || ((M_TAB(a,b) >= M_HIDDEN) && (M_TAB(a,b) < M_THERE+M_HIDDEN))))miny_zero_show(user,a,b);
-#define CHECK_MINA_ZERO_I(a,b) if((b < M_X) && (b >= 0) && (M_TAB(j,i) == 0) && ((M_TAB(a,b) == M_HIDDEN) || ((M_TAB(a,b) >= M_HIDDEN) && (M_TAB(a,b) < M_THERE+M_HIDDEN))))miny_zero_show(user,a,b);
+#define CHECK_MINA_ZERO_IJ(a,b) if((b < M_X) && (a < M_Y) && (M_TAB(j,i) == 0) && ((M_TAB(a,b) == M_HIDDEN) || ((M_TAB(a,b) >= M_HIDDEN) && (M_TAB(a,b) < M_THERE+M_HIDDEN))))miny_zero_show(user,a,b);
+#define CHECK_MINA_ZERO_J(a,b) if((a < M_Y) && (M_TAB(j,i) == 0) && ((M_TAB(a,b) == M_HIDDEN) || ((M_TAB(a,b) >= M_HIDDEN) && (M_TAB(a,b) < M_THERE+M_HIDDEN))))miny_zero_show(user,a,b);
+#define CHECK_MINA_ZERO_I(a,b) if((b < M_X) && (M_TAB(j,i) == 0) && ((M_TAB(a,b) == M_HIDDEN) || ((M_TAB(a,b) >= M_HIDDEN) && (M_TAB(a,b) < M_THERE+M_HIDDEN))))miny_zero_show(user,a,b);
 
 /* odkryva policka, ktore su prazdne - rekurz. */
 /*void miny_zero_show(user,j,i)
@@ -4814,8 +4812,8 @@ int i;
 /* odkryva policka, ktore su prazdne - rekurz. */         /* XXXX - plus to hnusne makro hore */
 void miny_zero_show(user,j,i)
 UR_OBJECT user;
-int j;
-int i;
+unsigned int j;
+unsigned int i;
 {
     M_TAB(j,i) = M_TAB(j,i) - M_HIDDEN;
 
@@ -4833,7 +4831,7 @@ int i;
 void miny_done(user)
 UR_OBJECT user;
 {
-    int j;
+    unsigned int j;
 
     if(user->miny_tab){
 	for(j = 0;j < M_Y;j++)
@@ -4846,11 +4844,11 @@ UR_OBJECT user;
     
 
 /*** The "Game" - Miny ***/
-void miny(user,inpstr)
+void miny(user)
 UR_OBJECT user;
-char *inpstr;
 {
-    int i,j,b;
+    unsigned int i,j,b;
+    int ri,rj;
     char buff[100];
 
     /* nespravne argumenty .miny blablabla */
@@ -4921,9 +4919,19 @@ char *inpstr;
                 write_user(user,"Este si nezacal hrat hru.\n");
                 return;
             }
-            sscanf(word[1], "%d", &j);
-            sscanf(word[2], "%d", &i);
-	    if(i < 0 || i > (M_X-1) || j < 0 || j > (M_Y-1)){
+            sscanf(word[1], "%d", &rj);
+            sscanf(word[2], "%d", &ri);
+
+	    if (ri < 0 || rj < 0) {
+		    sprintf(buff,"Suradnice nemozu byt zaportne!\n");
+		    write_user(user,buff);
+		    return;
+	    }
+
+	    j=rj;
+	    i=ri;
+
+	    if(i > (M_X-1) || j > (M_Y-1)){
 		    sprintf(buff, "Zadaj suradnice <0..%d> <0..%d> !\n", (user->miny_y-1), (user->miny_x-1));
 		    write_user(user,buff);
                     return;
@@ -5155,7 +5163,8 @@ UR_OBJECT user;
 {
 UR_OBJECT u;
 RM_OBJECT rm;
-int i,biely,chr,dlx=0,dly=0,figurka[7],j,smer,ok,minx=0,miny=0,x=0,y=0,oldsmer=0/*,check[7]*/;
+unsigned int i,j;
+int biely,chr,dlx=0,dly=0,figurka[7],smer,ok,minx=0,miny=0,x=0,y=0,oldsmer=0/*,check[7]*/;
 int tah[7][2]; /* postup tahu [x][y] */
 int vymaz[3][2]; /* [x][y] preskocenych figuriek v jednom tahu */
 if (word_count==1) 
@@ -5655,7 +5664,7 @@ if (user->dhrac>0)
     if (abs(dlx)>1)
      {
       ok=0;
-      for (j=1;j<abs(dlx);++j)
+      for (j=1;j<(unsigned int)abs(dlx);++j)
        {
         if ((biely && user->dama->plocha[tah[i][0]+j*minx][tah[i][1]+j*miny]<0)
         || (!biely && user->dama->plocha[tah[i][0]+j*minx][tah[i][1]+j*miny]>0))
@@ -5693,7 +5702,7 @@ if (user->dhrac>0)
       chr=check_dama_jump(user->dama,biely,tah[i+1][0],tah[i+1][1],oldsmer);
       for (j=1;j<8 && ok<2;++j)
        {
-        if (tah[i][0]+j*minx<0 || tah[i][1]+j*miny<0 || tah[i][0]+j*minx>7 || tah[i][1]+j*miny>7) break;
+        if (tah[i][0]+j*minx>7 || tah[i][1]+j*miny>7) break;
         if (ok==1 && user->dama->plocha[tah[i][0]+j*minx][tah[i][1]+j*miny]!=0) break;
         if (ok==1 && check_dama_jump(user->dama,biely,tah[i][0]+j*minx,tah[i][1]+j*miny,oldsmer)>chr)
          {
@@ -6391,8 +6400,7 @@ for(i=0;i<REVIEW_LINES;++i) clovece->revbuff[i][0]='\0';
 return clovece;
 }
 
-void record_clovece(str,clovece)
-char *str;
+void record_clovece(clovece)
 CL_OBJECT clovece;
 {
   sstrncpy(clovece->revbuff[clovece->revline],text,REVIEW_LEN);
@@ -6732,7 +6740,7 @@ if (!strcmp (word[1],"say") || !strncmp (word[1],"pov",3))
       for(i=0;i<4;++i)
        if (user->clovece->hrac[i]!=NULL && user!=user->clovece->hrac[i])
         write_user(user->clovece->hrac[i],text);
-      record_clovece(text,user->clovece);
+      record_clovece(user->clovece);
       return;
      }
     else
@@ -7536,8 +7544,7 @@ for(i=0;i<REVIEW_LINES;++i) farar->revbuff[i][0]='\0';
 return farar;
 }
 
-void record_farar(str,farar)
-char *str;
+void record_farar(farar)
 FR_OBJECT farar;
 {
   sstrncpy(farar->revbuff[farar->revline],text,REVIEW_LEN);
@@ -7595,10 +7602,11 @@ UR_OBJECT user;
 char *inpstr;
 {
 UR_OBJECT u=NULL;
-int i,j=0,o=0,cnt,y,line;
+unsigned int cnt,pocet;
+int i,j=0,o=0,y,line;
 int tah[5];
 int farba,oznac,zmen;
-int hold[32],pocet;
+int hold[32];
 char *pom,ks[5],vtext[100];
 
 if (!strcmp (word[1],"huh!"))
@@ -7651,7 +7659,7 @@ if (!strcmp (word[1],"say") || !strncmp (word[1],"pov",3))
       for(i=0;i<5;++i)
        if (user->farar->hrac[i]!=NULL && user!=user->farar->hrac[i])
         write_user(user->farar->hrac[i],text);
-      record_farar(text,user->farar);
+      record_farar(user->farar);
       return;
      }
     else
@@ -7868,7 +7876,7 @@ if (!strcmp (word[1],"start") || !strncmp (word[1],"zac",3))
        }
      }  
     y=100;
-    for (i=0;i<32-cnt;i++)
+    for (i=0;i<(int)(32-cnt);i++)
      {
       j=(int)(rand()%32);
       while (user->farar->karty[j]!=-1)
@@ -8167,9 +8175,9 @@ if (word_count>1)
       }
       zmen=-1;
       for (i=0;i<4;++i) tah[i]=-1;
-      for (i=0;i<word_count-1;i++)
+      for (i=0;i<(int)(word_count-1);i++)
        {
-        if (i==word_count-2 && hold[tah[0]]/4==5)
+        if (i==(int)(word_count-2) && hold[tah[0]]/4==5)
 	 {
 	  if (!strncmp(word[i+1],"zel",3)) { zmen=0; word_count--; continue; }
 	  if (!strncmp(word[i+1],"cer",3)) { zmen=1; word_count--; continue; }
@@ -8177,7 +8185,7 @@ if (word_count>1)
 	  if (!strncmp(word[i+1],"gul",3)) { zmen=3; word_count--; continue; }
 	 }
         tah[i]=atoi(word[i+1]);
-        if (tah[i]<1 || pocet<tah[i]) {
+        if (tah[i]<1 || (int)pocet<tah[i]) {
          write_user(user,"~FTKartu s takym cislom nemas, musis si tam nejaku namalovat.\n");
 	 return;
         }
@@ -8189,7 +8197,7 @@ if (word_count>1)
         write_user(user,"~FTAk nemas sedmicku alebo zeleneho dolnika, pekne si tahaj z kvopky..\n");
         return;
        }
-      for (i=0;i<word_count-1;i++)
+      for (i=0;i<(int)(word_count-1);i++)
        {
         for (j=0;j<i;j++)
 	 {
@@ -8223,7 +8231,7 @@ if (word_count>1)
         write_user(user,text);
         return;
        }
-      for (i=0;i<word_count-1;i++)
+      for (i=0;i<(int)(word_count-1);i++)
        {
         user->farar->karty[hold[tah[i]]]=user->farar->karty[o]+1+i;
 	if (hold[tah[i]]/4==7)
@@ -8366,7 +8374,8 @@ void farar_disp(user,tahal)
 UR_OBJECT user;
 int tahal;
 {
-int cnt,i,o,farba,oznac,pos,len;
+int cnt,i,o,farba,oznac,pos;
+unsigned int len;
 int hold[32],pocet[5],vkope;
 char num[40],kopa[5][40];
  if (user->fhrac==-1)
