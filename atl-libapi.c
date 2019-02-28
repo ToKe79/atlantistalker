@@ -516,7 +516,7 @@ int api_user_write(char *name, char* text) {
  *    * -1 - ak nastala chyba
  *****/
 int api_command_reg (
-		int order,
+/*		int order,
 		int lngord,
 		int casenum,
 		int isprefix,
@@ -527,7 +527,8 @@ int api_command_reg (
 		int language,
 		int multiple,
 		int group,
-		int badge
+		int badge*/
+		void
 		) {
     return -1;
 }
