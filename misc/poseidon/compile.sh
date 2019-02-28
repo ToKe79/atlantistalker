@@ -10,7 +10,7 @@ else
 	binary="poseidon"
 fi
 
-ccache gcc -Wall -pedantic -ggdb -o $binary poseidon.c
+ccache gcc -Wall -Wextra -Wformat=2 -pedantic -ggdb -o $binary poseidon.c
 if [ $? -eq 0 ] ; then
 	echo "Finished. You can run the bot by ./$binary"
 fi

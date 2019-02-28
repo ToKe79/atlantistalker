@@ -756,13 +756,13 @@ if ((!strcmp(curword(msg,2),"zakricala:")||!strcmp(curword(msg,2),"zakrical:")) 
 int quit_robot(flag)
 int flag;
 { 
-  if (debug) fprintf (stderr, "***** Crash! *****\n");
+  if (debug && flag) fprintf (stderr, "***** Crash! *****\n");
   if (loging) writelog("SHUTTING DOWN!");
 
   close (ttis); 
   close (ftis); 
 
-exit (0); 
+exit (flag);
 } 
  
 /**************************************************************** 
