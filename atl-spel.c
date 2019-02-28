@@ -120,7 +120,7 @@ char *allowcom[]={".kiss",".go",".hug",".shout",".tell","*"};
 UR_OBJECT target=user;
 RM_OBJECT room;
 char mword[1024], *ptr;
-int i;
+unsigned int i;
 char *name;
 
 if (word_count<2) {
