@@ -396,7 +396,7 @@ int argc;
 char *argv[];
 {
 /* fd_set readmask; */
-int i,len,s;
+unsigned int i,len,s;
 /* int y; */
 
 char inpstr[ARR_SIZE+1];
@@ -511,7 +511,7 @@ if (lab_load()) {
  	lab_room.dostupny=1;
  	}
 */
-amfiteater(NULL,0,NULL);    /* Inicializacia amfiteatru!!!!(R) */
+amfiteater(NULL,0);    /* Inicializacia amfiteatru!!!!(R) */
 printf("Prehadzujem prikazy do levelov podla %s ...\n", COM_LEVEL);
 poprehadzuj_prikazy(NULL);      /* zmena levelov niektoryx prikazov */
 
@@ -2462,7 +2462,8 @@ void write_user(user,str)
 UR_OBJECT user;
 char *str;
 {
-int buffpos,sock,i,vec,webuser=0;
+int buffpos,sock,vec,webuser=0;
+unsigned int i;
 char *langw;
 char *start, buff[OUT_BUFF_SIZE+50],*pom; /* *colour_com_strip()*/
 
@@ -2941,7 +2942,8 @@ UR_OBJECT user;
 char *inpstr;
 {
 UR_OBJECT u;
-int i,cnt=0;
+int cnt=0;
+unsigned int i;
 
 char name[USER_NAME_LEN+3], passwd[80];
 char tempname[USER_NAME_LEN+3];
@@ -3444,7 +3446,7 @@ echo_on(user);
 void endstring(inpstr)
 char *inpstr;
 {
-int i;
+unsigned int i;
 for (i=0;i<strlen(inpstr);i++)
 	if (inpstr[i]=='\n') {
 		inpstr[i]=0;
@@ -4516,7 +4518,8 @@ int bogus;
 PAGER pom;
 char tempname[15],temppass[20];
 char histrecord[20],temp[20];
-int i,del_count=0,a=0,b=0,z=0;
+int del_count=0,a=0,z=0;
+unsigned int i,b=0;
 
 if (user->misc_op) {
 	sprintf(histrecord,"%02d:%02d *%d", tmin, tsec, user->misc_op);
@@ -4834,7 +4837,7 @@ switch(user->misc_op) {
 		return 1; 
 					
      case 14:			
-	zmenheslo(user,inpstr,0);
+	zmenheslo(user,0);
 	return 1;
 
       case 15:
@@ -4926,7 +4929,7 @@ switch(user->misc_op) {
 		return 1; 
 					
      case 32:
-	zmenheslo(user,inpstr,1);
+	zmenheslo(user,1);
 	return 1;
      case 33: /* police! */
         sprintf(temp,"Secure%s",user->name);
@@ -5990,7 +5993,8 @@ UR_OBJECT user;
 int sock;
 char *filename;
 {
-int i,buffpos,num_chars,lines,retval,len,totalines, fperc, p=0,buffold=0;
+int buffpos,num_chars,lines,retval,len,totalines, fperc, p=0,buffold=0;
+unsigned int i;
 long fsize;
 char buff[OUT_BUFF_SIZE+8],*str; /* *colour_com_strip() */
 /* char text2[83]; */
@@ -6847,7 +6851,8 @@ char *str;
 UR_OBJECT user;
 {
 char *s, *x;
-int i, ss, retval,o,skip;
+int i,retval,o,skip;
+unsigned int ss;
 retval=0;
 
 if ((s=(char *)malloc(strlen(str)+2))==NULL) {
@@ -8180,7 +8185,7 @@ switch(com_num) {
       case FIX      : change_room_fix(user,1);  break;
       case UNFIX    : change_room_fix(user,0);  break;
       case VIEWLOG  : viewlog(user, inpstr);  break;
-      case ACCREQ   : account_request(user,inpstr);  break;
+      case ACCREQ   : account_request(user);  break;
       case REVCLR   : revclr(user);  break;
       case CLONE    : create_clone(user);  break;
       case DESTROY  : destroy_clone(user);  break;
@@ -8232,11 +8237,11 @@ switch(com_num) {
       case TELLALL   : tellall(user,inpstr); break;
       case PRIKAZY   : help_commands(user, 0); break;
       case COMMANDS  : help_commands(user, 1); break;
-      case LOGTIME   : logtime(user, inpstr); break;
+      case LOGTIME   : logtime(user); break;
       case FAQ       : info(user,1); break;
       case RULES     : info(user,2); break;
       case PECHO     : pecho(user,inpstr); break;
-      case REALUSER  : whois(user,inpstr); break;
+      case REALUSER  : whois(user); break;
       /* case VOTE      : vote(user,inpstr, 1, 0); break; */
       case VOTE      : votenew(user); break;
       case SET       : set(user,inpstr); break; 
@@ -8254,13 +8259,13 @@ switch(com_num) {
       case SBANNER   : sbanner(user,inpstr); break;  
       
             
-      case WFROM     : who_from(user,inpstr); break;  
+      case WFROM     : who_from(user); break;  
       case INSULT    : insult_user(user); break;  
-      case CHNAME    : chname(user,inpstr); break;  
+      case CHNAME    : chname(user); break;  
       case PP        : power_points(user); break;
       case WINNERS   : winners(user,0,0); break;
       case WEATHER   : weather(user,inpstr); break;
-      case PLAY      : amfiteater(user,1,inpstr); break;
+      case PLAY      : amfiteater(user,1); break;
       case SKRIPT    : skript(user); break;
       case HINT      : hint(user, 0); break;
       case KICK      : kick(user); break;
@@ -8979,7 +8984,8 @@ void copies_to(user)
 UR_OBJECT user;
 {
 UR_OBJECT u;
-int remote,i=0,docopy,found,cnt,j;
+int remote,docopy,found,cnt;
+unsigned int i=0,j;
 
 if (!strcmp(word[1],"none")) {
   for (i=0; i<MAX_COPIES; i++) user->copyto[i][0]='\0';
@@ -9143,7 +9149,7 @@ if ((sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1) {
         bcopy(he->h_addr, (char *)&blah.sin_addr, he->h_length);
     }
     else {
-         if ((blah.sin_addr.s_addr = inet_addr(server)) < 0) {
+         if ((blah.sin_addr.s_addr = inet_addr(server)) == INADDR_NONE) {
            write_user(user,"Chyba v zapise!\n");
            return;
          }
@@ -9610,7 +9616,8 @@ UR_OBJECT user;
 char *inpstr; 
 {  
 FILE *fp;
-int lines,type,r,i,year=0,mon=0,day=0,lev;
+int lines,type,r,year=0,mon=0,day=0,lev;
+unsigned int i;
 char id[10],serv[40],port[10],filename[81],line[4096],levstr[10];
 UR_OBJECT u;
 
@@ -11330,10 +11337,9 @@ write_user(user,"~FWPouzi: ~FG.set show~FW pre zobrazenie aktualnych nastaveni.\
  
 /* INICIALIZACIA Amfiteatra  (R) */
 
-void amfiteater(user, force,inpstr)
+void amfiteater(user, force)
 UR_OBJECT user;
 int force;
-char *inpstr;
 {
 char filename[80];
 
@@ -11619,9 +11625,8 @@ char *auth_sockuser2(s,local,remote,rtimeout)
     return ruser;
 }
  
-void whois(user, inpstr)
+void whois(user)
 UR_OBJECT user;
-char *inpstr;
 {
 UR_OBJECT u,uu;
 char smalbuf[4];
@@ -12932,9 +12937,8 @@ if (user->statline==CHARMODE) show_statline(user);
 
 /*Spakky - LOGTIME. Prikaz prida/uberie login-time (v hodinach danemu userovi)*/
 
-void logtime(user, inpstr)
+void logtime(user)
 UR_OBJECT user;
-char *inpstr;
 {
 UR_OBJECT u;
 int hodiny;
@@ -12987,7 +12991,7 @@ char *check_shortcut(UR_OBJECT user)
 static char ret[520];
 char name[21];
 UR_OBJECT u;
-int namelen,cnt=0,len;
+unsigned int namelen,cnt=0,len;
 
 strncpy(name,word[1],20);
 name[20]='\0';
@@ -14051,7 +14055,8 @@ write_user(user,text);
 char *lamerize(buf)
 char buf[MAX_LAME+1];
 {
-	register int j, i, found=0,  count=0;
+	register int i, found=0,  count=0;
+	unsigned int j;
 	static char out[MAX_LAME+1];
         char samohlasky[]={'a','e','u','o','y','i'};
 	time_t t;
@@ -15834,7 +15839,7 @@ write_user(user,"Vystupna fraza bola nastavena.\n");
 char *expand_outphr(UR_OBJECT user,RM_OBJECT destination)
 {
  static char retphr[100],*tmp;
- int i,cnt;
+ unsigned int i,cnt;
  
  if (destination==NULL) destination=user->room;
  if (destination==NULL) destination=get_room("namestie",NULL);
@@ -16375,9 +16380,10 @@ void customexamine(UR_OBJECT user,char *username,int testall)
 FILE *fp;
 char filename[81];
 char line[1001];
-int oflajn=0,profile=100,new_mail=0,err=0,repos=0,vec=-1;
+int oflajn=0,reqlines,new_mail=0,err=0,repos=0,vec=-1;
 UR_OBJECT u/* ,u2 */;
-int align,width,len,type,i,ii,pos,wizvar,disablelineifvarempty,nasiel=0;
+int align,type,pos,wizvar,disablelineifvarempty,nasiel=0;
+unsigned int width,len,profile=100,i,ii;
 char temp[500],var[500],yes[50],no[50],z;
 int mins,idle=0,blik,cols,timelen,days2,hours2,mins2;
 int holding[BODY];
@@ -16474,9 +16480,9 @@ else {
  }
 */
  if (word_count>2) {
-   profile=atoi(word[2]);
-   if (profile<0) profile=0;
-   if (profile>100) profile=100;
+   reqlines=atoi(word[2]);
+   if (reqlines<0) profile=0;
+   if (reqlines>100) profile=100;
    if (!strncmp(word[2],"no",2)) profile=0;
   }
  else profile=100;
@@ -16925,7 +16931,8 @@ MYSQL_ROW row;
 
 char *parse_who_line(UR_OBJECT u,char *line,int wizzes,int users,int userlevel)
 {
-int align,width,len,type,i,ii,pos;
+int align,type,pos;
+unsigned int i,ii,width,len;
 char temp[500],var[500],yes[32],no[32],z;
 int secs, daysuptime, hoursuptime,idle=0,mins=0,blik,cols;
 
@@ -18265,9 +18272,8 @@ int is_in_not;
 /* Spakky: who from  
  vypise userov zo zadanej site/alebo userov z rovnakej site ako ma dany user  
  */  
-void who_from(user,inpstr)  
+void who_from(user)
 UR_OBJECT user;  
-char *inpstr;  
 {  
 char odkial[101];
 UR_OBJECT u;
@@ -18381,16 +18387,14 @@ write_room_except(user->room,text,user);
   
   
 /*Spakky: change user name*/  
-void chname(user,inpstr)
+void chname(user)
 UR_OBJECT user;
-char *inpstr;
 {
 UR_OBJECT u;
 char oldfile[150], newfile[150];
-/* char filename[150]; */
 char newpwd[20],meno[14],tempname[USER_NAME_LEN+5];
-int newpass,i,oflajn,cnt=0;
-/* FILE *fp; */
+int newpass,oflajn,cnt=0;
+unsigned int i;
 
 if (word_count<3) {
 	write_user(user,"Pouzi: .chname <stare_meno> <nove_meno>\n");
@@ -18819,7 +18823,7 @@ char *inpstr;
 {
 char *name;
 char hv[90];
-int i;
+unsigned int i;
 
 
 sprintf(hv,"                                                                                \n");
@@ -20725,7 +20729,7 @@ write_user(user,"~FTStare (aktualne) heslo: ");
 
 
 /* (S) Funkcia potrebna pre zmenu hesla (sposobom B na ucet 501 ;-) */
-int zmenheslo(UR_OBJECT user,char *inpstr,int wizpass)
+int zmenheslo(UR_OBJECT user,int wizpass)
 {
 UR_OBJECT u;
 char temp[20];
@@ -24048,9 +24052,8 @@ else {
      misc_op 9 a 10, proceduru posielanie(), polozku user->email a script
      posli.
 ***/
-void account_request(user,inpstr)
+void account_request(user)
 UR_OBJECT user;
-char *inpstr;
 {
 UR_OBJECT u;
 
@@ -26987,7 +26990,7 @@ void zazuvackuj(inpstr, ok)
 char *inpstr;
 int ok;
 {
-int i;
+unsigned int i;
 char *newimpstr;
 
 if ((newimpstr=(char *)malloc(4000*sizeof(char)))==NULL) {
@@ -27052,7 +27055,7 @@ void zachlastaj2(inpstr, ok)
 char *inpstr;
 int ok;
 {
-int i, nah, j;
+unsigned int i, nah, j;
 char *newimpstr;
 
 if ((newimpstr=(char *)malloc(5000*sizeof(char)))==NULL) {
@@ -27125,7 +27128,7 @@ void debilneho(inpstr, ok)
 char *inpstr;
 int ok;
 {
-int i;
+unsigned int i;
 char *newimpstr;
 
 if ((newimpstr=(char *)malloc(4000*sizeof(char)))==NULL) {
@@ -27446,7 +27449,7 @@ MACRO allocate_macro(char *macroname,char *macrovalue) {
 int macroexpand(MACRO *list,MACRO *deflist,char *expansion, UR_OBJECT user, int irc) {
 MACRO macro;
 UR_OBJECT u;
-int i, def;
+unsigned int i, def;
 char *replacement,*string, replace_type;
 int overcheck=ARR_SIZE, size=0; /* Hnuusny overflow!!! :-( */
 
@@ -28271,7 +28274,7 @@ void send_sms(char *tonum,char *str,int gate)
 char comd[500],account[100],mesg[500];
 time_t tim;
 FILE *fp;
-int pos,max;
+unsigned int pos,max;
 
  if (!strcmp(tonum,"-")) return;
  strcpy(account,expand_gate(NULL,1,tonum));
@@ -28926,7 +28929,8 @@ int restrict_sms(char *str,int gate_num)
 {
 char filename[81],line[100];
 FILE *fp;
-int i,num,max,ok[2],ii,format;
+int num,max,ok[2],ii,format;
+unsigned int i;
 char name[20];
 char myrestrict[2][15];
 
@@ -29124,7 +29128,8 @@ char *datum_menin(char *meno)
 static char date[81];
 FILE *fp;
 char fname[81],name[81],name2[81];
-int i,ok,len;
+unsigned int i;
+int ok,len;
  
  if (!strcmp(meno,"Petra")) return "29.06";
  date[0]='\0';
