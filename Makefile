@@ -7,7 +7,7 @@ VERSION   = $(PROJECT).version
 XMLLIBS   = $(shell xml2-config --libs)
 XMLCFLAGS = $(shell xml2-config --cflags)
 LIBS      = -lmysqlclient -ldl -rdynamic -Wl,--version-script=$(VERSION) $(XMLLIBS)
-CFLAGS    = -Wall -I. $(XMLCFLAGS)
+CFLAGS    = -Wall $(XMLCFLAGS)
 DEPENDS   = make.depend
 SRCS      = ${wildcard *.c}
 TODO      = $(patsubst %.c,%.o,$(SRCS))
@@ -22,7 +22,7 @@ CFLAGS += -ggdb
 endif
 
 ifeq ($(MOREWARN), 1)
-CFLAGS += -pedantic -Wextra -Wformat=2
+CFLAGS += -Wextra -Wformat=2
 endif
 
 .PHONY: clean libs
@@ -40,9 +40,9 @@ libs/liblog.so: libs/lib_log.c
 	$(CC) $(CFLAGS) $(DEFINES) -fPIC -shared $< -o $@
 
 clean:
-	@echo -n "Deleting all object files..."
-	@rm -f *.o $(DEPENDS)
-	@echo "OK"
+	@echo "Deleting all object files..."
+	@rm -vf *.o libs/*.so $(DEPENDS)
+	@echo "Done!"
 
 %.o:
 	$(CC) $(CFLAGS) $(DEFINES) -c $< -o $@
