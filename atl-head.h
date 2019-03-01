@@ -40,7 +40,7 @@
 #include <sys/poll.h>
 #include <setjmp.h>
 #include <stdarg.h>
-#include <libxml/xmlwriter.h>
+#include <libxml2/libxml/xmlwriter.h>
 #include <locale.h>
 #if defined(HAVE_CONFIG)
 #include "config.h"
@@ -1713,6 +1713,7 @@ void alarm_clock(UR_OBJECT user);
 void copies_to(UR_OBJECT user);
 void save_users(UR_OBJECT user);
 extern void play_hangman(UR_OBJECT user, char *inpstr);
+void hangman_status(UR_OBJECT);
 void wizzes(UR_OBJECT user);
 extern void play_geo(UR_OBJECT user);
 

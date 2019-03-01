@@ -20,16 +20,15 @@ int clovece_plocha[]={
 };
 char *clovece_col[]={"~FT","~FG","~FY","~FR","*"};
 
-char *hanged[8]={
-  "~FY~OL+~RS~FY---~OL+ ~OL~FB=-=-=-=-=< ~FYSibenica ~FB>=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+\n~FY|                                                                  ~OL~FB|\n~FY|~RS           ~OL %-50s    ~OL~FB|\n~FY|~RS           ~FGHadane pismena:~RS~FY %-30s         ~OL~FB|\n~FY|~RS                                                                  ~OL~FB|\n~FY|______ ~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+\n",
-  "~FY~OL+~RS~FY---~OL+ ~OL~FB=-=-=-=-=< ~FYSibenica ~FB>=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+\n~FY|   |                                                              ~OL~FB|\n~FY|~RS           ~OL %-50s    ~OL~FB|\n~FY|~RS           ~FGHadane pismena:~RS~FY %-30s         ~OL~FB|\n~FY|~RS                                                                  ~OL~FB|\n~FY|______ ~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+\n",
-  "~FY~OL+~RS~FY---~OL+ ~OL~FB=-=-=-=-=< ~FYSibenica ~FB>=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+\n~FY|   |                                                              ~OL~FB|\n~FY|~RS   O       ~OL %-50s    ~OL~FB|\n~FY|~RS           ~FGHadane pismena:~RS~FY %-30s         ~OL~FB|\n~FY|~RS                                                                  ~OL~FB|\n~FY|______ ~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+\n",
-  "~FY~OL+~RS~FY---~OL+ ~OL~FB=-=-=-=-=< ~FYSibenica ~FB>=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+\n~FY|   |                                                              ~OL~FB|\n~FY|~RS   O       ~OL %-50s    ~OL~FB|\n~FY|~RS   |       ~FGHadane pismena:~RS~FY %-30s         ~OL~FB|\n~FY|~RS                                                                  ~OL~FB|\n~FY|______ ~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+\n",
-  "~FY~OL+~RS~FY---~OL+ ~OL~FB=-=-=-=-=< ~FYSibenica ~FB>=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+\n~FY|   |                                                              ~OL~FB|\n~FY|~RS   O       ~OL %-50s    ~OL~FB|\n~FY|~RS  /|       ~FGHadane pismena:~RS~FY %-30s         ~OL~FB|\n~FY|~RS                                                                  ~OL~FB|\n~FY|______ ~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+\n",
-  "~FY~OL+~RS~FY---~OL+ ~OL~FB=-=-=-=-=< ~FYSibenica ~FB>=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+\n~FY|   |                                                              ~OL~FB|\n~FY|~RS   O       ~OL %-50s    ~OL~FB|\n~FY|~RS  /|\\      ~FGHadane pismena:~RS~FY %-30s         ~OL~FB|\n~FY|~RS                                                                  ~OL~FB|\n~FY|______ ~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+\n",
-  "~FY~OL+~RS~FY---~OL+ ~OL~FB=-=-=-=-=< ~FYSibenica ~FB>=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+\n~FY|   |                                                              ~OL~FB|\n~FY|~RS   O       ~OL %-50s    ~OL~FB|\n~FY|~RS  /|\\      ~FGHadane pismena:~RS~FY %-30s         ~OL~FB|\n~FY|~RS  /                                                               ~OL~FB|\n~FY|______ ~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+\n",
-  "~FY~OL+~RS~FY---~OL+ ~OL~FB=-=-=-=-=< ~FYSibenica ~FB>=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+\n~FY|   |                                                              ~OL~FB|\n~FY|~RS   O       ~OL %-50s    ~OL~FB|\n~FY|~RS  /|\\      ~FGHadane pismena:~RS~FY %-30s         ~OL~FB|\n~FY|~RS  / \\                                                             ~OL~FB|\n~FY|______ ~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+\n"
-};
+const char *hanged[]={
+	"~FY~OL+~RS~FY---~OL+ ~OL~FB=-=-=-=-=< ~FYSibenica ~FB>=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+\n~FY|                                                                  ~OL~FB|\n~FY|~RS           ~OL %-50s    ~OL~FB|\n~FY|~RS           ~FGHadane pismena:~RS~FY %-30s         ~OL~FB|\n~FY|~RS                                                                  ~OL~FB|\n~FY|______ ~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+\n",
+	"~FY~OL+~RS~FY---~OL+ ~OL~FB=-=-=-=-=< ~FYSibenica ~FB>=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+\n~FY|   |                                                              ~OL~FB|\n~FY|~RS           ~OL %-50s    ~OL~FB|\n~FY|~RS           ~FGHadane pismena:~RS~FY %-30s         ~OL~FB|\n~FY|~RS                                                                  ~OL~FB|\n~FY|______ ~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+\n",
+	"~FY~OL+~RS~FY---~OL+ ~OL~FB=-=-=-=-=< ~FYSibenica ~FB>=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+\n~FY|   |                                                              ~OL~FB|\n~FY|~RS   O       ~OL %-50s    ~OL~FB|\n~FY|~RS           ~FGHadane pismena:~RS~FY %-30s         ~OL~FB|\n~FY|~RS                                                                  ~OL~FB|\n~FY|______ ~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+\n",
+	"~FY~OL+~RS~FY---~OL+ ~OL~FB=-=-=-=-=< ~FYSibenica ~FB>=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+\n~FY|   |                                                              ~OL~FB|\n~FY|~RS   O       ~OL %-50s    ~OL~FB|\n~FY|~RS   |       ~FGHadane pismena:~RS~FY %-30s         ~OL~FB|\n~FY|~RS                                                                  ~OL~FB|\n~FY|______ ~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+\n",
+	"~FY~OL+~RS~FY---~OL+ ~OL~FB=-=-=-=-=< ~FYSibenica ~FB>=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+\n~FY|   |                                                              ~OL~FB|\n~FY|~RS   O       ~OL %-50s    ~OL~FB|\n~FY|~RS  /|       ~FGHadane pismena:~RS~FY %-30s         ~OL~FB|\n~FY|~RS                                                                  ~OL~FB|\n~FY|______ ~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+\n",
+	"~FY~OL+~RS~FY---~OL+ ~OL~FB=-=-=-=-=< ~FYSibenica ~FB>=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+\n~FY|   |                                                              ~OL~FB|\n~FY|~RS   O       ~OL %-50s    ~OL~FB|\n~FY|~RS  /|\\      ~FGHadane pismena:~RS~FY %-30s         ~OL~FB|\n~FY|~RS                                                                  ~OL~FB|\n~FY|______ ~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+\n",
+	"~FY~OL+~RS~FY---~OL+ ~OL~FB=-=-=-=-=< ~FYSibenica ~FB>=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+\n~FY|   |                                                              ~OL~FB|\n~FY|~RS   O       ~OL %-50s    ~OL~FB|\n~FY|~RS  /|\\      ~FGHadane pismena:~RS~FY %-30s         ~OL~FB|\n~FY|~RS  /                                                               ~OL~FB|\n~FY|______ ~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+\n",
+	"~FY~OL+~RS~FY---~OL+ ~OL~FB=-=-=-=-=< ~FYSibenica ~FB>=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+\n~FY|   |                                                              ~OL~FB|\n~FY|~RS   O       ~OL %-50s    ~OL~FB|\n~FY|~RS  /|\\      ~FGHadane pismena:~RS~FY %-30s         ~OL~FB|\n~FY|~RS  / \\                                                             ~OL~FB|\n~FY|______ ~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+\n"};
 
 /* LODICKY (battle sh1ts) 
    Copyright RIDER (editor, ascii-art & some useful functions) 
@@ -2291,8 +2290,6 @@ y--;
     }
 }               /* Koniec hry GEO */
 
-
-
 extern void play_hangman(user,inpstr)
 UR_OBJECT user;
 char *inpstr;
@@ -2319,9 +2316,7 @@ if (!strcmp("status",word[1])) {
     return;
     }
   write_user(user,"Toto je stav Tvojej hry:\n");
-  if (strlen(user->hang_guess)<1) sprintf(text,"%s%s%s",hanged[user->hang_stage],user->hang_word_show,"zatial ziadne");
-  else sprintf(text,"%s%s%s",hanged[user->hang_stage],user->hang_word_show,user->hang_guess);
-  write_user(user,text);
+  hangman_status(user);
   write_user(user,"\n");
   return;
   }
@@ -2369,8 +2364,7 @@ if (!strcmp("start",word[1])) {
   	}
   user->hang_stage=0;
   write_user(user,"Zacinas hrat ...\n");
-  sprintf(text,"%s%s%s",hanged[user->hang_stage],user->hang_word_show,"zatial ziadne");
-  write_user(user,text);
+  hangman_status(user);
   return;
   }
   
@@ -2425,8 +2419,7 @@ if (strstr(user->hang_guess,word[1])) {
   user->hang_stage++;
   sprintf(text,"~OLToto pismeno si uz %s! \n",pohl(user,"hadal","hadala"));
   write_user(user,text);
-  sprintf(text,"%s%s%s",hanged[user->hang_stage],user->hang_word_show,user->hang_guess);
-  write_user(user,text);
+  hangman_status(user);
   if (user->hang_stage>=7) {
     sprintf(text,"~OL~FRAAAaaaaargh!! ~FY%s na sibenici!\n",pohl(user,"Neuhadol si slovo a odvisol si","Neuhadla si slovo a odvisla si"));
     write_user(user,text);
@@ -2451,8 +2444,7 @@ if (!count) {
   user->hang_stage++;
   sprintf(text,"~OLPismeno sa nenachadza v hadanom slove, ~FY%d. ~FWkrok k odvisnutiu!\n",user->hang_stage);
   write_user(user,text);
-  sprintf(text,"%s%s%s",hanged[user->hang_stage],user->hang_word_show,user->hang_guess);
-  write_user(user,text);
+  hangman_status(user);
   if (user->hang_stage>=7) {
     sprintf(text,"~OL~FRAAAaaaaargh!! ~FY%s na sibenici!\n",pohl(user,"Neuhadol si slovo a odvisol si","Neuhadla si slovo a odvisla si"));
     write_user(user,text);
@@ -2468,8 +2460,7 @@ if (!count) {
 if (count==1) sprintf(text,"~OL~FTDobre, pismeno '~FY%s~FT' sa nachadza v slove jeden krat.\n",word[1]);
 else sprintf(text,"~OL~FTDobre, pismeno '~FY%s~FT' sa nachadza v slove %d krat.\n",word[1],count);
 write_user(user,text);
-sprintf(text,"%s%s%s",hanged[user->hang_stage],user->hang_word_show,user->hang_guess);
-write_user(user,text);
+hangman_status(user);
 if (!blanks) {
   sprintf(text,"~FY~OLVYBORNE!~RS ~FY%s si slovo bez odvisnutia na sibenici!\n",pohl(user,"Uhadol","Uhadla"));
   add_point(user,DB_HANGMAN,1,0);
@@ -2479,6 +2470,38 @@ if (!blanks) {
   user->hang_word_show[0]='\0';
   user->hang_guess[0]='\0';
   }  
+}
+
+void hangman_status(UR_OBJECT user) {
+
+	switch (user->hang_stage) {
+		case 0:
+			sprintf(text,"~FY~OL+~RS~FY---~OL+ ~OL~FB=-=-=-=-=< ~FYSibenica ~FB>=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+\n~FY|                                                                  ~OL~FB|\n~FY|~RS           ~OL %-50s    ~OL~FB|\n~FY|~RS           ~FGHadane pismena:~RS~FY %-30s         ~OL~FB|\n~FY|~RS                                                                  ~OL~FB|\n~FY|______ ~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+\n",user->hang_word_show,strlen(user->hang_guess)<1?"zatial ziadne":user->hang_guess);
+			break;
+		case 1:
+			sprintf(text,"~FY~OL+~RS~FY---~OL+ ~OL~FB=-=-=-=-=< ~FYSibenica ~FB>=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+\n~FY|   |                                                              ~OL~FB|\n~FY|~RS           ~OL %-50s    ~OL~FB|\n~FY|~RS           ~FGHadane pismena:~RS~FY %-30s         ~OL~FB|\n~FY|~RS                                                                  ~OL~FB|\n~FY|______ ~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+\n",user->hang_word_show,strlen(user->hang_guess)<1?"zatial ziadne":user->hang_guess);
+			break;
+		case 2:
+			sprintf(text,"~FY~OL+~RS~FY---~OL+ ~OL~FB=-=-=-=-=< ~FYSibenica ~FB>=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+\n~FY|   |                                                              ~OL~FB|\n~FY|~RS   O       ~OL %-50s    ~OL~FB|\n~FY|~RS           ~FGHadane pismena:~RS~FY %-30s         ~OL~FB|\n~FY|~RS                                                                  ~OL~FB|\n~FY|______ ~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+\n",user->hang_word_show,strlen(user->hang_guess)<1?"zatial ziadne":user->hang_guess);
+			break;
+		case 3:
+			sprintf(text,"~FY~OL+~RS~FY---~OL+ ~OL~FB=-=-=-=-=< ~FYSibenica ~FB>=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+\n~FY|   |                                                              ~OL~FB|\n~FY|~RS   O       ~OL %-50s    ~OL~FB|\n~FY|~RS   |       ~FGHadane pismena:~RS~FY %-30s         ~OL~FB|\n~FY|~RS                                                                  ~OL~FB|\n~FY|______ ~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+\n",user->hang_word_show,strlen(user->hang_guess)<1?"zatial ziadne":user->hang_guess);
+			break;
+		case 4:
+			sprintf(text,"~FY~OL+~RS~FY---~OL+ ~OL~FB=-=-=-=-=< ~FYSibenica ~FB>=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+\n~FY|   |                                                              ~OL~FB|\n~FY|~RS   O       ~OL %-50s    ~OL~FB|\n~FY|~RS  /|       ~FGHadane pismena:~RS~FY %-30s         ~OL~FB|\n~FY|~RS                                                                  ~OL~FB|\n~FY|______ ~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+\n",user->hang_word_show,strlen(user->hang_guess)<1?"zatial ziadne":user->hang_guess);
+			break;
+		case 5:
+			sprintf(text,"~FY~OL+~RS~FY---~OL+ ~OL~FB=-=-=-=-=< ~FYSibenica ~FB>=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+\n~FY|   |                                                              ~OL~FB|\n~FY|~RS   O       ~OL %-50s    ~OL~FB|\n~FY|~RS  /|\\      ~FGHadane pismena:~RS~FY %-30s         ~OL~FB|\n~FY|~RS                                                                  ~OL~FB|\n~FY|______ ~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+\n",user->hang_word_show,strlen(user->hang_guess)<1?"zatial ziadne":user->hang_guess);
+			break;
+		case 6:
+			sprintf(text,"~FY~OL+~RS~FY---~OL+ ~OL~FB=-=-=-=-=< ~FYSibenica ~FB>=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+\n~FY|   |                                                              ~OL~FB|\n~FY|~RS   O       ~OL %-50s    ~OL~FB|\n~FY|~RS  /|\\      ~FGHadane pismena:~RS~FY %-30s         ~OL~FB|\n~FY|~RS  /                                                               ~OL~FB|\n~FY|______ ~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+\n",user->hang_word_show,strlen(user->hang_guess)<1?"zatial ziadne":user->hang_guess);
+			break;
+		case 7:
+			sprintf(text,"~FY~OL+~RS~FY---~OL+ ~OL~FB=-=-=-=-=< ~FYSibenica ~FB>=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+\n~FY|   |                                                              ~OL~FB|\n~FY|~RS   O       ~OL %-50s    ~OL~FB|\n~FY|~RS  /|\\      ~FGHadane pismena:~RS~FY %-30s         ~OL~FB|\n~FY|~RS  / \\                                                             ~OL~FB|\n~FY|______ ~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+\n",user->hang_word_show,strlen(user->hang_guess)<1?"zatial ziadne":user->hang_guess);
+			break;
+	}
+	write_user(user,text);
+	return;
 }
 
 extern char *get_hang_word(aword)
