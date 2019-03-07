@@ -501,7 +501,7 @@ if (doom_init()) {
        }
         
 lab_room.dostupny=0;
-/*
+
 if (lab_load()) {
 	printf("Chyba v inicializacii labyrintu!\n");
 	lab_room.dostupny=0;
@@ -510,7 +510,7 @@ if (lab_load()) {
  	printf("Labyrint bol uspesne inicializovany.\n");
  	lab_room.dostupny=1;
  	}
-*/
+
 amfiteater(NULL,0);    /* Inicializacia amfiteatru!!!!(R) */
 printf("Prehadzujem prikazy do levelov podla %s ...\n", COM_LEVEL);
 poprehadzuj_prikazy(NULL);      /* zmena levelov niektoryx prikazov */
