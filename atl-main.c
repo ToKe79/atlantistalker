@@ -2895,13 +2895,14 @@ int mem;
 if (!(fp=ropen(COMMLOG,"a"))) return; /*APPROVED*/
 
 if (timeword) {
+  fprintf(fp,"%d-%02d-%02d %02d:%02d:%02d: %-12s: %s",tyear,tmonth+1,tmday,thour,tmin,tsec,user,str);
   if ((com_num!=TELL) && (com_num!=PEMOTE) && (com_num!=GOSSIP) && (com_num!=GEMOTE)
   && (com_num!=HUG) && (com_num!=KISS) && (com_num!=WIZSHOUT)
   && (com_num!=REPLY)
   && (strcmp(str,"LOGIN")) && (strcmp(str,"LOGOUT")) && (strcmp(str,""))) {
-    fprintf(fp,"%02d:%02d:%02d: %-12s: %s %s %s %s %s\n",thour,tmin,tsec,user,str, word[1],word[2],word[3],word[4]);
+    fprintf(fp," %s %s %s %s\n",word[1],word[2],word[3],word[4]);
    }
-  else fprintf(fp,"%02d:%02d:%02d: %-12s: %s\n",thour,tmin,tsec,user,str);
+  else fprintf(fp,"\n");
  }
 else fprintf(fp,"%s\n",user);
 
