@@ -7,11 +7,12 @@ void brutalis_wars(void)
 	RM_OBJECT rm;
 	int vec,oldway,accel,i,cnt,nah;
 	if (tsec%2==1) {
-		for(rm=room_first;rm!=NULL;rm=rm->next) {
-			for(i=0;i<MPVM;i++) {
+		for (rm=room_first;rm!=NULL;rm=rm->next) {
+			for (i=0;i<MPVM;i++) {
 				if (rm->predmet[i]>-1 && predmet[rm->predmet[i]]->function==24) {
 					if (0<=rm->dur[i] && rm->dur[i]<10000) {
-						if (tsec%4==0) rm->dur[i]=dec_dur(rm->dur[i],1);
+						if (tsec%4==0)
+							rm->dur[i]=dec_dur(rm->dur[i],1);
 						if (rm->dur[i]==0) {
 							if (predmet[rm->predmet[i]]->rdestroy!=NULL) {
 								sprintf(text,"%s\n",parse_phrase(predmet[rm->predmet[i]]->rdestroy,NULL,NULL,NULL,0));
@@ -37,8 +38,12 @@ void brutalis_wars(void)
 										break;
 									}
 								}
-								if (u->room==rm) break;
-								if (u->room->group!=rm->group) { rm->dur[i]=abs_dur(rm->dur[i]); break; }
+								if (u->room==rm)
+									break;
+								if (u->room->group!=rm->group) {
+									rm->dur[i]=abs_dur(rm->dur[i]);
+									break;
+								}
 								else if (is_free_in_room(u->room)>-1 && (int)(rand()%3)==0) {
 									if (predmet[rm->predmet[i]]->searchphr!=NULL) {
 										sprintf(text,"%s\n",parse_phrase(predmet[rm->predmet[i]]->searchphr,u,u,u->room,0));
@@ -69,8 +74,10 @@ void brutalis_wars(void)
 						}
 						vec=rm->predmet[i];
 						nah=0;
-						if (predmet[vec]->firerate<0 && tsec%-predmet[vec]->firerate==i%-predmet[vec]->firerate) nah=1;
-						else if (predmet[vec]->firerate>0 && rand()%100<predmet[vec]->firerate) nah=1;
+						if (predmet[vec]->firerate<0 && tsec%-predmet[vec]->firerate==i%-predmet[vec]->firerate)
+							nah=1;
+						else if (predmet[vec]->firerate>0 && rand()%100<predmet[vec]->firerate)
+							nah=1;
 						if (nah==1) {
 							if (predmet[vec]->ustart!=NULL) {
 								sprintf(text,"%s\n",parse_phrase(predmet[vec]->ustart,u,NULL,u->room,0));
@@ -82,7 +89,8 @@ void brutalis_wars(void)
 							}
 							rm->dur[i]=dec_dur(rm->dur[i],4+rand()%2);
 							hurt(NULL,u,vec);
-							if (u->health<10) rm->dur[i]=abs_dur(rm->dur[i]);
+							if (u->health<10)
+								rm->dur[i]=abs_dur(rm->dur[i]);
 							do_alt_funct(u,vec);
 							if (rm->dur[i]==0) {
 								if (predmet[vec]->udestroy!=NULL) {
@@ -102,32 +110,39 @@ void brutalis_wars(void)
 			}
 		}
 	}
-	for(user=user_first;user!=NULL;user=user->next) {
+	for (user=user_first;user!=NULL;user=user->next) {
 		if (!user->login && user->type==USER_TYPE && user->room!=NULL && user->dead==0) {
 			if (april) {
 				if (april & 16) {
 					user->cloak=1+rand()%8;
-					if (user->cloak==6) user->cloak=8;
+					if (user->cloak==6)
+						user->cloak=8;
 				}
-				if (april & 32) user->vis=rand()%2;
-				if (april & 64) user->last_login=time(0)-rand()%86400;
+				if (april & 32)
+					user->vis=rand()%2;
+				if (april & 64)
+					user->last_login=time(0)-rand()%86400;
 				if (april & 256) {
 					user->cloak=0;
 					user->vis=1;
 					user->last_login=time(0);
 				}
 			}
-			if (user->attacking>0) user->attacking--;
+			if (user->attacking>0)
+				user->attacking--;
 			if (tsec%2==1 && user->health<100 && user->heal>0) {
 				user->heal--;
 				user->health++;
 			}
 			if (tsec%2==0) {
-				if (user->health<100) user->health++;
+				if (user->health<100)
+					user->health++;
 				if (user->health<10) {
 					user->health-=2;
-					if (user->health==1) user->health--;
-					if (user->health==0) user->dead=14;
+					if (user->health==1)
+						user->health--;
+					if (user->health==0)
+						user->dead=14;
 				}
 			}
 			if (user->target>-1) { /* zombie-like entities */
@@ -137,13 +152,15 @@ void brutalis_wars(void)
 					continue;
 				}
 				cnt=0;
-				for(i=0;i<MPVM;i++) {
+				for (i=0;i<MPVM;i++) {
 					if (user->room->predmet[i]>-1 && user->room->dur[i]%10000==user->socket && predmet[user->room->predmet[i]]->function==24) {
 						cnt++;
 						vec=user->room->predmet[i];
 						accel=0;
-						if (predmet[vec]->firerate<0 && tsec%-predmet[vec]->firerate==i%-predmet[vec]->firerate) accel=1;
-						else if (predmet[vec]->firerate>0 && rand()%100<predmet[vec]->firerate) accel=1;
+						if (predmet[vec]->firerate<0 && tsec%-predmet[vec]->firerate==i%-predmet[vec]->firerate)
+							accel=1;
+						else if (predmet[vec]->firerate>0 && rand()%100<predmet[vec]->firerate)
+							accel=1;
 						if (accel==1) {
 							if (predmet[vec]->ustart!=NULL) {
 								sprintf(text,"%s\n",parse_phrase(predmet[vec]->ustart,u,NULL,u->room,0));
@@ -175,16 +192,21 @@ void brutalis_wars(void)
 						}
 					}
 				}
-				if (cnt==0) user->target=-1;
+				if (cnt==0)
+					user->target=-1;
 			}
 			if (user->room->group==4 || (user->into!=NULL && user->into->group==4)) { /* brutalis walking engine */
 				if (user->into!=NULL || user->from!=NULL) {
 					vec=get_vehicle(user);
 					oldway=user->way;
-					if (user->predmet[HANDS+2]>-1) accel=predmet[user->predmet[HANDS+2]]->seconddur;
-					else accel=0;
-					if (vec>-1) user->way+=10+predmet[vec]->seconddur;
-					else user->way+=10+accel;
+					if (user->predmet[HANDS+2]>-1)
+						accel=predmet[user->predmet[HANDS+2]]->seconddur;
+					else
+						accel=0;
+					if (vec>-1)
+						user->way+=10+predmet[vec]->seconddur;
+					else
+						user->way+=10+accel;
 					if (oldway<0 && user->way>=0) {
 						if (user->into==NULL && user->from!=NULL) {
 							user->from=NULL;
@@ -215,7 +237,8 @@ void brutalis_wars(void)
 						user->hidden=0;
 						look(user);
 						reset_access(user->from);
-						if (user->statline==CHARMODE) show_statline(user);
+						if (user->statline==CHARMODE)
+							show_statline(user);
 						if (vec>-1 && predmet[vec]->victimphr!=NULL) {
 							sprintf(text,"~FG<- %s\n",parse_phrase(predmet[vec]->victimphr,user,NULL,user->from,1));
 							write_room_except(user->room,text,user);
@@ -249,7 +272,8 @@ void brutalis_wars(void)
 						}
 					}
 				}
-				else user->way=0;
+				else
+					user->way=0;
 			}
 		}
 	}
