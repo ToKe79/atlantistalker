@@ -110,7 +110,6 @@ int init_database(void)
 		fprintf(stderr,"MYSQL: Nemozno vybrat zakladnu databazu!\n");
 		boot_exit(1);
 	}
-
 	sprintf(query,"truncate table `web_index`");
 	mysql_kvery(query);
 	sprintf(query,"truncate table `web_in`");

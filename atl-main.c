@@ -391,10 +391,17 @@ return;
  
 /*** This function calls all the setup routines and also contains the
       main program loop ***/
-int main(argc,argv)
-int argc;
-char *argv[];
+int main(int argc,char *argv[])
 {
+
+if (argc>1) {
+	printf("Argumenty boli ignorovane:\n");
+	while (argc>1) {
+		argc--;
+		printf("%s\n",argv[argc]);
+	}
+}
+
 /* fd_set readmask; */
 unsigned int i,len,s;
 /* int y; */
@@ -406,8 +413,6 @@ char rinpstr[ARR_SIZE*5]; /* pre remote vstup */
 UR_OBJECT user,next;
 
 sstrncpy(progname,argv[0],39);
-if (argc<2) strcpy(confile,CONFIGFILE);
-else sstrncpy(confile,argv[1],39);         /* Poraadek musii bejt! :> */
 
 /* Startup */
 
@@ -418,7 +423,7 @@ printf("             Talker \033[1m|| ||  ||  ||__ || || || ||  ||  || __||\033[
 printf("             ~~~~~~ -->--==( %-22.22s )==--<-- ~~~~~~\n\n", ATLANTIS);
 
 if (!init_database()) {
-  printf("Chyba: problem s otvaranim konfiguracneho suboru 'atlantis.ini'.\n");
+  printf("Chyba: problem s pripojenim databazy.\n");
   boot_exit(1);
  }
 
@@ -1334,46 +1339,6 @@ RM_OBJECT rm1,rm2;
 
  
  parse_rooms_section();
-
-/*section_in=0;
-got_init=0;
-got_rooms=0;
-
-sprintf(filename,"%s/%s",DATAFILES,confile);
-printf("Parsujem konfiguracny subor \"%s\"...",filename);
-if (!(fp=ropen(filename,"r"))) {
-      perror("\nNUTS: Can't open config file");  boot_exit(1);
-      }
-
-config_line=0;
-fgets(line,81,fp);
-while(!feof(fp)) {
-      config_line++;
-      for(i=0;i<8;++i) wrd[i][0]='\0';
-      sscanf(line,"%s %s %s %s %s %s %s %s",wrd[0],wrd[1],wrd[2],wrd[3],wrd[4],wrd[5],wrd[6],wrd[7]);
-      if (wrd[0][0]=='#' || wrd[0][0]=='\0') {
-            fgets(line,81,fp);  continue;
-            }
-      if (wrd[0][strlen(wrd[0])-1]==':') {
-            if (!strcmp(wrd[0],"INIT:")) section_in=1;
-            else if (!strcmp(wrd[0],"ROOMS:")) section_in=2;
-                        else {
-                              fprintf(stderr,"\nNUTS: Neznama hlavicka sekcie na riadku %d.\n",config_line);
-                               fclose(fp);  boot_exit(1);
-                              }
-            }
-      switch(section_in) {
-            case 1: parse_init_section();  got_init=1;  break;
-            case 2: parse_rooms_section(); got_rooms=1; break;           
-            default:
-                  fprintf(stderr,"\nNUTS: Ocakavana hlavicka sekcie na riadku %d.\n",config_line);
-                  boot_exit(1);
-            }
-      fgets(line,81,fp);
-      }
- fclose(fp);
-*/
-
 
 /* See if required sections were present (SITES is optional) and if
    required parameters were set. */
