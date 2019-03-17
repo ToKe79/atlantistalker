@@ -112,7 +112,6 @@ void skiptoeol(FILE *fp)
 	while (dummy=getc(fp),dummy!='\n'&&dummy!=EOF);
 }
 
-
 /***
 * getparams
 * Handles all command-line parameters.  Puts all parameters within bounds except smushmode.
@@ -174,7 +173,8 @@ void readfontchar(FILE *file,inchr theord,char *line,int maxlen)
 	fclsave = fcharlist;
 	fcharlist = (fcharnode*)malloc(sizeof(fcharnode));
 	fcharlist->ord = theord;
-	for (x=0;x<M;x++) strcpy(fcharlist->thechar[x],"");
+	for (x=0;x<M;x++)
+		strcpy(fcharlist->thechar[x],"");
 	fcharlist->next = fclsave;
 	for (row=0;row<charheight;row++) {
 		if (fgets(line,maxlen+1,file)==NULL) {
@@ -223,32 +223,46 @@ int readfont(void)
 		strcpy(fontpath,fontname);
 		strcat(fontpath,TMPSUFFIX);
 		fontfile=ropen(fontpath,"r");
-		if (fontfile==NULL) return 0;
+		if (fontfile==NULL)
+			return 0;
 	}
 	fscanf(fontfile,"%4s",magicnum);
 	fileline=(char*)myalloc(sizeof(char)*(MAXFIRSTLINELEN+1));
-	if (fgets(fileline,MAXFIRSTLINELEN+1,fontfile)==NULL) fileline[0]='\0';
-	if (MYSTRLEN(fileline)>0?fileline[MYSTRLEN(fileline)-1]!='\n':0) skiptoeol(stdin);
+	if (fgets(fileline,MAXFIRSTLINELEN+1,fontfile)==NULL)
+		fileline[0]='\0';
+	if (MYSTRLEN(fileline)>0?fileline[MYSTRLEN(fileline)-1]!='\n':0)
+		skiptoeol(stdin);
 	/* Nacitanie dolezitych parametrov fontu!! */
 	numsread = sscanf(fileline,"%*c%c %d %*d %d %d %d%*[ \t]%d",&hardblank,&charheight,&maxlen,&defaultmode,&cmtlines,&ffright2left);
 	free(fileline);
-	if (strcmp(magicnum,FONTFILEMAGICNUMBER) || numsread<5) return 1;
-	for (i=1;i<=cmtlines;i++) skiptoeol(fontfile);
-	if (numsread<6) ffright2left = 0;
-	if (charheight<1) charheight = 1;
-	if (maxlen<1) maxlen = 1;
+	if (strcmp(magicnum,FONTFILEMAGICNUMBER) || numsread<5)
+		return 1;
+	for (i=1;i<=cmtlines;i++)
+		skiptoeol(fontfile);
+	if (numsread<6)
+		ffright2left = 0;
+	if (charheight<1)
+		charheight = 1;
+	if (maxlen<1)
+		maxlen = 1;
 	maxlen+=100; /* Give ourselves some extra room */
-	if (smushmode<-1) smushmode = -1;
-	if (right2left<0) right2left = ffright2left;
-	if (justification<0) justification = 2*right2left;
+	if (smushmode<-1)
+		smushmode = -1;
+	if (right2left<0)
+		right2left = ffright2left;
+	if (justification<0)
+		justification = 2*right2left;
 	fileline=(char*)myalloc(sizeof(char)*(maxlen+1));
 	/* Allocate "missing" character */
 	fcharlist=(fcharnode*)malloc(sizeof(fcharnode));
 	fcharlist->ord=0;
-	for (x=0;x<M;x++) strcpy(fcharlist->thechar[x],"");
+	for (x=0;x<M;x++)
+		strcpy(fcharlist->thechar[x],"");
 	fcharlist->next=NULL;
-	for (row=0;row<charheight;row++) fcharlist->thechar[row][0]='\0';
-	for (theord=' ';theord<='~';theord++) readfontchar(fontfile,theord,fileline,maxlen);
+	for (row=0;row<charheight;row++)
+		fcharlist->thechar[row][0]='\0';
+	for (theord=' ';theord<='~';theord++)
+		readfontchar(fontfile,theord,fileline,maxlen);
 	fclose(fontfile);
 	deltempfile(fontpath); /* vymazanie docasneho suboru s fontom */
 	free(fontpath);
@@ -279,11 +293,13 @@ void getletter(inchr c)
 
 	for (charptr=fcharlist;charptr==NULL?0:charptr->ord!=c;charptr=charptr->next);
 	if (charptr!=NULL) {
-		for (x=0;x<M;x++) strcpy(currchar[x],charptr->thechar[x]);
+		for (x=0;x<M;x++)
+			strcpy(currchar[x],charptr->thechar[x]);
 	}
 	else {
 		for (charptr=fcharlist;charptr==NULL?0:charptr->ord!=0;charptr=charptr->next);
-		for (x=0;x<M;x++) strcpy(currchar[x],charptr->thechar[x]);
+		for (x=0;x<M;x++)
+			strcpy(currchar[x],charptr->thechar[x]);
 	}
 	currcharwidth = MYSTRLEN(currchar[0]);
 }
@@ -302,55 +318,73 @@ void getletter(inchr c)
 ***/
 char smushem(char lch,char rch)
 {
-	if (lch==' ') return rch;
-	if (rch==' ') return lch;
-
+	if (lch==' ')
+		return rch;
+	if (rch==' ')
+		return lch;
 	if (smushmode & 32) {
-		if (lch==hardblank && rch==hardblank) return lch;
+		if (lch==hardblank && rch==hardblank)
+			return lch;
 	}
-
-	if (lch==hardblank || rch==hardblank) return '\0';
-
+	if (lch==hardblank || rch==hardblank)
+		return '\0';
 	if (smushmode & 1) {
-		if (lch==rch) return lch;
+		if (lch==rch)
+			return lch;
 	}
-
 	if (smushmode & 2) {
-		if (lch=='_' && strchr("|/\\[]{}()<>",rch)) return rch;
-		if (rch=='_' && strchr("|/\\[]{}()<>",lch)) return lch;
+		if (lch=='_' && strchr("|/\\[]{}()<>",rch))
+			return rch;
+		if (rch=='_' && strchr("|/\\[]{}()<>",lch))
+			return lch;
 	}
-
 	if (smushmode & 4) {
-		if (lch=='|' && strchr("/\\[]{}()<>",rch)) return rch;
-		if (rch=='|' && strchr("/\\[]{}()<>",lch)) return lch;
-		if (strchr("/\\",lch) && strchr("[]{}()<>",rch)) return rch;
-		if (strchr("/\\",rch) && strchr("[]{}()<>",lch)) return lch;
-		if (strchr("[]",lch) && strchr("{}()<>",rch)) return rch;
-		if (strchr("[]",rch) && strchr("{}()<>",lch)) return lch;
-		if (strchr("{}",lch) && strchr("()<>",rch)) return rch;
-		if (strchr("{}",rch) && strchr("()<>",lch)) return lch;
-		if (strchr("()",lch) && strchr("<>",rch)) return rch;
-		if (strchr("()",rch) && strchr("<>",lch)) return lch;
+		if (lch=='|' && strchr("/\\[]{}()<>",rch))
+			return rch;
+		if (rch=='|' && strchr("/\\[]{}()<>",lch))
+			return lch;
+		if (strchr("/\\",lch) && strchr("[]{}()<>",rch))
+			return rch;
+		if (strchr("/\\",rch) && strchr("[]{}()<>",lch))
+			return lch;
+		if (strchr("[]",lch) && strchr("{}()<>",rch))
+			return rch;
+		if (strchr("[]",rch) && strchr("{}()<>",lch))
+			return lch;
+		if (strchr("{}",lch) && strchr("()<>",rch))
+			return rch;
+		if (strchr("{}",rch) && strchr("()<>",lch))
+			return lch;
+		if (strchr("()",lch) && strchr("<>",rch))
+			return rch;
+		if (strchr("()",rch) && strchr("<>",lch))
+			return lch;
 	}
-
 	if (smushmode & 8) {
-		if (lch=='[' && rch==']') return '|';
-		if (rch=='[' && lch==']') return '|';
-		if (lch=='{' && rch=='}') return '|';
-		if (rch=='{' && lch=='}') return '|';
-		if (lch=='(' && rch==')') return '|';
-		if (rch=='(' && lch==')') return '|';
+		if (lch=='[' && rch==']')
+			return '|';
+		if (rch=='[' && lch==']')
+			return '|';
+		if (lch=='{' && rch=='}')
+			return '|';
+		if (rch=='{' && lch=='}')
+			return '|';
+		if (lch=='(' && rch==')')
+			return '|';
+		if (rch=='(' && lch==')')
+			return '|';
 	}
-
 	if (smushmode & 16) {
-		if (lch=='/' && rch=='\\') return 'X';
-		if (rch=='/' && lch=='\\') return 'X';
-		if (lch=='>' && rch=='<') return 'X';
+		if (lch=='/' && rch=='\\')
+			return 'X';
+		if (rch=='/' && lch=='\\')
+			return 'X';
+		if (lch=='>' && rch=='<')
+			return 'X';
 		/* Don't want the reverse of above to give 'X'. */
 	}
 	return '\0';
 }
-
 
 /***
 * smushamt
@@ -362,7 +396,8 @@ int smushamt(void)
 	int row,linebd,charbd;
 	char ch1,ch2;
 
-	if (smushmode== -1) return 0;
+	if (smushmode==-1)
+		return 0;
 	maxsmush=currcharwidth;
 	for (row=0;row<charheight;row++) {
 		if (right2left) {
@@ -375,9 +410,13 @@ int smushamt(void)
 			for (charbd=0;ch2=currchar[row][charbd],ch2==' ';charbd++);
 			amt=charbd+outlinelen-1-linebd;
 		}
-		if (!ch1||ch1==' ') amt++;
-		else if (ch2) if (smushem(ch1,ch2)!='\0') amt++;
-		if (amt<maxsmush) maxsmush = amt;
+		if (!ch1||ch1==' ')
+			amt++;
+		else if (ch2)
+			if (smushem(ch1,ch2)!='\0')
+				amt++;
+		if (amt<maxsmush)
+			maxsmush = amt;
 	}
 	return maxsmush;
 }
@@ -394,17 +433,20 @@ int addchar(inchr c)
 
 	getletter(c);
 	smushamount=smushamt();
-	if (outlinelen+currcharwidth-smushamount>outlinelenlimit || inchrlinelen+1>inchrlinelenlimit) return 0;
+	if (outlinelen+currcharwidth-smushamount>outlinelenlimit || inchrlinelen+1>inchrlinelenlimit)
+		return 0;
 	strcpy(templine,"");
 	for (row=0;row<charheight;row++) {
 		if (right2left) {
 			strcpy(templine,currchar[row]);
-			for (k=0;k<smushamount;k++) templine[currcharwidth-smushamount+k]=smushem(templine[currcharwidth-smushamount+k],outline[row][k]);
+			for (k=0;k<smushamount;k++)
+				templine[currcharwidth-smushamount+k]=smushem(templine[currcharwidth-smushamount+k],outline[row][k]);
 			strcat(templine,outline[row]+smushamount);
 			strcpy(outline[row],templine);
 		}
 		else {
-			for (k=0;k<smushamount;k++) outline[row][outlinelen-smushamount+k]=smushem(outline[row][outlinelen-smushamount+k],currchar[row][k]);
+			for (k=0;k<smushamount;k++)
+				outline[row][outlinelen-smushamount+k]=smushem(outline[row][outlinelen-smushamount+k],currchar[row][k]);
 			strcat(outline[row],currchar[row]+smushamount);
 		}
 	}
@@ -425,13 +467,18 @@ char *putstring(char string[80])
 	static char out[2000];
 	int i,len,ii=0;
 
-	for (i=0;i<2000;i++) out[i]='\0';
+	for (i=0;i<2000;i++)
+		out[i]='\0';
 	len=MYSTRLEN(string);
 	if (outputwidth>1) {
-		if (len>outputwidth-1) len=outputwidth-1;
-		if (justification>0) for (i=1;(3-justification)*i+len+justification-2<outputwidth;i++) out[ii++]=' ';
+		if (len>outputwidth-1)
+			len=outputwidth-1;
+		if (justification>0)
+			for (i=1;(3-justification)*i+len+justification-2<outputwidth;i++)
+				out[ii++]=' ';
 	}
-	for (i=0;i<len;i++) out[ii++]=string[i]==hardblank?' ':string[i];
+	for (i=0;i<len;i++)
+		out[ii++]=string[i]==hardblank?' ':string[i];
 	out[ii++]='\n';
 	out[ii]='\0';
 	return out;
@@ -461,7 +508,8 @@ void printline(UR_OBJECT user1, UR_OBJECT user2, int output)
 			strcpy(vystupny_banner,putstring(outline[i]));
 			sprintf(text,"~OL%s~RS",vystupny_banner);
 			write_user(user1, text);
-			if (user1!=user2) write_user(user2, text);
+			if (user1!=user2)
+				write_user(user2, text);
 		}
 		clrline();
 	}
@@ -471,7 +519,9 @@ void printline(UR_OBJECT user1, UR_OBJECT user2, int output)
 			strcpy(vystupny_banner,putstring(outline[i]));
 			if (user1->room->group==2) { /* OSTROV => do roomy a vsetkych okolo */
 				write_room(user1->room,vystupny_banner);
-				for(j=0;j<MAX_LINKS;j++) if (user1->room->link[j]!=NULL) write_room_except(user1->room->link[j],vystupny_banner, user1);
+				for (j=0;j<MAX_LINKS;j++)
+					if (user1->room->link[j]!=NULL)
+						write_room_except(user1->room->link[j],vystupny_banner, user1);
 			}
 			else {
 				write_room_except(NULL,vystupny_banner,user1);
@@ -502,18 +552,21 @@ void splitline(UR_OBJECT user1,UR_OBJECT user2, int output)
 			gotspace = 1;
 			lastspace = i;
 		}
-		if (gotspace && inchrline[i]!=' ') {
+		if (gotspace && inchrline[i]!=' ')
 			break;
-		}
 	}
 	len1=i+1;
 	len2=inchrlinelen-lastspace-1;
-	for (i=0;i<len1;i++) part1[i]=inchrline[i];
-	for (i=0;i<len2;i++) part2[i]=inchrline[lastspace+1+i];
+	for (i=0;i<len1;i++)
+		part1[i]=inchrline[i];
+	for (i=0;i<len2;i++)
+		part2[i]=inchrline[lastspace+1+i];
 	clrline();
-	for (i=0;i<len1;i++) addchar(part1[i]);
+	for (i=0;i<len1;i++)
+		addchar(part1[i]);
 	printline(user1, user2, output);
-	for (i=0;i<len2;i++) addchar(part2[i]);
+	for (i=0;i<len2;i++)
+		addchar(part2[i]);
 	free(part1);
 	free(part2);
 }
@@ -531,9 +584,8 @@ int Agetchar(int flag,char *buffer)
 	c=buffer[flag++]&0xFF;	/* get appropriate char of buffer */
 	if (!c) /* at '\0' that terminates word? */
 		c='\0'; /* (allows "hello '' world" to do \n at '') */
-	return(c); /* return appropriate character */
+	return c; /* return appropriate character */
 }
-
 
 /***
 * banner - klasika, vypise vsetkym v miestnosti
@@ -547,7 +599,6 @@ extern void banner(UR_OBJECT user,char *inpstr)
 
 	max_font_id=getfontid(1);
 	min_font_id=getfontid(0);
-
 	if (user->muzzled) {
 		write_user(user,"Si umlcany - nemozes pouzivat banner.\n");
 		return;
@@ -577,8 +628,10 @@ extern void banner(UR_OBJECT user,char *inpstr)
 		write_user(user,nocolors);
 		return;
 	}
-	if (user->vis) strcpy(name,user->name);
-	else strcpy(name,invisname(user));
+	if (user->vis)
+		strcpy(name,user->name);
+	else
+		strcpy(name,invisname(user));
 	inpstr=remove_first(inpstr);
 	if (user->level<WIZ && strlen(inpstr)>MAX_BANNER_LEN_LUSER) {
 		sprintf(text,"Nemozes generovat banner dlhsi ako %d znakov.\n",MAX_BANNER_LEN_LUSER);
@@ -620,7 +673,6 @@ extern void tbanner(UR_OBJECT user,char *inpstr)
 
 	max_font_id=getfontid(1);
 	min_font_id=getfontid(0);
-
 	if (user->muzzled) {
 		write_user(user,"Si umlcany - nemozes pouzivat tbanner.\n");
 		return;
@@ -651,8 +703,10 @@ extern void tbanner(UR_OBJECT user,char *inpstr)
 		write_user(user,text);
 		return;
 	}
-	if (user->vis) strcpy(name,user->name);
-	else strcpy(name,invisname(user));
+	if (user->vis)
+		strcpy(name,user->name);
+	else
+		strcpy(name,invisname(user));
 	inpstr=remove_first(inpstr);
 	if (user->level<WIZ && strlen(inpstr)>MAX_BANNER_LEN_LUSER) {
 		sprintf(text,"Nemozes generovat banner dlhsi ako %d znakov.\n",MAX_BANNER_LEN_LUSER);
@@ -665,9 +719,12 @@ extern void tbanner(UR_OBJECT user,char *inpstr)
 		return;
 	}
 	if (u->ignall) {
-		if (u->malloc_start!=NULL) sprintf(text,"%s prave nieco pise v editore.\n",u->name);
-		else if (u->filepos) sprintf(text,"%s prave cita nejaky text.\n",u->name);
-		else sprintf(text,"%s prave ignoruje vsetky hlasky.\n",u->name);
+		if (u->malloc_start!=NULL)
+			sprintf(text,"%s prave nieco pise v editore.\n",u->name);
+		else if (u->filepos)
+			sprintf(text,"%s prave cita nejaky text.\n",u->name);
+		else
+			sprintf(text,"%s prave ignoruje vsetky hlasky.\n",u->name);
 		write_user(user,text);
 		return;
 	}
@@ -739,7 +796,6 @@ extern void sbanner(UR_OBJECT user,char *inpstr)
 
 	max_font_id=getfontid(1);
 	min_font_id=getfontid(0);
-
 	if (user->muzzled) {
 		write_user(user,"Si umlcany - nemozes pouzivat sbanner.\n");
 		return;
@@ -750,7 +806,8 @@ extern void sbanner(UR_OBJECT user,char *inpstr)
 	}
 	if (word_count<3 || !is_number(word[1])) {
 		sprintf(text,"Pouzi: .sbanner <typ> <sprava>\n       Dostupne typy: ~OL%d-%d~RS\n",min_font_id,max_font_id);
-		write_user(user,text);  return;
+		write_user(user,text);
+		return;
 	}
 	type=atoi(word[1]);
 	if (type<min_font_id || type>max_font_id) {
@@ -768,7 +825,10 @@ extern void sbanner(UR_OBJECT user,char *inpstr)
 		write_user(user,nocolors);
 		return;
 	}
-	if (user->vis) strcpy(name,user->name); else strcpy(name,invisname(user));
+	if (user->vis)
+		strcpy(name,user->name);
+	else
+		strcpy(name,invisname(user));
 	inpstr=remove_first(inpstr);
 	if (user->level<WIZ && strlen(inpstr)>MAX_BANNER_LEN_LUSER) {
 		sprintf(text,"Nemozes generovat banner dlhsi ako %d znakov.\n",MAX_BANNER_LEN_LUSER);
@@ -792,10 +852,9 @@ extern void sbanner(UR_OBJECT user,char *inpstr)
 	sprintf(text,"~OL~FY%s vyslal%s banner[~FW%d~FY]: ~RS~FW%s\n",name,pohl(user,"","a"),type, inpstr);
 	if (user->room->group==2) {/* OSTROV */
 		write_room_except(user->room,text,user); /* do roomy */
-		for(i=0;i<MAX_LINKS;i++) { /* a vsetkych okolo */
+		for (i=0;i<MAX_LINKS;i++) /* a vsetkych okolo */
 			if (user->room->link[i]!=NULL)
 				write_room_except(user->room->link[i],text,user);
-		}
 		sprintf(text,"~OL~FY%s vyslal%s banner: ~FG[~RS~FW%s~OL~FG]~RS\n",name,pohl(user,"","a"),inpstr);
 		record_portalisshout(user->room->label,text);
 	}
@@ -846,23 +905,29 @@ extern int create_banner(UR_OBJECT user1,UR_OBJECT user2,int type,char *inpstr,i
 
 	/* font tahame z DB, zapiseme do docasneho suboru, nakoniec zmazeme */
 	sprintf(query,"SELECT `fontbody` FROM `fonts` where `fontid`=%d and `enabled`='Y'",type);
-	if (!(result=mysql_result(query))) return 0;
-	if (mysql_num_rows(result)!=1) return 0;
+	if (!(result=mysql_result(query)))
+		return 0;
+	if (mysql_num_rows(result)!=1)
+		return 0;
 	row=mysql_fetch_row(result);
 	sprintf(meno_fontu,"%s-font%s",user1->name,TMPSUFFIX);
 	sprintf(tempfontfilename,"%s%s",TMPFOLDER,meno_fontu);
-	if ((fptff=ropen(tempfontfilename,"w"))==NULL) return 0;
+	if ((fptff=ropen(tempfontfilename,"w"))==NULL)
+		return 0;
 	fprintf(fptff,"%s",row[0]);
 	mysql_free_result(result);
 	fclose(fptff);
 	getparams(meno_fontu); /* Nastavenia parametrov - dolezite!!! */
-	if (!readfont()) return 0; /* neuspesne nacitanie fontov! skoncili sme, jasna sprava! ;) */
+	if (!readfont())
+		return 0; /* neuspesne nacitanie fontov! skoncili sme, jasna sprava! ;) */
 	linealloc();
 	wordbreakmode = 0;  /* typ modu brejkovania slov - vid vyssie (0) */
 	/* Main cyklus ;) */
 	while ((c = Agetchar(flag++,inpstr))!='\0') {
-		if (isascii(c)&&isspace(c)) c=(c=='\t'||c==' ')?' ':'\n';
-		if ((c>'\0' && c<' ' && c!='\n') || c==127) continue;
+		if (isascii(c)&&isspace(c))
+			c=(c=='\t'||c==' ')?' ':'\n';
+		if ((c>'\0' && c<' ' && c!='\n') || c==127)
+			continue;
 		/***
 		* Note: The following code is complex and thoroughly tested.
 		* Be careful when modifying!
@@ -870,7 +935,8 @@ extern int create_banner(UR_OBJECT user1,UR_OBJECT user2,int type,char *inpstr,i
 		do {
 			char_not_added = 0;
 			if (wordbreakmode== -1) {
-				if (c==' ') break;
+				if (c==' ')
+					break;
 				else if (c=='\n') {
 					wordbreakmode = 0;
 					break;
@@ -882,32 +948,39 @@ extern int create_banner(UR_OBJECT user1,UR_OBJECT user2,int type,char *inpstr,i
 				wordbreakmode = 0;
 			}
 			else if (addchar(c)) {
-				if (c!=' ') wordbreakmode = (wordbreakmode>=2)?3:1;
-				else wordbreakmode = (wordbreakmode>0)?2:0;
+				if (c!=' ')
+					wordbreakmode = (wordbreakmode>=2)?3:1;
+				else
+					wordbreakmode = (wordbreakmode>0)?2:0;
 			}
 			else if (outlinelen==0) {
 				for (i=0;i<charheight;i++) {
-					if (right2left && outputwidth>1) putstring(currchar[i]+MYSTRLEN(currchar[i])-outlinelenlimit);
-					else putstring(currchar[i]);
+					if (right2left && outputwidth>1)
+						putstring(currchar[i]+MYSTRLEN(currchar[i])-outlinelenlimit);
+					else
+						putstring(currchar[i]);
 				}
 				wordbreakmode = -1;
 			}
 			else if (c==' ') {
-				if (wordbreakmode==2) splitline(user1, user2, output);
-				else printline(user1, user2, output);
+				if (wordbreakmode==2)
+					splitline(user1, user2, output);
+				else
+					printline(user1, user2, output);
 				wordbreakmode = -1;
 			}
 			else {
-				if (wordbreakmode>=2) splitline(user1, user2, output);
-				else printline(user1, user2, output);
+				if (wordbreakmode>=2)
+					splitline(user1, user2, output);
+				else
+					printline(user1, user2, output);
 				wordbreakmode = (wordbreakmode==3)?1:0;
 				char_not_added = 1;
 			}
 		} while (char_not_added);
 	} /* end while */
-	if (outlinelen!=0) {
+	if (outlinelen!=0)
 		printline(user1, user2, output);
-	}
 	return 1;
 }
 
