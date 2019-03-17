@@ -1,0 +1,37 @@
+~FG[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]
+
+      ~BB   ~HYPrva pomoc v Atlantide (alebo: som tu prvy krat, pomozte mi!)   ~RS
+
+Po prve: zapamataj si, ze vsetky prikazy sa ~OLmusia~RS zacinat s bodkou (.) !
+Po druhe: vsetky prikazy mozu byt ~OLskratene~RS! Napr.: .pom = .pomoc
+
+Zoznam dostupnych prikazov pre Tvoj level ziskas napisanim ~OL.pomoc prikazy~RS
+Viac o leveloch ktore mozes dosiahnut sa dozvies prikazom ~OL.ranks~RS
+Ak mas nejake otazky a chces sa na nieco spytat, pozri sa najprv do zoznamu
+casto kladenych otazok (prikaz ~OL.faq~RS) a mozno tam najdes odpoved.
+Ku kazdemu prikazu si mozes zobrazit pomocny text prikazom "~OL.help~RS" (napr.
+"~OL.help povedz~RS"). Zoznam ostatnych pomocnych textov je dostupny cez "~OL.help files~RS".
+
+Cim mas vyssi level, tym je Ti k dispozicii viac moznosti, vyhod a prikazov.
+Ako OTROK nemozes robit skoro nic, preto sa co najskor zaregistruj ako riadny
+OBCAN pomocou prikazu ~OL.request~RS
+
+Hned po prihlaseni mas nastavene zapnute farby. Ak boli s nimi problemy, mozes
+si ich vypnut prikazom ~OL.colour off~RS
+
+Ak sa k nam hlasis cez telnet, vyskusaj si prikaz ~OL.client~RS ktory zapne
+specialny editacny riadok do ktoreho budes pisat. Tvoj text teda nebude
+prepisovany vypismi z talkera.
+
+Pri komunikacii mozes mena ~OLskracovat~RS, takze napriklad ak chces nieco
+povedat Osmijankovi, staci napisat: .tell osmi ahoj!!
+
+Aby si sa nedostal do zbytocnych problemov, radime Ti co najskor si precitat
+pravidla spravania sa v Atlantide (prikaz ~OL.rules~RS).
+
+Zapamataj si: Aj ked sa Ti zozaciatku moze zdat system zlozity, neprepadni
+panike! Pomozu helpy, wizardi (niektory z nich Ti moze spravit "sprievodcu")
+alebo intuicia!
+
+~FG[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]
+
