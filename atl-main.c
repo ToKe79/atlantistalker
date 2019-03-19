@@ -18357,7 +18357,6 @@ void chname(user)
 UR_OBJECT user;
 {
 UR_OBJECT u;
-char oldfile[150], newfile[150];
 char newpwd[20],meno[14],tempname[USER_NAME_LEN+5];
 int newpass,oflajn,cnt=0;
 unsigned int i;
@@ -18434,7 +18433,7 @@ if (!strcasecmp(word[1],word[2])) {
     save_user_details(u,1);
 /*    sprintf(oldfile,"%s/%s.M",MAILFILES,word[1]);
     sprintf(newfile,"%s/%s.M",MAILFILES,word[2]);
-    rename(oldfile,newfile); */
+    rename(oldfile,newfile);
     sprintf(oldfile,"%s/%s.N",NOTESDIR,word[1]);
     sprintf(newfile,"%s/%s.N",NOTESDIR,word[2]);
     rename(oldfile,newfile);
@@ -18443,7 +18442,7 @@ if (!strcasecmp(word[1],word[2])) {
     rename(oldfile,newfile);
     sprintf(oldfile,"xamines/%s.ex",word[1]);
     sprintf(newfile,"xamines/%s.ex",word[2]);
-    rename(oldfile,newfile);
+    rename(oldfile,newfile);*/
     return;
    }
  }
@@ -26884,8 +26883,8 @@ long play_nxt(void) /* (S) uprava */
 	if (!cnt2) { filename[poz-6]=ourtime[poz];
 		     if (ourtime[poz]==' ') { filename[poz-6]='\0'; cnt2=1; }
 			}
-	if (!cnt3) { nazov[poz-6]=ourtime[poz+33];
-		     if (ourtime[poz+33]=='\n') { nazov[poz-6]='\0'; cnt3=1; }
+	if (!cnt3) { nazov[poz-6]=ourtime[poz+35];
+		     if (ourtime[poz+35]=='\n') { nazov[poz-6]='\0'; cnt3=1; }
 		     }
 	}
     ourtime[5]='\0'; /*Cas predstavenia vo prehladavanom riadku*/
