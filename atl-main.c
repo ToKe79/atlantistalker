@@ -49,11 +49,12 @@ void poprehadzuj_prikazy(UR_OBJECT user)
 {
 FILE *fp;
 int i;
-char comm[20];
+char comm[20],filename[255];
 int level;
 
-if ((fp=ropen(COM_LEVEL,"r"))==NULL) {
-	sprintf(text,"Subor '%s' neexistuje.\n",COM_LEVEL);
+sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,COM_LEVEL);
+if ((fp=ropen(filename,"r"))==NULL) {
+	sprintf(text,"Subor '%s' neexistuje.\n",filename);
 	if (user==NULL) {
 		printf("%s",text);
 	} else {
@@ -164,8 +165,10 @@ void resc_save()
 {
 FILE *fp;
 int i;
+char filename[255];
 
-if ((fp=ropen(RESC_CACHE,"w"))==NULL) return; /*APPROVED*/
+sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,RESC_CACHE);
+if ((fp=ropen(filename,"w"))==NULL) return; /*APPROVED*/
 for (i=0; i<rescn; i++) {
 	fprintf(fp, "%s %s\n", rescip[i], rescho[i]);
 	}
@@ -178,8 +181,10 @@ write_syslog(text,1);
 void resc_load()
 {
 FILE *fp;
+char filename[255];
 
-if ((fp=ropen(RESC_CACHE,"r"))==NULL) return; /*APPROVED*/
+sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,RESC_CACHE);
+if ((fp=ropen(filename,"r"))==NULL) return; /*APPROVED*/
 fscanf(fp,"%s %s", rescip[rescn], rescho[rescn]);
 while (!feof(fp)) {
 	rescn++;
@@ -188,7 +193,6 @@ while (!feof(fp)) {
 	}
 fclose(fp);
 }
-
 
 char *sstrncpy(char *dst, char *src, long len) {
 char *ptr;
@@ -284,9 +288,9 @@ switch(double_fork()) {
 int user_banned(char *name)
 {
 FILE *fp;
-char line[82],filename[80];
+char line[82],filename[255];
 
-sprintf(filename,"%s",NICKBLOCK);
+sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,NICKBLOCK);
 if (!(fp=ropen(filename,"r"))) return 0;  /*APPROVED*/
 fscanf(fp,"%s",line);
 while(!feof(fp)) {
@@ -517,7 +521,7 @@ if (lab_load()) {
  	}
 
 amfiteater(NULL,0);    /* Inicializacia amfiteatru!!!!(R) */
-printf("Prehadzujem prikazy do levelov podla %s ...\n", COM_LEVEL);
+printf("Prehadzujem prikazy do levelov podla %s%c%s ...\n",MISCFILES,DIRSEP,COM_LEVEL);
 poprehadzuj_prikazy(NULL);      /* zmena levelov niektoryx prikazov */
 
 
@@ -1018,7 +1022,7 @@ struct sockaddr_in acc_addr;
 int accept_sock;
 unsigned int size;
 int pocet_loginov;
-char filename[200];
+char filename[255];
 UR_OBJECT u;
 FILE *fp;
 
@@ -1044,7 +1048,7 @@ for(u=user_first;u!=NULL;u=u->next) {
 if (pocet_loginov>=MAX_POCET_LOGINOV) {
 	/*write_sock(accept_sock,"\r\nPrepac, momentalne nieje mozne sa prihlasit.\r\n\n");*/
 	close(accept_sock);
-	sprintf(filename,"%s/%s",DATAFILES,SITEBAN);
+	sprintf(filename,"%s%C%s",MISCFILES,DIRSEP,SITEBAN);
 	if (!(fp=ropen(filename,"a"))) { /*APPROVED*/
 	      return;
 	      	}
@@ -1199,9 +1203,9 @@ int site_banned(site)
 char *site;
 {
 FILE *fp;
-char line[82],filename[80];
+char line[82],filename[255];
 
-sprintf(filename,"misc/%s",SITEBAN);
+sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,SITEBAN);
 if (!(fp=ropen(filename,"r"))) return 0; /*APPROVED*/
 
 fscanf(fp,"%s",line);
@@ -1217,12 +1221,13 @@ return 0;
 void crash_smsnotice()
 {
 FILE *fp;
-char tmp[101];
+char tmp[101],filename[255];
 
- if ((fp=ropen("misc/crash","r"))) {
+ sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,CRASHFILE);
+ if ((fp=ropen(filename,"r"))) {
    fgets(tmp,100,fp);
    fclose(fp);
-   unlink("misc/crash");
+   unlink(filename);
    tmp[strlen(tmp)-1]='\0';
    sprintf(text,"ALERT!! Booting %d:%02d:%02d. %s",thour,tmin,tsec,tmp);
   }
@@ -1235,9 +1240,9 @@ int newuser_siteban(site)
 char *site;
 {
 FILE *fp;
-char line[82],filename[80];
+char line[82],filename[255];
 
-sprintf(filename,"misc/%s",NEWUSER_SITEBAN);
+sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,NEWUSER_SITEBAN);
 if (!(fp=ropen(filename,"r"))) return 0; /*APPROVED*/
 
 fscanf(fp,"%s",line);
@@ -2815,22 +2820,26 @@ char *str;
 int write_time;
 {
 FILE *fp;
+char filename[255];
 
 if (write_time==666) {
-  if (!(fp=ropen("misc/crash","w"))) return; 
+  sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,CRASHFILE);
+  if (!(fp=ropen(filename,"w"))) return; 
   fprintf(fp,"%d.%d. %02d:%02d:%02d: %s",tmday,tmonth+1,thour,tmin,tsec,str);
   fclose(fp);
   return;
  }
- 
+
 if (write_time==2) {
-  if (!system_logging || !(fp=ropen(WIZLOG,"a"))) return;
+  sprintf(filename,"%s%c%s",LOGFILES,DIRSEP,WIZLOG);
+  if (!system_logging || !(fp=ropen(filename,"a"))) return;
   fprintf(fp,"%02d/%02d %02d:%02d:%02d: %s",tmday,tmonth+1,thour,tmin,tsec,str);
   fclose(fp);
   return;
  }
 
-if (!system_logging || !(fp=ropen(SYSLOG,"a"))) return;
+sprintf(filename,"%s%c%s",LOGFILES,DIRSEP,SYSLOG);
+if (!system_logging || !(fp=ropen(filename,"a"))) return;
 if (!write_time) fputs(str,fp);
 else fprintf(fp,"%02d/%02d %02d:%02d:%02d: %s",tmday,tmonth+1,thour,tmin,tsec,str);
 fclose(fp);
@@ -2841,8 +2850,10 @@ void level_log(str)
 char *str;
 {
 FILE *fp;
+char filename[255];
 
-if (!(fp=ropen(LEVLOG,"a"))) return; /*APPROVED*/
+sprintf(filename,"%s%c%s",LOGFILES,DIRSEP,LEVLOG);
+if (!(fp=ropen(filename,"a"))) return; /*APPROVED*/
 
 fprintf(fp,"%02d/%02d %02d:%02d:%02d: %s",tmday,tmonth+1,thour,tmin,tsec,str);
  fclose(fp);
@@ -2856,8 +2867,10 @@ int timeword;
 {
 FILE *fp;
 int mem;
+char filename[255];
 
-if (!(fp=ropen(COMMLOG,"a"))) return; /*APPROVED*/
+sprintf(filename,"%s%c%s",LOGFILES,DIRSEP,COMMLOG);
+if (!(fp=ropen(filename,"a"))) return; /*APPROVED*/
 
 if (timeword) {
   fprintf(fp,"%d-%02d-%02d %02d:%02d:%02d: %-12s: %s",tyear,tmonth+1,tmday,thour,tmin,tsec,user,str);
@@ -2911,13 +2924,13 @@ UR_OBJECT u;
 int cnt=0;
 unsigned int i;
 
-char name[USER_NAME_LEN+3], passwd[80];
+char name[USER_NAME_LEN+3],passwd[80];
 char tempname[USER_NAME_LEN+3];
 char tempname2[USER_NAME_LEN+3];
 char temppass[12];
 char kontr[51];
 char *temp;
-
+char filename[255];
 
 name[0]='\0';  passwd[0]='\0';
 
@@ -3080,7 +3093,8 @@ switch(user->login) {
 		write_user(user,"\nToto je nazov predmetu v Atlantide, nemoze byt pouzity ako meno.\n\n");
       		attempts(user); return;
       		} */
-	     more(NULL,user->socket,"misc/newuser.nfo");
+	     sprintf(filename,"%s%c%s",DATAFILES,DIRSEP,NEWUSER_INFO);
+	     more(NULL,user->socket,filename);
 	    }
       else {
 	    if (user->level<minlogin_level) {
@@ -4941,7 +4955,7 @@ UR_OBJECT user;
 {
 char samo[7],spolu[18],heslo[7],adr[70];
 FILE *fp;
-char filename[80];
+char filename[255];
 char userheslo[7],usermeno[13], bogus[70];
 char par[200];
 char text[255];
@@ -4963,7 +4977,7 @@ if ((!strstr(adr,".")) || (!strstr(adr,"@")) || (!isalpha(adr[strlen(adr)-1])) |
 	return;
    	}
 
-sprintf(filename,"%s",ZOZNAM_USEROV);
+sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,ZOZNAM_USEROV);
 if (!(fp=ropen(filename,"r"))) {
 	sprintf(text,"Neexistuje subor '%s' s usermi, pokusim sa ho vytvorit\n",filename);
 	write_syslog(text,1);
@@ -5007,7 +5021,7 @@ while(!feof(fp)) {
 		write_user(user,text);
 		strcpy(user->email,"Nema ziadny email");
 		fclose(fp);
-                sprintf(filename,"%s",MULTI_REQUEST);
+                sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,MULTI_REQUEST);
                 if (!(fp=ropen(filename,"a"))) { /*APPROVED*/
                  return;
                  } 
@@ -5039,7 +5053,7 @@ strcpy(user->request,heslo);
 
 user->accreq=1;
 save_user_details(user,1);
-strcpy(filename,ZOZNAM_USEROV);
+sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,ZOZNAM_USEROV);
 if (!(fp=ropen(filename,"a"))) { /*APPROVED*/
 	write_user(user,"Prepac, nastal problem, kontaktuj prosim strazcov Atlantis! :-(\n");
 	sprintf(text,"~OL~FRCHYBA: ~OL~FWNie je mozne pridavat do suboru '%s'! Userko %s nemoze dokoncit .request!~RS\n",filename,user->name);
@@ -7168,12 +7182,12 @@ int mday,mmonth;
 {
 static char men[81];
 FILE *fp;
-char fname[81];
+char fname[255];
 char line[81];
 char denmes[81];
 
 sprintf(denmes,"%02d.%02d",mday, mmonth+1);
-sprintf(fname, "%s",MENINY_FILE);
+sprintf(fname, "%s%c%s",DATAFILES,DIRSEP,MENINY_FILE);
 
 if (!(fp=ropen(fname,"r"))) { /*APPROVED*/
 			     sprintf(text,"Nemozem najst subor s meninami!\n");
@@ -8272,7 +8286,7 @@ switch(com_num) {
       case GEMOTE    : gemote(user,inpstr);break;
       case REVGOSSIP : revgossip(user,inpstr); break;
       case QUEST     : quest_command(user,inpstr);break;
-      case TALKERS   : sprintf(filename,"misc/talkers");
+      case TALKERS   : sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,TALKERS_LIST);
             switch(more(user,user->socket,filename)) {
                   case 0: write_user(user,"Ziadne talkre neboli najdene.\n");  break;
                   case 1: user->misc_op=2;
@@ -8643,16 +8657,16 @@ UR_OBJECT user;
 char *to, *message;
 {
 FILE *fp;
-char filename[80];
+char filename[255];
 time_t akt_cas;
 char signature[255];
 
-sprintf(filename,"%s/%s.EMAIL",MAILSPOOL,user->name);
+sprintf(filename,"%s%c%s.EMAIL",MAILSPOOL,DIRSEP,user->name);
 if ((fp=ropen(filename,"w"))==NULL) { /*APPROVED*/
   write_syslog("Nemozem otvorit subor pre odoslanie posty vo send_email()\n",0);
   return;
   }
-    
+
 fprintf(fp,"From: %s <%s@%s>\n",user->name,user->name,TALKER_EMAIL_HOST);
 fprintf(fp,"To: %s <%s>\n",to,to);
 fprintf(fp,"X-mailer: Atlantis Talker ver. %s\n",ATLANTIS);
@@ -8668,9 +8682,9 @@ send_forward_email(to,filename);
 user->subject[0]='\0';
 
 /* logne kto kam posielal postu (koli odhaleniu spamov etc.) */
-if (!(fp=ropen("log/sentmail","a"))) { /*APPROVED*/
+sprintf(filename,"%s%c%s",LOGFILES,DIRSEP,SENT_MAIL);
+if (!(fp=ropen(filename,"a")))
 	return;
-	}
 time (&akt_cas);
 fprintf(fp,"%s %-12s %s\n",zobraz_datum(&akt_cas,5),user->name,to);
 fclose(fp);
@@ -9584,7 +9598,7 @@ char *inpstr;
 FILE *fp;
 int lines,type,r,year=0,mon=0,day=0,lev;
 unsigned int i;
-char id[10],serv[40],port[10],filename[81],line[4096],levstr[10];
+char id[10],serv[40],port[10],filename[255],line[4096],levstr[10];
 UR_OBJECT u;
 
 if (user->level>=GOD && !strncmp(word[1],"brutal",6)) {
@@ -9990,11 +10004,11 @@ if (!(strcmp(word[1],"mobil"))) {
     strcpy(user->mobile,"-");
     return;
    }
-  if (strlen(word[2])!=10 || !is_number(word[2]) || strncmp(word[2],"090",3)) {
+  if (strlen(word[2])!=10 || !is_number(word[2]) || strncmp(word[2],"09",2)) {
     strcpy(filename,word[2]);
     filename[0]='0';
     if (word[2][0]!='+' || !is_number(filename) || strlen(word[2])<10 || strlen(word[2])>15) {
-      write_user(user,"Cislo musi byt vo formate 0903123456 alebo vo formate +421903123456.\n");
+      write_user(user,"Cislo musi byt vo formate 09XYNNNNNN alebo vo formate +4219XYNNNNNN.\n");
       return;
      }
     strcpy(user->mobile,word[2]);
@@ -10425,7 +10439,7 @@ if (user->level>=GOD && !(strcmp(word[1],"april"))) {
 }
 if (user->level>=GOD && !(strcmp(word[1],"maxtimeoutz"))) {
  type=atoi(word[2]);
- if (type<1 || 1000<type) write_user(user,"Povolene hodnoty su 1 az 100. Nad 90 sa useri nevykopavaju.\n");
+ if (type<1 || 100<type) write_user(user,"Povolene hodnoty su 1 az 100. Nad 90 sa useri nevykopavaju.\n");
  else { 
    max_timeoutz=type;
    alter_maxtimeouts(1);
@@ -10459,7 +10473,6 @@ if (user->level>=GOD && !(strcmp(word[1],"maxsms"))) {
    if (type<0) write_user(user,"Povolene hodnoty su 1 a viac. 0 - neobmedzene.\n");
    else {
      max_sms=type;
-     alter_maxtimeouts(1);
     }
   }
  sprintf(text,"Maximalny pocet SMSiek za den je: ~OL%d\n",max_sms);
@@ -10597,12 +10610,13 @@ if (!(strncmp(word[1],"col",3))) {
 } 
 
 if (!strncmp(word[1],"ircs",4)) {
+	sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,IRC_SERVERS);
 	if (word_count>2) {
 		if (strlen(word[2])>10) {
 			write_user(user,"Prilis dlhy nazov IRC servera.\n");
 			return;
 			}
-		if ((fp=ropen(IRC_SERVERS,"r"))==NULL) {
+		if ((fp=ropen(filename,"r"))==NULL) {
 			write_user(user,"Sorry, niesu povolene ziadne IRC servre.\n");
 			return;
 			}
@@ -10620,7 +10634,7 @@ if (!strncmp(word[1],"ircs",4)) {
 		fclose(fp);
 		write_user(user,"Nespravny nazov IRC servera!\n");
 		}
-	if ((fp=ropen(IRC_SERVERS,"r"))==NULL) {
+	if ((fp=ropen(filename,"r"))==NULL) {
 		write_user(user,"Sorry, niesu povolene ziadne IRC servre.\n");
 		return;
 		}
@@ -11121,7 +11135,8 @@ if (!(strncmp(word[1],"ema",3))) {
   	colour_com_strip(user->email);
   	sprintf(text,"%s si svoju email adresu na: %s\n", pohl(user,"Nastavil","Nastavila"), user->email);
   	write_user(user,text);
-  	if (!(fp=ropen("misc/users.email","a"))) return; /*APPROVED*/
+	sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,ADRESY_USEROV);
+  	if (!(fp=ropen(filename,"a"))) return; /*APPROVED*/
   	
   	fprintf(fp,"%-12s %s\n",user->name, user->email);
   	 fclose(fp);
@@ -12909,6 +12924,7 @@ UR_OBJECT user;
 UR_OBJECT u;
 int hodiny;
 FILE *fp;
+char filename[255];
 
 if ((word_count<4) || ((strcmp(word[2],"+")) && (strcmp(word[2],"-")) && (strcmp(word[2],"vrat")))
  || (!(hodiny=atoi(word[3])))) {
@@ -12944,8 +12960,9 @@ if (!strcmp(word[2],"-")) {
 	sprintf(text,"~OL~FGZnizil si TLT %s o %d hodin!\n", sklonuj(u, 2), hodiny);
 	write_user(user,text);
 	}
-	
-if ((fp=ropen(TLT_LOG,"a"))!=NULL) { /*APPROVED*/
+
+sprintf(filename,"%s%c%s",LOGFILES,DIRSEP,TLT_LOG);
+if ((fp=ropen(filename,"a"))!=NULL) { /*APPROVED*/
 	if (!strcmp(word[2],"+")) fprintf(fp,"%-12s: + %-3dh -> %s\n", user->name, hodiny, u->name);
 	if (!strcmp(word[2],"-")) fprintf(fp,"%-12s: - %-3dh -> %s\n", user->name, hodiny, u->name);
 	fclose(fp);
@@ -14412,7 +14429,7 @@ if ((word_count==2) && (!strcmp(word[1],"all"))) {
 	}
 
 ktory=(random()%COUNT+1);
-sprintf(filename,FORTUNE_FILE);
+sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,FORTUNE_FILE);
 if (!(fp=ropen(filename,"r"))) write_user(user,"Chyba: Nenasiel som potrebny subor!\n"); /*APPROVED*/
 else {
 	
@@ -14438,13 +14455,13 @@ UR_OBJECT user;
 int ihned;
 {
 FILE *fp;
-char filename[80],line[501];
+char filename[255],line[501];
 int count,ktory,n;
 
 if ((word_count>2) && (!ihned)) {
       write_user(user,"Pouzi: .hint\n");  return;
       }
-sprintf(filename,HINT_FILE);
+sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,HINT_FILE);
 if (!(fp=ropen(filename,"r"))) { write_user(user,"Chyba: Nenasiel som potrebny subor s tipmi!\n"); return; } /*APPROVED*/
 
 count=0;
@@ -19103,7 +19120,7 @@ void help_fonts(user)
 void read_notices(user)
 UR_OBJECT user;
 {
-char filename[150];
+char filename[255];
 
 if (user->level>=GOD && word_count>1) {    /* tajny stuff... */
   sprintf(filename,"%s",word[1]);
@@ -19113,7 +19130,7 @@ if (user->level>=GOD && word_count>1) {    /* tajny stuff... */
    }
   return;
  }
-sprintf(filename,"%s",NOTICEBOARD);
+sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,NOTICEBOARD);
 switch(more(user,user->socket,filename)) {
   case 0: write_user(user,"Nemozem sa dostat k suboru NOTICEBOARD.\n"); break;
   case 1: user->misc_op=2;
@@ -21681,7 +21698,7 @@ void listbans(user)
 UR_OBJECT user;
 {
 int i,what=0;
-char filename[80];
+char filename[255];
 
 if (!strncmp(word[1],"us",2)) {
   what=DB_BAN;
@@ -21727,7 +21744,7 @@ if (!strncmp(word[1],"ren",3)) {
       
 if (!strncmp(word[1],"si",2)) {
       write_user(user,"\n~OL~FK--~RS~FW-=~OL~FW=(*~RS~FW Vyblokovane adresy ~OL~FW*)=~RS~FW=-~OL~FK--\n\n");
-      sprintf(filename,"misc/%s",SITEBAN);
+      sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,SITEBAN);
       switch(more(user,user->socket,filename)) {
             case 0:
             write_user(user,"Ziadne adresy neboli najdene.\n\n");
@@ -21739,7 +21756,7 @@ if (!strncmp(word[1],"si",2)) {
       }
 if (!strncmp(word[1],"mul",3)) {
       write_user(user,title("~OLRequesty na pouzite adresy","~FR"));
-      sprintf(filename,"%s",MULTI_REQUEST);
+      sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,MULTI_REQUEST);
       switch(more(user,user->socket,filename)) {
             case 0:
             write_user(user,"Ziadne requesty na pouzite adresy neboli najdene.\n\n");
@@ -21787,14 +21804,14 @@ void ban_site(user)
 UR_OBJECT user;
 {
 FILE *fp;
-char filename[80],host[81],site[102];
+char filename[255],host[81],site[102];
 
 gethostname(host,80);
 if (!strcmp(word[1],host)) {
       write_user(user,"Nemozes vyblokovat stroj, na ktorom bezi talker.\n");
       return;
       }
-sprintf(filename,"misc/%s",SITEBAN);
+sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,SITEBAN);
 
 /* See if ban already set for given site */
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/
@@ -21831,9 +21848,9 @@ void ban_site_for_newuser(user)
 UR_OBJECT user;
 {
 FILE *fp;
-char filename[80],site[102];
+char filename[255],site[102];
 
-sprintf(filename,"misc/%s",NEWUSER_SITEBAN);
+sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,NEWUSER_SITEBAN);
 if (word_count<2) {
 	write_user(user,"Pouzi: .newban <adresa>\nMomentalne vyblokovane adresy:\n");
 	showfile(user,filename);
@@ -21949,10 +21966,10 @@ void unban_site(user)
 UR_OBJECT user;
 {
 FILE *infp,*outfp;
-char filename[80],site[105];
+char filename[255],site[105];
 int found,cnt;
 
-sprintf(filename,"misc/%s",SITEBAN);
+sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,SITEBAN);
 if (!(infp=ropen(filename,"r"))) { /*APPROVED*/
       write_user(user,"Tato adresa/domena nieje vyblokovana.\n");
       return;
@@ -21997,10 +22014,10 @@ void unban_site_for_newuser(user)
 UR_OBJECT user;
 {
 FILE *infp,*outfp;
-char filename[80],site[105];
+char filename[255],site[105];
 int found,cnt;
 
-sprintf(filename,"misc/%s", NEWUSER_SITEBAN);
+sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,NEWUSER_SITEBAN);
 if (word_count<2) {
 	write_user(user,"Pouzi: .newunban <adresa>\nMomentalne vyblokovane adresy:\n");
 	showfile(user,filename);
@@ -22432,7 +22449,7 @@ void send_bomb(user)
 UR_OBJECT user;
 {
 UR_OBJECT u;
-char /* *name, */filename[80];
+char filename[255];
 
 if (word_count<2) {
       write_user(user,"Pouzi: .bomb <uzivatel>\n");  return;
@@ -22479,7 +22496,7 @@ if (((user->room->sndproof) || (u->room->sndproof)) && (user->room!=u->room)) {
 
   
 /* if (user->vis) name=user->name; else name=invisname(user); */
-sprintf(filename,"misc/bomb");
+sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,BOMBFILE);
             switch(more(u,u->socket,filename)) {
                   case 0: write_user(user,"Nenasiel som bombu.\n");  return;
                   case 1: u->misc_op=2;
@@ -23400,98 +23417,170 @@ UR_OBJECT user;
 int what;
 int done_editing;
 {
-FILE *fp;
-FILE *fp2;
-char *ptr;
-int cnt;
-static int copak;
-char typ;
-char pomocna[50];
-time_t akt_cas;
+	FILE *fp,*fp2;
+	char *ptr,typ,pomocna[50],filename[255];
+	int cnt;
+	static int copak;
+	time_t akt_cas;
 
-if (what<1 || what>3) return;
-
-if (user->muzzled && what!=3) {
-      write_user(user,"Si umlcany - nemozes pouzivat tento prikaz.\n");  return;
-      }
-      
-if (!done_editing) {
-      	if (what==1) write_user(user,"\n~OL~FK--~RS~FW-=~OL~FW=(*~RS~FW Pisanie STAZNOSTI ~OL~FW*)=~RS~FW=-~OL~FK--\n\n");
-      	else if (what==2) write_user(user,"\n~OL~FK--~RS~FW-=~OL~FW=(*~RS~FW Pisanie NAVRHU ~OL~FW*)=~RS~FW=-~OL~FK--\n\n");
-      		else if (what==3) write_user(user,"\n~OL~FK--~RS~FW-=~OL~FW=(*~RS~FW Pisanie OSPRAVEDLNENIA ~OL~FW*)=~RS~FW=-~OL~FK--\n\n");
-        user->misc_op=16;
-        editor(user,NULL);
-        copak=what;
-        return; 
-        }        
-else {
-	ptr=user->malloc_start; 
-      }
-    
-/* vypishe */
-if (copak==1) sprintf(text,"~OL~FRStaznost od %s:\n", sklonuj(user,2));
-    else if (copak==2) sprintf(text,"~OL~FRNavrh od %s:\n", sklonuj(user,2));
-      	else if (copak==3) sprintf(text,"~OL~FROspravedlnenie od %s:\n", sklonuj(user,2));
-      	
-if (copak==2) {
-	write_level(GOD, 1, text, NULL);
-	write_level(GOD, 1, ptr, NULL);
+	if (what<1 || what>3)
+		return;
+	if (user->muzzled && what!=3) {
+		write_user(user,"Si umlcany - nemozes pouzivat tento prikaz.\n");
+		return;
+	}
+	if (!done_editing) {
+		if (what==1)
+			write_user(user,"\n~OL~FK--~RS~FW-=~OL~FW=(*~RS~FW Pisanie STAZNOSTI ~OL~FW*)=~RS~FW=-~OL~FK--\n\n");
+		else if (what==2)
+			write_user(user,"\n~OL~FK--~RS~FW-=~OL~FW=(*~RS~FW Pisanie NAVRHU ~OL~FW*)=~RS~FW=-~OL~FK--\n\n");
+		else if (what==3)
+			write_user(user,"\n~OL~FK--~RS~FW-=~OL~FW=(*~RS~FW Pisanie OSPRAVEDLNENIA ~OL~FW*)=~RS~FW=-~OL~FK--\n\n");
+		user->misc_op=16;
+		editor(user,NULL);
+		copak=what;
+		return; 
 	}
 	else {
-	write_level(WIZ, 1, text, NULL);
-	write_level(WIZ, 1, ptr, NULL);
+		ptr=user->malloc_start;
 	}
-
-
-if (!(fp=ropen(NOTICEBOARD,"a"))) return; /*APPROVED*/
-
-/* je tam, or not */
-if ((fp2=ropen(NOTICE_DIGEST,"r"))==NULL) {
-	if ((fp2=ropen(NOTICE_DIGEST,"w"))==NULL) { fclose (fp); return; }
-	time(&akt_cas);
-	fprintf(fp2,"From: Atlantis Talker <%s@%s>\n",TALKER_EMAIL_ALIAS,TALKER_EMAIL_HOST);
-	fprintf(fp2,"To: %s@%s\n",WIZZES_EMAIL_ALIAS,TALKER_EMAIL_HOST);
-	sprintf(text,"Subject: Notice digest (%s)\n\n", zobraz_datum(&akt_cas,4));
-	fprintf(fp2,"%s",text);
+	if (copak==1)
+		sprintf(text,"~OL~FRStaznost od %s:\n", sklonuj(user,2));
+	else if (copak==2)
+		sprintf(text,"~OL~FRNavrh od %s:\n", sklonuj(user,2));
+	else if (copak==3)
+		sprintf(text,"~OL~FROspravedlnenie od %s:\n", sklonuj(user,2));
+	if (copak==2) {
+		write_level(GOD, 1, text, NULL);
+		write_level(GOD, 1, ptr, NULL);
+	}
+	else {
+		write_level(WIZ, 1, text, NULL);
+		write_level(WIZ, 1, ptr, NULL);
+	}
+	sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,NOTICEBOARD);
+	if ((fp=ropen(filename,"r"))==NULL) {
+		if((fp=ropen(filename,"w"))==NULL) {
+			write_level(WIZ,1,"~OL~FRCHYBA: Nie je mozne vytvorit subor pre NOTICEBOARD!\n",NULL);
+			write_user(user,"Prepac, ale nastal technicky problem s registraciou ");
+			switch (copak) {
+				case 1:
+					write_user(user,"tvojej staznosti.\n");
+					break;
+				case 2:
+					write_user(user,"tvojho navrhu.\n");
+					break;
+				case 3:
+					write_user(user,"tvojho ospravedlnenia.\n");
+					break;
+			}
+			return;
+		}
+	}
+	else {
+		fclose(fp);
+		if (!(fp=ropen(filename,"a"))) {
+			write_level(WIZ,1,"~OL~FRCHYBA: Nie je mozne zapisovat do suboru NOTICEBOARD!\n",NULL);
+			write_user(user,"Prepac, ale nastal technicky problem s registraciou ");
+			switch (copak) {
+				case 1:
+					write_user(user,"tvojej staznosti.\n");
+					break;
+				case 2:
+					write_user(user,"tvojho navrhu.\n");
+					break;
+				case 3:
+					write_user(user,"tvojho ospravedlnenia.\n");
+					break;
+			}
+			return;
+		}
+	}
+	sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,NOTICE_DIGEST);
+	if ((fp2=ropen(filename,"r"))==NULL) {
+		if ((fp2=ropen(filename,"w"))==NULL) {
+			fclose(fp);
+			write_level(WIZ,1,"~OL~FRCHYBA: Nie je mozne vytvorit subor pre NOTICE_DIGEST!\n",NULL);
+			write_user(user,"Prepac, ale nastal technicky problem s registraciou ");
+			switch (copak) {
+				case 1:
+					write_user(user,"tvojej staznosti.\n");
+					break;
+				case 2:
+					write_user(user,"tvojho navrhu.\n");
+					break;
+				case 3:
+					write_user(user,"tvojho ospravedlnenia.\n");
+					break;
+			}
+			return;
+		}
+		time(&akt_cas);
+		fprintf(fp2,"From: Atlantis Talker <%s@%s>\n",TALKER_EMAIL_ALIAS,TALKER_EMAIL_HOST);
+		fprintf(fp2,"To: %s@%s\n",WIZZES_EMAIL_ALIAS,TALKER_EMAIL_HOST);
+		sprintf(text,"Subject: Notice digest (%s)\n\n", zobraz_datum(&akt_cas,4));
+		fprintf(fp2,"%s",text);
+		fclose(fp2);
+	}
+	else {
+		fclose(fp2);
+		if (!(fp2=ropen(filename,"a"))) {
+			fclose(fp);
+			write_level(WIZ,1,"~OL~FRCHYBA: Nie je mozne zapisovat do suboru NOTICEBOARD!\n",NULL);
+			write_user(user,"Prepac, ale nastal technicky problem s registraciou ");
+			switch (copak) {
+				case 1:
+					write_user(user,"tvojej staznosti.\n");
+					break;
+				case 2:
+					write_user(user,"tvojho navrhu.\n");
+					break;
+				case 3:
+					write_user(user,"tvojho ospravedlnenia.\n");
+					break;
+			}
+			return;
+		}
+	}
+	if (copak==1)
+		typ='C';
+	else if (copak==2)
+		typ='S';
+	else if (copak==3)
+		typ='E';
+	else
+		typ='-';
+	sprintf(pomocna,"%c %02d/%02d/%02d - %s",typ,tmday,tmonth+1,tyear,user->name);
+	sprintf(text,"~OL~FR[====== ~FW%s ~FR=========================",pomocna);
+	text[46]='\0';
+	strcat(text,"============================================]\n");
+	fprintf(fp, "%s", text);
+	colour_com_strip(text);
+	fprintf(fp2,"%s", text);
+	cnt=0;
+	while(*ptr!='\0') {
+		putc(*ptr,fp);
+		putc(*ptr,fp2);
+		if (*ptr=='\n')
+			cnt=0;
+		else
+			++cnt;
+		if (cnt==80) {
+			putc('\n',fp);
+			putc('\n',fp2);
+			cnt=0;
+		}
+		++ptr;
+	}
+	fclose(fp);
 	fclose(fp2);
-	}
-else fclose(fp2);
-
-if (!(fp2=ropen(NOTICE_DIGEST,"a"))) return;
-
-if (copak==1) typ='C';
-else if (copak==2) typ='S';
-	else if (copak==3) typ='E';
-		else typ='-';
-		
-sprintf(pomocna,"%c %02d/%02d/%02d - %s", typ, tmday, tmonth+1, tyear, user->name);
-
-sprintf(text,"~OL~FR[====== ~FW%s ~FR=========================", pomocna);
-text[46]='\0';
-/* for (cnt=0; cnt<(25-strlen(pomocna)); cnt++) strcat(text,"="); */
-strcat(text,"============================================]\n");
-
-fprintf(fp, "%s", text);
-colour_com_strip(text);
-fprintf(fp2,"%s", text);
-
-cnt=0;
-while(*ptr!='\0') {
-      putc(*ptr,fp);
-      putc(*ptr,fp2);
-      if (*ptr=='\n') cnt=0; else ++cnt;
-      if (cnt==80) { cnt=0; }
-      ++ptr;
-     }
-     
-fclose(fp);
-fclose(fp2);
-
-if (copak==1) write_user(user,"Tvoja staznost bola zaregistrovana.\n");
-else if (copak==2) write_user(user,"Tvoj navrh bol zaregistrovany.\n");
-	else if (copak==3) write_user(user,"Tvoje ospravedlnenie bolo zaregistrovane.\n");
+	if (copak==1)
+		write_user(user,"Tvoja staznost bola zaregistrovana.\n");
+	else if (copak==2)
+		write_user(user,"Tvoj navrh bol zaregistrovany.\n");
+	else if (copak==3)
+		write_user(user,"Tvoje ospravedlnenie bolo zaregistrovane.\n");
 }
-
 
 /*** Muzzle (zapcha usta) an annoying user so he cant speak, emote, echo,
   write, smail or bcast. Muzzles have levels from WIZ to GOD so for instance
@@ -23957,14 +24046,16 @@ void viewlog(user, inpstr)
 UR_OBJECT user;
 char *inpstr;
 {
-FILE *fp, *fp2;
+FILE *fp, *tmpfp;
 char *emp="\nSystemovy log je prazdny.\n";
 int lines;
-char line[200], fn[50];
+char line[200],filename[255],tmpfilename[255];
 
+sprintf(filename,"%s%c%s",LOGFILES,DIRSEP,SYSLOG);
+sprintf(tmpfilename,"%s%c%s%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
 if (word_count==1) {
       write_user(user,"\n~OL~FK--~RS~FW-=~OL~FW=(*~RS~FW Systemovy dennik ~OL~FW*)=~RS~FW=-~OL~FK--\n\n");
-      switch(more(user,user->socket,SYSLOG)) {
+      switch(more(user,user->socket,filename)) {
             case 0: write_user(user,emp);  return;
             case 1: user->misc_op=2;
             }
@@ -23972,12 +24063,11 @@ if (word_count==1) {
       }
 
 else {
-      if (!(fp=ropen(SYSLOG,"r"))) { /*APPROVED*/
+      if (!(fp=ropen(filename,"r"))) { /*APPROVED*/
       	write_user(user,emp);
       	return;
       	}
-      sprintf(fn,"log/%s.SYSLTMP", user->name);
-      if (!(fp2=ropen(fn,"w"))) { /*APPROVED*/
+      if (!(tmpfp=ropen(tmpfilename,"w"))) { /*APPROVED*/
       	write_user(user,"Neda sa otvorit docasny subor vo viewlog().\n");
       	fclose(fp);
       	return;
@@ -23988,18 +24078,18 @@ else {
       while(!feof(fp)) {
       	if (strstr(line, inpstr)) {
       		lines=1;
-      		fprintf(fp2,"%s", line);
+      		fprintf(tmpfp,"%s", line);
       		}
       	fgets(line,199,fp);
       	}
       fclose(fp);
-      fclose(fp2);
+      fclose(tmpfp);
       if (!lines) {
       	sprintf(text,"Vyskyt retazca \"~OL%s~RS\" nebol najdeny.\n", inpstr);
       	write_user(user,text);      
       	}
       else {
-      switch(more(user,user->socket,fn)) {
+      switch(more(user,user->socket,tmpfilename)) {
             case 0: write_user(user,emp);  return;
             case 1: user->misc_op=2;
             }      
@@ -24728,41 +24818,40 @@ no_prompt=1;
 void wipe_user(meno)
 char meno[13];
 {
-FILE *infp, *outfp;
-char filename[80], filename2[80];
-char userheslo[7],usermeno[13], bogus[70];
+FILE *infp,*outfp;
+char filename[255],filename2[255];
+char userheslo[7],usermeno[13],bogus[70];
 
-
-sprintf(filename,"%s",ZOZNAM_USEROV);
+sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,ZOZNAM_USEROV);
 if (!(infp=ropen(filename,"r"))) {return;} /*APPROVED*/
 
-sprintf(filename2,"misc/users.new.temp");
+sprintf(filename2,"%s%c%s%s",TMPFOLDER,DIRSEP,ZOZNAM_USEROV,TMPSUFFIX);
 if (!(outfp=ropen(filename2,"w"))) {  fclose(infp); return;} /*APPROVED*/
 
 fscanf(infp,"%s %s %s", userheslo, usermeno, bogus);
-while(!feof(infp)) {	
+while(!feof(infp)) {
 	if (!strcmp(usermeno,meno)) { }
 		else {
 		fprintf(outfp,"%-6s %-12s %s\n",userheslo,usermeno, bogus);
-		}			
+		}
 fscanf(infp,"%s %s %s", userheslo, usermeno, bogus);
 }
  fclose(infp);
  fclose(outfp);
-rename("misc/users.new.temp", "misc/users.new");
+rename(filename2, filename);
 }
 
 void rename_user_on_list(meno, novemeno)
 char meno[13], novemeno[13];
 {
-FILE *infp, *outfp;
-char filename[80], filename2[80];
-char userheslo[7],usermeno[13], bogus[70];
+FILE *infp,*outfp;
+char filename[255],filename2[255];
+char userheslo[7],usermeno[13],bogus[70];
 
-sprintf(filename,"%s",ZOZNAM_USEROV);
+sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,ZOZNAM_USEROV);
 if (!(infp=ropen(filename,"r"))) {return;} /*APPROVED*/
 
-sprintf(filename2,"misc/users.new.temp");
+sprintf(filename2,"%s%c%s%s",TMPFOLDER,DIRSEP,ZOZNAM_USEROV,TMPSUFFIX);
 if (!(outfp=ropen(filename2,"w"))) {  fclose(infp); return; } /*APPROVED*/
 
 fscanf(infp,"%s %s %s",userheslo, usermeno, bogus);
@@ -24777,7 +24866,7 @@ fscanf(infp,"%s %s %s", userheslo, usermeno, bogus);
 }
  fclose(infp);
  fclose(outfp);
-rename("misc/users.new.temp", "misc/users.new");
+rename(filename2, filename);
 }
 
 void rebirth(UR_OBJECT user)
@@ -25916,9 +26005,12 @@ if ((ship=get_room(SHIPPING_SHIP,NULL))==NULL) return;
 void send_noticeboard_digest(char* komu)
 {
 	FILE *fp;
-	if((fp=ropen(NOTICE_DIGEST,"r"))) {
+	char filename[255];
+
+	sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,NOTICE_DIGEST);
+	if((fp=ropen(filename,"r"))) {
 		fclose(fp);
-		send_forward_email(komu,NOTICE_DIGEST);
+		send_forward_email(komu,filename);
 	}
 }
 
@@ -25943,16 +26035,14 @@ for(rm1=room_first;rm1!=NULL;rm1=rm1->next) {
 
 void check_web_board()
 {
- char filename[80], meno[20], rmeno[ROOM_NAME_LEN+1];
+ char filename[255], meno[20], rmeno[ROOM_NAME_LEN+1];
  RM_OBJECT rm;
  FILE *fp;
  
- sprintf(filename,"%s/%s",DATAFILES,WEB_BOARD_DAT);
- if ((fp=ropen(filename,"r"))==NULL) { /*APPROVED*/
-            return;
-            }
-      
-fscanf(fp,"%s %s",meno,rmeno);
+ sprintf(filename,"%s%c%s",DATAFILES,DIRSEP,WEB_BOARD_DAT);
+ if ((fp=ropen(filename,"r"))==NULL)
+	 return;
+ fscanf(fp,"%s %s",meno,rmeno);
 	while(!feof(fp)) {
 		    if ((rm=get_room(rmeno,NULL))!=NULL) {
 			    sprintf(texthb,"%s napisal(a) cez web spravu na nastenku.\n",meno);
@@ -25963,7 +26053,7 @@ fscanf(fp,"%s %s",meno,rmeno);
 	            }
 	    
  fclose(fp);
-unlink(filename);
+ unlink(filename);
 }
 
 void zapis_statistiku()
@@ -25971,23 +26061,23 @@ void zapis_statistiku()
 FILE *fp, *temp;
 int i, nasiel;
 char match[40], string1[40];
-char filename1[40], filename2[40];
+char filename[255],tmpfilename[255];
 
 sprintf(match,"%d.%d.%d",tmday,tmonth+1,tyear);
-sprintf(filename1,"misc/statistika");
-sprintf(filename2,"misc/tempstat.tmp");
+sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,STATSFILE);
+sprintf(tmpfilename,"%s%c%s%s",TMPFOLDER,DIRSEP,STATSFILE,TMPSUFFIX);
 
-if (!(fp=ropen(filename1,"r"))) { /*APPROVED*/
+if (!(fp=ropen(filename,"r"))) { /*APPROVED*/
 	/* nieje subor */
 	nasiel=0;
-	fp=ropen(filename1,"w"); /*APPROVED*/
+	fp=ropen(filename,"w"); /*APPROVED*/
 	fprintf(fp,"%s %d\n",match,all_logins);
 	all_logins=0;
-	 fclose(fp);			
+	 fclose(fp);
 	return;
 	}
 
-if (!(temp=ropen(filename2,"w"))) { /*APPROVED*/
+if (!(temp=ropen(tmpfilename,"w"))) { /*APPROVED*/
 	 fclose(fp);
 	return;
 	}
@@ -26005,15 +26095,13 @@ while (!feof(fp)) {
 	else fprintf(temp,"%s %d\n", string1, i);
 	fscanf(fp,"%s %d",string1,&i);
 	}
-	
 if (!nasiel) {
 	fprintf(temp,"%s %d\n",match,all_logins);
 	all_logins=0;
 	}
-	
  fclose(temp);
  fclose(fp);
-rename("misc/tempstat.tmp","misc/statistika");
+rename(tmpfilename,filename);
 return;
 }
 
@@ -27673,9 +27761,10 @@ int pos=0,des=0;
 int quotacheck(char *username) /* ze ci ma danemu userovi quotu checkovat */
 {
 FILE *fp;
-char menko[20];
+char menko[20],filename[255];
 
-if (!(fp=ropen(NO_QUOTA,"r"))) { /*APPROVED*/
+sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,NO_QUOTA);
+if (!(fp=ropen(filename,"r"))) { /*APPROVED*/
 	return 1;
 	}
 username[0]=toupper(username[0]);	
@@ -27994,12 +28083,13 @@ return vysledok;
 int check_passwd_simplex(char *passwd)
 {
 FILE *fp;
-char heslo[50];
-char *tmp;
+char heslo[50],*tmp,filename[255];
 
 if (strlen(passwd)<6) return 1;
 
-if (!(fp=ropen(DICT,"r"))) return 0; /*APPROVED*/
+sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,DICT);
+
+if (!(fp=ropen(filename,"r"))) return 0; /*APPROVED*/
 
 strtolower(passwd);
 fscanf(fp, "%s", heslo);
@@ -28024,9 +28114,10 @@ return 1;
 int skontroluj()
 {
 FILE *fp;
-char slovo[50];
+char slovo[50],filename[255];
 
-if (!(fp=ropen("misc/kontrola","r"))) return 0; /*APPROVED*/
+sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,CHECKFILE);
+if (!(fp=ropen(filename,"r"))) return 0; /*APPROVED*/
 fscanf(fp,"%s",slovo);
 fclose(fp);
 if (strlen(slovo)>1) return 1;
@@ -28036,16 +28127,17 @@ return 0;
 void aklient_log(char *meno)
 {
 FILE *fp, *tempfp;
-char tempfilename[80];
+char filename[255],tempfilename[255];
 char juzer[15];
 char verzia[20];
 char ver[110];
 int pristupy;
 int je;
 
-sprintf(tempfilename,"log/aklient_log_users.tmp");
-if (!(fp=ropen(AKLIENT_LOG_USERS,"r"))) { /*APPROVED*/
-	if (!(fp=ropen(AKLIENT_LOG_USERS,"w"))) return;
+sprintf(filename,"%s%c%s",LOGFILES,DIRSEP,AKLIENT_LOG_USERS);
+sprintf(tempfilename,"%s%c%s%s",TMPFOLDER,DIRSEP,AKLIENT_LOG_USERS,TMPSUFFIX);
+if (!(fp=ropen(filename,"r"))) { /*APPROVED*/
+	if (!(fp=ropen(filename,"w"))) return;
 	fprintf(fp,"%s 1\n", meno);
 	fclose(fp);	
 	}
@@ -28067,7 +28159,7 @@ else {
 	if (!je) fprintf(tempfp, "%s 1\n", meno);
 	fclose(fp);
 	fclose(tempfp);
-	rename(tempfilename, AKLIENT_LOG_USERS);
+	rename(tempfilename, filename);
 	}
 
 strcpy(ver,word[6]);
@@ -28078,9 +28170,10 @@ if (!strcmp(word[6],"2000") && !strcmp(word[7],"official")) strcpy(ver,"2000");
 /****************/
 
 /* LOGNUTIE VERZIE */
-sprintf(tempfilename,"log/aklient_log_ver.tmp");
-if (!(fp=ropen(AKLIENT_LOG_VER,"r"))) { /*APPROVED*/
-	if (!(fp=ropen(AKLIENT_LOG_VER,"w"))) return;
+sprintf(filename,"%s%c%s",LOGFILES,DIRSEP,AKLIENT_LOG_VER);
+sprintf(tempfilename,"%s%c%s%s",TMPFOLDER,DIRSEP,AKLIENT_LOG_VER,TMPSUFFIX);
+if (!(fp=ropen(filename,"r"))) { /*APPROVED*/
+	if (!(fp=ropen(filename,"w"))) return;
 	fprintf(fp,"%s 1\n", ver);
 	fclose(fp);
 	}
@@ -28102,7 +28195,7 @@ else {
 	if (!je) fprintf(tempfp,"%s 1\n", ver);
 	fclose(fp);
 	fclose(tempfp);
-	rename(tempfilename, AKLIENT_LOG_VER);
+	rename(tempfilename, filename);
 	}
 
 return;
@@ -28113,12 +28206,12 @@ void who_for_web()
 {
 UR_OBJECT u;
 int mins,idle;
-char pohl;
-
+char pohl,filename[255];
 FILE *fp;
 
 if (disable_web) return;
-if ((fp=ropen(WHO_FOR_WEB,"w"))==NULL) { /*APPROVED*/	 
+sprintf(filename,"%s%c%s",WEB_ROOT,DIRSEP,WHO_FOR_WEB);
+if ((fp=ropen(filename,"w"))==NULL) { /*APPROVED*/	 
 	return;
 	}
 
@@ -28236,7 +28329,7 @@ FILE *ropen (const char *path, const char *mode)
 
 void send_sms(char *tonum,char *str,int gate)
 {
-char comd[500],account[100],mesg[500];
+char comd[500],account[100],mesg[500],filename[255];
 time_t tim;
 FILE *fp;
 unsigned int pos,max;
@@ -28253,7 +28346,8 @@ unsigned int pos,max;
    if(comd[pos]=='\n') comd[pos]=' '; 
    pos++;
   }
- if ((fp=ropen("log/sentsms","a"))) { /*APPROVED*/
+ sprintf(filename,"%s%c%s",LOGFILES,DIRSEP,SENT_SMS);
+ if ((fp=ropen(filename,"a"))) { /*APPROVED*/
    time (&tim);
    fprintf(fp,"%s %-12s %s\n",zobraz_datum(&tim,5),"<SYSTEM>",tonum);
 /*   fprintf(fp,"%s\n",comd); */
@@ -28270,7 +28364,7 @@ unsigned int pos,max;
 void sms(UR_OBJECT user,int done_editing)
 {
 FILE *fp;
-char cmd[1000],*c,filename[81],account[100];
+char cmd[1000],*c,filename[255],account[100];
 time_t tim;
 int /* ch, */oflajn=0,pos,i;
 UR_OBJECT u;
@@ -28290,15 +28384,16 @@ if (done_editing==1) {
     pos++;
    }
   cmd[pos]='\0';
-  sprintf(texthb,"' >mailspool/%s.sms",user->name);
+  sprintf(texthb,"' >%s%c%s.sms",MAILSPOOL,DIRSEP,user->name);
   strcat(cmd,texthb);
   user->smswait=1;
   sprintf(text,"~FTPosielam SMS spravu..\n");
   write_user(user,text);
   user->smsssent++;
-  sprintf(text,"~FTDnes si uz poslal%s %d SMS %s. (denny limit je %d %s)\n",pohl(user,"","a"),user->smsssent,skloncislo(user->smsssent,"spravu","spravy","sprav"),max_sms,skloncislo(max_sms,"sprava","spravy","sprav"));
+  sprintf(text,"~FTDnes si uz poslal%s %d SMS sprav%s. (denny limit je %d sprav%s)\n",pohl(user,"","a"),user->smsssent,skloncislo(user->smsssent,"u","y",""),max_sms,skloncislo(max_sms,"a","y",""));
   if (max_sms>0) write_user(user,text);
-  if ((fp=ropen("log/sentsms","a"))) { /*APPROVED*/
+  sprintf(filename,"%s%c%s",LOGFILES,DIRSEP,SENT_SMS);
+  if ((fp=ropen(filename,"a"))) { /*APPROVED*/
     time (&tim);
     fprintf(fp,"%s %-12s %s\n",zobraz_datum(&tim,5),user->name,user->mail_to);
     fclose(fp);
@@ -28317,7 +28412,7 @@ if (done_editing==1) {
  }
 if (done_editing==2) {
   pos=0;
-  sprintf(filename,"mailspool/%s.sms",user->name);
+  sprintf(filename,"%s%c%s.sms",MAILSPOOL,DIRSEP,user->name);
   if ((fp=ropen(filename,"r"))) { /*APPROVED*/
     fgets(cmd,500,fp);
     i=0;
@@ -28510,7 +28605,7 @@ UR_OBJECT u;
 int oflajn,i,avg,days2,hours2,mins2/* ,vel */;
 float po[11],zvy;
 FILE *fp;
-char filename[81],komand[20],kto[USER_NAME_LEN+5];
+char filename[255],komand[20],kto[USER_NAME_LEN+5];
 char tmp[100],*temp;
 
 oflajn=0;
@@ -28640,7 +28735,7 @@ if (temp!=NULL) {
   sprintf(text,"~OL~FRUzivatela demotol/la:    ~FW%s~FR (dovod: ~FW%s~FR)\n",kto,temp);
   write_user(user,text);
  }
-sprintf(filename,"%s",MULTI_REQUEST);
+sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,MULTI_REQUEST);
 if (!(fp=ropen(filename,"r"))) { } /*APPROVED*/
   else {
   fscanf(fp,"%s %s %s %s",filename,kto,komand,tmp);
@@ -28704,7 +28799,7 @@ FILE *fp;
 char filename[80];
 int value,value2,max;
 
-sprintf(filename,"misc/timeouts.max");
+sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,MAXTIMEOUTS);
 if (do_what==0) {
   if (!(fp=ropen(filename,"r"))) {
     if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
@@ -29092,14 +29187,14 @@ char *datum_menin(char *meno)
 {
 static char date[81];
 FILE *fp;
-char fname[81],name[81],name2[81];
+char fname[255],name[81],name2[81];
 unsigned int i;
 int ok,len;
  
  if (!strcmp(meno,"Petra")) return "29.06";
  date[0]='\0';
  name2[0]='\0';
- sprintf(fname,"%s",MENINY_FILE);
+ sprintf(fname,"%s%c%s",DATAFILES,DIRSEP,MENINY_FILE);
  if (!(fp=ropen(fname,"r"))) { /*APPROVED*/
    sprintf(text,"Nemozem najst subor s meninami!\n");
    write_syslog(text,0);

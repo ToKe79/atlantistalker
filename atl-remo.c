@@ -112,13 +112,14 @@ write_user(user,text);
 
 void cmon_auth(UR_OBJECT gdo)
 {
-char identita[100];
+char identita[100],filename[255];
 FILE *fp;
 
 switch(double_fork()) {
 	case -1: return; break;
 	case 0 : sstrncpy(identita,real_auth(gdo),99); /* real_user() */
-		 if ((fp=ropen(GOT_AUTH,"a"))!=NULL) {
+		 sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,GOT_AUTH);
+		 if ((fp=ropen(filename,"a"))!=NULL) {
 		 	fprintf(fp,"%s %s\n", gdo->name, identita);
 		 	fclose(fp);
 		 	if (identita[0]!='<') {
@@ -134,9 +135,10 @@ void check_ident_reply()
 {
 FILE *fp;
 UR_OBJECT u;
-char name[20], ident[100];
+char name[20],ident[100],filename[255];
 
-if ((fp=ropen(GOT_AUTH,"r"))==NULL) return;
+sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,GOT_AUTH);
+if ((fp=ropen(filename,"r"))==NULL) return;
 
 fscanf(fp,"%s %s", name, ident);
 while(!feof(fp)) {
@@ -150,7 +152,7 @@ while(!feof(fp)) {
 	fscanf(fp,"%s %s", name, ident);	
 	}
 fclose(fp);
-unlink(GOT_AUTH);
+unlink(filename);
 }
 
 /* Toto je nahrada, ale tiez nefunguje a hlavne mrzne. Sux. */
@@ -802,7 +804,7 @@ RN_OBJECT remote,next=NULL;
 char rn_file_name[80],line[200];
 FILE *rn;
 
-sprintf(rn_file_name,"misc/%s",REMOTE_FILE);
+sprintf(rn_file_name,"%s%c%s",MISCFILES,DIRSEP,REMOTE_FILE);
 if (!(rn=ropen(rn_file_name,"r"))) {
   if (user!=NULL) write_user(user,"Nemozem otvorit subor vzdialenych pripojeni.\n");
   else {
@@ -865,10 +867,10 @@ int connect_to_site(UR_OBJECT user,RN_OBJECT remote,int slot)
 {
 struct sockaddr_in con_addr;
 char *sn;
-int inetnum, i;
+int inetnum,i;
 FILE *fp;
 
-char serveridlo[100], id[15];
+char serveridlo[100],id[15],filename[255];
 int def_port;
 
 if ((user->remote_socket[slot]=socket(AF_INET,SOCK_STREAM,0))==-1) {
@@ -877,7 +879,8 @@ if ((user->remote_socket[slot]=socket(AF_INET,SOCK_STREAM,0))==-1) {
 	}
 i=0;
 if (!strcmp(remote->desc,"IRC")) {
-	if ((fp=fopen(IRC_SERVERS,"r"))!=NULL) {
+	sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,IRC_SERVERS);
+	if ((fp=fopen(filename,"r"))!=NULL) {
 		fscanf(fp,"%s %s %d", id, serveridlo, &def_port);
 		while(!feof(fp)) {
 			if (!strcmp(user->irc_serv, id)) {
@@ -1168,7 +1171,7 @@ void view_remote(UR_OBJECT user)
 {
   
   FILE *fp,*rn;
-  char filename[80],filename2[80],shortcut,shortcut2='\0';
+  char filename[255],filename2[255],shortcut,shortcut2='\0';
   char name[REMOTE_NAME_LEN],desc[REMOTE_DESC_LEN],port[5];
   char tmp[3];
   int slot,j,i,free,error;
@@ -1375,7 +1378,7 @@ void view_remote(UR_OBJECT user)
 	  write_user(user,"~OL~FB=-=-=-=-=-=-=-=-=-= ~FYMozes sa napojit na nasledovne talkre: ~FB=-=-=-=-=-=-=-=-=-=-\n");
 	  write_user(user,"~OL~FRSkratka     Adresa                  Port    Nazov talkera        Autologin\n");
 	  
-	  sprintf(filename,"misc/%s",REMOTE_FILE);	  
+	  sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,REMOTE_FILE);	  
 	  if ((fp=ropen(filename,"r"))!=NULL) {
 	 	 while (!feof(fp)) {
 		  	fscanf(fp,"%c %s %s %s\n",&shortcut, name, port, desc);
@@ -1412,7 +1415,7 @@ void view_remote(UR_OBJECT user)
           }
       
 	
-  sprintf(filename2,"misc/%s",REMOTE_FILE);
+  sprintf(filename2,"%s%c%s",MISCFILES,DIRSEP,REMOTE_FILE);
 
   /* na zaklade REMOTE_FILE zistime o aky server ide */
   if ((rn=ropen(filename2,"r")))

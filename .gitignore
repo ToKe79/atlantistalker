@@ -2,3 +2,4 @@
 make.depend
 libs/*.so
 config.h
+*.swp

@@ -181,54 +181,77 @@ int writeerror,max_timeouts,max_timeoutz;
 #define MAX_ENTRIES 1000 /* No, viac ako 1000 ix neviem ci bude */
 
 /* First of all, nejake definicie suborov ... */
+/* adresare */
+#define MISCFILES "misc" /* adresar pre misc-subory */
+#define BACKUP_DIR "backups" /* adresar na zalohy */
+#define DATAFILES "data" /* adresar pre data-subory */
+#define CLOVECEFILES "saves-clovece" /* adresar pre ulozene hry clovece */
+#define LODICKY_SAVE_DIR "saves-lodicky" /* adresar pre ulozene hry lodiciek */
+#define DAMAFILES "saves-dama" /* adresar pre ulozene hry damy */
+#define MAILSPOOL "mailspool"
+#define POMOCFILES "help" /* adresar pre pomoc-subory */
+#define LOGFILES "logs" /* adresar pre rozne logy */
 
-#define DICT "misc/dict"                    /* slovnik lamerskyx hesiel */
-#define DEFAULT_TOPIC_FILE "topic"          /* topikovy subor */
-#define LAST_TOPIC_FILE "last_topic"        /* posledne topiky */
-#define ROZLOZENIE_P "rozlozenie"           /* rozlozenie predmetov */
-#define ZOZNAM_USEROV "misc/users.new"      /* zoznam userov */
-#define MULTI_REQUEST "misc/multirequest"   /* pokusy requestov na uz pouzite adresy */
-#define MENINY_FILE "datafiles/meniny.dat"  /* kalendar */
-#define LABYRINT_WINNERS "labyrint.win"     /* vitazi labu */
-#define LODICKY_SAVE_DIR "lodicky-save"     /* adresar pre save v lodickax */
-#define HANGMAN_WORDS "hangman"             /* slova do obesenca */
-#define WEB_BOARD_DAT "board.log"           /* kto pisal na board a kde */
-#define PISKFILE "piskvorky.top"            /* piskvorove skore */
-#define NO_QUOTA "misc/noquota"             /* kto nema kvotu na postu */
-#define AKLIENT_LOG_USERS "log/akl_user.log"/* log userov z klienta */
-#define AKLIENT_LOG_VER "log/akl_ver.log"   /* log pristupov z verzii klienta */
-#define LEVLOG "log/level.log"              /* log promotes/demotes */
-#define HINT_FILE "misc/hints"              /* zoznam hintov */
-#define COMMLOG "log/commlog2.log"          /* command debug log */
-#define WHO_FOR_WEB "../public_html/who.raw"/* who pre web - surovy fajl */
-#define TLT_LOG "log/tlt.log"               /* TLT +, - log */
-#define NICKBLOCK  "misc/nickblock"         /* vyblokovane nicky */                                               
-#define RESC_CACHE "misc/resc_cache"        /* cache pre resolvera */
-#define NEWUSER_SITEBAN "newban"            /* misc/newban */
-#define REMOTE_FILE "remote"                /* konfigurak connecticutu :-) */
-/* #define REMOTEDIR "remote" */                 /* kde budu uzivatelske remote hesla */
-#define NOTESDIR  "notes"                   /* poznamkove bloky uzivatelov */
-#define GOT_AUTH  "misc/users.auth"         /* real identity z forknuteho tisu */
-/* #define IRC_DIR "irc" */                      /* userovske IRC veci */
-#define IRC_SERVERS "misc/ircserv"          /* povolene IRC servre */
-#define COM_LEVEL "misc/comlevel"           /* prehodene levely k prikazom */
-#define REVERSIFILE "reversi.top"           /* tabulka reversiarov */
-#define DAMAFILE "dama.top"                 /* tabulka damy! */
-#define DAMAFILES "dama-save"               /* save adresar pre dddamu :> */
-/* #define REPOSITORY "repository" */            /* adresar pre repository */
-#define TMPSUFFIX ".talkertmp"                 /* koncovka docasnych suborov pre vypisy who, boardov a podobne */
-#define MINYTOP "miny.top"                  /* tabulka min! */
-#define NOTICE_DIGEST "misc/notice_digest"  /* digest z noticof */
-/* #define REVTELL_TMP "mailspool/rt_tmp" */     /* revtell tempfile */
-#define CLOVECEFILES "xclosave"             /* clovece */
-#define BACKUP_DIR "backup_db"              /* adresar na zalohy db */
-#define TALKER_TELNET_HOST "vps.vudiq.sk"   /* host, kde bezi talker */
-#define TALKER_EMAIL_HOST "vps.vudiq.sk"    /* e-mailovy host */
-#define WIZZES_EMAIL_ALIAS "wizzes"         /* alias, na ktory sa posieju e-maily pre spravcov */
-#define TALKER_EMAIL_ALIAS "talker"         /* alias, na ktory sa posielaju vseobecne e-maily */
-#define TALKER_WEB_SITE "https://vps.vudiq.sk/talker" /* site, kde bezi web talkera */
-#define TALKER_CITY "Bratislava"            /* mesto, kde talker bezi */
-#define TALKER_COUNTRY "Slovensko"          /* krajina, kde talker bezi */
+/* misc-subory */
+#define DICT "dict" /* slovnik lamerskyx hesiel */
+#define ZOZNAM_USEROV "users_list" /* zoznam userov */
+#define ADRESY_USEROV "users_emails" /* e-mailove adresy userov */
+#define MULTI_REQUEST "multirequest" /* pokusy requestov na uz pouzite adresy */
+#define COM_LEVEL "comlevel" /* prehodene levely k prikazom */
+#define NO_QUOTA "noquota" /* kto nema kvotu na postu */
+#define HINT_FILE "hints" /* zoznam hintov */
+#define NICKBLOCK  "nickblock" /* vyblokovane nicky */
+#define RESC_CACHE "resc_cache" /* cache pre resolvera */
+#define GOT_AUTH  "users_auth" /* real identity z forknuteho tisu */
+#define IRC_SERVERS "ircserv" /* povolene IRC servre */
+#define TALKERS_LIST "talkers" /* zoznam inych talkerov */
+#define FORTUNE_FILE "fortune" /* subor s mudrostami */
+#define NOTICEBOARD "noticeboard" /* staznosti, ospravedlnenia, navrhy - archiv */
+#define NOTICE_DIGEST "notice_digest"  /* denny vyber z ^^^ */
+#define SITEBAN "siteban" /* vybanovane sites */
+#define NEWUSER_SITEBAN "newban" /* sites vybanovane iba na vytvaranie novych uctov */
+#define REMOTE_FILE "remote" /* konfigurak connecticutu :-) */
+#define STATSFILE "statistika"
+#define CHECKFILE "kontrola"
+#define CRASHFILE "crash"
+#define BOMBFILE "bomb"
+#define MAXTIMEOUTS "timeouts.max"
+
+/* datafiles-subory */
+#define MENINY_FILE "meniny.dat" /* kalendar */
+#define LAB_FILE  "labdata.dat" /* Nazov datoveho suboru */
+#define NEWUSER_INFO "newuser_info" /* informacie pre noveho userka - novy nick pri logine */
+#define HANGMAN_WORDS "hangman" /* slova do obesenca */
+#define LABYRINT_WINNERS "labyrint.win" /* vitazi labu */
+#define WEB_BOARD_DAT "webboard.dat" /* kto pisal na board a kde */
+
+/* log-subory */
+#define AKLIENT_LOG_USERS "akl_user.log" /* log userov z klienta */
+#define AKLIENT_LOG_VER "akl_ver.log" /* log pristupov z verzii klienta */
+#define LEVLOG "level.log" /* log promotes/demotes */
+#define COMMLOG "command.log" /* command debug log */
+#define TLT_LOG "tlt.log" /* TLT +, - log */
+#define SYSLOG "system.log" /* zabijet/nezabijet sezrat/nesezrat */
+#define WIZLOG "wizzes.log"
+#define GAMES_LOG "games.log"
+#define SENT_SMS "sentsms.log"
+#define SENT_MAIL "sentmail.log"
+
+#define TMPSUFFIX ".talkertmp" /* koncovka docasnych suborov pre vypisy who, boardov a podobne */
+
+/* pocasie-subory */
+#define WEATHER_TODAY_FILE    "pocasie/weather.today"
+#define WEATHER_TOMORROW_FILE "pocasie/weather.tomorrow"
+#define WEATHER_STRED_FILE    "pocasie/weather.stred"
+#define WEATHER_VYCHOD_FILE   "pocasie/weather.vychod"
+#define WEATHER_ZAPAD_FILE    "pocasie/weather.zapad"
+#define WEATHER_BLAVA_FILE    "pocasie/weather.blava"
+#define WEATHER_TATRY_FILE    "pocasie/weather.tatry"
+
+#define KOLOS_PROGRAM "amfiteater/program.atl"
+
+/* web-subory */
+#define WHO_FOR_WEB "who.raw" /* who pre web - surovy fajl */
 
 /* Status line */
 enum statline {NONEMODE,UNKNOWN,LINEMODE,CHARMODE};
@@ -242,9 +265,6 @@ enum statline {NONEMODE,UNKNOWN,LINEMODE,CHARMODE};
 #define HISTORY_LINES 10
 #define HISTORY_LEN 20
 
-#define RULES_HTML "../public_html/rules/rules.htm"
-#define FAQ_HTML   "../public_html/atlantis/faq.htm"
-#define NEWS_HTML  "../public_html/talnews.htm"
 
 #define DB_JAIL 1
 #define DB_DEMOTE 2
@@ -295,34 +315,11 @@ int remote_slot_active;
 sigjmp_buf save_state;
 
 extern int h_errno;
-			       
-/* #define MACRODIR "macros" */
-#define PRIKAZDIR "prikazy"
-#define MACROFILE "macrofile" 
-#define FORTUNE_FILE "misc/fortune" 
-#define POMOCFILES "pomocfiles" 
-#define USERLIST "misc/users.old" 
-#define NOEXITS "noexits" 
-#define DATAFILES "datafiles" 
-/* #define MAILFILES "userfiles" 
-#define HELPFILES "helpfiles" 
-#define PICTURES "pictures" */
-#define NOTICEBOARD "misc/noticeboard" 
-#define MAILSPOOL "mailspool" 
-#define CONFIGFILE "config.new" 
-#define MAPFILE "mapfile" 
-#define SITEBAN "siteban" 
-#define USERBAN "userban" /* uloupit/neloupit sezrat/nesezrat */
-#define SYSLOG "log/syslog" /* zabijet/nezabijet sezrat/nesezrat */
-#define WIZLOG "log/wizlog" 
-#define GAMES_LOG "log/games"
 
 /* Definicie pre labyrint. Dufajuc ze sa v tom nestratite ! :> */
 #define LAB_ROOMS 65            /* Maximalny pocet miestnosti */
 #define LAB_DESC  900            /* Maximalna velkost popisu miestnosti */
 #define MAX_LINE  100            /* Maximalna dlzka jedneho riadku z fajlu */
-#define LAB_FILE  "datafiles/labdata.dat"  /* Nazov datoveho suboru */
-        /* do laby!!! :>> */  /* do laby-netlaby */ /* do nextraby */
 
 /* Pokracujeme v definiciax. */
  
@@ -377,42 +374,6 @@ extern int h_errno;
 #define HANDS 4 /* pocet chapadiel usera */
 #define BODY HANDS+3 /* HANDS + cepicka + oblecenie + boty */
 
-/* Arena stuff. Zurive bitky mozu zacat !!!! */
-#define ARENA_FILE "arena.top"
-#define ARENA_TEMPFILE "arena.tempfile"
-
-#define HANGTOP "hangman.top" /* Aj tak bude Mia na 1. mieste :* */
-#define FLYTOP "flyer.top" /* najuspesnejsi piloti ... */
-
-/* Weather report stuff. Lepsie ako CNN !!! Aktualne spravodajstvo, priamo
-   na Atlantise priamo zo Slovenskeho Hydrometeorologickeho Ustavu !! */
-   
-#define WEATHER_TODAY_FILE    "pocasie/weather.today"
-#define WEATHER_TOMORROW_FILE "pocasie/weather.tomorrow"
-#define WEATHER_STRED_FILE    "pocasie/weather.stred"
-#define WEATHER_VYCHOD_FILE   "pocasie/weather.vychod"
-#define WEATHER_ZAPAD_FILE    "pocasie/weather.zapad"
-#define WEATHER_BLAVA_FILE    "pocasie/weather.blava"
-#define WEATHER_TATRY_FILE    "pocasie/weather.tatry"
-
-/* notify .......... Ak tam bude zasa nejaky bug, Buk(g)o je dead ! :> */
-/* ludia sa stazovali ze 30 je malo .... tak zvysit? No dobre tak 35 :> */
-/* TAKZE Buko je dead, lebo dalsi bug sa nasiel :>>> Gde mam tu devinu kua!*/
-/* Pod wankusom... alebo este skor pod psiou budou, vedla toho kluca :> */
-/* Juuuj clowece to je naaapad, zbrane skryvat pod psou budou :> Ale to este
-   nepoznas nasho psa .. to keby si tu zbran ryxlo potreboval tak by si sa
-   k nej nedostal lebo Cezarko by Ta najprv poriadne pooblizoval, oslintal,
-   oskakal, prinajhorsom este aj ocikal, takze za ten cas by vyrabovali
-   cely barak aj s kompom na ktorom su ... SAKRA ZDROJAKY ATLANTISU!!!!!!!!!!
-   Okay vsetky zbrane vratane granatov presuvam pod vankus ... M16ka, M203ka
-   aj par M249 nabite, of course, pre pripad nudze ...
-   Kurnik ale ten kluc nieje celkom pod budou, ale je v areali strazenom 
-   psom :>>> no a aby som nezabudol, F16ky su v garazi ... to pre pripad
-   leteckeho utoku z Kosic (?! $&!@(# !!!!!!) sakra nikdy som nebol militantny!*/
-/* Vies co? To bude uplne super, ked bueds musiet narukvat a budes osisany na
-   kratucke vlasky (ako ty zvyknes) a budes musiet pochodovat, cistit latriny,
-   drhnut si boty, skakat na poplachy, zakopavat tanky a tak... Potom ta ta
-   militantna nalada celkom iste prejde ;-) */
 
 struct 
  {
@@ -429,15 +390,7 @@ struct pager_struct {
 	struct pager_struct *next;
 	};                                   
 typedef struct pager_struct *PAGER; 
-   
-  /*  (S) ZMENA!!!!!!!!!! DYNAMICKY NOTIFY LIST -> MOZNOST ZARADIT LUBOVOLNY
-      POCET JUZROV!!! 
-      cele som to teda prerobil, hlavna funkcia je teraz ovela prehladnejsia
-      a tiez cele to je efektivnejsie, krajsie, genialnejsie, proste totalne
-      dokonale :->>>>>>>>>      
-      Zabudol si napisat, ze je to "transcendentalne!!!"
-      */
-      
+
 struct notify_struct {
 	char meno[13];
 	struct notify_struct *next;         
@@ -452,20 +405,6 @@ struct dama_struct {
         };
 typedef struct dama_struct* DAMA_OBJECT;
    
-/* ... aha, to vsetko sa tykalo toho notify?!?! :> WOW! */
-
-/* DNL (Date Number Length) will have to become 12 on Sun Sep 9 02:46:40 2001
-   when all the unix timers will flip to 1000000000 :) */
-/* No a my si natolko verime ze Atlantida bude existovat aj po roku 2001, ze
-   toto cislo ihned ako to bude mozne, zmenime na 12.  */
-/* Ovsem, ak nam ho ten Coronerov 'kamos' neoskalpuje, ako slubil :))) */
-/* ... uz nas skoro oskalpoval Wilder so Somebodym, suuuux! */
-/* !!! A UZ SA XYSTAJU AJ NA NETLAB !!! Musime zavolat TPSovho kocura Mexana :>*/ 
-/* ..a uz ho dostali. Cest jeho pamiatke. Co myslis, nastahuju sa nam aj na
-   Platona? Mozno mame remote exploit v drivery sietovice... juuuuj!! */
-
-/* #define DNL 11 */
-/* fok DNL, zjadne DNL! MYSQL RULEZ!! */
 
 #define PUBLIC 0
 #define PRIVATE 1
@@ -512,19 +451,7 @@ typedef struct dama_struct* DAMA_OBJECT;
 #define CLONE_HEAR_SWEARS 1
 #define CLONE_HEAR_ALL 2
 
-/* ourSQL .. the future is our world, the future is our time .. */
-/* now defined in atlantis.ini file
-#define HOSTNAME	""
-#define USER		""
-#define PASSWORD	""
-#define DATABASE	""
-*/
-
-int resolve_ip; /* ci ma resolvovat tu IPcku alebo nema resolvovat tu IPcku
-                   ... "Byt .... ci nebyt . ... TO JE OTAZKA!!!!!!!!!!!!"
-                   po nasom: "Resolvovatj ... ci neresolvovatj ... to je taaa
-                   spraaaavna otaaaazka!!!" Let it beeeee.... slafko... */
-
+int resolve_ip;
 /*Sem, neviem preco prave sem, ale sem pojdu tie buffery ;) */
 char revshoutbuff[REVIEW_LINES+1][REVIEW_LEN+2];
 int revshoutline;
@@ -847,6 +774,8 @@ RM_OBJECT create_room();
 #define nocolors  "Nemozes pouzivat farby.\n" /* Papluha, ogrgel akysi! */
 #define noswearing  "U nas sa nenadava, ty grobian!\n" /* Papluha, ogrgel akysi! */
                                                    /*     ^^^^^^^^^^^^^^^^^^^^^^ */
+#define NOEXITS "noexits"
+
 #define ZALAR_TLT_CONSUMPTION 30
 
 /* S> Ta hnusna Hvozdarka ma sakra 2x za sebou vyrazila .. strasne nexutne!
@@ -957,15 +886,6 @@ extern char *auth_sockuser2();
                /* no dobre, stacilo :->> Kruci, tiez musis definovat krawiny */
 #define TRI 3 /* no jo, co uz ... */ /* Nic... zastrelte ho! */
 
-#define KOLOS_PROGRAM "amfiteater/program.atl" /* nikto nam nexce pisat scanare */
-       /* keby tam tak dame tie Miloskove porno-poviedky ... ale sakra co
-          keby to videla Mamina ... :>>> Co ty vies, mozno by tu bola castejsie :> */
-       /* myslis? :> Ne, ona xodi na StarWars ovela castejsie ako na Tis ...
-          (prip. Talis :>) ... zeby tiez pa3la do Igiho tajnej bandy? No teda,
-          nevyzera na to :> */
-       /* Co myslis, (v)zrusia ich pri upgrade Qwyxa? Inak, ked uz spominas
-          Talis, je to celkom milucke blondave diefcatko... Teda, nic moc, ale
-	  zasa lepsie ako draatom do oka :) Sme minule fayn pokecali, jux! */
 
 /* deklaracia funkcii amfiteatru: */
 long play_nxt(void);
@@ -987,17 +907,9 @@ void remote_close();
 #define D_AMMO  20   /* Gulovnica */
 #define D_GRAPH "doom/graph.doom"
 #define D_DATA  "doom/data.doom"
-#define D_FILE  "doom.top" /* aj tak bude Rexo prvy :> No iste, zapomen! :> */
-                           /* No dobre, tak Dar Kvader :> */ /* Ee, Amazonka! */
 
 /* Externe premenne D00Ma */
-int doom_status;     /* Ci DOOM fici alebo je v... pazi */
-                     /* S>... alebo je KDE, RIDER????? v &lt;&gt, hehehe */
-                     /* Rider sa nam KAZI, JEDNOZNACNE!! */
-                     /* Rider sa nekazi, iba Spakky mysli na same prasaciny! */
-                     /* pockaj pockaj kto napisal ten prvy riadok? A je uplne
-                        jasne na co si pritom myslel!!! */
-		     /* JASNE? A na co teda podla teba?! */
+int doom_status;
 int doom_players;    /* Pocet hracov */
 char doom_grf[D_LOCAT][D_LINES][D_COLMS]; /* D_LINES-1 */
 char doom_map[D_MAPY][D_MAPX][5];
@@ -1034,92 +946,7 @@ char nazov[80];
 FILE *file;       /* subor so "scenarom", resp. pointer nan   */
 } play;
 
-/* (S) DEFINICIE suborov pre WEB publikovanie 
-   Pozor - v ceste k suborom nepouzivat ~ lebo to asi nejde :> */
- /* Kua samozrejme ze to nejde, a ani nepojde !!!! :<< */
- /* Teeeda, spakky, no fujha, tak sa nehovori :>> yasne ze to nejde, kam
-    bys sel kdyz nemas shell, ze ano :> */
- /* S> Blbost, ved to ide aj s nie-shellom, ved sa to pouziva napr. aj vo
-       webkax, aj vsade ... tak by to malo inct!!! */
-/* ale problem je v tom ze to nejde :< no nevadi, ale dolezitejsi je ten
-   blby resolver */       
-/* (Spartakus sings: *she sells Bourne shells by the sea shore ...*) */   
-/* Ja asi odidem do doxodku na stare kolena ... akoze sorry, ale ten hnusny
-   resolver blbne aj na tom Netlabe! Do (net)laby!!! Fakt uz nexapem co toto
-   ma znamenat...*/
-/* takze Rider ten resolverisko uz vopravil, ale robi to zombikov, aspon
-   u mna doma. On si akoze mysli, ze ked sepali zombika devinou, tak mu
-   to pojde. HOVNO!! (:>) Zombik sa neda sepalit. Zombik sa odpazi az ked
-   sa odpazi proces ktory ho tam zapazil. A double fork nefunguje. RIDER!
-*/      
-/* Yag zombikof, ti dam zobikof, zjadnyx zobikof... xybalo tam dake wajtpid,
-   tak som to bugfixol a Zombici sa odobrali nazad do pekiel jazernych, johoho,
-   aj s flasof rumu... */
-   
-#define KOLOS_HTML "../public_html/amfiteater/index.html"
-#define JOKEBOARD_HTML "../public_html/jokeboard/index.html"
-
-/* kontrolne cisielko pre suicide (that is painless) */
-/* RIDEEEEEEEEEEEEEEEEEEEEEEER!!! Co som Ti povedal?!?! :>> */
-/* Co peknuckeho? Nahodou... Co mas furt proti tej Qjetyne? Ved ona je celkom
-   fajn diefcatko... Pravda, este stale nemozem odprisahat, ze ma nevodi za
-   nos, ale ked je to take hrozne zlate... Ako vobec na to mozes kaslat? Ved
-   diefcatka su take pjekne makkucke milucke a pritulne... Teda akoze da sa zit
-   aj bez nich, ale je to tak troxu nuda... :( */
-/* Ja mozem odprisahat ze neviem o co vam vlastne ide :> Ale zda sa ze sa
-   Kukadlove uz konecne trosku umudrilo, a ze uz nerobi take krawiny ako
-   predtym - myslim ze ta lekcia riadne pomohla :>>> Uz aj ku mne sa sprava
-   trosku inak, cece :) */   
-/* a ja som sa pre zmenu zalubil - do Danky Chudej ... sakra ona je SUPER!*/
-/* ... ale minule som nepoxopil co to akoze malo znamenat na tych datate.
-   Sme tam celu hodinu a pol sedeli, potom prisiel Nehez, povedal nieco co
-   som vobec nexapal akoze o com malo bytj, a isli sme prec ...
-   Ale aspon som sa dozvedel, ze letiaceho ftaka nemozes sepalit sipom :>
-*/
-  /* Tak moment ten riadok o priblizne 6 vyssie beriem spat ... */
-  /* No a samozrejme Rider ty budes mat tiez xut asi z tych replik hore
-     nieco zobrat spat ... :( */
-  /* Ja? Ani za nic! Fakt su take mile, pjekne, pritulne, makkucke, sladucke a
-     tag... Akurat ma smolku. Btw, ten ony, co mu na meno prist nefim, je
-     vlastne celkom v pohode xalan, snad jej s nim bude aj celkom dobre,
-     myslim, ze ju ma celkom rad... Ale aj tak myslim, ze somnou by jej bolo 
-     lepsie, viac sa k sebe hodime ;-) Este aj Steelka to potrvdila ;-)
-     Err... a... btw, ked tak neznasas Danku, preco jej robis tu svocku?! :>
-  */
-  
-int logcommands; /* ci ma logovat prikazy */
-/* samozrejme ze ma, mohlo by to byt default na 1 !!!!!! */
-/* JO, A KTO BUDE KONTROLOVAT QUOTU?!?!?! No way, Sir!!! */
-/* Aye Sir, je to v tempe, takze pohoda :->> */
-/* Hnusny Sir!! */
-/* ??? ^^ to kto pisal?!?! ja ne, sakra a predtym to tu nebolo :> ??? */
-/* UFONI ZELENI!!!!!!!!!!!!!!!!!!!!! */
-/* Zeleni nie su ufoni, ale policajti a Zaba... :>> */
-/* Zaba ma este k tomu aj water-resist-eyes ... Hnusna Zaba! Ktovie ci
-   len do 200 metrov, musime vyskusat ... alebo by zvladla 2k4 mil pod
-   morom? Ak hej tak ja nexcem byt Kapitan Nemo!!!!!!!!!!!!!!!*/
-/* Ty ses vuul! Tyx 2E+4 mil pod morom bolo myslene ako vzdialenost, nie
-   ako hlbka! Taka priepast tu nikde na zemeguli neexistuje! Iba cosi okolo
-   11km (a o je cca 6 mil, takze...) 20 tisic mil, to mas.. err.. ax, ta
-   moja matika... ak dobre ratam, okolo 37000 kilometrof... HUH! Zacinaju ma
-   tie vypocty bavit. Takze, keby si sa ponoril do hlbky 20 000 mil, tak by
-   si preliezol durch zemegulov a este by si vyskocil 24 000 kilometrov do
-   vesmiru. Alebo inak, ak by si sa na druhej strane zeme otocil, tak by si
-   ju presiel celu dva krat skrz-naskrz a este by ti ostala rezerva na
-   vytrepanie sa do stratosfery... Este ma napadla taka vec, ze vyratat
-   hypoteticky tlak na ponorku v takej hlbke, ale nexce sa mi... ;-))*/
- 
-/* Definicie pre autorizaciu usera. ZASA !! */ 
-/* ... a tu je dokonca tusim zbytocne skoro vsetko :>>> */
-/* Ale rypat sa mi v tom nexce, takze smolka! :>> */
-/* prizo mi na zaciatku nexcel verit ze viem ako to pracuje */
-/* No a? Ja ti to neverim doteraz a vobec sa tym netajim :> */
-/* Akoze sorry, ale: connectne sa na port 113 daneho servera odkial ide
-   luzer, posle 2 cisla: nas port (7000) a cislo portu z ktoreho ide
-   luzer, a server mu posle userid usera ktory robi danu tcp connection.
-   Je to proste ako facka, tak co :> */
-/* Akoze sorry, ale ked je to take lahke, tak preco si to nenapisal sam? */
-
+int logcommands;
 unsigned short auth_tcpport;
 int            auth_rtimeout;
  
@@ -1212,8 +1039,6 @@ int            auth_rtimeout;
 /* Quest - questoviny */
 #define QLEADER 6         /* min. level "questleadra" */
 #define QUEST_DIR "quest"
-#define QUEST_FILE "quest.top"
-#define QUEST_TEMPFILE "questers.tmp"
 
 /* Globalna struktura quest - ked viete ako bez nej, tak prerobte... */
 /* Zdalo sa mi to sikovnejsie ako naflakat 20 roznych premennych... */

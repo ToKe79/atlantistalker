@@ -1,6 +1,15 @@
-#define TMPFOLDER	"temp/"				/* adresar na docasne subory */
-#define DBHOST		"localhost"			/* host pre MySQL */
-#define DBUSER		"talker"			/* user pre MySQL */
-#define DBPASS		"secret"			/* heslo pre MySQL */
-#define DBNAME		"atlantis"			/* nazov databazy MySQL */
-#define DATESINCE	"vzniku sveta"			/* datum, ktory sa doplni na prihlasovaciu obrazovku */
+#define TMPFOLDER		"temp/"				/* adresar na docasne subory */
+#define DBHOST			"localhost"			/* host pre MySQL */
+#define DBUSER			"talker"			/* user pre MySQL */
+#define DBPASS			"secret"			/* heslo pre MySQL */
+#define DBNAME			"atlantis"			/* nazov databazy MySQL */
+#define DATESINCE		"vzniku sveta"			/* datum, ktory sa doplni na prihlasovaciu obrazovku */
+#define WEB_ROOT		"/var/www"			/* kde je web-root / kam zapisovat veci pre web */
+#define DIRSEP			'/'				/* oddelovac adresarov, pre MS '\\' */
+#define TALKER_TELNET_HOST	"talker.example.com"		/* host, kde bezi talker */
+#define TALKER_EMAIL_HOST	"example.com"			/* e-mailovy host */
+#define WIZZES_EMAIL_ALIAS	"wizzes"			/* alias, na ktory sa posieju e-maily pre spravcov */
+#define TALKER_EMAIL_ALIAS	"talker"			/* alias, na ktory sa posielaju vseobecne e-maily */
+#define TALKER_WEB_SITE		"https://www.example.com"	/* site, kde bezi web talkera */
+#define TALKER_CITY		"Talkerville"			/* mesto, kde talker bezi */
+#define TALKER_COUNTRY		"Talklandia"			/* krajina, kde talker bezi */

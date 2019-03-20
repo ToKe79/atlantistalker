@@ -8,11 +8,12 @@
 char *get_ircserv_name(char *id)
 {
 static char nazov[100];
-char iden[15], server[50], port[8];
+char iden[15],server[50],port[8],filename[255];
 FILE *fp;
 
 nazov[0]='\0';
-if ((fp=fopen(IRC_SERVERS, "r"))==NULL) return nazov;
+sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,IRC_SERVERS);
+if ((fp=fopen(filename,"r"))==NULL) return nazov;
 fscanf(fp, "%s %s %s", iden, server, port);
 while (!feof(fp)) {
 	if (!strcmp(id, iden)) {

@@ -1440,7 +1440,7 @@ void do_webusers()
 		if (pocet_loginov>=MAX_POCET_LOGINOV) {
 			mysql_free_result(result);
 			eliminate_webuser(id);
-			sprintf(filename,"%s/%s",DATAFILES,SITEBAN);
+			sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,SITEBAN);
 			if (!(fp=ropen(filename,"a"))) {
 				return;
 			}

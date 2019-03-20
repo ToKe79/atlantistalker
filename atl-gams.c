@@ -26,8 +26,10 @@ char *clovece_col[]={"~FT","~FG","~FY","~FR","*"};
 extern void log_game(char *str)
 {
 	FILE *fp;
+	char filename[255];
 
-	if (!system_logging || !(fp=ropen(GAMES_LOG,"a")))
+	sprintf(filename,"%s%c%s",LOGFILES,DIRSEP,GAMES_LOG);
+	if (!system_logging || !(fp=ropen(filename,"a")))
 		return;
 	fprintf(fp,"%02d/%02d %02d:%02d:%02d: %s",tmday,tmonth+1,thour,tmin,tsec,str);
 	fclose(fp);
@@ -48,7 +50,7 @@ extern void lod(UR_OBJECT user)
 	int shdef, x, y;
 	int neukazuj=0;
 	int cz;
-	char filename[80];
+	char filename[255];
 	char temp[500];
 	char a,b;
 	int p;
@@ -89,7 +91,7 @@ extern void lod(UR_OBJECT user)
 			write_user(user,"Teraz nemozes ukladat stav hry.\n");
 			return;
 		}
-		sprintf(filename,"%s/%s.sav",LODICKY_SAVE_DIR,user->name);
+		sprintf(filename,"%s%c%s.sav",LODICKY_SAVE_DIR,DIRSEP,user->name);
 		if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
 			write_user(user,"Prepac, nemozem otvorit subor na zapis.\n");
 			return;
@@ -313,8 +315,9 @@ extern void lod(UR_OBJECT user)
 			u->tah=0;
 			user->zasah=0;
 			u->zasah=0;
-			show_user(user,"datafiles/ships-title");
-			show_user(u,"datafiles/ships-title");
+			sprintf(filename,"%s%cships-title",DATAFILES,DIRSEP);
+			show_user(user,filename);
+			show_user(u,filename);
 			shprn2(user,u);
 			shprn2(u,user);
 			strcpy(user->uname,u->name);
@@ -475,7 +478,8 @@ extern void lod(UR_OBJECT user)
 					default:
 						write_user(user,"~OL~FGFlotila rozmiestnena!\n");
 						user->shmode=1;
-						show_user(user,"datafiles/ships-title");
+						sprintf(filename,"%s%cships-title",DATAFILES,DIRSEP);
+						show_user(user,filename);
 						if (u->shmode==2) {
 							 sprintf(text,"%s uz rozostavil%s svoje lodstvo! Caka sa len na Teba ...\n",user->name,pohl(user,"","a"));
 							 write_user(u,text);
@@ -483,7 +487,7 @@ extern void lod(UR_OBJECT user)
 							 write_user(user,text);
 						 }
 						 if (u->shmode==1) {
-							 show_user(u,"datafiles/ships-title");
+							 show_user(u,filename);
 							 shprn2(user,u);
 							 shprn2(u,user);
 							 sprintf(text,"~OL~FY%s rozostavil%s lodstvo, hra sa moze zacat!\n",user->name,pohl(user,"","a"));
@@ -577,8 +581,10 @@ extern void lod(UR_OBJECT user)
 				sprintf(text,"~OL~FY~BB G A M E  O V E R ~RS~BK~FW\n");
 				writecent(user,text);
 				writecent(u,text);
-				show_user(user,"datafiles/ships-winner");
-				show_user(u,"datafiles/ships-loser");
+				sprintf(filename,"%s%cships-winner",DATAFILES,DIRSEP);
+				show_user(user,filename);
+				sprintf(filename,"%s%cships-loser",DATAFILES,DIRSEP);
+				show_user(u,filename);
 				user->game=0;
 				u->game=0;
 				user->uname[0]='\0';
@@ -959,12 +965,26 @@ extern void lab(UR_OBJECT user)
 		write_user(user,text);
 		writecent(user,"~OL~FB** ~FYGAME OVER ~FB**\n");
 		user->lab=0;
-		sprintf(filename,"%s/%s",DATAFILES, LABYRINT_WINNERS);
-		if (!(fp=ropen(filename,"a")))
+		sprintf(filename,"%s%c%s",DATAFILES,DIRSEP,LABYRINT_WINNERS);
+		if (!(fp=ropen(filename,"r"))) {
+			if(!(fp=ropen(filename,"w"))) {
+				write_level(WIZ,1,"~OL~FRCHYBA: Nie je mozne vytvorit subor pre vitazov labyrintu!\n",NULL);
+				return;
+			}
+			fprintf(fp,"%s\n",user->name);
+			fclose(fp);
 			return;
-		fprintf(fp,"%s\n",user->name);
-		fclose(fp);
-		return;
+		}
+		else {
+			fclose(fp);
+			if (!(fp=ropen(filename,"a"))) {
+				write_level(WIZ,1,"~OL~FRCHYBA: Nie je mozne zapisovat do suboru pre vitazov labyrintu!\n",NULL);
+				return;
+			}
+			fprintf(fp,"%s\n",user->name);
+			fclose(fp);
+			return;
+		}
 	}
 	sprintf(text,"%s\n~FTMozes ist: ",lab_room.popiska[user->lab]); /* Text roomu + kam sa da ist */
 	write_user(user,text);
@@ -3364,12 +3384,13 @@ extern void doom_load_users()
 int lab_load()
 {
 	int mode=0,lines=0,x=0,a,b,c,d,e,f;
-	char string[MAX_LINE+1];
+	char string[MAX_LINE+1],filename[255];
 	FILE *data;
 
 	lab_room.start=0;
 	lab_room.end=0;
-	if (!(data=ropen(LAB_FILE,"rt"))) {
+	sprintf(filename,"%s%c%s",DATAFILES,DIRSEP,LAB_FILE);
+	if (!(data=ropen(filename,"rt"))) {
 		printf("CHYBA: Datafile nenajdeny\n");
 		return 1;
 	}

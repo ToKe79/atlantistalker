@@ -6,9 +6,6 @@
 #define MAX_BANNER_LEN 40       /* max dlzka banneru */
 #define MAX_BANNER_LEN_LUSER 20 /* max dlzka banneru pre luzrof (<WIZ) ;) */
 #define MYSTRLEN(x) ((int)strlen(x)) /* Eliminate ANSI problem */
-/* DIRSEP - make this '\\' for an MS-DOS port. */
-/* Note: '/' also used in filename in get_columns(). */
-#define DIRSEP '/'
 #define FONTFILEMAGICNUMBER "flf2"
 #define FSUFFIXLEN MYSTRLEN(TMPSUFFIX)
 #define DEFAULTCOLUMNS 80
