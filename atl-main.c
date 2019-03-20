@@ -11343,9 +11343,9 @@ else if ((!strcmp(word[1],"status")) && (user->level>KIN))
 /* vypise bez parametru */
 
 
-else  {     sprintf(text,"\n\nNajblizsie predstavenie: %s; najblizi cas predstavenia: %dh%dm\n",play.nazov,play.hodina,play.minuta);
+else  {     sprintf(text,"Najblizsie predstavenie: ~OL%s~RS; najblizi cas predstavenia: ~OL%dh%dm~RS\n\n",play.nazov,play.hodina,play.minuta);
             write_user(user,text);   
-            sprintf(filename,"amfiteater/predstavenie.atl");
+            sprintf(filename,"%s%c%s",KOLOS_FILES,DIRSEP,KOLOS_BANNER);
             switch(more(user,user->socket,filename)) {
                   case 0: write_user(user,"Nenasiel sa subor s predstavenim.\n");  break;
                   case 1: user->misc_op=2;
@@ -26945,7 +26945,7 @@ return(dest);
 
 long play_nxt(void) /* (S) uprava */
 {
-   char filename[MAXSTRING+1], ourtime[MAXSTRING+1], nazov[80];
+   char ourtime[MAXSTRING+1],nazov[80],filename[255];
    long curmin,ourmin;
    int count,poz;
    /* int cilhod, cilmin; */
@@ -26957,8 +26957,9 @@ long play_nxt(void) /* (S) uprava */
    /* cilhod=thour; */ /* Aky cas je CIL :> */
                  /* po Nitriansky: VCULEKY! :> */
    /* cilmin=tmin; */
-   curmin=thour*60+tmin;      
-   if ((program = ropen(KOLOS_PROGRAM,"r")) == NULL) return(ZERO); /*APPROVED*/
+   curmin=thour*60+tmin;
+   sprintf(filename,"%s%c%s",KOLOS_FILES,DIRSEP,KOLOS_PROGRAM);
+   if ((program = ropen(filename,"r")) == NULL) return(ZERO); /*APPROVED*/
    
    count=0; /*fcil posluzi ako flag */
    while (fgets(ourtime,MAXSTRING,program)!=NULL)  /* divoky string alebo eof */

@@ -14,19 +14,15 @@
 #endif
 #include <fcntl.h>
 #include <time.h>
-
 #include <netdb.h>
 #include <signal.h>
 #include <string.h>
 #include <unistd.h>
-
 #include <errno.h>
 #include <dirent.h>
 #include <stddef.h>
-
 #include <stdlib.h>
 #include <ctype.h>
-
 #include <sys/vfs.h> /* koli ropen */
 #include <sys/socket.h>
 #include <sys/time.h>
@@ -47,19 +43,16 @@
 #else
 #include "config.h.sample"
 #endif
-
 #ifdef HPUX_SB
 #define FD_CAST (int *)
 #else
 #define FD_CAST (fd_set *)
 #endif
-
 #ifdef GLIBC207
 #define SIGNAL(x,y) sysv_signal(x,y)
 #else
 #define SIGNAL(x,y) signal(x,y)
 #endif
-
 
 int wrtype,pollerror;
 
@@ -71,11 +64,10 @@ int wrtype,pollerror;
 #define WR_NOCOL 6
 #define WR_WITHCOL 7
 
-
 #define RESCNUM 500
 char rescip[RESCNUM][17];
 char rescho[RESCNUM][52];
-int  rescn;
+int rescn;
 int resc_resolved;
 int resc_cached;
 
@@ -248,7 +240,9 @@ int writeerror,max_timeouts,max_timeoutz;
 #define WEATHER_BLAVA_FILE    "pocasie/weather.blava"
 #define WEATHER_TATRY_FILE    "pocasie/weather.tatry"
 
-#define KOLOS_PROGRAM "amfiteater/program.atl"
+#define KOLOS_FILES "amfiteater"
+#define KOLOS_PROGRAM "program.atl"
+#define KOLOS_BANNER "predstavenie.atl"
 
 /* web-subory */
 #define WHO_FOR_WEB "who.raw" /* who pre web - surovy fajl */
