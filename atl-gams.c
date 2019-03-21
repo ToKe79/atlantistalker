@@ -7017,7 +7017,7 @@ void clovece(UR_OBJECT user,char *inpstr)
 				if (user->clovece->hrac[i]!=NULL)
 					cnt++;
 			if (cnt>1) {
-				j=(int)(rand()%3);
+				j=(int)(rand()%4);
 				switch (j) {
 					case 0:
 						sprintf(text,"~FT%s sa nahneval%s a hodil%s svoje figurky o zem.\n",user->name,pohl(user,"","a"),pohl(user,"","a"));
@@ -7027,6 +7027,9 @@ void clovece(UR_OBJECT user,char *inpstr)
 						break;
 					case 2:
 						sprintf(text,"~FT%s hodil%s na zem svoje figurky a zurivo po nich zacal%s skakat.\n",user->name,pohl(user,"","a"),pohl(user,"","a"));
+						break;
+					case 3:
+						sprintf(text,"~FT%s sa uz nechce hrat clovece, vzal%s svoje figurky a odlozil%s ich do krabice.\n",sklonuj(user,3),pohl(user,"","a"),pohl(user,"","a"));
 						break;
 				}
 				for (i=0;i<4;++i)
@@ -7049,6 +7052,9 @@ void clovece(UR_OBJECT user,char *inpstr)
 						break;
 					case 2:
 						sprintf(text,"~FTHodil%s si na zem svoje figurky z clovece a zurivo zacal%s po nich skakat.\n",pohl(user,"","a"),pohl(user,"","a"));
+						break;
+					case 3:
+						sprintf(text,"~FTNechce sa ti uz hrat clovece, tak si vzal%s svoje figurky a odlozil%s ich do krabice.\n",pohl(user,"","a"),pohl(user,"","a"));
 						break;
 				}
 				write_user(user,text);
