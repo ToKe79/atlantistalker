@@ -300,7 +300,7 @@ void load_irc_details(UR_OBJECT user)
 {
 int ok=1;
 
-sprintf(query,"select defnick,channel,server,name from irc where userid='%d';",user->id);
+sprintf(query,"select `defnick`,`channel`,`server`,`name` from `irc` where `userid`='%d';",user->id);
 if (!(result=mysql_result(query))) ok=0;
 if (ok==1) {
   if ((row=mysql_fetch_row(result))) {
@@ -328,7 +328,7 @@ if (user->level<SAG) return;
 
 if (user->irc_chan[0]=='\0') strcpy(user->irc_chan,"#atlantis"); 
 if (user->irc_serv[0]=='\0') strcpy(user->irc_serv,"nextra1");
-sprintf(query,"replace into irc (userid,defnick,channel,server,name) values ('%d','",user->id);
+sprintf(query,"replace into `irc` (`userid`,`defnick`,`channel`,`server`,`name`) values ('%d','",user->id);
 strcat(query,dbf_string(user->irc_defnick)); strcat(query,"','");
 strcat(query,dbf_string(user->irc_chan)); strcat(query,"','");
 strcat(query,dbf_string(user->irc_serv)); strcat(query,"','");

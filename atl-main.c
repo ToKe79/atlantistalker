@@ -1503,7 +1503,7 @@ if (user==NULL) fprintf(stderr,"Nacitavam popisky miestnosti...");
 else write_user(user,"Nacitavam popisky miestnosti...");
 
 for(rm1=room_first;rm1!=NULL;rm1=rm1->next) {
-  sprintf (query,"select desc_sk,desc_en from rooms where name_sk='%s'",rm1->name);
+  sprintf (query,"select `desc_sk`,`desc_en` from `rooms` where `name_sk`='%s'",rm1->name);
   if (!(result=mysql_result(query))) {
     sprintf(text,"CHYBA\n- Nemozem najst popis pre miestnost %s.\n",rm1->name);
     if (user==NULL) fprintf(stderr,"%s",text);
@@ -3736,7 +3736,7 @@ if ((has_unread_mail(user)) && (user->level)) {
 
 
 mailboxsize=0;
-sprintf(query,"select sum(length(message)) from mailbox where userid='%d'",user->id);
+sprintf(query,"select sum(length(`message`)) from `mailbox` where `userid`='%d'",user->id);
 mailboxsize=query_to_int(query);
 i=db_user_switch(user->id,2); /* no quota userlist */
 if (mailboxsize>MAIL_LIMIT*(1+i*20)) {
@@ -8456,17 +8456,17 @@ char filename[80];
 
 sprintf(filename,"atlantis.map");
 
-     if (word_count==2 && !strncmp(word[1],"atl",3)) sprintf(filename,"atlantis.map");
-else if (word_count==2 && !strncmp(word[1],"por",3)) sprintf(filename,"portalis.map");
-else if (word_count==2 && !strncmp(word[1],"oce",3)) sprintf(filename,"ocean.map");
-else if (word_count==2 && !strncmp(word[1],"bru",3)) sprintf(filename,"brutalis.map");
+     if (word_count==2 && !strncmp(word[1],"a",1)) sprintf(filename,"atlantis.map");
+else if (word_count==2 && !strncmp(word[1],"p",1)) sprintf(filename,"portalis.map");
+else if (word_count==2 && !strncmp(word[1],"o",1)) sprintf(filename,"ocean.map");
+else if (word_count==2 && !strncmp(word[1],"b",1)) sprintf(filename,"brutalis.map");
 
 else if (user->room->group==1) sprintf(filename,"atlantis.map");
 else if (user->room->group==2) sprintf(filename,"portalis.map");
 else if (user->room->group==4) sprintf(filename,"brutalis.map");
 else if (!strcmp(user->room->name,"plachetnica")) sprintf(filename,"ocean.map");
 
-sprintf(query,"select body from files where filename='%s'",filename);
+sprintf(query,"select `body` from `files` where `filename`='%s'",filename);
 switch(sqlmore(user,user->socket,query)) {
 	case 0: write_user(user,"Nenasla sa mapa.\n");  break;
 	case 1: user->misc_op=222;
@@ -11728,7 +11728,7 @@ int typ;
 {
 char filename[80];
 if (typ==1) {
-            sprintf(filename,"select body from files where filename='faq'");
+            sprintf(filename,"select `body` from `files` where `filename`='faq'");
             switch(sqlmore(user,user->socket,filename)) {
                   case 0: write_user(user,"Nenasiel sa subor s FAQ!\n");  break;
                   case 1: user->misc_op=222;
@@ -11738,7 +11738,7 @@ if (typ==1) {
 if (typ==2) {
 /*	    sprintf(filename,"%s/rules",DATAFILES);
             switch(more(user,user->socket,filename)) { */
-	    sprintf(filename,"select body from files where filename='rules'");
+	    sprintf(filename,"select `body` from `files` where `filename`='rules'");
             switch(sqlmore(user,user->socket,filename)) {
                   case 0: write_user(user,"Nenasiel sa subor s pravidlami (rules)!\n");  break;
                   case 1: user->misc_op=222;
@@ -16470,7 +16470,7 @@ else {
   }
  else profile=100;
 
- sprintf(query,"select max(UNIX_TIMESTAMP(time)) from mailbox where userid='%d'",u->id);
+ sprintf(query,"select max(UNIX_TIMESTAMP(`time`)) from `mailbox` where `userid`='%d'",u->id);
  new_mail=query_to_int(query);
 
  if (!oflajn) {
@@ -18983,7 +18983,7 @@ if (found && com_level[com_num]>user->level) {
  if (!(ret=more(user,user->socket,filename))) write_user(user,"Pomoc k takemu prikazu sa nenasla.\n");
  if (ret==1) user->misc_op=2;
 */
- sprintf (query,"select help from help where name like ('%s%%') and level<='%d' order by name,lang%s,level desc;",name,user->level,user->lang==0?"":" desc");
+ sprintf (query,"select `help` from `help` where `name` like ('%s%%') and `level`<='%d' order by `name`,`lang`%s,`level` desc;",name,user->level,user->lang==0?"":" desc");
  if (!(ret=sqlmore(user,user->socket,query))) write_user(user,"Pomoc k takemu prikazu sa nenasla.\n");
  if (ret==1) user->misc_op=222;
  if (found && !user->misc_op) {  
@@ -19946,7 +19946,7 @@ user->messnum=0;
 if (word_count==2) {
   if (word[1][0]=='n') {
     user->browsing=10;
-    sprintf(query,"select count(msgid) from mailbox where userid='%d' and time<FROM_UNIXTIME('%d')",user->id,(int)user->read_mail);
+    sprintf(query,"select count(`msgid`) from `mailbox` where `userid`='%d' and `time`<FROM_UNIXTIME('%d')",user->id,(int)user->read_mail);
     user->rjoke_from=query_to_int(query);
     user->rjoke_from++;
    }
@@ -20082,7 +20082,7 @@ if (strlen(word[1])>12) {
   write_user(user,"Prilis dlhe meno adresata.\n");
   return;
  }
-sprintf(query,"select sum(length(message)) from mailbox where userid='%d'",uid);
+sprintf(query,"select sum(length(`message`)) from `mailbox` where `userid`='%d'",uid);
 mailboxsize=query_to_int(query);
 bigquota=db_user_switch(uid,2); /* no quota userlist */
 if (mailboxsize>MAIL_LIMIT*(1+bigquota*20)) {
@@ -20289,7 +20289,7 @@ if (profile) {
 	      }
 */
 
-sprintf(query,"select max(UNIX_TIMESTAMP(time)) from mailbox where userid='%d'",u->id);
+sprintf(query,"select max(UNIX_TIMESTAMP(`time`)) from `mailbox` where `userid`='%d'",u->id);
 new_mail=query_to_int(query);
   
 days=u->total_login/86400;  
@@ -20509,7 +20509,7 @@ else
 
 sstrncpy(hp,u->homepage,HOMEPAGE_LEN);
 
-sprintf(query,"select max(UNIX_TIMESTAMP(time)) from mailbox where userid='%d'",u->id);
+sprintf(query,"select max(UNIX_TIMESTAMP(`time`)) from `mailbox` where `userid`='%d'",u->id);
 /* new_mail=query_to_int(query); */
 
 days=u->total_login/86400;  
@@ -26804,7 +26804,7 @@ mysql_kvery(query);
 deleted=mysql_affected_rows(&mysql);
 
 for(rm=room_first;rm!=NULL;rm=rm->next) {
-  sprintf(query,"select count(msgid) from board where room='%s' and deleted=0",rm->name);
+  sprintf(query,"select count(`msgid`) from `board` where `room`='%s' and `deleted`=0",rm->name);
   rm->mesg_cnt=query_to_int(query);
   total+=rm->mesg_cnt;
  }

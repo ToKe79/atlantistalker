@@ -2452,7 +2452,7 @@ void write_board(UR_OBJECT user,char *inpstr,int done_editing)
 		name=user->name;
 	else
 		name=invisname2(user);
-	sprintf(query,"select max(msgid) from board where room='%s'",user->room->name);
+	sprintf(query,"select max(`msgid`) from `board` where `room`='%s'",user->room->name);
 	max=query_to_int(query);
 	if (!user->vis) {
 		if (user->sex)
@@ -3016,13 +3016,13 @@ void delete_joke(UR_OBJECT user)
 		write_user(user,"Prve cislo musi byt mensie (alebo rovne) ako druhe!\n");
 		return;
 	}
-	sprintf(query,"select id from jokes order by id desc limit %d,1",from-1);
+	sprintf(query,"select `id` from `jokes` order by `id` desc limit %d,1",from-1);
 	if ((result=mysql_result(query))) {
 		if ((row=mysql_fetch_row(result)) && row[0])
 			fromid=atoi(row[0]);
 		else {
 			mysql_free_result(result);
-			sprintf(query,"select count(id) from jokes");
+			sprintf(query,"select count(`id`) from `jokes`");
 			sprintf(text,"Na jokeboarde je len %d vtipov!\n",query_to_int(query));
 			write_user(user,text);
 			return;
