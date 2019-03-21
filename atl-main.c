@@ -25610,8 +25610,9 @@ return 1;
 }
 
 void check_messages(user)
-/*UR_OBJECT user;
+UR_OBJECT user;
 {
+/*
 RM_OBJECT rm;
 FILE *infp;
 char filename[80],line[301];
