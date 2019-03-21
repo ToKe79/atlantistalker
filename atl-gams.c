@@ -2421,7 +2421,7 @@ extern char *get_hang_word(char *aword)
 	int lines,cnt,i;
 
 	lines=cnt=i=0;
-	sprintf(filename,"%s/%s",DATAFILES,HANGMAN_WORDS);
+	sprintf(filename,"%s%c%s",DATAFILES,DIRSEP,HANGMAN_WORDS);
 	lines=count_lines(filename);
 	if (!lines) lines++;
 	srand(time(0));

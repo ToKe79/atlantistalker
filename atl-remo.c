@@ -16,7 +16,7 @@ for(user=user_first;user!=NULL;user=user->next) {
 !user->lynx) continue;
   if (waitpid (user->lynx, &status, WNOHANG) == user->lynx) {
     user->lynx=0;
-    sprintf(filename,"%s%s-lynx%s",TMPFOLDER,user->name,TMPSUFFIX);
+    sprintf(filename,"%s%c%s-lynx%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
     if (user->misc_op) {
       if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/
         fclose(fp);
@@ -34,7 +34,7 @@ for(user=user_first;user!=NULL;user=user->next) {
      }              
    }
   else {
-    sprintf(filename,"%s%s-lynx%s",TMPFOLDER,user->name,TMPSUFFIX);
+    sprintf(filename,"%s%c%s-lynx%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
     if (filesize(filename)>200000) {
       kill(-user->lynx,9);
       waitpid(user->lynx, &status, 0);
@@ -59,7 +59,7 @@ if (word_count!=2) {
    return;
    }
 
-sprintf(filename,"%s%s-lynx%s",TMPFOLDER,user->name,TMPSUFFIX);
+sprintf(filename,"%s%c%s-lynx%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
 
 if (!strcmp(word[1],"stop")) {
    if (user->lynx) {

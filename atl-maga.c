@@ -16,7 +16,7 @@ extern void magazin(UR_OBJECT user, char *inpstr)
 		write_user(user,"          .magazin list    - zoznam vydani\n");
 		return;
 	}
-	sprintf(filename, "%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+	sprintf(filename, "%s%c%s%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
 	if ((subor=ropen(filename,"w"))==NULL) { /*APPROVED*/
 		write_user(user,"~OL~FRNepodarilo sa zapisat docasny subor pre citanie casopisu!~RS~FW\n");
 		return;

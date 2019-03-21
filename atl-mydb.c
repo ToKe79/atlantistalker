@@ -792,7 +792,7 @@ void query_com(UR_OBJECT user,char *inpstr)
 			write_user(user,"~OL~FRObmedzene na 'SELECT'!\n");
 			return;
 		}
-		sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+		sprintf(filename,"%s%c%s%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
 		if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
 			write_user(user,"Chyba: problem s otvaranim docasneho suboru.\n");
 			return;
@@ -2954,7 +2954,7 @@ void read_board(UR_OBJECT user)
 	}
 	if (!strcmp(rm->name,"cintorin")) {
 		write_user(user,title("~FW~OLTu odpocivaju v pokoji:","~OL~FK"));
-		sprintf(filename,"%s/suicides",DATAFILES);
+		sprintf(filename,"%s%csuicides",DATAFILES,DIRSEP);
 		if (!(ret=more(user,user->socket,filename))) {
 			write_user(user,"Tabula s umrtnymi oznameniami je prazdna.\n\n");
 			user->browsing=0;

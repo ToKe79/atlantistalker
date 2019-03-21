@@ -73,7 +73,7 @@ int deutschflag,justification,paragraphflag,right2left;
 int smushmode;
 int outputwidth;
 int outlinelenlimit;
-char *fontdirname,*fontname;
+char fontdirname[255],*fontname;
 
 /***
 * Globals read from font file
@@ -118,7 +118,7 @@ void getparams(char *fontsubor)
 {
 	int firstfont;
 
-	fontdirname = TMPFOLDER;
+	sprintf(fontdirname,"%s%c",TMPFOLDER,DIRSEP);
 	firstfont = 1;
 	fontname = (char*)myalloc(sizeof(char)*(MYSTRLEN(DEFAULTFONTFILE)+1));
 	strcpy(fontname,DEFAULTFONTFILE); /* Some systems don't have strdup() */
@@ -882,7 +882,7 @@ extern int create_banner(UR_OBJECT user1,UR_OBJECT user2,int type,char *inpstr,i
 	char meno_fontu[50];
 	inchr c;
 	int i;
-	char tempfontfilename[80];
+	char tempfontfilename[255];
 	char query[100];
 	MYSQL_RES *result;
 	MYSQL_ROW row;
@@ -908,7 +908,7 @@ extern int create_banner(UR_OBJECT user1,UR_OBJECT user2,int type,char *inpstr,i
 		return 0;
 	row=mysql_fetch_row(result);
 	sprintf(meno_fontu,"%s-font%s",user1->name,TMPSUFFIX);
-	sprintf(tempfontfilename,"%s%s",TMPFOLDER,meno_fontu);
+	sprintf(tempfontfilename,"%s%c%s",TMPFOLDER,DIRSEP,meno_fontu);
 	if ((fptff=ropen(tempfontfilename,"w"))==NULL)
 		return 0;
 	fprintf(fptff,"%s",row[0]);

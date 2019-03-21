@@ -123,7 +123,7 @@ int i,line/* ,cnt */;
 char filename[80];
 FILE *fp;
 
-sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+sprintf(filename,"%s%c%s%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/	
   fclose(fp);
   deltempfile(filename);
@@ -1429,7 +1429,7 @@ while (!feof(fp)) {
  }
 */
 /* Io frazy miestnosti (do husteho lesa, z husteho lesa, v hustom lese) */
-sprintf(filename,"%s/%s",DATAFILES,"ioroom");
+sprintf(filename,"%s%cioroom",DATAFILES,DIRSEP);
 if (!(fp=ropen(filename,"r"))) { /*APPROVED*/
  printf("Chyba - Nenasiel som subor s io frazami miestnosti (%s)\n",filename);
 }
@@ -1543,7 +1543,7 @@ for(rm1=room_first;rm1!=NULL;rm1=rm1->next) {
 if (user==NULL) fprintf(stderr,"...alternativne...");
    else write_user(user,"...alternativne...");
 if (alt_island_desc!=NULL) free ((void *) alt_island_desc);   
-sprintf(filename,"%s/%s.S",DATAFILES,SHIPPING_ISLAND);
+sprintf(filename,"%s%c%s.S",DATAFILES,DIRSEP,SHIPPING_ISLAND);
 if (!(fp=ropen(filename,"r"))) { /*APPROVED*/
       sprintf(text,"CHYBA\n- Nemozem otvorit alt. popis pre miestnost %s.\n",SHIPPING_ISLAND);
       if (user==NULL) fprintf(stderr,"%s",text);
@@ -1588,7 +1588,7 @@ else {
      }
 
 if (alt_plachetnica_desc!=NULL) free ((void *) alt_plachetnica_desc);   
-sprintf(filename,"%s/%s.S",DATAFILES,SHIPPING_SHIP);
+sprintf(filename,"%s%c%s.S",DATAFILES,DIRSEP,SHIPPING_SHIP);
 if (!(fp=ropen(filename,"r"))) { /*APPROVED*/
       sprintf(text,"CHYBA\n- Nemozem otvorit alt. popis pre miestnost %s.\n",SHIPPING_SHIP);
       if (user==NULL) fprintf(stderr,"%s",text);
@@ -1633,7 +1633,7 @@ else {
      }
 
 if (alt_home_desc!=NULL) free ((void *) alt_home_desc);   
-sprintf(filename,"%s/%s.S",DATAFILES,SHIPPING_HOME);
+sprintf(filename,"%s%c%s.S",DATAFILES,DIRSEP,SHIPPING_HOME);
 if (!(fp=ropen(filename,"r"))) { /*APPROVED*/
       sprintf(text,"CHYBA\n- Nemozno otvorit alt. popis pre miestnost %s.\n",SHIPPING_HOME);
       if (user==NULL) fprintf(stderr,"%s",text);
@@ -3931,7 +3931,7 @@ RM_OBJECT rm;
 UR_OBJECT u2,u;
 int mins,minutes,hours,days, i,y,pocet=0;
 FILE *fp;
-char tempfilename[80];
+char tempfilename[255];
 int nukehim=0;
 int status;
 char *dovod;
@@ -3994,7 +3994,7 @@ if (user->lynx) {
 	waitpid(user->lynx, &status, 0);
         }
         
-sprintf(tempfilename,"%s%s-lynx%s",TMPFOLDER,user->name,TMPSUFFIX);
+sprintf(tempfilename,"%s%c%s-lynx%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
 if ((fp=ropen(text,"r"))!=NULL) { fclose(fp); deltempfile(tempfilename); }
 
 if (user->hang_stage!=-1) {
@@ -4270,12 +4270,12 @@ free_notifylist(&(user->combanlist));
 
 save_irc_details(user);
                  
-sprintf(tempfilename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+sprintf(tempfilename,"%s%c%s%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
 if ((fp=ropen(tempfilename,"r"))!=NULL) { /*APPROVED*/
 	fclose(fp);
 	deltempfile(tempfilename);
 	}
-sprintf(tempfilename,"%s%s-lynx%s",TMPFOLDER,user->name,TMPSUFFIX);
+sprintf(tempfilename,"%s%c%s-lynx%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
 if ((fp=ropen(tempfilename,"r"))!=NULL) { /*APPROVED*/	
 	fclose(fp);
 	deltempfile(tempfilename);
@@ -4379,11 +4379,11 @@ int i, line, size,cnt=0;
 FILE *fp;
 time_t akt_cas;
 char *ptr;
-char filename[81];
+char filename[255];
 /* char email[255]; */
 
 size=0;
-sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+sprintf(filename,"%s%c%s%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
 
 if (sp) {
   if ((fp=ropen(filename,"w"))==NULL) return;
@@ -10916,7 +10916,7 @@ if (!(strncmp(word[1],"exa",3))) {
    }
   if (word_count==3) {
     if (!strcmp(word[2],"test")) {
-      sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+      sprintf(filename,"%s%c%s%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
       if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/
         fclose(fp);
         deltempfile(filename);
@@ -11736,8 +11736,6 @@ if (typ==1) {
 	}
 
 if (typ==2) {
-/*	    sprintf(filename,"%s/rules",DATAFILES);
-            switch(more(user,user->socket,filename)) { */
 	    sprintf(filename,"select `body` from `files` where `filename`='rules'");
             switch(sqlmore(user,user->socket,filename)) {
                   case 0: write_user(user,"Nenasiel sa subor s pravidlami (rules)!\n");  break;
@@ -16283,7 +16281,7 @@ FILE *fp;
 char filename[90];
 int vyskyt[101],cnt,i;
 
-sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+sprintf(filename,"%s%c%s%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/	
 	fclose(fp);
 	deltempfile(filename);
@@ -16546,7 +16544,7 @@ else {
     }
   }
 
- sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+ sprintf(filename,"%s%c%s%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
  if (!(fp=ropen(filename,testall?"a":"w"))) { /*APPROVED*/
    if (!testall) write_user(user,"Chyba! Nepodarilo sa otvorit docasny subor!\n");
    mysql_free_result(result);
@@ -16835,7 +16833,7 @@ MYSQL_ROW row;
 /* int stage=0; */
 UR_OBJECT u;
 
- sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+ sprintf(filename,"%s%c%s%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
  if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
    write_user(user,"Chyba! Nepodarilo sa vytvorit docasny subor!\n");
    sprintf(text,"~OL~FW~BRVarovanie:~RS ~OLNepodarilo sa vytvorit docasny subor '%s'!\n",filename);
@@ -16881,7 +16879,7 @@ char query[255];
 MYSQL_RES *result;
 MYSQL_ROW row;
 
- sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+ sprintf(filename,"%s%c%s%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
  if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
    write_user(user,"Chyba! Nepodarilo sa vytvorit docasny subor!\n");
    sprintf(text,"~OL~FW~BRVarovanie:~RS ~OLNepodarilo sa vytvorit docasny subor '%s'!\n",filename);
@@ -17142,7 +17140,7 @@ UR_OBJECT u;
    return;
   }
  */
- sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+ sprintf(filename,"%s%c%s%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
  if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
    write_user(user,"Chyba! Nepodarilo sa otvorit docasny subor!\n");
    mysql_free_result(result);
@@ -17207,7 +17205,7 @@ if (people && (word_count==2) && (!strcmp(word[1],"t"))) {
  }
 total=0;invis=0;/* remote=0; */logins=0;
 
-sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+sprintf(filename,"%s%c%s%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/	
 	fclose(fp);
 	deltempfile(filename);
@@ -17315,7 +17313,7 @@ char filename[90];
 	return;
 	}
 */
-sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+sprintf(filename,"%s%c%s%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/
 	fclose(fp);
 	deltempfile(filename);
@@ -17430,7 +17428,7 @@ char filename[90];
 	return;
 	}
 */	
-sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+sprintf(filename,"%s%c%s%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/	
 	fclose(fp);
 	deltempfile(filename);
@@ -17542,7 +17540,7 @@ FILE *fp;
 	return;
 	}
 */	
-sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+sprintf(filename,"%s%c%s%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/	
 	fclose(fp);
 	deltempfile(filename);
@@ -17634,7 +17632,7 @@ FILE *fp;
 	return;
 	}
 */	
-sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+sprintf(filename,"%s%c%s%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/	
 	fclose(fp);
 	deltempfile(filename);
@@ -17741,7 +17739,7 @@ char filename[90];
 */	
 total=0;invis=0;/* remote=0;logins=0; */
 
-sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+sprintf(filename,"%s%c%s%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/
 	fclose(fp);
 	deltempfile(filename);
@@ -17851,7 +17849,7 @@ char filename[90];
 */	
 total=0;invis=0;/* remote=0;logins=0; */
 
-sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+sprintf(filename,"%s%c%s%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/
 	fclose(fp);
 	deltempfile(filename);
@@ -17971,7 +17969,7 @@ wizzes=0;
 	return;
 	}
 */
-sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+sprintf(filename,"%s%c%s%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/	
 	fclose(fp);
 	deltempfile(filename);
@@ -18098,7 +18096,7 @@ FILE *fp;
 	return;
 	}
 */
-sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+sprintf(filename,"%s%c%s%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/	
 	fclose(fp);
 	deltempfile(filename);
@@ -18191,7 +18189,7 @@ char filename[90];
 */	
 total=0; 
 
-sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+sprintf(filename,"%s%c%s%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/
 	fclose(fp);
 	deltempfile(filename);
@@ -18956,7 +18954,7 @@ if (found && com_level[com_num]>user->level) {
  if (!(result=mysql_result(query)))
   { write_user(user,"Chyba: Nastal problem s citanim helpu.\n"); return; }
  if ((row=mysql_fetch_row(result))) {
-   sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+   sprintf(filename,"%s%c%s%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
    if (!(fp=ropen(filename,"w"))) {
      mysql_free_result(result);
      write_user(user,"Chyba: Nastal problem s citanim helpu.\n");
@@ -19004,7 +19002,7 @@ void help_fonts(user)
 	MYSQL_RES *result;
 	MYSQL_ROW row;
 
-	sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+	sprintf(filename,"%s%c%s%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
 
 	if (!(fp=ropen(filename,"w"))) {
 		write_user(user,"Nepodarilo sa vytvorit docasny subor!\n");
@@ -20565,7 +20563,7 @@ int cnt,i, ppredm=0,zwjs/* ,rast */;
 FILE *fp;
 char filename[81];
 
-sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+sprintf(filename,"%s%c%s%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
 if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/	
   fclose(fp);
   deltempfile(filename);
@@ -24994,7 +24992,7 @@ if (this_user) {
       strcpy(name,user->name);
       if (user->total_login/86400>=2) {
         time (&tim);
-        sprintf(filename,"%s/suicides",DATAFILES);
+        sprintf(filename,"%s%csuicides",DATAFILES,DIRSEP);
         if ((fp=ropen(filename,"a"))) {
           sprintf(text,"%10s %s %s %s\n",zobraz_datum(&tim,4),level_name[user->level],user->name,user->desc);
           fputs(text,fp);
@@ -25612,7 +25610,7 @@ return 1;
 }
 
 void check_messages(user)
-UR_OBJECT user;
+/*UR_OBJECT user;
 {
 RM_OBJECT rm;
 FILE *infp;
@@ -25625,8 +25623,8 @@ bad_cnt=0;
 for(rm=room_first;rm!=NULL;rm=rm->next) {
       tmp=rm->mesg_cnt;
       rm->mesg_cnt=0;
-      sprintf(filename,"%s/%s.B",DATAFILES,rm->name);
-      if (!(infp=ropen(filename,"r"))) continue; /*APPROVED*/
+      sprintf(filename,"%s%c%s.B",DATAFILES,DIRSEP,rm->name);
+      if (!(infp=ropen(filename,"r"))) continue;
       
       board_cnt++;
 
@@ -25641,7 +25639,9 @@ for(rm=room_first;rm!=NULL;rm=rm->next) {
       }
       
 sprintf(texthb,"%d board files checked, %d had an incorrect message count.\n",board_cnt,bad_cnt);
-write_user(user,texthb);      
+write_user(user,texthb);
+*/
+write_user(user,"Tento prikaz je uz zbytocny, kedze spravy z nastenok sa ukladaju v DB,\nlen sa nikomu nechcelo ho odstranit.\n");
 }
 
 
@@ -26277,7 +26277,7 @@ if (((rand()%1200)+1)==60) {         /* TU SA ROZHODUJE AKO CASTO SA TO BUDE VOL
 				   /* napr. ..%60)+1)==30 znamena ze priblizne raz za 2 minuty 
 				      (ak je hardbeat 2) */
 for (rm=room_first;rm!=NULL;rm=rm->next) {
-	sprintf(filename,"%s/%s.udl",DATAFILES,rm->name);
+	sprintf(filename,"%s%c%s.udl",DATAFILES,DIRSEP,rm->name);
 	if (!(fp=ropen(filename,"r"))) continue; /*APPROVED*/
 	
 	fscanf(fp,"%d",&pocet);
@@ -26704,7 +26704,7 @@ if ((user->room!=NULL) && (user->alarm>0)) {
 	user->alarm-=heartbeat;
 	if (user->alarm==0) {
 	    user->alarm=-1;
-	    sprintf(filename,"%s/alarmfile",DATAFILES);
+	    sprintf(filename,"%s%calarmfile",DATAFILES,DIRSEP);
             /* ja nefim uz ci nam to niekto kradne alebo co,
                ale uz asi 5 krat sa stratil alarmfile..
                jednoducho zmizol a musel som ho tam znova kopirovat.. (V) */
@@ -27207,7 +27207,7 @@ MACRO macro;
 FILE *fp;
 char filename[81];
 
- sprintf(filename,"%s%s%s",TMPFOLDER,user->name,TMPSUFFIX);
+ sprintf(filename,"%s%c%s%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
  if ((fp=ropen(filename,"r"))!=NULL) { /*APPROVED*/	
    fclose(fp);
    deltempfile(filename);

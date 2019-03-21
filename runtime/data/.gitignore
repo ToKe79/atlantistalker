@@ -1,5 +1,6 @@
 *
 !.gitignore
+!alarmfile
 !hangman
 !ioroom
 !labdata.dat
