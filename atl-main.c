@@ -11775,7 +11775,7 @@ FILE *fp;
 if (word_count>1 && com_num==LOOK) { /* skusime predmet */
   vec=expand_predmet(word[1]);
   if (vec>-1) {
-    sprintf(filename,"predmety/%s",predmet[vec]->name);  
+    sprintf(filename,"%s%c%s",ITEMFILES,DIRSEP,predmet[vec]->name);
     if (!(fp=ropen(filename,"r"))) {  /*APPROVED*/
       if (!ammunition(user,vec)) write_user(user,"K tomuto predmetu niet opisu!\n");
       return; 
@@ -16416,7 +16416,7 @@ char *str;
    if (!nasiel) { 
      /* skusime predmet */
      if (!repos && vec>-1) {
-       sprintf(filename,"predmety/%s",predmet[vec]->name);  
+       sprintf(filename,"%s%c%s",ITEMFILES,DIRSEP,predmet[vec]->name);
        if (!(fp=ropen(filename,"r"))) {  /*APPROVED*/
          if (!testall) write_user(user,"K tomuto predmetu niet opisu!\n");
 	 return; 
@@ -20221,7 +20221,7 @@ u2=NULL;
    if (!nasiel) { 
      /* skusime predmet */
      if (!repos && vec>-1) {
-       sprintf(filename,"predmety/%s",predmet[vec]->name);  
+       sprintf(filename,"%s%c%s",ITEMFILES,DIRSEP,predmet[vec]->name);
        if (!(fp=ropen(filename,"r"))) {  /*APPROVED*/
          write_user(user,"K tomuto predmetu niet opisu!\n");
 	 return; 

@@ -183,6 +183,7 @@ int writeerror,max_timeouts,max_timeoutz;
 #define MAILSPOOL "mailspool"
 #define POMOCFILES "help" /* adresar pre pomoc-subory */
 #define LOGFILES "logs" /* adresar pre rozne logy */
+#define ITEMFILES "predmety" /* adresar s popiskami predmetov */
 
 /* misc-subory */
 #define DICT "dict" /* slovnik lamerskyx hesiel */
