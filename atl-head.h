@@ -159,6 +159,9 @@ int writeerror,max_timeouts,max_timeoutz;
  
 #define THROWDEC     20
 #define THROWCAN     50
+#define STEALCAN     50
+#define THIEFDEC     30
+#define VICTIMDEC    10
 
 #define PRIVPUBDEC   40
 #define PRIVPUBCAN   100
