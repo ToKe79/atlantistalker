@@ -2093,7 +2093,7 @@ int mailmore(UR_OBJECT user)
 					case 10:
 					case 11:
 					case 12:
-						if (row[3] && atoi(row[3])>=user->read_mail) { 
+						if (row[3] && atoi(row[3])>=user->read_mail) {
 							i=1;
 							user->read_mail=atoi(row[3])+1;
 						}

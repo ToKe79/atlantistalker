@@ -481,21 +481,21 @@ extern void lod(UR_OBJECT user)
 						sprintf(filename,"%s%cships-title",DATAFILES,DIRSEP);
 						show_user(user,filename);
 						if (u->shmode==2) {
-							 sprintf(text,"%s uz rozostavil%s svoje lodstvo! Caka sa len na Teba ...\n",user->name,pohl(user,"","a"));
-							 write_user(u,text);
-							 sprintf(text,"%s este rozostavuje lode ... chvilu pockaj.\n",u->name);
-							 write_user(user,text);
-						 }
-						 if (u->shmode==1) {
-							 show_user(u,filename);
-							 shprn2(user,u);
-							 shprn2(u,user);
-							 sprintf(text,"~OL~FY%s rozostavil%s lodstvo, hra sa moze zacat!\n",user->name,pohl(user,"","a"));
-							 writecent(u,text);
-							 sprintf(text,"~OL~FYVsetko je v poriadku, hra sa moze zacat!\n");
-							 writecent(user,text);
-						 }
-						 break;
+							sprintf(text,"%s uz rozostavil%s svoje lodstvo! Caka sa len na Teba ...\n",user->name,pohl(user,"","a"));
+							write_user(u,text);
+							sprintf(text,"%s este rozostavuje lode ... chvilu pockaj.\n",u->name);
+							write_user(user,text);
+						}
+						if (u->shmode==1) {
+							show_user(u,filename);
+							shprn2(user,u);
+							shprn2(u,user);
+							sprintf(text,"~OL~FY%s rozostavil%s lodstvo, hra sa moze zacat!\n",user->name,pohl(user,"","a"));
+							writecent(u,text);
+							sprintf(text,"~OL~FYVsetko je v poriadku, hra sa moze zacat!\n");
+							writecent(user,text);
+						}
+						break;
 				}
 
 			}
@@ -717,7 +717,7 @@ extern int shcount(UR_OBJECT user, int x, int y)
 	int r=0;
 
 	if ((x+1<10) && (user->shtable[y][x+1]=='X'))
-	       	r++;
+		r++;
 	if ((y+1<10) && (user->shtable[y+1][x]=='X'))
 		r++;
 	if ((x-1>=0) && (user->shtable[y][x-1]=='X'))
@@ -1395,7 +1395,7 @@ extern void je5b(UR_OBJECT user,int n)
 		if (!(u=get_user(user->uname)))
 			return;
 	}
-	else 
+	else
 		u=user;
 	if (!(u2=get_user(u->uname)))
 		return;
@@ -2521,7 +2521,7 @@ extern void doom(UR_OBJECT user,char *inpstr)
 			case '5':
 				strcpy(text,"Uaaaaaaaaaaauuuuuaaaaaaaauuaaa!!!!!!!!!");
 				break;
-			case '6': 
+			case '6':
 				strcpy(text,"Priprav si vstupenku do pekla, mojko!");
 				break;
 			case '7':
@@ -2636,16 +2636,16 @@ extern void doom(UR_OBJECT user,char *inpstr)
 			doom_map[user->doom_y][user->doom_x][4]=1;
 			x=user->doom_x; y=user->doom_y;
 			switch (user->doom_heading) {
-				case 0: 
+				case 0:
 					user->doom_x--;
 					break;
-				case 1: 
+				case 1:
 					user->doom_y++;
 					break;
-				case 2: 
+				case 2:
 					user->doom_x++;
 					break;
-				case 3: 
+				case 3:
 					user->doom_y--;
 					break;
 			}
@@ -2755,10 +2755,10 @@ extern void doom(UR_OBJECT user,char *inpstr)
 					case 1:
 						user->doom_x--;
 						break;
-					case 2: 
+					case 2:
 						user->doom_y++;
 						break;
-					case 3: 
+					case 3:
 						user->doom_x++;
 						break;
 				}
@@ -2903,7 +2903,7 @@ extern void doom_showmap(UR_OBJECT user)
 						break;
 					default:
 						write_user(user,"?");
-						 break;
+						break;
 				}
 			}
 		write_user(user,"+\n+");
@@ -3307,7 +3307,7 @@ extern int doom_init()
 
 	if (!(subor=ropen(D_GRAPH,"r")))
 		return 1;
-	for (y=0;y<D_LOCAT;y++) 
+	for (y=0;y<D_LOCAT;y++)
 		for (x=0;x<6;x++)
 			if (fgets(doom_grf[y][x],D_COLMS,subor)==NULL) {
 				fclose(subor);
@@ -4476,11 +4476,16 @@ void reversi_pocitajznaky(UR_OBJECT user,int *pX,int *pO)
 /* test, ci moze tahat podla pravidiel na [x,y] */
 int reversi_testok(UR_OBJECT user,int y,int x)
 {
-	int k,l,kn,ln,i,j;	/* k,l,kn,ln - suradnice [nove]   i - smer
-				   j - posun v smere i */
-	int ok=0;	/* ok - moze tahat*/
+	int k,l,kn,ln,i,j;
+	/* k,l,kn,ln - suradnice [nove]
+	 * i - smer
+	 * j - posun v smere i
+	 */
+	int ok=0;
+	/* ok - moze tahat*/
 
-	if (user->reversi_plan[y][x]) return 0;
+	if (user->reversi_plan[y][x])
+		return 0;
 	for (i=0; (!ok)&&(i<8) ;++i)
 		/* vyskusaj smer i */
 		for (k=x,l=y,j=0; !ok; k=kn,l=ln,++j) {
@@ -6470,7 +6475,7 @@ void clovece_disp(UR_OBJECT user)
 							if ((user->colour==0 || user->clovece->monochrom[user->chrac-1]==1)) {
 								strcat(text,"~OL  ");
 								switch (i) {
-									case 0: 
+									case 0:
 										text[strlen(text)-2]='0';
 										break;
 									case 1:

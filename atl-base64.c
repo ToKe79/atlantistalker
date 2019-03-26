@@ -63,7 +63,6 @@ char *encode_base64(int size, unsigned char *src)
 			*p++=encode(b6);
 		else
 			*p++='=';
-		
 		if (i+2<size)
 			*p++=encode(b7);
 		else
@@ -155,7 +154,7 @@ static unsigned char decode(char c)
 /**
  * Return 1 if 'c' is a valid base64 character, otherwise 0
  */
-static int is_base64(char c) 
+static int is_base64(char c)
 {
 	if ((c>='A' && c<='Z') || (c>='a' && c<='z') || (c>='0' && c<='9') || (c=='+') || (c=='/') || (c=='='))
 		return 1;

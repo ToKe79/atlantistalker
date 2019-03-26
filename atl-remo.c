@@ -370,24 +370,24 @@ void zober_predpoved(UR_OBJECT user,int force)
 			return;
 			break;
 		case 0:
-			 /* Vsetky fajly ktore xceme stiahnut stiahneme najprv tu ... www.shmu.sk 193.87.204.9 */
-			 webcicni("www.shmu.sk","/predpoved/predpoved.cgi?2","pocasie/raw2.htm");
-			 webcicni("www.shmu.sk","/predpoved/predpoved.cgi?3","pocasie/raw3.htm");
-			 webcicni("www.shmu.sk","/predpoved/predpoved.cgi?4","pocasie/raw4.htm");
-			 webcicni("www.shmu.sk","/predpoved/predpoved.cgi?5","pocasie/raw5.htm");
-			 webcicni("www.shmu.sk","/predpoved/predpoved.cgi?6","pocasie/raw6.htm");
-			 webcicni("www.shmu.sk","/predpoved/predpoved.cgi?7","pocasie/raw7.htm");
-			 webcicni("www.shmu.sk","/predpoved/predpoved.cgi?8","pocasie/raw8.htm");
-			 /* ... a parsneme */
-			 parsni_pocasie("pocasie/raw2.htm",WEATHER_TODAY_FILE);
-			 parsni_pocasie("pocasie/raw3.htm",WEATHER_TOMORROW_FILE);
-			 parsni_pocasie("pocasie/raw4.htm",WEATHER_STRED_FILE);
-			 parsni_pocasie("pocasie/raw5.htm",WEATHER_VYCHOD_FILE);
-			 parsni_pocasie("pocasie/raw6.htm",WEATHER_ZAPAD_FILE);
-			 parsni_pocasie("pocasie/raw7.htm",WEATHER_BLAVA_FILE);
-			 parsni_pocasie("pocasie/raw8.htm",WEATHER_TATRY_FILE);
-			 _exit(1);
-			 break;
+			/* Vsetky fajly ktore xceme stiahnut stiahneme najprv tu ... www.shmu.sk 193.87.204.9 */
+			webcicni("www.shmu.sk","/predpoved/predpoved.cgi?2","pocasie/raw2.htm");
+			webcicni("www.shmu.sk","/predpoved/predpoved.cgi?3","pocasie/raw3.htm");
+			webcicni("www.shmu.sk","/predpoved/predpoved.cgi?4","pocasie/raw4.htm");
+			webcicni("www.shmu.sk","/predpoved/predpoved.cgi?5","pocasie/raw5.htm");
+			webcicni("www.shmu.sk","/predpoved/predpoved.cgi?6","pocasie/raw6.htm");
+			webcicni("www.shmu.sk","/predpoved/predpoved.cgi?7","pocasie/raw7.htm");
+			webcicni("www.shmu.sk","/predpoved/predpoved.cgi?8","pocasie/raw8.htm");
+			/* ... a parsneme */
+			parsni_pocasie("pocasie/raw2.htm",WEATHER_TODAY_FILE);
+			parsni_pocasie("pocasie/raw3.htm",WEATHER_TOMORROW_FILE);
+			parsni_pocasie("pocasie/raw4.htm",WEATHER_STRED_FILE);
+			parsni_pocasie("pocasie/raw5.htm",WEATHER_VYCHOD_FILE);
+			parsni_pocasie("pocasie/raw6.htm",WEATHER_ZAPAD_FILE);
+			parsni_pocasie("pocasie/raw7.htm",WEATHER_BLAVA_FILE);
+			parsni_pocasie("pocasie/raw8.htm",WEATHER_TATRY_FILE);
+			_exit(1);
+			break;
 	}
 	if (force)
 		write_user(user,"Poziadavka bola odoslana ...\n");
