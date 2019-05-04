@@ -22,7 +22,7 @@ CFLAGS += -ggdb
 endif
 
 ifeq ($(MOREWARN), 1)
-CFLAGS += -Wextra -Wformat=2
+CFLAGS += -Wextra -Wformat=2 -Wmisleading-indentation
 endif
 
 .PHONY: clean libs
