@@ -150,7 +150,7 @@ int com_level[]={
 	PRI, SOL, CIT, WAR, KIN,
 	KIN, KIN, KIN, KIN, GOD,
 	CIT, PRI, KIN, SOL, NEW,
-	CIT, CIT, SOL, KIN, CIT,
+	CIT, CIT, SOL, WIZ, CIT,
 	KIN, CIT, WAR, NEW, SOL,
 	SOL, GOD,
 };
