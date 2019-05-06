@@ -1,11 +1,3 @@
-/*****************************************************************************
-  	           ---=> ATLANTIS 4.xx (pow!) HEADER <=---
-	             ged reedy four a phun-tastic staff!
-      	         (a verte tomu, ze je NAOZAJ phun-toastycs!)
-******************************************************************************/ 
-   /* aj procko by ziral ... */
-                                 /* WHOARN(IE)YNG! BLBOSTI INSIDE! KIPE UTE! */
-
 /* Takze najskor budu INCLUDY - preco ich nedat sem, ked mozem? */
 
 #include <stdio.h>
@@ -23,11 +15,11 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include <sys/vfs.h> /* koli ropen */
+#include <sys/vfs.h>
 #include <sys/socket.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#include <sys/stat.h> /* koli poste ... */
+#include <sys/stat.h>
 #include <sys/wait.h>
 #include <sys/file.h>
 #include <netinet/in.h>
@@ -56,7 +48,7 @@
 
 int wrtype,pollerror;
 
-#define WR_IOPHR 1     /* i/o phrase ignorovanie */
+#define WR_IOPHR 1
 #define WR_ZVERY 2
 #define WR_NEWBIE 3
 #define WR_AVOID_PREDMETS 4
@@ -86,7 +78,7 @@ int inyjefuc;
 int max_users_was;
 int all_logins;
 int sayfloodnum;
-int passwd_simplex; /* Ahem ... Brezina, Ivanicova!!!! - ale nestras! */
+int passwd_simplex;
 int hb_can;
 int hb_sec;
 
@@ -97,28 +89,28 @@ int writeerror,max_timeouts,max_timeoutz;
 
 #define VERSION "3.3.3"
 #define WORK "modifikacie: Spartakus, Rider, Buko, Hruza, Viper"
-#define MOZENADAVAT GOD  /* Ze ktory level mozenadavat */
-#define MOZEFARBICKOVAT KIN  /* Ze ktory level pouzivat farbicky */
+#define MOZENADAVAT GOD
+#define MOZEFARBICKOVAT KIN
 #define TIMEOUT 3
 #define EXECPREFIX "./"
 
 /* Zabezpecenie otvarania suborov (ropen) */
 
-#define FILESYSTEM "/"  /* cesticka k disk-device */
-#define LOW_DISK_LIMIT 1024     /* minimum volneho v KB   */
+#define FILESYSTEM "/"
+#define LOW_DISK_LIMIT 1024
 
 #define POCET_KUZIEL 16
 /* Definicie Power-Pointov */
 
-#define SPELLK	   20  /* konstanta pre vypocet many */ 
-#define MAXPP      200 /* maximalny pocet pp */
-#define INCPP      1   /* kolko pp prida za 1 hearbeat */
-#define NODYNAMIC  0   /* nie je dynamicky uberane */
+#define SPELLK	   20
+#define MAXPP      200
+#define INCPP      1
+#define NODYNAMIC  0
  
-#define SHOUTDEC   35  /* kolko uberie shout */ 
-#define SHOUTCAN   105 /* kedy uz moze shoutovat */ 
-#define SHOUTDYN   85  /* dynamicka konstanta v percentach */   
-  		        /* Dalej uz tak isto - PRIKAZDEC, PRIKAZCAN, PRIKAZDYN */ 
+#define SHOUTDEC   35
+#define SHOUTCAN   105
+#define SHOUTDYN   85
+
 #define SEMOTEDEC  35 
 #define SEMOTECAN  105
 #define SEMOTEDYN  85
@@ -173,7 +165,7 @@ int writeerror,max_timeouts,max_timeoutz;
    1 user nemoze byt naraz vo viac akcijach (napr. naraz jail a muzzle). ;))) */
 
 /* Sortovanie v tabulkach */
-#define MAX_ENTRIES 1000 /* No, viac ako 1000 ix neviem ci bude */
+#define MAX_ENTRIES 1000
 
 /* First of all, nejake definicie suborov ... */
 /* adresare */
@@ -255,20 +247,19 @@ int writeerror,max_timeouts,max_timeoutz;
 enum statline {NONEMODE,UNKNOWN,LINEMODE,CHARMODE};
 
 /* REM0TE */
-#define MAX_CONNECTIONS 5 /* ZMENIT NA 5 !!!!!!! */
+#define MAX_CONNECTIONS 5
 #define MAX_POLL 2000
 
-#define AUTOSAVE 300   /* autosave (krat dva) -> 600 = 20 minut */
+#define AUTOSAVE 300
 
 #define HISTORY_LINES 10
 #define HISTORY_LEN 20
-
 
 #define DB_JAIL 1
 #define DB_DEMOTE 2
 #define DB_BAN 3
 
-#define COUNT 111                           /* fortune cookies */
+#define COUNT 111 /* fortune cookies */
 
 #define MAIL_QUOTA 50000 /* odkedy bude upozornovat na preplnenu sxranku */
 #define MAIL_LIMIT 55000 /* odkedy uz nebude moct dostavat postu!!! */
@@ -276,9 +267,6 @@ enum statline {NONEMODE,UNKNOWN,LINEMODE,CHARMODE};
 /* Toto je na HNUSNY resolver. */
 #define NUMBER_OF_LOOPS 75 /* kolko desiatok microsekund na resolvnutie */
 #define ADRESIZE 512       /* maximalna dlzka hostname         */
-
-#define PROMOTE_PASSWD "SSChoredaj*PB%f,T4BnP{pi}%^(jPjf&"
-#define X_PASSWD "SSCmarine*N(k0>x,tiGnV%J;l<pVz^&"
 
 /* Second of all, some macros and other stuff */
 
@@ -351,6 +339,9 @@ extern int h_errno;
 
 #define EMAIL_LEN 60 /* max. dlzka emailu */
 #define PASS_LEN 10 /* only the 1st 8 chars will be used by crypt() though */
+#define PASS_MIN_LEN 4
+#define PASS_MIN_LEN_WIZ 6
+#define WIZPASS_MIN_LEN 3
 #define BUFSIZE 900
 #define ROOM_NAME_LEN 20
 #define ROOM_LABEL_LEN 5
@@ -362,11 +353,7 @@ extern int h_errno;
 #define REVIRC_LINES 50
 #define LASTLOG_LINES 50
 #define REVIEW_LEN 300 /* bolo 1000 - potom 500 ci kolko */
-#define HOMEPAGE_LEN 60 /* Kapitan: Jsi v pasti a my te ted oloupime! */
-                        /* Ivan: Mne?!?!? */
-                        /* Kapitan: Kua do paze koho ineho?!? */
-                        /* Ivan: Tak cooo, volupte mne vole vozralej! (hodi na zem brasnu) */
-
+#define HOMEPAGE_LEN 60
 
 #define MPVM 25 /* Maximum predmetov v miestnosti */
 #define HANDS 4 /* pocet chapadiel usera */
@@ -860,18 +847,18 @@ struct room_struct *testroom; /* aby som furt nedavel write_room(NULL,text);
 #ifndef AUTHUSER_H 
 #define AUTHUSER_H 
  
-extern unsigned short auth_tcpport; 
-extern int            auth_rtimeout; 
-extern char *auth_xline(); 
-extern int auth_fd(); 
-extern int auth_fd2(); 
-extern int auth_tcpsock(); 
-extern char *auth_tcpuser(); 
-extern char *auth_tcpuser2(); 
-extern char *auth_tcpuser3(); 
-extern char *auth_tcpuser4(); 
-extern char *auth_sockuser(); 
-extern char *auth_sockuser2(); 
+extern unsigned short auth_tcpport;
+extern int auth_rtimeout;
+extern char *auth_xline();
+extern int auth_fd();
+extern int auth_fd2();
+extern int auth_tcpsock();
+extern char *auth_tcpuser(register unsigned long in,register unsigned short local,register unsigned short remote);
+extern char *auth_tcpuser2(register unsigned long inlocal,register unsigned long inremote,register unsigned short local,register unsigned short remote);
+extern char *auth_tcpuser3();
+extern char *auth_tcpuser4();
+extern char *auth_sockuser(register int s,register unsigned short local,register unsigned short remote);
+extern char *auth_sockuser2(register int s,register unsigned short local,register unsigned short remote,int rtimeout);
 #endif 
 
 
