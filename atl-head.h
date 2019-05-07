@@ -1,5 +1,3 @@
-/* Takze najskor budu INCLUDY - preco ich nedat sem, ked mozem? */
-
 #include <stdio.h>
 #ifdef _AIX
 #include <sys/select.h>
@@ -30,16 +28,19 @@
 #include <stdarg.h>
 #include <libxml2/libxml/xmlwriter.h>
 #include <locale.h>
+
 #if defined(HAVE_CONFIG)
 #include "config.h"
 #else
 #include "config.h.sample"
 #endif
+
 #ifdef HPUX_SB
 #define FD_CAST (int *)
 #else
 #define FD_CAST (fd_set *)
 #endif
+
 #ifdef GLIBC207
 #define SIGNAL(x,y) sysv_signal(x,y)
 #else
@@ -62,8 +63,6 @@ char rescho[RESCNUM][52];
 int rescn;
 int resc_resolved;
 int resc_cached;
-
-/* Teraz dake deklaracie, ktore boli tam, kde byt NEMALI! */
 
 int counter_db(int add);
 
@@ -94,13 +93,10 @@ int writeerror,max_timeouts,max_timeoutz;
 #define TIMEOUT 3
 #define EXECPREFIX "./"
 
-/* Zabezpecenie otvarania suborov (ropen) */
-
 #define FILESYSTEM "/"
 #define LOW_DISK_LIMIT 1024
 
 #define POCET_KUZIEL 16
-/* Definicie Power-Pointov */
 
 #define SPELLK	   20
 #define MAXPP      200
@@ -158,27 +154,17 @@ int writeerror,max_timeouts,max_timeoutz;
 #define PRIVPUBDEC   40
 #define PRIVPUBCAN   100
 
-/* Definicie akcii - pokusne */ 
-/* Poznamka: Aj tak je teraz osobitny casovac pre kazdy, predmet, pche! :>> */
-/* No jo, a potom nefunguje .caction, pajada... :( */
-/* V) Akcije su na meno, na dorucitela a tu v zdojaku su na howno!, lebo potom
-   1 user nemoze byt naraz vo viac akcijach (napr. naraz jail a muzzle). ;))) */
-
-/* Sortovanie v tabulkach */
-#define MAX_ENTRIES 1000
-
-/* First of all, nejake definicie suborov ... */
 /* adresare */
-#define MISCFILES "misc" /* adresar pre misc-subory */
-#define BACKUP_DIR "backups" /* adresar na zalohy */
-#define DATAFILES "data" /* adresar pre data-subory */
-#define CLOVECEFILES "saves-clovece" /* adresar pre ulozene hry clovece */
-#define LODICKY_SAVE_DIR "saves-lodicky" /* adresar pre ulozene hry lodiciek */
-#define DAMAFILES "saves-dama" /* adresar pre ulozene hry damy */
+#define MISCFILES "misc" /* misc-subory */
+#define BACKUP_DIR "backups" /* zalohy */
+#define DATAFILES "data" /* data-subory */
+#define CLOVECEFILES "saves-clovece" /* ulozene hry clovece */
+#define LODICKY_SAVE_DIR "saves-lodicky" /* ulozene hry lodiciek */
+#define DAMAFILES "saves-dama" /* ulozene hry damy */
 #define MAILSPOOL "mailspool"
-#define POMOCFILES "help" /* adresar pre pomoc-subory */
-#define LOGFILES "logs" /* adresar pre rozne logy */
-#define ITEMFILES "predmety" /* adresar s popiskami predmetov */
+#define POMOCFILES "help" /* pomoc-subory */
+#define LOGFILES "logs" /* logy */
+#define ITEMFILES "predmety" /* popisky predmetov */
 
 /* misc-subory */
 #define DICT "dict" /* slovnik lamerskyx hesiel */
@@ -207,7 +193,7 @@ int writeerror,max_timeouts,max_timeoutz;
 
 /* datafiles-subory */
 #define MENINY_FILE "meniny.dat" /* kalendar */
-#define LAB_FILE  "labdata.dat" /* Nazov datoveho suboru */
+#define LAB_FILE  "labdata.dat" /* labyrint - nazov datoveho suboru */
 #define NEWUSER_INFO "newuser_info" /* informacie pre noveho userka - novy nick pri logine */
 #define HANGMAN_WORDS "hangman" /* slova do obesenca */
 #define LABYRINT_WINNERS "labyrint.win" /* vitazi labu */
@@ -218,8 +204,8 @@ int writeerror,max_timeouts,max_timeoutz;
 #define AKLIENT_LOG_VER "akl_ver.log" /* log pristupov z verzii klienta */
 #define LEVLOG "level.log" /* log promotes/demotes */
 #define COMMLOG "command.log" /* command debug log */
-#define TLT_LOG "tlt.log" /* TLT +, - log */
-#define SYSLOG "system.log" /* zabijet/nezabijet sezrat/nesezrat */
+#define TLT_LOG "tlt.log"
+#define SYSLOG "system.log"
 #define WIZLOG "wizzes.log"
 #define GAMES_LOG "games.log"
 #define SENT_SMS "sentsms.log"
@@ -246,7 +232,6 @@ int writeerror,max_timeouts,max_timeoutz;
 /* Status line */
 enum statline {NONEMODE,UNKNOWN,LINEMODE,CHARMODE};
 
-/* REM0TE */
 #define MAX_CONNECTIONS 5
 #define MAX_POLL 2000
 
@@ -264,20 +249,12 @@ enum statline {NONEMODE,UNKNOWN,LINEMODE,CHARMODE};
 #define MAIL_QUOTA 50000 /* odkedy bude upozornovat na preplnenu sxranku */
 #define MAIL_LIMIT 55000 /* odkedy uz nebude moct dostavat postu!!! */
 
-/* Toto je na HNUSNY resolver. */
 #define NUMBER_OF_LOOPS 75 /* kolko desiatok microsekund na resolvnutie */
 #define ADRESIZE 512       /* maximalna dlzka hostname         */
 
-/* Second of all, some macros and other stuff */
-
-#define MAX_POCET_LOGINOV 10 /* kolko ludi sa moze z 1 adresy naraz prihlasovat
-			       (rata sa len login stage), prevencia proti floodu */
-			     /* Wilderovi sa to tiez lubilo, ako to mame spravene,
-			        hehe :-) */
+#define MAX_POCET_LOGINOV 10 /* kolko ludi sa moze z 1 adresy naraz prihlasovat (rata sa len login stage), prevencia proti floodu */
 			        
 #define PROMPT_LEN 120 /*dlzka promptu!*/
-
-/* REM0TE */
 
 #define REMOTE_NAME_LEN 256
 #define REMOTE_DESC_LEN 256
@@ -287,28 +264,27 @@ enum statline {NONEMODE,UNKNOWN,LINEMODE,CHARMODE};
 int size_fds;
 
 struct remote_struct {
-			char name[REMOTE_NAME_LEN];
-                        char desc[REMOTE_DESC_LEN];
-			char shortcut;
-			int port;
-			struct hostent *he;
-		        struct remote_struct *next;
-		      };
+	char name[REMOTE_NAME_LEN];
+	char desc[REMOTE_DESC_LEN];
+	char shortcut;
+	int port;
+	struct hostent *he;
+	struct remote_struct *next;
+};
 		     
 typedef struct remote_struct *RN_OBJECT;
+
 RN_OBJECT remote_start,remote_last,remote_active;
+
 int remote_slot_active;
 sigjmp_buf save_state;
 
 extern int h_errno;
 
-/* Definicie pre labyrint. Dufajuc ze sa v tom nestratite ! :> */
 #define LAB_ROOMS 65            /* Maximalny pocet miestnosti */
 #define LAB_DESC  900            /* Maximalna velkost popisu miestnosti */
 #define MAX_LINE  100            /* Maximalna dlzka jedneho riadku z fajlu */
 
-/* Pokracujeme v definiciax. */
- 
 #define OUT_BUFF_SIZE 3000
 #define MAX_WORDS 100
 #define MAX_IRC_WORDS 15
@@ -318,9 +294,8 @@ extern int h_errno;
 #define MAX_LINES 100 
 #define NUM_COLS 38
 
-#define MAX_COPIES 10 /* malo/vela?! */ /* coby kamenom dohodil.. */
+#define MAX_COPIES 10
 
-/* sign on to room: */ 
 #define ARENA_ROOM "arena"   /* Rooma reprezentujuca arenu */
 
 #define DESC_CHAR_LEN 400 /* Kolko ZNAKOV (aj tyx coolblbosti) moze mat desc */
@@ -336,8 +311,7 @@ extern int h_errno;
 #define PHRASE_LEN 45
 #define MAXSLOHY 4    /* kolko sluoh mozno naraz vypotit .poet-om (flood)  */
 
-
-#define EMAIL_LEN 60 /* max. dlzka emailu */
+#define EMAIL_LEN 60
 #define PASS_LEN 10 /* only the 1st 8 chars will be used by crypt() though */
 #define PASS_MIN_LEN 4
 #define PASS_MIN_LEN_WIZ 6
@@ -348,11 +322,11 @@ extern int h_errno;
 #define TOPIC_LEN 70  /* C00ltalk */
 #define MAX_LINKS 8
 #define REVB_LINES 10
-#define REVIEW_LINES 30 /* bolo 22 */
-#define REVTELL_LINES 50 /* bolo 30 */
+#define REVIEW_LINES 30
+#define REVTELL_LINES 50
 #define REVIRC_LINES 50
 #define LASTLOG_LINES 50
-#define REVIEW_LEN 300 /* bolo 1000 - potom 500 ci kolko */
+#define REVIEW_LEN 300
 #define HOMEPAGE_LEN 60
 
 #define MPVM 25 /* Maximum predmetov v miestnosti */
@@ -360,36 +334,37 @@ extern int h_errno;
 #define BODY HANDS+3 /* HANDS + cepicka + oblecenie + boty */
 
 
-struct 
- {
- int start;
- int end;
- int sever[LAB_ROOMS],juh[LAB_ROOMS],vychod[LAB_ROOMS],zapad[LAB_ROOMS],hore[LAB_ROOMS],dole[LAB_ROOMS];
- char popiska[LAB_ROOMS][LAB_DESC];
- int dostupny;
- } lab_room;
+struct {
+	int start;
+	int end;
+	int sever[LAB_ROOMS],juh[LAB_ROOMS],vychod[LAB_ROOMS],zapad[LAB_ROOMS],hore[LAB_ROOMS],dole[LAB_ROOMS];
+	char popiska[LAB_ROOMS][LAB_DESC];
+	int dostupny;
+} lab_room;
 
 struct pager_struct {
 	int filepos;
 	int messnum;
 	struct pager_struct *next;
-	};                                   
+};                                   
+
 typedef struct pager_struct *PAGER; 
 
 struct notify_struct {
 	char meno[13];
 	struct notify_struct *next;         
-	};                                    
+};
+
 typedef struct notify_struct *NOTIFY;
 
 struct dama_struct {
 	struct user_struct *hrac[2];
-        int plocha[8][8],forcejump,remiza[2],monochrom[2];
-	int natahu,lastmove[2],disptype[2]; /* posledny tah [x,y],typ zobrazenia */
-        int tah;
-        };
+	int plocha[8][8],forcejump,remiza[2],monochrom[2];
+	int natahu,lastmove[2],disptype[2];
+	int tah;
+};
+
 typedef struct dama_struct* DAMA_OBJECT;
-   
 
 #define PUBLIC 0
 #define PRIVATE 1
@@ -398,21 +373,19 @@ typedef struct dama_struct* DAMA_OBJECT;
 #define FIXED_PRIVATE 3
 #define GOD_PRIVATE 5
 
-#define NEW 0  /* ZMENA - Nove levely, nove skratky !!! */
-#define CIT 1  /* USER */
-#define SOL 2  /* BC */       /* <--- aj to by (zatial) stacilo!!! :>   */
-#define WAR 3  /* ING */      /* <--- toto by sme fsetci xceli bytj! :> */
+#define NEW 0
+#define CIT 1
+#define SOL 2
+#define WAR 3
 #define SAG 4
 #define PRI 5
 #define WIZ 6
-#define KIN 7  /* ARCH */     /* <--- Hnuuusny Archangel! Este aj level ma! */
-                              /* Clovece Archangel ... to mi ani nespominaj!*/
+#define KIN 7
 #define GOD 8
-#define POS 9 /* Poseidon OberGod! ;) */ /* Vidis, nazvem ho BohBot! */
-          /*     ^^^^^^^^^^^^^^^^^^^^ to tu napisal BUKO! */
+#define POS 9
 
 #define DB_ARENA     1  /* Nemenit! bo sa presunu body a mena v tabulach (V) */
-#define DB_PISKVORKY 2  
+#define DB_PISKVORKY 2
 #define DB_HANGMAN   3
 #define DB_QUEST     4
 #define DB_DOOM      5
@@ -422,14 +395,6 @@ typedef struct dama_struct* DAMA_OBJECT;
 #define DB_MINY      9
 #define DB_BRUTALIS 10
 
-/* Kurnajs, sak tie klony NIKTO nepouziva !!! */
-/* S> hmmm . o O ( co keby sme vyhodili aj tie ... :-))) */
-/* R> Sa neopovaz, ja to nahodof casto (raz za mesiac) pouzivam!!!! */
-/* S> No fidis, tak ked ix budes xciet pouzit, tak zoberies zdrojak a
-      doprogramujes si to tam, je to taky problem?! :>>> */
-/* R> Nijaky. Nakoniec to ide aj bez toho, staci mat paky na spravnych 
-      mjestach, ze ano ;-) */
-
 #define USER_TYPE 0
 #define CLONE_TYPE 1
 #define CLONE_HEAR_NOTHING 0
@@ -437,7 +402,6 @@ typedef struct dama_struct* DAMA_OBJECT;
 #define CLONE_HEAR_ALL 2
 
 int resolve_ip;
-/*Sem, neviem preco prave sem, ale sem pojdu tie buffery ;) */
 char revshoutbuff[REVIEW_LINES+1][REVIEW_LEN+2];
 int revshoutline;
 char revbcastbuff[REVB_LINES+1][REVIEW_LEN*2+2];
@@ -446,351 +410,274 @@ char revsosbuff[REVIEW_LINES+1][REVIEW_LEN+2];
 int revsosline;
 char revporshbuff[REVIEW_LINES+1][REVIEW_LEN+2];
 int revporshline;
-/* preco prave SEM? No neviem, ale SEM pojdu buffery pre gossip a quest! */
 char revgossipbuff[REVIEW_LINES+1][REVIEW_LEN+2];
 int revgossipline;
 char revquestbuff[REVIEW_LINES+1][REVIEW_LEN+2];
 int revquestline;
 char revwizshoutbuff[REVIEW_LINES+1][REVIEW_LEN+2];
 int revwizshoutline;
-/*Sem, vobec neviem preco akurat sem, ale predsa sem, je to az neuveritelne
-  ze sem, ale kedze sem, tak sem, pojdu tie lastlogy !!!!!!! ;) SEM !!! */
 char lastlog[LASTLOG_LINES+1][REVIEW_LEN+2];
 int lastlogline;
 
-struct cl_struct
- {
-  struct user_struct *hrac[4],*loadhrac[4];
-  int monochrom[4],figurka[4][4],usertahs[4],remiza[4];
-  int natahu,tahov,locked,kocka,loadlock;
-  char revbuff[REVIEW_LINES+1][REVIEW_LEN+2];
-  int revline;
- };
+struct cl_struct {
+	struct user_struct *hrac[4],*loadhrac[4];
+	int monochrom[4],figurka[4][4],usertahs[4],remiza[4];
+	int natahu,tahov,locked,kocka,loadlock;
+	char revbuff[REVIEW_LINES+1][REVIEW_LEN+2];
+	int revline;
+};
+
 typedef struct cl_struct* CL_OBJECT;
 
-struct fr_struct /* V) pharaon .. trosqu sa to scvarklo oproti clovece.. */
- {
-  struct user_struct *hrac[5];
-  int karty[32];
-  int active[5];
-  int natahu,action;
-  char revbuff[REVIEW_LINES+1][REVIEW_LEN+2];
-  int revline;
- };
+struct fr_struct {
+	struct user_struct *hrac[5];
+	int karty[32];
+	int active[5];
+	int natahu,action;
+	char revbuff[REVIEW_LINES+1][REVIEW_LEN+2];
+	int revline;
+};
+
 typedef struct fr_struct* FR_OBJECT;
 
-struct xa_struct
- {
-  struct user_struct *creator;
-  char *buffer[REVIEW_LINES+1];
-  char topic[60];
-  int line,type;
- };
+struct xa_struct {
+	struct user_struct *creator;
+	char *buffer[REVIEW_LINES+1];
+	char topic[60];
+	int line,type;
+};
+
 typedef struct xa_struct* XA_OBJECT;
 
-struct p_struct
- {
-  char name[21];
-  char dativ[21];
-  char akuzativ[21];
-  char inytiv[21];
-  char food[21];
-  int type,weight,dur,price,function,amount;
-  int attack,firerate,seconddur,pp,restrikt,tajm;
-  long altfunct;
-  char *enter, *leave, *ustart, *rstart, *ustop,*rstop;
-  char  *uinphr, *uoutphr, *rinphr, *routphr;
-  char *userphr, *roomphr, *victimphr;
-  char *special, *picture, *error;
-  int showpict,ofense,defense;
-  char *udestroy,*rdestroy;
-  char *ujoinphr,*rjoinphr,*searchphr;
-  struct room_struct *spawn;
-  int spawnarea;
- };
+struct p_struct {
+	char name[21];
+	char dativ[21];
+	char akuzativ[21];
+	char inytiv[21];
+	char food[21];
+	int type,weight,dur,price,function,amount;
+	int attack,firerate,seconddur,pp,restrikt,tajm;
+	long altfunct;
+	char *enter, *leave, *ustart, *rstart, *ustop,*rstop;
+	char  *uinphr, *uoutphr, *rinphr, *routphr;
+	char *userphr, *roomphr, *victimphr;
+	char *special, *picture, *error;
+	int showpict,ofense,defense;
+	char *udestroy,*rdestroy;
+	char *ujoinphr,*rjoinphr,*searchphr;
+	struct room_struct *spawn;
+	int spawnarea;
+};
+
 typedef struct p_struct* P_OBJECT;
 
-struct co_struct
- {
-  int component[4];
-  int eliminate[4],setowner;
-  int product,source,destination,mana,heal;
-  char *usermsg, *roommsg,*missing;
-  char spell[21];
- };
+struct co_struct {
+	int component[4];
+	int eliminate[4],setowner;
+	int product,source,destination,mana,heal;
+	char *usermsg, *roommsg,*missing;
+	char spell[21];
+};
+
 typedef struct co_struct* CO_OBJECT;
 
-
-/* The elements vis, ignall, prompt, command_mode etc could all be bits in 
-   one flag variable as they're only ever 0 or 1, but I tried it and it 
-   made the code unreadable. Better to waste a few bytes */ 
-   
-/* Tak, tak. Uz je to natolko neprehladne, ze aj sam Neil by ziral. Vy zirate
-   my zirame a zurime, lebo pouzivame Azur. Nex zuju nove premenne pridane
-   do tejto struktury ! :> */
-/* Juuuj aj preto to asi tak padalo, ze to uz je take velke ze to v pamati
-   blbne pri tej zlej praci s tymi hnusnymi pointrami, ale nejde o tooo! */
-/* Kazdopadne, niekde nam tam desne uteka pointer, a nevieme kde ... uz to
-   je asi fixnute, takze ked este tato verzia (3.0) nebezi, tak sa statocne
-   vyhovarame na ten uz fixnuty pointer ... som zvedavy, na co sa teda budeme
-   vyhovarat ked nahodime tuto verziu, a nebude to fungovatj?! Ja uz teda
-   neviem, a ani radsej nexcem vediet ... :(( */
-/* Co sa bojis. Ja zu daco na co to zvalime najdem. A ked nie, tak vyskusame,
-   ci je suicide skutocne painless... */
-/* Ale zda sa ze to zatial ide ... sice to fclose() ma riadne nasrrr... ehm,
-   hnevalo, ale pohoda uptime uz bol cez 1 den na netlabe :> A cil ked sa este
-   ma upgradovatj server, tak to bude fakt spica! */   
-/* ... uz to aj je spica, ten qwyx je velmi, ale velmi dobry stroj! Ozaj
-   presunieme to na mechan0.tps.sk :-> */
-/* Jo, velmi dobry stroj, akurat ze si tam uz tiez rootuje kde-kto. Ale teraz 
-   je to este spicovejsie, ten platon je velmi, ale velmi dobry stroj! */
-
 struct user_struct { 
-      int id;
-      int visitor;
-      char name[USER_NAME_LEN+1]; 
-      char desc[DESC_CHAR_LEN+1];
-      char pass[PASS_LEN+50]; 
-      char wizpass[PASS_LEN+50]; 
-      char email[EMAIL_LEN+1],requestemail[EMAIL_LEN+1];
-      char sname[3][20];
-      int zaradeny; /* ze ci je zaradeny do pouzivania! */
-      int sex; /*SEX - pche, kam sa hrabe daky sex na riadnu partiu DOOMa! :>*/ 
-               /* Rider, konecne spravna rec! :>>> HNUUUUSNY SEGZ! */
-               /* Ale zasa dooma mam furt, hmmm... s tym treba cosi robit :> */
-               /* A sex nemas furt? No neviem ja hej :( */
-	       /* No, neviem, ci by tvoja pravacka neprotestovala ;-) */
-	       /* KOKSO co tam po doome, QUAKE ]I[ ARENA je TOTAL SPICA 
-	          3D DRTICKA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
-	       /* QUAKE ]I[ CIRCUS.. oko na nohach behat, who to kedy videl..
-		  Unreal Tournament: Tactical Ops || HalfLife: CounterStrike! */
-      char lasttellfrom[USER_NAME_LEN+1],lasttellto[USER_NAME_LEN+1];
-      int lasttg;
-      char prevname[USER_NAME_LEN+1]; 
-      char follow[USER_NAME_LEN+1],smsfollow[15]; 
-      char sell_to[USER_NAME_LEN+1]; 
-      char in_phrase[PHRASE_LEN+1],out_phrase[PHRASE_LEN+1]; 
-      char buff[BUFSIZE+10],site[82],last_site[82],page_file[82]; 
-      char mail_to[WORD_LEN+1], *revbuff[REVTELL_LINES+1]; /* (S) -> DYNAMICKY */
-      char afk_mesg[AFK_MESG_LEN+1],inpstr_old[REVIEW_LEN+2]; 
-      struct room_struct *room,*invite_room,*into,*from; 
-      int type,port,site_port,login,socket,attempts;
-      unsigned int buffpos,filepos; 
-      int vis,ignall,prompt,command_mode,muzzled,muzzletime,charmode_echo; 
-      int level,cloak,misc_op,/*remote_com,*/edit_line,charcnt,warned; 
-      int accreq,last_login_len,ignall_store,clone_hear,afk; 
-      int edit_op,colour,ignore,ignshout,igntell,ignportal,ignbeep,ignio, revline,jailed;
-      int ignsys,ignfun,ignzvery,igncoltell,ignportalis;
-      int ignblink,ignpict,ignspell;
-      time_t last_input,last_login,total_login,read_mail,first_login,idletime;
-      char *malloc_start,*malloc_end;       
-      struct user_struct *prev,*next,*owner; 
-      int pp, mana; /*PowerPoints, Mana*/
-      char homepage[HOMEPAGE_LEN+1];
-      char lastcommand[23],lastcommand2[23];
-      int pridavacas; /* male opatrenie proti skriptarom (S) */
-      int lastidle,lastidle2,lastidle3; /* vylepsene opatrenie proti skriptarom (V) */
-      char newpass[PASS_LEN+50]; /* pre zmenu hesla */
-      char chanp[USER_NAME_LEN+1]; /* pre zmenu hesla */
-      int has_ignall;
-      char uname[20],pis[21][21],znak;
-      int joined,tah,last_x,last_y,game,moves;
-      int alarm, hang_stage;
-      char copyto[MAX_COPIES+1][USER_NAME_LEN+1]; /* Hnusni kopytovci!! */
-      char hang_word[60], hang_word_show[60], hang_guess[60];      
-      int lines,storelines,colms,wrap,who_type,rt_on_exit;
-      int predmet[BODY],dur[BODY],carry; /* setky ruky usera, vaha */
-      int zuje, glue, prehana,stars,lsd;
-      int zuje_t, kridla_t,prehana_t,prehana_t2, muzzle_t;
-      int lieta, viscount, afro;
-      char call[21];
-      char shtable[10][10];   /*10d1cky*/
-      int shmode, shbuild, shstatus, zasah; /*10d1cky*/
-      int browsing, messnum, lab;
-      int lastm, autofwd, pagewho, examine, lang,com_priority; /*llang*/
-      char real_ident[101]; /* Don't ask why :>> *//* Tell me why you cry...*/
-                             /* And why u lie 2 meeee!!! */
-      char remote_ident[81];
-      char subject[150];
-      int doom;         /* D00M je naaas...    */ /* dela dobre mne i tobje */
-      int doom_energy;  /* zivot v D00Me       */
-      int doom_score;   /* skore               */
-      int doom_ammo[3]; /* strelivo pre zbrane */
-      int doom_loading; /* nabijanie zbrane    */
-      int doom_weapon;  /* zvolena zbran       */
-      int doom_heading; /* pohlad v D00Me      */
-      int doom_x;       /* suradnice s         */
-      int doom_y;       /* polohou v D00Me     */
-      int doom_sayon;   /* poistka na say :)   */
-      int newtell, tellpos;  /* ci a kolko novych tellov ma.. */
-      int com_counter;   /* M@CRO stuff*/ 
-      struct macro_struct *macrolist;
-      struct notify_struct *notifylist,*ignorelist,*combanlist; /* dynamicky notify-list */
-      int igngossip,quest,flood;
-      char prompt_string[PROMPT_LEN+2]; /*PROMMMPT*/
-      int dead; /* ak ho to ma odlognut v heartbeate */
-      int rjoke_from; /* Jose stuff ... */ /* Jose rocks.. Btw, nesiel by si 
-                                              slavo s Josem & staf na vylet? */
-                      /* no to je problem, ale KEDY? A islo by aj Kukadlove?
-                         nefim zatial Ti povedatj ... */
-		    /* neslo. Lebo nexcelo. Lebo.. Tchfuj :( */
-      struct pager_struct *pager; /* dynamicky pager - aj ja xcem kupit pager! */
-      int pageno;
-      char ignword[WORD_LEN+1];
-      int saturate,idle; /* kolko je spolu idle */
-      int autosave,histpos;
-      char history[HISTORY_LINES+1][HISTORY_LEN+1];
-      /********************/
-      char remote_name[USER_NAME_LEN+1],remote_passwd[PASS_LEN+100];
-      int remote_login_socket,remote_login;
-      struct remote_struct *remote[MAX_CONNECTIONS];
-      int remote_socket[MAX_CONNECTIONS], ircsocknum;
-      int actual_remote_socket,fds,remote_fds[MAX_CONNECTIONS];                   
-      int akl;
-      char irc_chan[50], irc_nick[21], irc_defnick[21], irc_name[51], irc_serv[12], *revirc[REVIRC_LINES+1];
-      char channels[10][50];
-      pid_t lynx;
-      int sayflood, revircline, irc_reg;
-      int statline, statlcount, newline, statlcan, remtelopt;
-      struct blackjack_game_struct *bj_game;
-      int ignlook;      
-      int reversi_plan[8][8];
-      struct user_struct *reversi_sh;  /*SpoluHrac*/
-      int reversi_natahu;  /* 0 - spoluhrac   1 - ja   2 - nikto */
-      int reversi_znak;  /*moj znak: 1 - X   2 - O */
-      int reversi_cislotahu;  /*poradove cislo tahu  0 - nehra */
-      int reversi_jept;  /*Je Posledny Tah*/
-      int reversi_ptX,reversi_ptY;  /*Posledny Tah X Y*/
-      /* Miny Struktura */
-      unsigned char **miny_tab;
-      unsigned int miny_x,miny_y,miny_h;
-      struct dama_struct *dama;
-      struct cl_struct *clovece;  
-      int chrac,clovecewin,dhrac;
-      struct user_struct *clovece_starter,*dama_opp;
-      char ipcka[20];
-      int col[7]; /* V) pastelky pre: shout, gossip, say, tell_name, tell, xannel */
-      struct user_struct *farar_starter;
-      struct fr_struct *farar; /* V) kartova gamesa narocna na rozmyslanie */
-      int fhrac,fararwin,cps,goafkafter,killmeafter; /* cps = commands per session */
-      char reserved[10];
-      int commused[11],ignafktell,igngames,mailnotify,ignautopromote;
-      int totaljailtime,killed,totalmuzzletime,nontimejails;
-      int gold,swapped,shoutswears,sayswears,hangups,hangupz;
-      int ignxannel,ignnongreenhorn,multiply,lastrevt,lastrevs,lastrevi;
-      struct xa_struct *xannel;
-      struct user_struct *invite2xannel,*nox; /* next on xannel */
-      int sell_price,sell_what,ep_line,affected,affecttime,affpermanent;
-      int smsssent,smsday,allowsms,smswait,smsgate,smschars;
-      char mobile[21],logoutmsg[61];
-      int team,way,weapon,hidden,reveal,attacking; /* atlantis wars stuff */
-      int kills,deaths,health,heal,deathtype,head,body,feets,target;
-      int switches,shortcutwarning,temp,wizactivity,age,agecode;
-      int longestsession,mail2sms,timeinrevt,miscoptime;
-      int macro_num,notify_num,ap,websecond;
-      int skip,exams,kontrola,messsize,special;
-      char findstr[20],request[7];
-      char shoutmsg[21],shoutmsg2[21],gossipmsg[21],gossipmsg2[21];
-      char saymsg[21],saymsg2[21],tellmsg[21],tellmsg2[21];
-      char wizshmsg[21],wizshmsg2[21];
-      char where[31];
-
-      /* XML handling usera a jeho nastavenia */
-      xmlTextWriterPtr xml_writer;
-      xmlBufferPtr xml_buffer;
-      int output_format;
-      };   
-
-/* A aby nebolo luto aj nasim drahym miestnostickam ... */
+	int id;
+	int visitor;
+	char name[USER_NAME_LEN+1]; 
+	char desc[DESC_CHAR_LEN+1];
+	char pass[PASS_LEN+50]; 
+	char wizpass[PASS_LEN+50]; 
+	char email[EMAIL_LEN+1],requestemail[EMAIL_LEN+1];
+	char sname[3][20];
+	int zaradeny;
+	int sex;
+	char lasttellfrom[USER_NAME_LEN+1],lasttellto[USER_NAME_LEN+1];
+	int lasttg;
+	char prevname[USER_NAME_LEN+1]; 
+	char follow[USER_NAME_LEN+1],smsfollow[15]; 
+	char sell_to[USER_NAME_LEN+1]; 
+	char in_phrase[PHRASE_LEN+1],out_phrase[PHRASE_LEN+1]; 
+	char buff[BUFSIZE+10],site[82],last_site[82],page_file[82]; 
+	char mail_to[WORD_LEN+1], *revbuff[REVTELL_LINES+1];
+	char afk_mesg[AFK_MESG_LEN+1],inpstr_old[REVIEW_LEN+2]; 
+	struct room_struct *room,*invite_room,*into,*from; 
+	int type,port,site_port,login,socket,attempts;
+	unsigned int buffpos,filepos; 
+	int vis,ignall,prompt,command_mode,muzzled,muzzletime,charmode_echo; 
+	int level,cloak,misc_op,edit_line,charcnt,warned; 
+	int accreq,last_login_len,ignall_store,clone_hear,afk; 
+	int edit_op,colour,ignore,ignshout,igntell,ignportal,ignbeep,ignio, revline,jailed;
+	int ignsys,ignfun,ignzvery,igncoltell,ignportalis;
+	int ignblink,ignpict,ignspell;
+	time_t last_input,last_login,total_login,read_mail,first_login,idletime;
+	char *malloc_start,*malloc_end;       
+	struct user_struct *prev,*next,*owner; 
+	int pp, mana;
+	char homepage[HOMEPAGE_LEN+1];
+	char lastcommand[23],lastcommand2[23];
+	int pridavacas;
+	int lastidle,lastidle2,lastidle3;
+	char newpass[PASS_LEN+50];
+	char chanp[USER_NAME_LEN+1];
+	int has_ignall;
+	char uname[20],pis[21][21],znak;
+	int joined,tah,last_x,last_y,game,moves;
+	int alarm, hang_stage;
+	char copyto[MAX_COPIES+1][USER_NAME_LEN+1];
+	char hang_word[60], hang_word_show[60], hang_guess[60];      
+	int lines,storelines,colms,wrap,who_type,rt_on_exit;
+	int predmet[BODY],dur[BODY],carry;
+	int zuje, glue, prehana,stars,lsd;
+	int zuje_t, kridla_t,prehana_t,prehana_t2, muzzle_t;
+	int lieta, viscount, afro;
+	char call[21];
+	char shtable[10][10];
+	int shmode, shbuild, shstatus, zasah;
+	int browsing, messnum, lab;
+	int lastm, autofwd, pagewho, examine, lang,com_priority;
+	char real_ident[101];
+	char remote_ident[81];
+	char subject[150];
+	int doom;
+	int doom_energy;
+	int doom_score;
+	int doom_ammo[3];
+	int doom_loading;
+	int doom_weapon;
+	int doom_heading;
+	int doom_x;
+	int doom_y;
+	int doom_sayon;
+	int newtell, tellpos;
+	int com_counter;
+	struct macro_struct *macrolist;
+	struct notify_struct *notifylist,*ignorelist,*combanlist;
+	int igngossip,quest,flood;
+	char prompt_string[PROMPT_LEN+2];
+	int dead;
+	int rjoke_from;
+	struct pager_struct *pager;
+	int pageno;
+	char ignword[WORD_LEN+1];
+	int saturate,idle;
+	int autosave,histpos;
+	char history[HISTORY_LINES+1][HISTORY_LEN+1];
+	char remote_name[USER_NAME_LEN+1],remote_passwd[PASS_LEN+100];
+	int remote_login_socket,remote_login;
+	struct remote_struct *remote[MAX_CONNECTIONS];
+	int remote_socket[MAX_CONNECTIONS], ircsocknum;
+	int actual_remote_socket,fds,remote_fds[MAX_CONNECTIONS];                   
+	int akl;
+	char irc_chan[50], irc_nick[21], irc_defnick[21], irc_name[51], irc_serv[12], *revirc[REVIRC_LINES+1];
+	char channels[10][50];
+	pid_t lynx;
+	int sayflood, revircline, irc_reg;
+	int statline, statlcount, newline, statlcan, remtelopt;
+	struct blackjack_game_struct *bj_game;
+	int ignlook;      
+	int reversi_plan[8][8];
+	struct user_struct *reversi_sh; /*SpoluHrac*/
+	int reversi_natahu;
+	int reversi_znak;
+	int reversi_cislotahu;
+	int reversi_jept;  /*Je Posledny Tah*/
+	int reversi_ptX,reversi_ptY;  /*Posledny Tah X Y*/
+	unsigned char **miny_tab;
+	unsigned int miny_x,miny_y,miny_h;
+	struct dama_struct *dama;
+	struct cl_struct *clovece;  
+	int chrac,clovecewin,dhrac;
+	struct user_struct *clovece_starter,*dama_opp;
+	char ipcka[20];
+	int col[7];
+	struct user_struct *farar_starter;
+	struct fr_struct *farar;
+	int fhrac,fararwin,cps,goafkafter,killmeafter;
+	char reserved[10];
+	int commused[11],ignafktell,igngames,mailnotify,ignautopromote;
+	int totaljailtime,killed,totalmuzzletime,nontimejails;
+	int gold,swapped,shoutswears,sayswears,hangups,hangupz;
+	int ignxannel,ignnongreenhorn,multiply,lastrevt,lastrevs,lastrevi;
+	struct xa_struct *xannel;
+	struct user_struct *invite2xannel,*nox;
+	int sell_price,sell_what,ep_line,affected,affecttime,affpermanent;
+	int smsssent,smsday,allowsms,smswait,smsgate,smschars;
+	char mobile[21],logoutmsg[61];
+	int team,way,weapon,hidden,reveal,attacking;
+	int kills,deaths,health,heal,deathtype,head,body,feets,target;
+	int switches,shortcutwarning,temp,wizactivity,age,agecode;
+	int longestsession,mail2sms,timeinrevt,miscoptime;
+	int macro_num,notify_num,ap,websecond;
+	int skip,exams,kontrola,messsize,special;
+	char findstr[20],request[7];
+	char shoutmsg[21],shoutmsg2[21],gossipmsg[21],gossipmsg2[21];
+	char saymsg[21],saymsg2[21],tellmsg[21],tellmsg2[21];
+	char wizshmsg[21],wizshmsg2[21];
+	char where[31];
+	xmlTextWriterPtr xml_writer;
+	xmlBufferPtr xml_buffer;
+	int output_format;
+};   
 
 typedef struct user_struct* UR_OBJECT;
 
-/* REM0TE */
-struct pollfd fds[MAX_POLL];
-
 UR_OBJECT user_first,user_last, remote_user_active;
 
+struct pollfd fds[MAX_POLL];
+
 struct room_struct {
-      char name[ROOM_NAME_LEN+1]; /* meno miestnosti */
-      char name_en[ROOM_NAME_LEN+1];
-      char label[ROOM_LABEL_LEN+1]; /* label miestnosti */
-      char *desc_sk; /* deskripcia miestnosti :> */ /* (S) -> DYNAMICKY! */
-      char *desc_en;
-      char topic[COOLBUF_LEN+1]; /* topik miestnosti */
-      char *revbuff[REVIEW_LINES+1]; /* revbuff miestnosti (S) -> DYNAMICKY!*/
-      char from[ROOM_NAME_LEN+21];/* "odisiel do miestnosti luka", luka njeje */
-      char into[ROOM_NAME_LEN+21];/* miestnost, luka je luka, odisiel na luku (V) */
-      char where[ROOM_NAME_LEN+21];/* whereami? na luke. (V) */
-      char lemmein[USER_NAME_LEN+1];
-      char topicmaker[USER_NAME_LEN+1];
-      int countdown;
-      int access; /* public , private etc */
-      int revline; /* line number for review */
-      int group; /* cislo skupiny miestnosti - ()STROV */
-      int mesg_cnt; /* kolko je messagesov! */
-      int sndproof; /* ci je zvukotesna */
-      int invisible; /* ci je neviditelna :> */ /* TO JE AKOZE CO?! :> */
- 		     /* To akoze ju neviediet v rooms pri levele < wiz */
-      int logging; /* ZMENA - logovanie, pozri rlogging() */ /* Tfuj!! :(( */
-      char link_label[MAX_LINKS][ROOM_LABEL_LEN+1]; /* temp store for parse */
-      int predmet[MPVM+1]; /* predmety v miestonosti (V) */
-      int dur[MPVM+1]; /* durability || timer of a predmet*/
-      struct room_struct *link[MAX_LINKS];
-      struct room_struct *next; 
-      }; 
+	char name[ROOM_NAME_LEN+1];
+	char name_en[ROOM_NAME_LEN+1];
+	char label[ROOM_LABEL_LEN+1];
+	char *desc_sk;
+	char *desc_en;
+	char topic[COOLBUF_LEN+1];
+	char *revbuff[REVIEW_LINES+1];
+	char from[ROOM_NAME_LEN+21];
+	char into[ROOM_NAME_LEN+21];
+	char where[ROOM_NAME_LEN+21];
+	char lemmein[USER_NAME_LEN+1];
+	char topicmaker[USER_NAME_LEN+1];
+	int countdown;
+	int access;
+	int revline;
+	int group;
+	int mesg_cnt;
+	int sndproof;
+	int invisible;
+	int logging;
+	char link_label[MAX_LINKS][ROOM_LABEL_LEN+1];
+	int predmet[MPVM+1];
+	int dur[MPVM+1];
+	struct room_struct *link[MAX_LINKS];
+	struct room_struct *next; 
+}; 
  
 typedef struct room_struct *RM_OBJECT; 
-RM_OBJECT room_first,room_last; 
-RM_OBJECT create_room(); 
 
-#define syserror    "Prepac, nastala systemova chyba" /* systemova xyba sa obskurla! */
-#define nosuchroom  "Taka miestnost neexistuje.\n"
-#define nosuchroom_en  "There is no such room.\n"
-#define nosuchuser  "Taky uzivatel neexistuje.\n"
+RM_OBJECT room_first,room_last,create_room(); 
+
+#define syserror "Prepac, nastala systemova chyba"
+#define nosuchroom "Taka miestnost neexistuje.\n"
+#define nosuchroom_en "There is no such room.\n"
+#define nosuchuser "Taky uzivatel neexistuje.\n"
 #define notloggedon "Nikto s takym menom nie je momentalne prihlaseny.\n"
-#define invisenter2  "Neznamy vstupil do miestnosti...\n"
+#define invisenter2 "Neznamy vstupil do miestnosti...\n"
 #define invisenter(user) pohl(user,"Neznamy vstupil do miestnosti...\n","Neznama vstupila do miestnosti...\n")
-#define invisleave2  "Neznamy opustil miestnost...\n"
+#define invisleave2 "Neznamy opustil miestnost...\n"
 #define invisleave(user) pohl(user,"Neznamy opustil miestnost...\n","Neznama opustila miestnost...\n")
 
 #define invisname(user) pohl(user,"\253Im","\253Iz")
 #define invisname2(user) pohl(user,"Neznamy","Neznama")
 
-#define nocolors  "Nemozes pouzivat farby.\n" /* Papluha, ogrgel akysi! */
-#define noswearing  "U nas sa nenadava, ty grobian!\n" /* Papluha, ogrgel akysi! */
-                                                   /*     ^^^^^^^^^^^^^^^^^^^^^^ */
+#define nocolors "Nemozes pouzivat farby.\n"
+#define noswearing "U nas sa nenadava, ty grobian!\n"
 #define NOEXITS "noexits"
 
 #define ZALAR_TLT_CONSUMPTION 30
 
-/* S> Ta hnusna Hvozdarka ma sakra 2x za sebou vyrazila .. strasne nexutne!
-      tak nex je aspon takto potrestana ... JUUJ! To bola prva trauma z
-      ustnej skusky ... sakra ja neznasam uuustne skuusky :-((( */      
-/* no asi sa k tomu pridaju aj "tomaska" a "zalezacka" .... :(( Hnusny
-   odporny managedement, kua tie hnusoby ma uz museli vyrazit?!?! */
-/* a Starla vraj este ze "to maaas f pohode ked to maaas u Tomasovej" !!! no
-   sisku drevenu v druhej maringotke to bolo f pohode !!! :(( A to Starla ma
-   uz neraz takto oblbla, tiez s Ekonometriou ... vraj "Hatraaak je v pohode,
-   ten to daaa kazdeeemu!!!", no a xybali mi 3 body, a vyflakol ma a nexcel
-   mi to dat :((( Juuuj! Sakra ale som sa nejako rozpisal ... :> */
-/* Zaver: ja uz tu Starlu NEBUDEM pocuvat, len ma oblbuje :(((( */
-/* PS: este stastie ze mi to iste nehovorila o Operaku, lebo to by ma uz asi
-   naozaj priviedlo do hrobu :( */
-/* Boooze Spartakus, ty sa vies rozkecat... Uz skoro ako ja... Nechces sa
-   liecit? A ake z toho vyplyva ponaucenie: Nepocuvaj rady bab, lebo skoncis
-   nahouby!!!! Tak, tak, ver skusenemu starsiemu cloveku... :>> */
-/* Tak pocuj o tomto sme sa uz raz bavili ... vraj STARSI? Haha, o 1.5
-   mesiaca, ale tu sa neberie ze starsi ale skusenejsi a to som ja, pretoze
-   sice ty nevidis ked sa nieco deje, ale potom zas dostanes facku :>> -sice
-   aj to je skusenost, ale ja vidim cely priebeh :> No co uz, clovek si svoj
-   osud nevyberie, vsakaaaano :> */         
-/* No a CO ze o jeden a pol mesiaca! Ale starsi a to je podstatne! Takze ty
-   ucho jedno, nevyskakuj tu na nas, starsich a skusenejsich a budes pekne
-   posluchat a nosit desiate a vreckove! :>> */
-
-/* Uff, globalky !!!!!!!!!!!!!!! */
-
-#define T_SIZE ARR_SIZE*3 /*dlzka textu!!! ('koze sorry ...) */
+#define T_SIZE ARR_SIZE*3
 
 void query_com(UR_OBJECT user,char *inpstr);
 char ipcka_glob[20]; 
@@ -833,20 +720,12 @@ UR_OBJECT current_user;
 P_OBJECT predmet[MAX_PREDMETY+1];
 CO_OBJECT convert[MAX_CONVERT];
 
-/*extern char *sys_errlist[];*/
 char *long_date(); 
 struct macro_struct *defaultmacrolist;
-struct room_struct *testroom; /* aby som furt nedavel write_room(NULL,text);
- lebo potom na to zabudnem a ked to nahodim tak je z toho haluz prevelika (V) */
+struct room_struct *testroom;
 
-/* Oh boze, naozaj to xcete?! Tak dobre, tu je to - autorizacia usera! */
-/* polka veci tam je zbytocnyx!!! ak sa vam v tom xce rypat, prosim, mne
-   nie :> */
-/* Mne tiez ne... */
- 
 #ifndef AUTHUSER_H 
 #define AUTHUSER_H 
- 
 extern unsigned short auth_tcpport;
 extern int auth_rtimeout;
 extern char *auth_xline();
@@ -861,18 +740,9 @@ extern char *auth_sockuser(register int s,register unsigned short local,register
 extern char *auth_sockuser2(register int s,register unsigned short local,register unsigned short remote,int rtimeout);
 #endif 
 
+#define MAXSTRING 150  /* maximalna dlzka stringu v scenari */
+#define ZERO 0
 
-/* (R) definicie Kolosea + prislusne funkcie (deklaracia) (S) uprava*/
-#define MAXSTRING 150  /* maximalna dlzka stringu v scenari       */
-#define ZERO 0 /* toto bolo zmysluplne, Rider :>> */
-               /* okay ked mozes ty, tak idem aj ja:*/
-#define JEDNA 1 /* S~me s~e pobavili, Slafko..! */
-#define DVA 2
-               /* no dobre, stacilo :->> Kruci, tiez musis definovat krawiny */
-#define TRI 3 /* no jo, co uz ... */ /* Nic... zastrelte ho! */
-
-
-/* deklaracia funkcii amfiteatru: */
 long play_nxt(void);
 long asctomin(char string[], int upd);
 char *chrcat(char *dest, char src);
@@ -883,7 +753,7 @@ int connect_to_site();
 int exec_remote_com();
 void remote_close();
 
-/* Definicie deklaracie D00Ma */
+/* D00M */
 #define D_LINES 7    /* Velkost okna s DOOMom */
 #define D_COLMS 100  /* Buffer pre dlzku okna */
 #define D_LOCAT 21   /* Pocet lokaci v grfile */
@@ -893,13 +763,11 @@ void remote_close();
 #define D_GRAPH "doom/graph.doom"
 #define D_DATA  "doom/data.doom"
 
-/* Externe premenne D00Ma */
 int doom_status;
-int doom_players;    /* Pocet hracov */
-char doom_grf[D_LOCAT][D_LINES][D_COLMS]; /* D_LINES-1 */
+int doom_players;
+char doom_grf[D_LOCAT][D_LINES][D_COLMS];
 char doom_map[D_MAPY][D_MAPX][5];
 
-/* Deklaracie D00Ma */                 /* .... proste neuveritelnet!!! */
 extern UR_OBJECT doom_get_user(int x,int y);
 extern UR_OBJECT doom_check_view(UR_OBJECT user);
 extern void doom(UR_OBJECT user,char *inpstr);
@@ -917,23 +785,18 @@ extern void doom_quit(UR_OBJECT user);
 extern void doom_who(UR_OBJECT user);
 extern void doom_wall(UR_OBJECT user,char *msg);
 
-/* Globalna struktura play - ked viete ako bez nej, tak prerobte... */
-/* Zdalo sa mi to sikovnejsie ako naflakat 20 roznych premennych... */
-/* S> tusim ze tuto to vsetko zacalo, ze?? :>> */
-/* No jasne, a niekto to fuuurt musi opakovat... ;-) */
-
 struct {
-int time;    /* Uz bude sluzit len pocas playovania              */
-int hodina, minuta; /*Hodina a minuta zaciatku dalsieho predstavenia */
-char on;          /* flag: 0-caka hru; 1-hra; 2-vypnute       */
-char name[80];   /* dalsi citany "scenar", meno suboru       */
-char nazov[80];
-FILE *file;       /* subor so "scenarom", resp. pointer nan   */
+	int time; /* Uz bude sluzit len pocas playovania */
+	int hodina, minuta; /* Hodina a minuta zaciatku dalsieho predstavenia */
+	char on; /* flag: 0-caka hru; 1-hra; 2-vypnute */
+	char name[80]; /* dalsi citany "scenar", meno suboru */
+	char nazov[80];
+	FILE *file; /* subor so "scenarom", resp. pointer nan */
 } play;
 
 int logcommands;
 unsigned short auth_tcpport;
-int            auth_rtimeout;
+int auth_rtimeout;
  
 #define SIZ            500 
 #define MAX_CHAR_BUFF  380 
@@ -958,110 +821,31 @@ int            auth_rtimeout;
 #      define NBLOCK_CMD 0
 #     endif
 #    endif
-#   endif                                                                                                                                                                                                /* hnusne Kukadlove! */
-#  endif /* To Kukadlove tam za obzorom minuleho riadku CO MA BYT?! */                                                                                                                                   /* ona je aj tak strasne super...*/
-# endif  /* Teda vies co, a mne hovoris ze na nu furt myslim. A pritom vobec */
-#endif   /* nie furt. Iba rano, naobed, vecer, v noci a .. no dobre, no a co!*/
-       /* no vidis ... Is it love, tak co :> - Hnuuusne Kukadlove! Ale na
-          druhej strane, keby si si to neprezeral v t602-ke alebo v norton
-          editore tak by si si to nebol vsimol!!! Juuuj! Hnuuusny lord norton!
-          a bolo by to tam az do umrtia smutku, a nikto by si to nevsimol ...
-          a o 50 rokov by sme na to pozreli a "... Kukadlove? Jaj to je
-          moja staraaaa ...." */
-     /*  na tomto ^^^^^^^^ sa vraj Rider rehotal az sa za bruxo xytal. Ja
-         teda neviem co je na tom take ftipne, mne sa to ftipne nezda :> */
-
-/* Sibenica. Ak mate slabe nervy, keep out!! Ak mate slabe nervy a chceli 
-   by ste prerabat dizajn tejto milej hry, tak keep out double!
-   Pozrite sa na dlzku tyx riadkov ... :> Ale ved: NEJDE O TOOOOO ! :> */
-/* Ocuj, nesibalo ti z tej sibenice ze si to takto robil? :> */
-/* S> No tak to skus spravit inak ked si taky mudry :>> Nic rozumnejsie ma
-      v tej xvili nenapadlo, tak to bude takto .. kazdopadne menit ten dizajn
-      fakt neodporucam, koli moznej vaznej psyxickej ujme :->> */
-      /* heheh aspon tam bude musiet NAVEKY byt ten moj krasny nadherny
-         cacany dizajn, heheheheheh!!!! Este dobre ze tam nieje ruzova :> */
-/* ... zabudol som este: ... NADOPOZEMSKY A TRANSCENDENTALNY!!! */
-/* Mno, ono z globalneho hladiska pohladu na danu problematiku mozno na zaklade
-   emprickych znalosti konstatovat, ze tento dizajn bude na houby, ale v ramci
-   aspektu standarizacie a unitarity, takze v podstate nepovazujem za akutne
-   nutne prevadzat akekolvek interne diferenciacie (ak nevies co som tym chcel
-   povedat, tak sa netrap, ja tiez nie :>) */
-/* Keby tam nebol ten spicaty ostry smajlik na konci, tak by som si na moj
-   dusu myslel ze to pisal Buko :>>> */
-/* Apropos, Buko .. uz ZASA (9.4.98, 17:10) zasiera qwyxa MP3-kami!! Teda,
-   akoze sorry, ale TOTO NE! :((( */
-/* Mno a co, dnes (4.6.1999) takisto mp3kuje .. mimoxodom Slafko (teda ja)
-   tam vyssie ma byt 9.4.99 asi, a nie 98, co uz nefis ani aky rok je?!?!)
-   ..ale zasa to ma aj vyhodu: nehrozi ti kriza z y2k, az o rok ;-)
-*/
-
-
-/* Tam niesu len rovnitka, ono to pokracuje aj dalej, staci sa len
-   kuknut .... a pripadne zmenit, ale nexajte to tak ako to je, je to dobre
-   :> */
-/*   
-#define talker_signature  "===============================================================================\nForwardovana sprava z Atlantis Talkera (telnet %s %d)\n"
-#define talker_signature2 "===============================================================================\nPoslane z Atlantis Talkera (telnet %s %d, %s)\n"
-*/
+#   endif
+#  endif
+# endif
+#endif
 
 #define talker_signature  "-------\nAtlantis talker (telnet %s %d, %s)\n"
 
-/* Sem, ale to uz fakt presahuje vsetko, neviem preco akurat sem, ale predsa-
-   len som sa rozhodol ze sem, aj ked to je uplne f pazi, ale sem, sem, sem,
-   sem, sem, sem, sem, sem a just sem, aj keby to nemalo koli tomu fungovat
-   ze sem, ale predsalen sem, pojdu tie poondiate hnusne idiotske posrane
-   lamerske blbe predmety !!!!!!! :> */ /* ale no, mojko, pozor na pusu, oki? */
-/* pocuj nepouzivaj slovo Mojko, lebo tak mi hovoril Pasmo ked sme este boli
-   milenci, a teda to vo mne vyvolava spomienky ... sice prijemne, ale potom
-   skor neprijemne nad stratou Pasma ... :((( Juuj! :> */
-/* Ty si chodil s Pasmom?? A mne ste sa hned vy dvaja zdali akysi mierne
-   inak zamerany, ale ved neeejde otoo.. a Jester v tom ide s vami? Alebo to
-   bol prave on, kto vam ten krasny vztah rozbil?? :>>> */
-
-/* (konecny verdikt: HNUUUSNY PASMO!) */
-
-
-/* Quest - questoviny */
-#define QLEADER 6         /* min. level "questleadra" */
+#define QLEADER 6 /* min. level "questleadra" */
 #define QUEST_DIR "quest"
 
-/* Globalna struktura quest - ked viete ako bez nej, tak prerobte... */
-/* Zdalo sa mi to sikovnejsie ako naflakat 20 roznych premennych... */
-/* (text above copyright by (R), used with NO permission by (S) :> */
-struct {  /* Struktura pre quest, zmena (S) */
-	int queston;              /* Flag ci bezi ci nje      */
-	int lastquest;            /* Iba jeden quest za den   */
-	char lq_time[10];          /* Kedy bol posl. quest */
-	char lq_leader[13];       /* Leader posl. questu */
-	char lq_winner[13];       /* Vitaz posl. questu */
-	char questfilename[80];   /* Zaznam questu - filename */
+struct {
+	int queston; /* Flag ci bezi ci nje */
+	int lastquest; /* Iba jeden quest za den */
+	char lq_time[10]; /* Kedy bol posl. quest */
+	char lq_leader[13]; /* Leader posl. questu */
+	char lq_winner[13]; /* Vitaz posl. questu */
+	char questfilename[80]; /* Zaznam questu - filename */
 } quest;
 
-/* definicie shipping - ()STROV 
-   Toto su definicie pre nasu lodicku. */
-            /* je to jednoduhsie ako naflakat tam 20 roznyx premennyx :) */
 int ship_timer;
 #define SHIPPING_ISLAND  "ostrov"
 #define SHIPPING_HOME    "pristav"
 #define SHIPPING_SHIP    "plachetnica"
 #define PORTALIS_KISS    "luka"
 #define BRUTALIS         "brutalis"
-
-/* Velmi cool bolo ked sme nahodili novu Atlantis (vsimas si ako sa ucim -
-   novU Atlantis nie novY Atlantis :>), tak ludia zacali shoutovat ze
-   "sakra kedy pojde atlantis, kedy to nahodite, kedy kedy .." a my ze
-   "do paze VED STE NA NOM!!" a oni furt to svoje... zaujimave, ze na
-   atlantise kricali ze kedy pojde atlantis, to je uz uplna zawislost :>
-   A korunu tomu nasadil Tomas, ked sa prihlasil a shoutol:
-   Tomas shouts: Kua jaky pertalis?
-   :->>>>>>>>>>
-   Alebo raz som bol v sound-proof miestnosti, a zrazu som dostal .smail od
-   Tomasa: Kua co si to v jakej vzduchotesnej miestnosti!
-*/
-
-/* Alternativne desky pre island, home a lodicku! */
-/* neviem naco sa tu s tym babreme, aj tak si to nikto nebude vazit */
-/* Lebo nas to tesi ;>> A robi nam to dobre ;>>>*/
 
 char *alt_island_desc;
 char *alt_home_desc;
@@ -1072,57 +856,30 @@ void link_room(RM_OBJECT, RM_OBJECT);
 void unlink_room(RM_OBJECT, RM_OBJECT);
 void link_room_oneway(RM_OBJECT room,RM_OBJECT rm);
 
-/* FLYER - a mame v Atlantide po Doomovi letecky simulator :>> 
-   (no a co ze som blazon, liecit sa aj tak nebudem! :)) (R) 
-   S> vsetci su blazni, len ja som LIETADIELKO ( <--cim samozrejme nexcem
-      nic naznacitj! :-))) */ /* ... ((( but it's made of steel ... :> )))
-   R> Teda slafko... No fuj! Takto rypat do nevinnych ludi.. "All alone, I
-       have cried, silent tears, full of pride, in the world made of steel...
-       No a COO!! Ostatne, teraz to je ganz fuka (frantisek), ale vies co je
-       zaujimave? Ze to Lietadielko sa dost podoba na Agnethku... Teda aspon
-       na jednom obrazku co mam UPLNE! A zasa Tynka je zasa hotova Fridushka..
-       Je to vobec mozne? Vies co, hovor mi Benny, oki Bjorn..er, Slavo? :> */
-   /* ja niesom ziadny bjorn ani bjork ... bleeah ... ja som ... co som
-      sakra? Jaj uz viem ... ja som Majkl Dzekson!!! A kto je viac?? :> */
-   /* no, ako sa tak nad tym zamyslam, tak v podstate uplne kazdy... :>> */       
-   
-#define FLYER_TIMEOUT 15  /* 30 sekund na odlepenie sa od zeme :> */
-                          /* Logicke! Tak ma tam 15, a pritom pise ze
-                             30 sekund ... akoze sorry Rider :>> (ale no
-                             ja viem ze heartbeat, ale aj tak :> */
-#define FLYER_ROOM "letun" /* hnusny letun */
-#define FLYER_HOME "vzdusny_pristav" /* hnusny vzdusny_pristav */
-#define FLYER_LAND "namestie" /* namestie (hnusne) */
+#define FLYER_TIMEOUT 15
+#define FLYER_ROOM "letun"
+#define FLYER_HOME "vzdusny_pristav"
+#define FLYER_LAND "namestie"
 
-/* Globalna struktura flyer - ked viete ako bez nej, tak prerobte...
-   Zdalo sa mi to sikovnejsie ako naflakat 20 roznych premennych...
-   (spakky, ty mi nekradni moje texty, anoo??? :>>>>>> (R):> 
-   S> Px, ja si budem kradnutj co sa mi zaxce, ale ved som tam napisal
-      ze used without permission, tak co?! 
-   R> Jak "tak co"? Dostanem dvanast tisic za pouzivanie autorskych prav!!      
-  */
-
-   
-struct {  /* Struktura pre flyer, zmena (R) */
-	int pozicia;              /* Pozicia letuna            */
-        int vykon;		  /* Vykon eletioveho cerpadla */
-	int mind;		  /* Posobenie silou vole :>   */
-        int vyska;		  /* ...co to asi bude...      */
-        int palivo;		  /* Stava! :>                 */
-        int vzdialenost;          /* Kolko uz toho preletel... */
-        int timeout;              /* Nespiiime, startujeme!    */
-        int gotta_write;          /* ci zapise skore a ci nie  */
-        char pilot[20];          /* Kto to bude pilotovat :>  - ZMENA - meno!*/
-   /*   ^^^^ Rider pliz do not kill me now ... but LATER you won't run away! */
+struct {
+	int pozicia; /* Pozicia letuna */
+	int vykon; /* Vykon eletioveho cerpadla */
+	int mind; /* Posobenie silou vole */
+	int vyska; /* ...co to asi bude... */
+	int palivo; /* Stava! */
+	int vzdialenost; /* Kolko uz toho preletel... */
+	int timeout; /* Nespiiime, startujeme! */
+	int gotta_write; /* ci zapise skore a ci nie */
+	char pilot[20]; /* Kto to bude pilotovat */
 } flyer;
 
-struct {        /* GUEST struktura */
-	int on;               /* ci guest mode prave bezi */
-	int getuser;          /* ci ma vediet getnut usera guest */
-	UR_OBJECT user;       /* pointer na usera guestoweho */
-	UR_OBJECT moderator;  /* pointer na moderatora */
-	UR_OBJECT talk;       /* pointer na toho kto moze polozit otazku */		
-	char name[40];        /* meno - pojde do descu a do sayu */
+struct {
+	int on; /* ci guest mode prave bezi */
+	int getuser; /* ci ma vediet getnut usera guest */
+	UR_OBJECT user; /* pointer na usera guestoweho */
+	UR_OBJECT moderator; /* pointer na moderatora */
+	UR_OBJECT talk; /* pointer na toho kto moze polozit otazku */		
+	char name[40]; /* meno - pojde do descu a do sayu */
 } guest;
 
 #define GUEST_ROOM  "krcma"
@@ -1131,15 +888,6 @@ void flyer_fly();
 int check_crash_flyer();
 void eject(UR_OBJECT user);
 
-/* M@CRO tak odtialto su to tie makroidne blbosticky ...
-   Goda jeho Spartaka, to je ale bordel! :> 
-   S>No a co, hlavne ze je pohoda a ze to funguje :>>> */
-/* apropos Spartakus ... prave bola v pokuseni taka otazka, ze:
-   Kto bol vodca rimskych otrokov v roku 73 pred n.l. ??? ;-))) -> akoze
-   sorry, ale toto ne ;> */ 
-/* R|msky 0tr0k.FMX rules!!! */
-/* Jo, hlavne to FMX! :> */
-   
 #define MAX_COMMANDS 5
 #define TRUE 1
 #define FALSE 0
@@ -1148,14 +896,16 @@ void eject(UR_OBJECT user);
 #define OUTPUT_FORMAT_XML   2
 
 #define INPUT_SEP '\\' /* cim sa bude separovatj */
-#define NUM_MAC_PARAM 10 /* max. pocet parametrof */
+#define NUM_MAC_PARAM 10 /* max. pocet parametrof macra */
+
 struct macro_struct {
-	char *name; /* meno makra */
-	char *value; /* nahradzovaci string pre makro */
-	int star;	/* zaciatocny word pre $* expresiu :> */
-	int is_running; /* ci to makro bezi alebo nie! */
-	struct macro_struct *next; /* pointer na dalsie makro, alebo NULL */
-	};
+	char *name;
+	char *value;
+	int star;
+	int is_running;
+	struct macro_struct *next;
+};
+
 typedef struct macro_struct *MACRO;
 enum result {SUCCESS,FAIL};  
 void free_macrolist(MACRO *list);
@@ -1177,36 +927,22 @@ void fix_separators(char *input,char *output);
 char todigit(char c);
 void check_death();
 void got_line(UR_OBJECT user,char *inpstr);
-/* definicia funkcii pre notify */
 
 void free_notifylist(NOTIFY *list);
-/* int save_notifylist(NOTIFY *list, char *filename); */
 int load_notifylist(NOTIFY *list,int id,int noti);
 int delete_notify(NOTIFY *list, char *meno);
 void add_notify(NOTIFY *list, char *name);
 
-/* game definitions */
-
 #define DEFAULT_BJ_BET   10
 #define USE_MONEY_SYSTEM  0
 
-/* game structures */
-
 struct blackjack_game_struct {
-  short int deck[60],hand[10],dealer_hand[10],bet,cardpos;
+	short int deck[60],hand[10],dealer_hand[10],bet,cardpos;
 };
+
 typedef struct blackjack_game_struct *BJ_GAME;
 
-
-/************************* FUNKCIE!!!!!!!!!!! ******************
- A sem, neviem preco prave sem, ale skratka sem pojdu deklaracie
- funkcii... Kto sa obetuje a spravi to??
- R> No ako vzdy.. daky upny kreten, co si nevazi vlastny zivot
-    a pusti sa do toho... Takze zasaa jaaa....
- **************************************************************/
-
-
-RM_OBJECT get_room(char *name,UR_OBJECT user);   /* deklaracie */
+RM_OBJECT get_room(char *name,UR_OBJECT user);
 RM_OBJECT get_linked_room(char *name,RM_OBJECT room);
 char *meniny(int mday, int mmonth);
 char *datum_menin(char *meno);
@@ -1225,7 +961,7 @@ char *real_user(UR_OBJECT gdo);
 char *sklonuj(UR_OBJECT juzer, int pad);
 char *skloncislo(int pocet,char *squirrel,char *squirrle,char *squirrelov);
 
-char *lamerize(char buf[]);       /* nadefinovacie fcii, ktore grcaju char */
+char *lamerize(char buf[]);
 char *lame_color(char buf[],int typ);
 char *revert(char vstup[]);
 char *colour_com_strip2(char *str,int usercol);
@@ -1691,7 +1427,6 @@ void remote_connect(UR_OBJECT user);
 void remote_disconnect(UR_OBJECT user);
 void view_remote(UR_OBJECT user);
 void edit_remote_servers(UR_OBJECT user);
-/* void check_anti_idle(); */
 int UPDATE_FDS();
 int ADD_FDS();
 void zazabuj(char *inpstr, int ok);
@@ -1732,9 +1467,9 @@ FILE *ropen (const char *path, const char *mode);
 void obnov_statline_userof();
 void setpp(UR_OBJECT user, int amount);
 int charsavail(int fd);
-BJ_GAME   create_blackjack_game(void);
-void      show_blackjack_cards(UR_OBJECT,int,int);
-int       check_blackjack_total(UR_OBJECT,int);
+BJ_GAME create_blackjack_game(void);
+void show_blackjack_cards(UR_OBJECT,int,int);
+int check_blackjack_total(UR_OBJECT,int);
 void vwrite_user(UR_OBJECT user, char *str, ...);
 char *get_ircserv_name(char *id);
 void boot_statline(UR_OBJECT user);
@@ -1746,8 +1481,6 @@ void toggle_ignlook(UR_OBJECT user);
 void logout_user(UR_OBJECT, char*);
 void timeout_auth(); 
 void kde(UR_OBJECT user);
-/* void write_sock(int sock,char *str); */
-/* void write_sock2(int sock,char *str,size_t count); */
 ssize_t twrite(int fd, const void *buf, size_t count);
 void write2sock_ex(UR_OBJECT user,int sock,char *str,size_t count);
 size_t write2sock(UR_OBJECT user,int sock,const char *str,size_t count);
@@ -1783,7 +1516,6 @@ void dama_stav(UR_OBJECT);
 void dama_stav2(UR_OBJECT);
 char *header(char *str);
 void oline(UR_OBJECT);
-/* void do_repository(char *subor, int typ); */
 void repository(char *name, int typ);
 void rebirth(UR_OBJECT user);
 void miny_placing(UR_OBJECT,unsigned int,unsigned int);
@@ -1820,7 +1552,6 @@ extern char *clovece_saved_opponent(UR_OBJECT);
 extern void add_cloveceplayer(UR_OBJECT,UR_OBJECT);
 extern void hod_kockou(UR_OBJECT, int);
 extern void clovece_next(UR_OBJECT);
-/* void clovece(UR_OBJECT,char*); */
 
 extern FR_OBJECT create_farar();
 extern void destruct_farar(UR_OBJECT);
@@ -1830,12 +1561,6 @@ extern void record_farar(FR_OBJECT farar);
 extern void farar(UR_OBJECT,char*);
 
 extern void log_game(char*);
- /* V) hmh, extern || neextern .. what's the difference ?? */
-
-/***********************************************************
-*************** EXTERNE  FUNKCIE ***************************
-*************** (uplne na konci) ***************************
-************************************************************/
 
 int put_in_room(RM_OBJECT rm,int vec,int dur);
 int remove_from_room(RM_OBJECT rm,int vec,int dur);
@@ -1871,9 +1596,9 @@ extern void show_kniha_kuziel(UR_OBJECT user,int dur);
 
 extern char *crypt_slavko(char *crypt, char *salt);
 extern char *md5_crypt(char *pw, char *salt);
-extern void      destruct_blackjack_game(UR_OBJECT);
-extern void      play_blackjack(UR_OBJECT);
-extern void      clovece(UR_OBJECT, char*);
+extern void destruct_blackjack_game(UR_OBJECT);
+extern void play_blackjack(UR_OBJECT);
+extern void clovece(UR_OBJECT, char*);
 
 extern XA_OBJECT create_xannel();
 extern void destruct_xannel(UR_OBJECT user);
@@ -1884,27 +1609,3 @@ extern void xannel(UR_OBJECT user,char *inpstr);
 extern void cmd_module(UR_OBJECT user, char *inpstr);
 
 char *dbf_string(char *string);
-/***********************************************************/
-
-
-/********* konec headru... **************/
-/* Aka sucha hlaska... To sa pise inak! Asi takto:
-Vazene damy, vazeni pani! Dovolujeme si vam laskavo oznamit, ze mnozstvo
-bytov, urcene pre tento header sa uz racilo minut a tak vam neostava nic ine,
-ako stlacit ctrl+c a ponechat tento header svojmu osudu. Pevne verime, ze sa
-vam toto stretnutie pacilo a ze ste sa milo pobavili. Ak nie, hlboko sa vam
-ospravedlnujeme a slubujeme, ze nabuduce to bude zasa o nieco lepsie. Tesime
-sa na najblizsie stretutie s vami, vase pismenka v headri... :> GAME OVER */
-
-       /* GODa jeho Ridera, este tam ma aj pravopysne chibi! */
-  /* To ne ja, to pismenka :>> (musim sa na daco vyhovorit, nie?) */   
-
-/*.. Rozhostila se cernocerna tma. Osvetlene je jen okno Niny Alexandrovny ..*/
-/* To si tam uz wacsju krawinu dat nemohol?! Koniec musi byt uplne krasny,
- stylovy a nie ako v americkych filmox! Napriklad takyto:
-
- ...oprel sa o pachole a pozrel smerom, kde stala predtym nasa ponorka. Na
- hladine ostala iba skvrna po nafte a tazko rozoznatelne plavajuce predmety.
- Ludia z posadky. Jeho oci, vzdy privrete, boli teraz uplne vytrestene a meravo
- hladeli na tu skazu. Zrazu sa mu z ust vyrynul pramienok krvi...
-*/
