@@ -244,8 +244,6 @@ enum statline {NONEMODE,UNKNOWN,LINEMODE,CHARMODE};
 #define DB_DEMOTE 2
 #define DB_BAN 3
 
-#define COUNT 111 /* fortune cookies */
-
 #define MAIL_QUOTA 50000 /* odkedy bude upozornovat na preplnenu sxranku */
 #define MAIL_LIMIT 55000 /* odkedy uz nebude moct dostavat postu!!! */
 

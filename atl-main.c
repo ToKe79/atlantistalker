@@ -14203,13 +14203,13 @@ void fortune_cookies(UR_OBJECT user)
 {
 	FILE *fp;
 	char filename[80],line[201];
-	int n,ktory,all;
+	int n=0,ktory=0,all=0;
+	char *dummy="Hovorit striebro, mlcat je zlato.\n";
 
 	if (word_count>2) {
 		write_user(user,"Pouzi: .fortune [<all>]\n");
 		return;
 	}
-	all=0;
 	if ((word_count==2) && (!strcmp(word[1],"all"))) {
 		all=1;
 	}
@@ -14217,26 +14217,36 @@ void fortune_cookies(UR_OBJECT user)
 		write_user(user,"Pouzi: .fortune [<all>]\n");
 		return;
 	}
-	ktory=(random()%COUNT+1);
 	sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,FORTUNE_FILE);
-	if (!(fp=ropen(filename,"r")))
+	if (!(fp=ropen(filename,"r"))) {
 		write_user(user,"Chyba: Nenasiel som potrebny subor!\n");
-	else {
-		for (n=0;n<=ktory;n++) {
-			if (!feof(fp))
-				fgets(line,200,fp);
-		}
-		if (all) {
-			sprintf(text,"~OL%s mudruje: ~RS%s",user->name,line);
-			write_room_except(user->room, text, user);
-			sprintf(text,"~OLMudrujes: ~RS%s",line);
-			write_user(user, text);
-		}
-		else {
-			sprintf(text,"~OLPamataj: ~RS%s",line);
-			write_user(user, text);
-		}
+		return;
+	}
+	while (fgets(line,200,fp)!=NULL)
+		n++;
+	if (n==0) {
 		fclose(fp);
+		write_user(user,"Oznam spravcom, ze Voodoo pozral vsetky kolaciky mudrosti.\nA urcite ich zapil kofolou, ten barbar!\n");
+		return;
+	}
+	line[0]='\0';
+	ktory=(random()%n+1);
+	n=0;
+	rewind(fp);
+	while (fgets(line,200,fp)!=NULL && n<ktory)
+		n++;
+	fclose(fp);
+	if(!(strlen(line)))
+		strcpy(line,dummy);
+	if (all) {
+		sprintf(text,"~OL%s mudruje: ~RS%s",user->name,line);
+		write_room_except(user->room,text,user);
+		sprintf(text,"~OLMudrujes: ~RS%s",line);
+		write_user(user,text);
+	}
+	else {
+		sprintf(text,"~OLPamataj: ~RS%s",line);
+		write_user(user,text);
 	}
 }
 
