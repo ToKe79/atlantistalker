@@ -163,7 +163,7 @@ int writeerror,max_timeouts,max_timeoutz;
 #define DAMAFILES "saves-dama" /* ulozene hry damy */
 #define MAILSPOOL "mailspool"
 #define POMOCFILES "help" /* pomoc-subory */
-#define LOGFILES "logs" /* logy */
+#define LOGFILES "log" /* logy */
 #define ITEMFILES "predmety" /* popisky predmetov */
 
 /* misc-subory */
