@@ -13,6 +13,11 @@ SRCS      = ${wildcard *.c}
 TODO      = $(patsubst %.c,%.o,$(SRCS))
 DEFINES   =
 
+GIT_VERSION := $(shell git describe --abbrev=7 --dirty --always --tags 2>/dev/null)
+ifneq ($(GIT_VERSION),)
+DEFINES += -DHAVE_GIT_VERSION -DGIT_VERSION=\"$(GIT_VERSION)\"
+endif
+
 ifeq ($(HAVE_CONFIG), 1)
 DEFINES += -DHAVE_CONFIG
 endif

@@ -12,6 +12,7 @@
 /* FIXME & TODO:
  * void invite() - da sa floodit, ak sa po sebe pytaju dvaja useri a striedaju sa
  * "Si umlcany" - prerobit muz/zena, kde este nie je
+ * Ignorovanie - ak niekoho ignorujem, nemal by som voci nemu pouzivat ziadne prikazy
  */
 
 #define ATLANTIS "5.40 Videopoll Release"
@@ -424,7 +425,11 @@ int main(int argc,char *argv[])
 	printf("                    \033[1m_____ ____ __   _____ __ __ ____ __ ____\033[0m\n");
 	printf("                    \033[1m||_||  ||  ||   ||_|| ||\\||  ||  || ||__\033[0m\n");
 	printf("             Talker \033[1m|| ||  ||  ||__ || || || ||  ||  || __||\033[0m Talker\n");
-	printf("             ~~~~~~ -->--==( %-22.22s )==--<-- ~~~~~~\n\n", ATLANTIS);
+	printf("             ~~~~~~ -->--==( %-22.22s )==--<-- ~~~~~~\n",ATLANTIS);
+#ifdef HAVE_GIT_VERSION
+	printf("             Revision: %s\n",GIT_VERSION);
+#endif
+	printf("\n");
 	if (!init_database()) {
 		printf("Chyba: problem s pripojenim databazy.\n");
 		boot_exit(1);
@@ -434,7 +439,11 @@ int main(int argc,char *argv[])
 	daily_num=tmday;
 	every_min_num=tmin;
 	burkamin=tmin;
+#ifdef HAVE_GIT_VERSION
+	sprintf(text,"\n*** SERVER BOOTING, Atlantis version %s, rev %s ***\n",ATLANTIS,GIT_VERSION);
+#else
 	sprintf(text,"\n*** SERVER BOOTING, Atlantis version %s ***\n",ATLANTIS);
+#endif
 	write_syslog(text,1);
 	init_signals();
 	init_remote_connections(NULL);
@@ -8314,6 +8323,10 @@ void show_version(UR_OBJECT user)
 	write_user(user,"~RS~FB            ::| ::|  ::|  ::::::|::| ::|::| \\:|  ::|  ::::::|,::::/\n");
 	sprintf(text,"~OL~FW- ~RS~FTVerzia %s ~OL~FW-~RS\n",ATLANTIS);
 	writecent(user,text);
+#ifdef HAVE_GIT_VERSION
+	sprintf(text,"~OL~FW- ~RS~FTGIT revizia %s ~OL~FW-~RS\n",GIT_VERSION);
+	writecent(user,text);
+#endif
 	write_user(user,"~RS~FY     *--------------------------------------------------------------------*\n");
 	sprintf(text,"~FTAtlantis uz existuje ~OL~FT%d~RS~FT rok%s, ~OL~FT%d~RS~FT mesiac%s a ~OL~FT%d~RS~FT d%s\n",exrok,skloncislo(exrok,"","y","ov"),exmesiac,skloncislo(exmesiac,"","e","ov"),exden,skloncislo(exden,"en","ni","ni"));
 	writecent(user,text);
@@ -19382,7 +19395,11 @@ void help_commands(UR_OBJECT user,int engl)
 
 void help_credits(UR_OBJECT user)
 {
+#ifdef HAVE_GIT_VERSION
+	sprintf(text,"\n*** The Credits ***\n\nNUTS version %s,\n%s,\nGIT revision: %s,\nCopyright (C) Neil Robertson 1996.\n\n",VERSION,WORK,GIT_VERSION);
+#else
 	sprintf(text,"\n*** The Credits ***\n\nNUTS version %s,\n%s,\nCopyright (C) Neil Robertson 1996.\n\n",VERSION,WORK);
+#endif
 	write_user(user,text);
 	write_user(user,"~BM             ~BB             ~BT             ~BG             ~BY             ~BR             ~RS~BK~FW\n");
 	write_user(user,"NUTS stands for Neils Unix Talk Server, a program which started out as a\nuniversity project in autumn 1992 and has progressed from thereon. In no\nparticular order thanks go to the following people who helped me develop or\n");
@@ -23720,7 +23737,11 @@ void system_details(UR_OBJECT user,int typ)
 		return;
 	}
 	if (typ) {
+#ifdef HAVE_GIT_VERSION
+		sprintf(text,"\n*** NUTS ver. %s (Atlantis version: %s, revision: %s)  ***\n\n",VERSION,ATLANTIS,GIT_VERSION);
+#else
 		sprintf(text,"\n*** NUTS ver. %s (Atlantis version: %s)  ***\n\n",VERSION,ATLANTIS);
+#endif
 		write_user(user,text);
 	}
 	strcpy(bstr,zobraz_datum((time_t *)&boot_time, 1));
