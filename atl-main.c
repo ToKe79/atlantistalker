@@ -59,8 +59,7 @@ void poprehadzuj_prikazy(UR_OBJECT user)
 			write_user(user,text);
 		return;
 	}
-	fscanf(fp,"%s %d", comm, &level);
-	while (!feof(fp)) {
+	while (fscanf(fp,"%s %d",comm,&level)!=EOF) {
 		sprintf(text,"Prikaz: %-10s Level: %d\n", comm, level);
 		if (user==NULL)
 			printf("%s",text);
@@ -74,7 +73,6 @@ void poprehadzuj_prikazy(UR_OBJECT user)
 			}
 			i++;
 		}
-		fscanf(fp,"%s %d",comm,&level);
 	}
 	fclose(fp);
 }
@@ -193,12 +191,10 @@ void resc_load()
 	sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,RESC_CACHE);
 	if ((fp=ropen(filename,"r"))==NULL)
 		return;
-	fscanf(fp,"%s %s",rescip[rescn],rescho[rescn]);
-	while (!feof(fp)) {
+	while (fscanf(fp,"%s %s",rescip[rescn],rescho[rescn])!=EOF) {
 		rescn++;
 		if (rescn>(RESCNUM-1))
 			rescn=0;
-		fscanf(fp,"%s %s",rescip[rescn],rescho[rescn]);
 	}
 	fclose(fp);
 }
@@ -305,15 +301,13 @@ int user_banned(char *name)
 	sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,NICKBLOCK);
 	if (!(fp=ropen(filename,"r")))
 		return 0;
-	fscanf(fp,"%s",line);
-	while(!feof(fp)) {
+	while (fscanf(fp,"%s",line)!=EOF) {
 		if (line[0]!='#' && line[0]) {
 			if (!strcmp(line,name)) {
 				fclose(fp);
 				return 1;
 			}
 		}
-		fscanf(fp,"%s",line);
 	}
 	fclose(fp);
 	return 0;
@@ -1112,13 +1106,11 @@ int site_banned(char *site)
 	sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,SITEBAN);
 	if (!(fp=ropen(filename,"r")))
 		return 0;
-	fscanf(fp,"%s",line);
-	while (!feof(fp)) {
+	while (fscanf(fp,"%s",line)!=EOF) {
 		if (strstr(site,line)) {
 			fclose(fp);
 			return 1;
 		}
-		fscanf(fp,"%s",line);
 	}
 	fclose(fp);
 	return 0;
@@ -1151,13 +1143,11 @@ int newuser_siteban(char *site)
 	sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,NEWUSER_SITEBAN);
 	if (!(fp=ropen(filename,"r")))
 		return 0;
-	fscanf(fp,"%s",line);
-	while (!feof(fp)) {
+	while (fscanf(fp,"%s",line)!=EOF) {
 		if (strstr(site,line)) {
 			fclose(fp);
 			return 1;
 		}
-		fscanf(fp,"%s",line);
 	}
 	fclose(fp);
 	return 0;
@@ -1295,9 +1285,8 @@ void load_and_parse_config()
 		fprintf(stderr,"Chyba - Nenasiel som subor s io frazami miestnosti (%s)\n",filename);
 	}
 	else {
-		fgets(line,81,fp);
-		line[strlen(line)-1]='\0';
-		while (!feof(fp)) {
+		while (fgets(line,81,fp)!=NULL) {
+			line[strlen(line)-1]='\0';
 			for (rm1=room_first;rm1!=NULL;rm1=rm1->next) {
 				if (!strcmp(line,rm1->name)) {
 					fgets(line,81,fp);
@@ -1311,8 +1300,6 @@ void load_and_parse_config()
 					strcpy(rm1->where,line);
 				}
 			}
-			fgets(line,81,fp);
-			line[strlen(line)-1]='\0';
 		}
 		fclose(fp);
 	}
@@ -1441,10 +1428,8 @@ void load_rooms_desc(UR_OBJECT user)
 	}
 	else {
 		i=0;
-		c=getc(fp);
-		while (!feof(fp)) {
+		while ((c=getc(fp))!=EOF) {
 			tempdesc[i]=c;
-			c=getc(fp);
 			++i;
 		}
 		tempdesc[i]='\0';
@@ -1491,10 +1476,8 @@ void load_rooms_desc(UR_OBJECT user)
 	}
 	else {
 		i=0;
-		c=getc(fp);
-		while (!feof(fp)) {
+		while ((c=getc(fp))!=EOF) {
 			tempdesc[i]=c;
-			c=getc(fp);
 			++i;
 		}
 		tempdesc[i]='\0';
@@ -1541,10 +1524,8 @@ void load_rooms_desc(UR_OBJECT user)
 	}
 	else {
 		i=0;
-		c=getc(fp);
-		while (!feof(fp)) {
+		while ((c=getc(fp))!=EOF) {
 			tempdesc[i]=c;
-			c=getc(fp);
 			++i;
 		}
 		tempdesc[i]='\0';
@@ -4447,8 +4428,7 @@ void posielanie(UR_OBJECT user)
 			return;
 		}
 	}
-	fscanf(fp,"%s %s %s", userheslo, usermeno, bogus);
-	while (!feof(fp)) {
+	while (fscanf(fp,"%s %s %s",userheslo,usermeno,bogus)!=EOF) {
 		strtolower(bogus);
 		if ((!strcmp(usermeno,"*")) && (strstr(adr,bogus))) {
 			fclose(fp);
@@ -4475,7 +4455,6 @@ void posielanie(UR_OBJECT user)
 			fclose(fp);
 			return;
 		}
-		fscanf(fp,"%s %s %s", userheslo,usermeno,bogus);
 	}
 	fclose(fp);
 	write_user(user, "\n~OLVyborne, uspesne si sa zaregistroval. ~RSKazdu chvilu ocakavaj email v ktorom sa\n");
@@ -5316,14 +5295,13 @@ int more(UR_OBJECT user,int sock,char *filename)
 	if ((user!=NULL) && (user->browsing==1) && (!user->filepos))
 		totalines-=1;
 	lines=0;
-	fgets(text,sizeof(text)-10,fp);
 	if (user!=NULL && user->skip>0) {
 		max=totalines*user->skip;
 		user->skip--;
 	}
 	else
 		max=totalines;
-	while (!feof(fp) && (lines<max || user==NULL)) {
+	while (fgets(text,sizeof(text)-10,fp)!=NULL && (lines<max || user==NULL)) {
 		if (lines>0 && (lines)%totalines==0 && user!=NULL && user->skip>0) {
 			user->skip--;
 			if (user->skip>0)
@@ -5429,14 +5407,13 @@ int more(UR_OBJECT user,int sock,char *filename)
 			if (strstr(text,"~OL~FB======= ~RS~FYSprava od:"))
 				user->messnum++;
 			if (user->browsing==10) {
-				while ((user->messnum<=user->lastm) && (!feof(fp))) {
-					fgets(text,sizeof(text)-10,fp);
+				while ((user->messnum<=user->lastm) && (fgets(text,sizeof(text)-10,fp)!=NULL)) {
 					len=strlen(text);
 					num_chars+=len;
 					if (strstr(text,"~OL~FB======= ~RS~FYSprava od:"))
 						user->messnum++;
 				}
-				if (feof(fp)) {
+				if (fgets(text,sizeof(text)-10,fp)==NULL) {
 					write_user(user,"Bohuzial, neboli zaznamenane ziadne nove spravy.\n");
 					user->filepos=0;
 					no_prompt=0;
@@ -5575,7 +5552,6 @@ CONT:
 		}
 		else
 			lines+=len/80+(len<80);
-		fgets(text,sizeof(text)-10,fp);
 	}
 	if (buffpos && sock!=-1)
 		write2sock(user,sock,buff,buffpos);
@@ -5583,7 +5559,7 @@ CONT:
 		fclose(fp);
 		return 2;
 	}
-	if (feof(fp)) {
+	if (fgets(text,sizeof(text)-10,fp)==NULL) {
 		user->filepos=0;
 		no_prompt=0;
 		retval=2;
@@ -6438,14 +6414,19 @@ char *meniny(int mday,int mmonth)
 		sprintf(men,"Mr. Nobody");
 		return men;
 	}
-	while (!feof(fp)) {
-		fgets(line,80,fp);
+	while (fgets(line,sizeof(line)-1,fp)!=NULL) {
 		if (strstr(line,denmes)) {
-			fgets(line,80,fp);
-			strcpy(men,line);
-			men[strlen(men)-1]=0;
-			fclose(fp);
-			return men;
+			if (fgets(line,sizeof(line)-1,fp)!=NULL) {
+				strcpy(men,line);
+				men[strlen(men)-1]=0;
+				fclose(fp);
+				return men;
+			}
+			else {
+				fclose(fp);
+				sprintf(men,"Mr. Nobody");
+				return men;
+			}
 		}
 	}
 	fclose(fp);
@@ -8348,11 +8329,8 @@ void show_user(UR_OBJECT user,char fajl[255])
 
 	if (!(fp=ropen(fajl,"r")))
 		return;
-	fgets(line,199,fp);
-	while (!feof(fp)) {
+	while (fgets(line,sizeof(line)-1,fp)!=NULL)
 		write_user(user,line);
-		fgets(line,199,fp);
-	}
 	fclose(fp);
 }
 
@@ -8485,12 +8463,9 @@ int count_lines(char *filename)
 	i=0;
 	if (!(fp=ropen(filename,"r")))
 		return i;
-	c=getc(fp);
-	while (!feof(fp)) {
+	while ((c=getc(fp))!=EOF)
 		if (c=='\n')
 			i++;
-		c=getc(fp);
-	}
 	fclose(fp);
 	return i;
 }
@@ -10278,8 +10253,7 @@ void set(UR_OBJECT user,char *inpstr)
 				write_user(user,"Sorry, nie su povolene ziadne IRC servre.\n");
 				return;
 			}
-			fscanf(fp,"%s %s %s",id,serv,port);
-			while (!feof(fp)) {
+			while (fscanf(fp,"%s %s %s",id,serv,port)!=EOF) {
 				if (!strcmp(word[2],id)) {
 					sstrncpy(user->irc_serv,word[2],11);
 					sprintf(text,"Nastaveny IRC server: ~OL%s %s~RS.\n",serv,port);
@@ -10287,7 +10261,6 @@ void set(UR_OBJECT user,char *inpstr)
 					fclose(fp);
 					return;
 				}
-				fscanf(fp,"%s %s %s",id,serv,port);
 			}
 			fclose(fp);
 			write_user(user,"Nespravny nazov IRC servera!\n");
@@ -10300,10 +10273,9 @@ void set(UR_OBJECT user,char *inpstr)
 		write_user(user,"~OL~FB.=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-.\n");
 		write_user(user,"~OL~FB|         ~OL~FYprikaz          ~FB| ~OL~FY     server               port~FB |\n");
 		fscanf(fp,"%s %s %s",id,serv,port);
-		while (!feof(fp)) {
+		while (fscanf(fp,"%s %s %s",id,serv,port)!=EOF) {
 			sprintf(text,"~OL~FB| ~RS~FW.set ircserv ~OL%-10s ~FB| ~RS~FT%-25s %s ~OL~FB|~RS\n",id,serv,port);
 			write_user(user,text);
-			fscanf(fp,"%s %s %s",id,serv,port);
 		}
 		fclose(fp);
 		write_user(user,"~OL~FB`=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'\n");
@@ -11406,11 +11378,8 @@ void look(UR_OBJECT user)
 				return;
 			}
 			else {
-				fgets(line,440,fp);
-				while (!feof(fp)) {
+				while (fgets(line,sizeof(line)-1,fp)!=NULL)
 					write_user(user,line);
-					fgets(line,440,fp);
-				}
 				fclose(fp);
 			}
 			ammunition(user,vec);
@@ -14267,7 +14236,8 @@ void hint(UR_OBJECT user, int ihned)
 {
 	FILE *fp;
 	char filename[255],line[501];
-	int count,ktory,n;
+	int ktory,n;
+	char *dummy=".kon hijo sluzi na rychle presuvanie sa na koni?\n";
 
 	if ((word_count>2) && (!ihned)) {
 		write_user(user,"Pouzi: .hint\n");
@@ -14278,17 +14248,22 @@ void hint(UR_OBJECT user, int ihned)
 		write_user(user,"Chyba: Nenasiel som potrebny subor s tipmi!\n");
 		return;
 	}
-	count=0;
-	while (!feof(fp)) {
-		fgets(line,500,fp);
-		count++;
+	while (fgets(line,sizeof(line)-1,fp)!=NULL)
+		n++;
+	if (n==0) {
+		fclose(fp);
+		write_user(user,"Hmm... tusim sa nam minuly dobre tipy.\n");
+		return;
 	}
 	rewind(fp);
-	ktory=(random()%count+1);
-	for (n=1;n!=ktory+1;n++) {
-		fgets(line,500,fp);
-	}
+	ktory=(random()%n+1);
+	n=0;
+	line[0]='\0';
+	while (fgets(line,sizeof(line)-1,fp)!=NULL && n<ktory)
+		n++;
 	fclose(fp);
+	if(!strlen(line))
+		strcpy(line,dummy);
 	sprintf(text,"~FTTIP: Vedel%s si, ze:\n~FW%s",pohl(user,"","a"),line);
 	write_user(user,text);
 	if (user->level>CIT && note_vote(user)) {
@@ -16160,11 +16135,8 @@ void customexamine(UR_OBJECT user,char *username,int testall)
 					return;
 				}
 				else {
-					fgets(line,440,fp);
-					while (!feof(fp)) {
+					while (fgets(line,sizeof(line)-1,fp)!=NULL)
 						write_user(user,line);
-						fgets(line,440,fp);
-					}
 					fclose(fp);
 				}
 				return;
@@ -20356,11 +20328,8 @@ void examine(UR_OBJECT user)
 					return;
 				}
 				else {
-					fgets(line,440,fp);
-					while (!feof(fp)) {
+					while (fgets(line,sizeof(line)-1,fp)!=NULL)
 						write_user(user,line);
-						fgets(line,440,fp);
-					}
 					fclose(fp);
 				}
 				return;
@@ -21803,14 +21772,12 @@ void ban_site(UR_OBJECT user)
 	}
 	sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,SITEBAN);
 	if ((fp=ropen(filename,"r"))!=NULL) {
-		fscanf(fp,"%s",site);
-		while (!feof(fp)) {
+		while (fscanf(fp,"%s",site)!=EOF) {
 			if (!strcmp(site,word[1])) {
 				write_user(user,"Tato adresa/domena uz je vyblokovana.\n");
 				fclose(fp);
 				return;
 			}
-			fscanf(fp,"%s",site);
 		}
 		fclose(fp);
 	}
@@ -21841,14 +21808,12 @@ void ban_site_for_newuser(UR_OBJECT user)
 		return;
 	}
 	if ((fp=ropen(filename,"r"))!=NULL) {
-		fscanf(fp,"%s",site);
-		while (!feof(fp)) {
+		while (fscanf(fp,"%s",site)!=EOF) {
 			if (!strcmp(site,word[1])) {
 				write_user(user,"Tato adresa/domena uz je vyblokovana pre zakladanie novych kont.\n");
 				fclose(fp);
 				return;
 			}
-			fscanf(fp,"%s",site);
 		}
 		fclose(fp);
 	}
@@ -21952,15 +21917,13 @@ void unban_site(UR_OBJECT user)
 	}
 	found=0;
 	cnt=0;
-	fscanf(infp,"%s",site);
-	while (!feof(infp)) {
+	while (fscanf(infp,"%s",site)!=EOF) {
 		if (strcmp(word[1],site)) {
 			fprintf(outfp,"%s\n",site);
 			cnt++;
 		}
 		else
 			found=1;
-		fscanf(infp,"%s",site);
 	}
 	fclose(infp);
 	fclose(outfp);
@@ -22006,15 +21969,13 @@ void unban_site_for_newuser(UR_OBJECT user)
 	}
 	found=0;
 	cnt=0;
-	fscanf(infp,"%s",site);
-	while (!feof(infp)) {
+	while (fscanf(infp,"%s",site)!=EOF) {
 		if (strcmp(word[1],site)) {
 			fprintf(outfp,"%s\n",site);
 			cnt++;
 		}
 		else
 			found=1;
-		fscanf(infp,"%s",site);
 	}
 	fclose(infp);
 	fclose(outfp);
@@ -23958,13 +23919,11 @@ void viewlog(UR_OBJECT user,char *inpstr)
 		}
 		write_user(user,"\n~OL~FK--~RS~FW-=~OL~FW=(*~RS~FW Systemovy dennik - vyhladavanie ~OL~FW*)=~RS~FW=-~OL~FK--\n\n");
 		lines=0;
-		fgets(line,199,fp);
-		while (!feof(fp)) {
-			if (strstr(line, inpstr)) {
+		while (fgets(line,sizeof(line),fp)!=NULL) {
+			if (strstr(line,inpstr)) {
 				lines=1;
-				fprintf(tmpfp,"%s", line);
+				fprintf(tmpfp,"%s",line);
 			}
-			fgets(line,199,fp);
 		}
 		fclose(fp);
 		fclose(tmpfp);
@@ -24641,12 +24600,9 @@ void wipe_user(char *meno)
 		return;
 	}
 	fscanf(infp,"%s %s %s",userheslo,usermeno,bogus);
-	while (!feof(infp)) {
-		if (strcmp(usermeno,meno)) {
+	while (fscanf(infp,"%s %s %s",userheslo,usermeno,bogus)!=EOF)
+		if (strcmp(usermeno,meno))
 			fprintf(outfp,"%-6s %-12s %s\n",userheslo,usermeno,bogus);
-		}
-		fscanf(infp,"%s %s %s",userheslo,usermeno,bogus);
-	}
 	fclose(infp);
 	fclose(outfp);
 	rename(filename2,filename);
@@ -24666,16 +24622,11 @@ void rename_user_on_list(char *meno,char *novemeno)
 		fclose(infp);
 		return;
 	}
-	fscanf(infp,"%s %s %s",userheslo,usermeno,bogus);
-	while (!feof(infp)) {
-		if (!strcmp(usermeno,meno)) {
+	while (fscanf(infp,"%s %s %s",userheslo,usermeno,bogus)!=EOF)
+		if (!strcmp(usermeno,meno))
 			fprintf(outfp,"%-6s %-12s %s\n",userheslo,novemeno,bogus);
-		}
-		else {
+		else
 			fprintf(outfp,"%-6s %-12s %s\n",userheslo,usermeno,bogus);
-		}
-		fscanf(infp,"%s %s %s", userheslo,usermeno,bogus);
-	}
 	fclose(infp);
 	fclose(outfp);
 	rename(filename2,filename);
@@ -25741,15 +25692,12 @@ void check_web_board()
 	sprintf(filename,"%s%c%s",DATAFILES,DIRSEP,WEB_BOARD_DAT);
 	if ((fp=ropen(filename,"r"))==NULL)
 		return;
-	fscanf(fp,"%s %s",meno,rmeno);
-	while (!feof(fp)) {
+	while (fscanf(fp,"%s %s",meno,rmeno)!=EOF)
 		if ((rm=get_room(rmeno,NULL))!=NULL) {
 			sprintf(texthb,"%s napisal(a) cez web spravu na nastenku.\n",meno);
 			write_room(rm,texthb);
 			rm->mesg_cnt++;
 		}
-		fscanf(fp,"%s %s",meno,rmeno);
-	}
 	fclose(fp);
 	unlink(filename);
 }
@@ -25777,9 +25725,8 @@ void zapis_statistiku()
 		return;
 	}
 	i=0;
-	fscanf(fp,"%s %d",string1,&i);
 	nasiel=0;
-	while (!feof(fp)) {
+	while (fscanf(fp,"%s %d",string1,&i)!=EOF)
 		if (!strcmp(string1,match)) {
 			i+=all_logins;
 			fprintf(temp,"%s %d\n",string1,i);
@@ -25788,8 +25735,6 @@ void zapis_statistiku()
 		}
 		else
 			fprintf(temp,"%s %d\n", string1, i);
-		fscanf(fp,"%s %d",string1,&i);
-	}
 	if (!nasiel) {
 		fprintf(temp,"%s %d\n",match,all_logins);
 		all_logins=0;
@@ -26001,20 +25946,18 @@ void udalosti()
 				fclose(fp);
 				continue;
 			}
-			fgets(line,149,fp);
 			kolko=(rand()%(pocet))+1;
 			for (m=0;m!=kolko;m++) {
-				if (feof(fp)) {
+				if (fgets(line,sizeof(line),fp)!=NULL) {
 					fclose(fp);
 					return;
 				}
-				fgets(line,149,fp);
 			}
 			write_room(rm,line);
 			fclose(fp);
 		}
 	}
-	if((rand()%55)==15) {
+	if ((rand()%55)==15) {
 		for (u=user_first;u!=NULL;u=u->next) {
 			if (!u->login && u->level==NEW && u->room!=NULL && !u->ignall && u->type!=CLONE_TYPE && u->zaradeny) {
 				write_user(u,"~OLAko novemu uzivatelovi ti odporucame:~RS\n");
@@ -27066,12 +27009,12 @@ int update_macro(UR_OBJECT user,MACRO macro,char *value)
 		strcpy(newvalue,value);
 		free(macro->value);
 		macro->value=newvalue;
-                sprintf(query,"replace into `macros` (`userid`,`name`,`value`) values ('%d','",user->id);
-                strcat(query,dbf_string(macro->name));
+		sprintf(query,"replace into `macros` (`userid`,`name`,`value`) values ('%d','",user->id);
+		strcat(query,dbf_string(macro->name));
 		strcat(query,"','");
-                strcat(query,dbf_string(macro->value));
+		strcat(query,dbf_string(macro->value));
 		strcat(query,"');");
-                mysql_kvery(query);
+		mysql_kvery(query);
 		write_user(user,"Makro bolo zmenene.\n");
 		return SUCCESS;
 	}
@@ -27103,7 +27046,7 @@ void add_macro(MACRO *list,char *name,char *value)
 	star=0;
 	while ((replace=strchr(value,'$'))!=NULL) {
 		replace_type=replace[1];
-                if (star==0 && (replace_type=='n' || replace_type=='g' || replace_type=='d' || replace_type=='a'))
+		if (star==0 && (replace_type=='n' || replace_type=='g' || replace_type=='d' || replace_type=='a'))
 			star=1;
 		if (isdigit(replace_type)){
 			num=todigit(replace_type);
@@ -27407,14 +27350,12 @@ int quotacheck(char *username)
 		return 1;
 	}
 	username[0]=toupper(username[0]);
-	fscanf(fp,"%s", menko);
-	while (!feof(fp)) {
+	while (fscanf(fp,"%s",menko)!=EOF) {
 		menko[0]=toupper(menko[0]);
 		if (!strcmp(menko,username)) {
 			fclose(fp);
 			return 0;
 		}
-		fscanf(fp,"%s",menko);
 	}
 	fclose(fp);
 	return 1;
@@ -27427,16 +27368,12 @@ int showfile(UR_OBJECT user,char filename[90])
 
 	if (!(fp=ropen(filename,"r")))
 		return 0;
-	fgets(linaj,500,fp);
-	while (!feof(fp)) {
+	while (fgets(linaj,sizeof(linaj)-1,fp)!=NULL)
 		write_user(user,linaj);
-		fgets(linaj,500,fp);
-	}
 	fclose(fp);
-	if (strlen(filename)>=strlen(TMPSUFFIX)) {
+	if (strlen(filename)>=strlen(TMPSUFFIX))
 		if (!strcmp(strchr(filename,'\0')-strlen(TMPSUFFIX),TMPSUFFIX))
 			deltempfile(filename);
-	}
 	return 1;
 }
 
@@ -27830,15 +27767,12 @@ int check_passwd_simplex(char *passwd)
 	if (!(fp=ropen(filename,"r")))
 		return 0;
 	strtolower(passwd);
-	fscanf(fp, "%s", heslo);
-	strtolower(heslo);
-	while (!feof(fp)) {
+	while (fscanf(fp,"%s",heslo)!=EOF) {
+		strtolower(heslo);
 		if (strstr(passwd,heslo)) {
 			fclose(fp);
 			return 1;
 		}
-		fscanf(fp,"%s",heslo);
-		strtolower(heslo);
 	}
 	fclose(fp);
 	tmp=passwd;
@@ -27856,10 +27790,11 @@ int skontroluj()
 	sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,CHECKFILE);
 	if (!(fp=ropen(filename,"r")))
 		return 0;
-	fscanf(fp,"%s",slovo);
-	fclose(fp);
-	if (strlen(slovo)>1)
-		return 1;
+	if (fscanf(fp,"%s",slovo)!=EOF) {
+		fclose(fp);
+		if (strlen(slovo)>1)
+			return 1;
+	}
 	return 0;
 }
 
@@ -27883,14 +27818,12 @@ void aklient_log(char *meno)
 			return;
 		}
 		je=0;
-		fscanf(fp,"%s %d",juzer,&pristupy);
-		while (!feof(fp)) {
+		while (fscanf(fp,"%s %d",juzer,&pristupy)!=EOF) {
 			if (!strcmp(juzer,meno)) {
 				pristupy++;
 				je=1;
 			}
 			fprintf(tempfp, "%s %d\n",juzer,pristupy);
-			fscanf(fp,"%s %d",juzer,&pristupy);
 		}
 		if (!je)
 			fprintf(tempfp,"%s 1\n",meno);
@@ -27919,14 +27852,12 @@ void aklient_log(char *meno)
 			return;
 		}
 		je=0;
-		fscanf(fp,"%s %d",verzia,&pristupy);
-		while (!feof(fp)) {
+		while (fscanf(fp,"%s %d",verzia,&pristupy)!=EOF) {
 			if (!strcmp(verzia,ver)) {
 				pristupy++;
 				je=1;
 			}
 			fprintf(tempfp,"%s %d\n",verzia,pristupy);
-			fscanf(fp,"%s %d",verzia,&pristupy);
 		}
 		if (!je)
 			fprintf(tempfp,"%s 1\n",ver);
@@ -28170,9 +28101,8 @@ void sms(UR_OBJECT user,int done_editing)
 		pos=0;
 		sprintf(filename,"%s%c%s.sms",MAILSPOOL,DIRSEP,user->name);
 		if ((fp=ropen(filename,"r"))) {
-			fgets(cmd,500,fp);
 			i=0;
-			while (!feof(fp)) {
+			while (fgets(cmd,sizeof(cmd)-1,fp)!=NULL) {
 				if (i==0)
 					write_user(user,"\n");
 				if (pos==0) {
@@ -28181,7 +28111,6 @@ void sms(UR_OBJECT user,int done_editing)
 				}
 				else
 					pos--;
-				fgets(cmd,500,fp);
 				i++;
 			}
 			fclose(fp);
@@ -28466,13 +28395,11 @@ void statistic(UR_OBJECT user)
 	if (!(fp=ropen(filename,"r"))) {
 	}
 	else {
-		fscanf(fp,"%s %s %s %s",filename,kto,komand,tmp);
-		while (!feof(fp)) {
+		while (fscanf(fp,"%s %s %s %s",filename,kto,komand,tmp)!=EOF) {
 			if ((!strcmp(kto,u->name))) {
 				sprintf(text,"~FR%s pokus o request na email usera ~OL%s~RS~FR (%s).\n",filename,komand,tmp);
 				write_user(user,text);
 			}
-			fscanf(fp,"%s %s %s %s",filename,kto,komand,tmp);
 		}
 		fclose(fp);
 	}
@@ -28568,16 +28495,14 @@ int get_gate_no(char *str)
 	if (!(fp=ropen(filename,"r"))) {
 		return -1;
 	}
-	fgets(line,99,fp);
 	i=0;
-	while (!feof(fp)) {
+	while (fgets(line,sizeof(line)-1,fp)!=NULL) {
 		sscanf(line,"%d %s",&num,name);
 		if (!strcmp(str,name)) {
 			fclose(fp);
 			return num;
 		}
 		i++;
-		fgets(line,99,fp);
 	}
 	fclose(fp);
 	return -1;
@@ -28593,16 +28518,14 @@ int get_gate_maxchars(int gate_num)
 	if (!(fp=ropen(filename,"r"))) {
 		return -1;
 	}
-	fgets(line,99,fp);
 	i=0;
-	while (!feof(fp)) {
+	while (fgets(line,sizeof(line)-1,fp)!=NULL) {
 		sscanf(line,"%d %s %d",&num,name,&max);
 		if (num==gate_num) {
 			fclose(fp);
 			return max;
 		}
 		i++;
-		fgets(line,99,fp);
 	}
 	fclose(fp);
 	return -1;
@@ -28626,9 +28549,8 @@ char *expand_gate(UR_OBJECT user,int inc_account,char *sendtonum)
 	if (!(fp=ropen(filename,"r"))) {
 		return ret;
 	}
-	fgets(line,99,fp);
 	i=0;
-	while (!feof(fp)) {
+	while (fgets(line,sizeof(line)-1,fp)!=NULL) {
 		sscanf(line,"%d %s %d %d %s %s",&num,name,&max,&format,uname,pass);
 		if (num==gateno || i==1) {
 			if (inc_account) {
@@ -28678,7 +28600,6 @@ char *expand_gate(UR_OBJECT user,int inc_account,char *sendtonum)
 				strcpy(first,ret);
 		}
 		i++;
-		fgets(line,99,fp);
 	}
 	fclose(fp);
 	strcpy(ret,first);
@@ -28703,11 +28624,11 @@ void show_gates(UR_OBJECT user)
 		write_user(user,error);
 		return;
 	}
-	fgets(line,99,fp);
 	i=0;
 	sprintf(text,"~FTK dispozicii su nasledovne brany:\n");
-	while (!feof(fp)) {
-		for (ii=0;ii<3;ii++) myrestrict[ii][0]='\0';
+	while (fgets(line,sizeof(line)-1,fp)!=NULL) {
+		for (ii=0;ii<3;ii++)
+			myrestrict[ii][0]='\0';
 		sscanf(line,"%d %s %d %d %s %s %s %s %s",&num,name,&max,&format,uname,pass,myrestrict[0],myrestrict[1],myrestrict[2]);
 		if (myrestrict[0][0])
 			sprintf(filename,"  %-13s~FT(max. %d znakov) obmedzena na cisla %s %s %s\n",name,max,myrestrict[0],myrestrict[1],myrestrict[2]);
@@ -28715,7 +28636,6 @@ void show_gates(UR_OBJECT user)
 			sprintf(filename,"  %-13s~FT(max. %d znakov)\n",name,max);
 		strcat(text,filename);
 		i++;
-		fgets(line,99,fp);
 	}
 	fclose(fp);
 	if (i==0)
@@ -28737,8 +28657,7 @@ int restrict_sms(char *str,int gate_num)
 	if (!(fp=ropen(filename,"r"))) {
 		return 1;
 	}
-	fgets(line,99,fp);
-	while (!feof(fp)) {
+	while (fgets(line,sizeof(line)-1,fp)!=NULL) {
 		myrestrict[0][0]='\0';
 		myrestrict[1][0]='\0';
 		sscanf(line,"%d %s %d %d %s %s %s %s",&num,name,&max,&format,name,name,myrestrict[0],myrestrict[1]);
@@ -28758,7 +28677,6 @@ int restrict_sms(char *str,int gate_num)
 				return 0;
 			return 1;
 		}
-		fgets(line,99,fp);
 	}
 	fclose(fp);
 	return 1;
@@ -28789,12 +28707,12 @@ int is_leap(unsigned int yr)
 
 unsigned int months_to_days(unsigned mn)
 {
-  return (mn*3057-3007)/100;
+	return (mn*3057-3007)/100;
 }
 
 long int years_to_days(unsigned yr)
 {
-  return yr*365L+yr/4-yr/100+yr/400;
+	return yr*365L+yr/4-yr/100+yr/400;
 }
 
 long int ymd_to_scalar(unsigned int yr,unsigned int mo,unsigned int dy)
@@ -28954,9 +28872,7 @@ char *datum_menin(char *meno)
 		write_syslog(text,0);
 		return date;
 	}
-	while (!feof(fp)) {
-		fgets(date,80,fp);
-		fgets(name,80,fp);
+	while (fgets(date,sizeof(date)-1,fp)!=NULL && fgets(name,sizeof(name)-1,fp)!=NULL) {
 		name[strlen(name)-1]=0;
 		if (strchr(name,',')) {
 			ok=-1;
@@ -28971,16 +28887,14 @@ char *datum_menin(char *meno)
 			}
 			name[ok]='\0';
 		}
-		if(!strcmp(name,meno) || !strcmp(name2,meno)) {
+		if (!strcmp(name,meno) || !strcmp(name2,meno)) {
 			date[strlen(date)-1]=0;
 			fclose(fp);
 			return date;
 		}
 	}
 	rewind(fp);
-	while (!feof(fp)) {
-		fgets(date,80,fp);
-		fgets(name,80,fp);
+	while (fgets(date,sizeof(date)-1,fp)!=NULL && fgets(name,sizeof(name)-1,fp)!=NULL) {
 		if(strstr(name,meno)) {
 			date[strlen(date)-1]=0;
 			fclose(fp);
