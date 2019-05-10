@@ -1,10 +1,7 @@
-/*--------------------------------------------------------------------------*/
-/*                    REMOTE CONNECT - 23-24.12.1999                        */
-/*--------------------------------------------------------------------------*/
 #include "atl-head.h"
 #include "atl-mydb.h"
 
-void test_lynx_done(void) /* vola sa v do_events */
+void test_lynx_done(void)
 {
 	UR_OBJECT user;
 	FILE *fp;
@@ -14,7 +11,7 @@ void test_lynx_done(void) /* vola sa v do_events */
 	for (user=user_first;user!=NULL;user=user->next) {
 		if (user->login || user->type!=USER_TYPE || user->room==NULL || !user->lynx)
 			continue;
-		if (waitpid (user->lynx, &status, WNOHANG) == user->lynx) {
+		if (waitpid (user->lynx,&status,WNOHANG)==user->lynx) {
 			user->lynx=0;
 			sprintf(filename,"%s%c%s-lynx%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
 			if (user->misc_op) {
@@ -47,7 +44,7 @@ void test_lynx_done(void) /* vola sa v do_events */
 	}
 }
 
-void lynx(UR_OBJECT user) /* hlavny prikaz */
+void lynx(UR_OBJECT user)
 {
 	int status;
 	pid_t pid;
@@ -113,9 +110,9 @@ void lynx(UR_OBJECT user) /* hlavny prikaz */
 			write_user(user,"~FTLynx:~FW lutujem, chyba pri forku...\n");
 			return;
 		case 0:
-			setpgid(0,0); /* rodinne meno - vyvrazdime potom vsetko nazraz :) */
+			setpgid(0,0);
 			sprintf(text,"/usr/bin/lynx -restrictions=all -dump http://%s > %s 2>> %s",word[1],filename,filename);
-			system(text); /* deticko */
+			system(text);
 			_exit(0);
 	}
 	user->lynx=pid;
@@ -136,10 +133,10 @@ void cmon_auth(UR_OBJECT gdo)
 			sstrncpy(identita,real_auth(gdo),99);
 			sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,GOT_AUTH);
 			if ((fp=ropen(filename,"a"))!=NULL) {
-				fprintf(fp,"%s %s\n", gdo->name, identita);
+				fprintf(fp,"%s %s\n",gdo->name,identita);
 				fclose(fp);
 				if (identita[0]!='<') {
-					sprintf(text,"Ident reply for %s: %s\n", gdo->name, identita);
+					sprintf(text,"Ident reply for %s: %s\n",gdo->name,identita);
 					write_syslog(text,1);
 				}
 			}
@@ -156,9 +153,8 @@ void check_ident_reply(void)
 	sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,GOT_AUTH);
 	if ((fp=ropen(filename,"r"))==NULL)
 		return;
-	fscanf(fp,"%s %s",name,ident);
-	while(!feof(fp)) {
-		for(u=user_first;u!=NULL;u=u->next) {
+	while (fscanf(fp,"%s %s",name,ident)!=EOF) {
+		for (u=user_first;u!=NULL;u=u->next) {
 			if (u->login)
 				continue;
 			if (!strcmp(u->name,name)) {
@@ -166,13 +162,11 @@ void check_ident_reply(void)
 				break;
 			}
 		}
-		fscanf(fp,"%s %s",name,ident);
 	}
 	fclose(fp);
 	unlink(filename);
 }
 
-/* Toto je nahrada, ale tiez nefunguje a hlavne mrzne. Sux. */
 char *real_auth(UR_OBJECT gdo)
 {
 	struct sockaddr_in addr;
@@ -257,7 +251,7 @@ char *real_auth(UR_OBJECT gdo)
 	sprintf(buf,"%u,%u\r\n",gdo->site_port,gdo->port);
 	buflen=strlen(buf);
 	FD_ZERO(&fs);
-	FD_SET(s, &fs);
+	FD_SET(s,&fs);
 	timeout.tv_sec=5;
 	timeout.tv_usec=0;
 	if (select(s+1,FD_CAST NULL,FD_CAST&fs,FD_CAST NULL,(struct timeval *)&timeout)==0 || !FD_ISSET(s,&fs)) {
@@ -306,16 +300,14 @@ char *real_auth(UR_OBJECT gdo)
 		}
 	}
 	else {
-		sprintf(vysledok,"%s@%s", meno, gdo->site);
+		sprintf(vysledok,"%s@%s",meno,gdo->site);
 		return vysledok;
 	}
 	strcpy(vysledok,"<CHYBA>");
 	return vysledok;
 }
 
-/************** Weather report daily ;) ***************/
-/* Spartakus - .weather (predpoved pocasia), berie sa z www.shmu.sk */
-void weather(UR_OBJECT user, char *inpstr)
+void weather(UR_OBJECT user,char *inpstr)
 {
 	char filename[255];
 
@@ -370,7 +362,6 @@ void zober_predpoved(UR_OBJECT user,int force)
 			return;
 			break;
 		case 0:
-			/* Vsetky fajly ktore xceme stiahnut stiahneme najprv tu ... www.shmu.sk 193.87.204.9 */
 			webcicni("www.shmu.sk","/predpoved/predpoved.cgi?2","pocasie/raw2.htm");
 			webcicni("www.shmu.sk","/predpoved/predpoved.cgi?3","pocasie/raw3.htm");
 			webcicni("www.shmu.sk","/predpoved/predpoved.cgi?4","pocasie/raw4.htm");
@@ -378,7 +369,6 @@ void zober_predpoved(UR_OBJECT user,int force)
 			webcicni("www.shmu.sk","/predpoved/predpoved.cgi?6","pocasie/raw6.htm");
 			webcicni("www.shmu.sk","/predpoved/predpoved.cgi?7","pocasie/raw7.htm");
 			webcicni("www.shmu.sk","/predpoved/predpoved.cgi?8","pocasie/raw8.htm");
-			/* ... a parsneme */
 			parsni_pocasie("pocasie/raw2.htm",WEATHER_TODAY_FILE);
 			parsni_pocasie("pocasie/raw3.htm",WEATHER_TOMORROW_FILE);
 			parsni_pocasie("pocasie/raw4.htm",WEATHER_STRED_FILE);
@@ -393,7 +383,6 @@ void zober_predpoved(UR_OBJECT user,int force)
 		write_user(user,"Poziadavka bola odoslana ...\n");
 }
 
-/* WEATHER FUNCTIONS!! */
 void webcicni(char host[50],char dokument[80],char filename[255])
 {
 	int len,res,zasuva;
@@ -419,9 +408,9 @@ void webcicni(char host[50],char dokument[80],char filename[255])
 	}
 	if (!(fajl=ropen(filename,"w")))
 		return;
-	while ((len = read (zasuva, rbuf, 1)) > 0)
+	while ((len=read(zasuva,rbuf,1))>0)
 		fputc(*rbuf,fajl);
-	if (len < 0)
+	if (len<0)
 		write_syslog("Chyba v nacitavani stranky (webcicni)",1);
 	close(zasuva);
 	fclose(fajl);
@@ -441,14 +430,12 @@ void parsni_pocasie(char vstup[255],char vystfile[255])
 		fclose(fajl);
 		return;
 	}
-	fgets(line,100,fajl);
-	while (!feof(fajl)) {
+	while (fgets(line,sizeof(line)-1,fajl)!=NULL) {
 		if (strstr(line,"PREDPOVED"))
 			stav=1;
 		if (strstr(line,"SHMU"))
 			stav=0;
 		if (line[0]=='<') {
-			fgets(line,100,fajl);
 			continue;
 		}
 		for (i=0;i<=strlen(line);++i) {
@@ -459,7 +446,6 @@ void parsni_pocasie(char vstup[255],char vystfile[255])
 		}
 		if (stav)
 			fputs(line,vystup);
-		fgets(line,100,fajl);
 	}
 	fclose(fajl);
 	fclose(vystup);
@@ -501,7 +487,6 @@ void connecthost_timeout(void)
 	write_syslog(text,1);
 	siglongjmp(save_state,1);
 }
-/*--------------   End of weather functions   ----------------*/
 
 void note(UR_OBJECT user,char *inpstr)
 {
@@ -766,17 +751,15 @@ int init_remote_connections(UR_OBJECT user)
 		remote_start=NULL;
 		remote_last=NULL;
 		fgets(line,199,rn);
-		while (!feof(rn)) {
+		while (fgets(line,sizeof(line),rn)!=NULL) {
 			remote=create_remote(user);
 			sscanf(line,"%c %s %d %s",&remote->shortcut,remote->name,&remote->port,remote->desc);
-			fgets(line,199,rn);
 		}
 		fclose(rn);
 	}
 	else {
 		remote=remote_start;
-		fgets(line,199,rn);
-		while (!feof(rn)) {
+		while (fgets(line,sizeof(line)-1,rn)!=NULL) {
 			if (remote==NULL) {
 				remote=create_remote(user);
 				write_user(user,"- creating remote connection..\n");
@@ -786,7 +769,6 @@ int init_remote_connections(UR_OBJECT user)
 			sscanf(line,"%c %s %d %s",&remote->shortcut,remote->name,&remote->port,remote->desc);
 			next=remote;
 			remote=remote->next;
-			fgets(line,199,rn);
 		}
 		fclose(rn);
 		next->next=NULL;
@@ -827,24 +809,22 @@ int connect_to_site(UR_OBJECT user,RN_OBJECT remote,int slot)
 	if (!strcmp(remote->desc,"IRC")) {
 		sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,IRC_SERVERS);
 		if ((fp=fopen(filename,"r"))!=NULL) {
-			fscanf(fp,"%s %s %d", id, serveridlo, &def_port);
-			while (!feof(fp)) {
-				if (!strcmp(user->irc_serv, id)) {
+			while (fscanf(fp,"%s %s %d",id,serveridlo,&def_port)!=EOF) {
+				if (!strcmp(user->irc_serv,id)) {
 					i=1;
 					break;
 				}
-				fscanf(fp,"%s %s %d", id, serveridlo, &def_port);
 			}
 			fclose(fp);
 		}
 		if (!i) {
 			strcpy(serveridlo,"irc.nextra.sk");
 			def_port=6667;
-			strcpy(user->irc_serv,"nextra1"); /* Dzast tu bi shur! */
+			strcpy(user->irc_serv,"nextra1");
 		}
 	}
 	else {
-		sstrncpy(serveridlo, remote->name, 99);
+		sstrncpy(serveridlo,remote->name,99);
 		def_port=remote->port;
 	}
 	sn = serveridlo;
@@ -1015,7 +995,7 @@ int exec_remote_com(UR_OBJECT user,char *inpstr)
 				strncat(inpstr,"\r\n",2);
 				if (user->remote_socket[i]==user->ircsocknum) {
 					user->com_counter=MAX_COMMANDS;
-					parse(user, inpstr+1, 1);
+					parse(user,inpstr+1,1);
 				}
 				else
 					write(user->remote_socket[i],inpstr+1,strlen(inpstr)-1);
@@ -1028,14 +1008,14 @@ int exec_remote_com(UR_OBJECT user,char *inpstr)
 		strncat(inpstr,"\r\n",2);
 		if (user->actual_remote_socket==user->ircsocknum) {
 			user->com_counter=MAX_COMMANDS;
-			parse(user, inpstr, 1);
+			parse(user,inpstr,1);
 		}
 		else
 			write(user->actual_remote_socket,inpstr,strlen(inpstr));
 		return 1;
 	}
 	if (word[0][0]=='+')
-		strcpy(inpstr, inpstr+1);
+		strcpy(inpstr,inpstr+1);
 	return 0;
 }
 
@@ -1089,7 +1069,7 @@ void timeout_rem()
 void view_remote(UR_OBJECT user)
 {
 	FILE *fp,*rn;
-	char filename[255],filename2[255],shortcut,shortcut2='\0',name[REMOTE_NAME_LEN],desc[REMOTE_DESC_LEN],port[5],tmp[3];
+	char filename[255],shortcut,shortcut2='\0',name[REMOTE_NAME_LEN],desc[REMOTE_DESC_LEN],port[5],tmp[3];
 	int slot,j,i,free,error,found=0;
 	RN_OBJECT remote;
 
@@ -1156,7 +1136,7 @@ void view_remote(UR_OBJECT user)
 				if (remote->shortcut==word[2][0] || !strncasecmp(remote->desc,word[2],strlen(word[2]))) {
 					for (i=0;i<MAX_CONNECTIONS;i++)
 						if (user->remote[i]==remote) {
-							sprintf(text,"Uz si napojen%s na ~OL%s~RS.\n",pohl(user,"y","a"), remote->desc);
+							sprintf(text,"Uz si napojen%s na ~OL%s~RS.\n",pohl(user,"y","a"),remote->desc);
 							write_user(user,text);
 							return;
 						}
@@ -1176,9 +1156,9 @@ void view_remote(UR_OBJECT user)
 #endif
 					signal(SIGALRM,timeout_rem);
 					alarm(heartbeat);
-					remote_active=remote; /* aktivny remote server */
-					remote_user_active=user; /* user, pri ktorom sa to cele zalagovalo */
-					remote_slot_active=slot; /* slot, pri ktorom sa to cele zalagovalo */
+					remote_active=remote;
+					remote_user_active=user;
+					remote_slot_active=slot;
 					switch ((error=connect_to_site(user,remote,slot))) {
 						case 1:
 							sprintf(text,"Chyba v pripajani sa na %s %d.\n",remote->name,remote->port);
@@ -1201,7 +1181,7 @@ void view_remote(UR_OBJECT user)
 								if (remote==user->remote[j]) {
 									i=j;
 									break;
-								} /* i je index socketu s danym talkerom */
+								}
 							if (i==-1) {
 								write_user(user,"Nastala chyba v pripajani.\n");
 								return;
@@ -1232,13 +1212,13 @@ void view_remote(UR_OBJECT user)
 								}
 							}
 							if (user->remote_socket[i]==user->ircsocknum)
-								sprintf(text,"~FT[Pripojeny na IRC server ~OL%s~RS~FT]\n", get_ircserv_name(user->irc_serv));
+								sprintf(text,"~FT[Pripojeny na IRC server ~OL%s~RS~FT]\n",get_ircserv_name(user->irc_serv));
 							else
-								sprintf(text,"~FT[Pripojeny na ~OL%s %d~RS~FT]\n",user->remote[i]->name,user->remote[i]->port/*,user->remote_socket[i]*/);
+								sprintf(text,"~FT[Pripojeny na ~OL%s %d~RS~FT]\n",user->remote[i]->name,user->remote[i]->port);
 							break;
 					}
 					if (error!=0)
-						user->remote_socket[slot]=0; /* ak nastala chyba*/
+						user->remote_socket[slot]=0;
 					write_user(user,text);
 					if (user->statline==CHARMODE) {
 						show_statline(user);
@@ -1287,8 +1267,7 @@ void view_remote(UR_OBJECT user)
 		write_user(user,"~OL~FRSkratka     Adresa                  Port    Nazov talkera        Autologin\n");
 		sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,REMOTE_FILE);
 		if ((fp=ropen(filename,"r"))!=NULL) {
-			while (!feof(fp)) {
-				fscanf(fp,"%c %s %s %s\n",&shortcut,name,port,desc);
+			while (fscanf(fp,"%c %s %s %s",&shortcut,name,port,desc)!=EOF) {
 				sprintf(tmp,"%c",shortcut);
 				sprintf(query,"select `name` from `remote` where `userid`='%d' and `talker`='%s';",user->id,dbf_string(tmp));
 				if ((result=mysql_result(query))) {
@@ -1300,34 +1279,30 @@ void view_remote(UR_OBJECT user)
 					}
 					else {
 						if (!strcmp(desc,"IRC") && user->irc_nick[0]!='\0')
-							sprintf(text,"   %c        %-31s %-20s %-13.13s\n",shortcut2, get_ircserv_name(user->irc_serv), desc, user->irc_defnick);
+							sprintf(text,"   %c        %-31s %-20s %-13.13s\n",shortcut2,get_ircserv_name(user->irc_serv),desc,user->irc_defnick);
 						else
-							sprintf(text,"   %c        %-23s %-7s %-20s ---\n",shortcut,name, port, desc);
+							sprintf(text,"   %c        %-23s %-7s %-20s ---\n",shortcut,name,port,desc);
 						write_user(user,text);
 					}
 					mysql_free_result(result);
 				}
 				else {
 					if (!strcmp(desc,"IRC") && user->irc_nick[0]!='\0')
-						sprintf(text,"   %c        %-31s %-20s %-13.13s\n",shortcut2, get_ircserv_name(user->irc_serv), desc, user->irc_defnick);
+						sprintf(text,"   %c        %-31s %-20s %-13.13s\n",shortcut2,get_ircserv_name(user->irc_serv),desc,user->irc_defnick);
 					else
-						sprintf(text,"   %c        %-23s %-7s %-20s ---\n",shortcut,name, port, desc);
+						sprintf(text,"   %c        %-23s %-7s %-20s ---\n",shortcut,name,port,desc);
 					write_user(user,text);
 				}
-
 			}
 			fclose(fp);
 		}
 		write_user(user,"~OL~FB=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
 		return;
 	}
-	sprintf(filename2,"%s%c%s",MISCFILES,DIRSEP,REMOTE_FILE);
-	/* na zaklade REMOTE_FILE zistime o aky server ide */
-	if ((rn=ropen(filename2,"r"))) {
+	sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,REMOTE_FILE);
+	if ((rn=ropen(filename,"r"))) {
 		found = 0;
-		while (!feof(rn)) {
-			fscanf(rn,"%c %s %s %s",&shortcut,name,port,desc);
-			fgets(text,80,rn);
+		while (fscanf(rn,"%c %s %s %s\n",&shortcut,name,port,desc)!=EOF) {
 			if (word[1][0]==shortcut || !strncasecmp(word[1],desc,strlen(word[1]))) {
 				found=1;
 				break;
@@ -1347,7 +1322,7 @@ void view_remote(UR_OBJECT user)
 			sprintf(query,"delete from `remote` where `userid`='%d' and `talker`='%s';",user->id,dbf_string(tmp));
 			if (mysql_kvery(query)) {
 				if (mysql_affected_rows(&mysql)) {
-					sprintf(text,"%s si talker ~OL%s~RS zo svojho zoznamu.\n", pohl(user,"Vymazal","Vymazala"), desc);
+					sprintf(text,"%s si talker ~OL%s~RS zo svojho zoznamu.\n",pohl(user,"Vymazal","Vymazala"),desc);
 					write_user(user,text);
 				}
 				else {
@@ -1361,7 +1336,6 @@ void view_remote(UR_OBJECT user)
 			return;
 
 		case 4:
-			/* name,port,desc mame server, ktory treba pridat */
 			if (strlen(word[2])>15 || strlen(word[3])>50) {
 				write_user(user,"Prilis dlhy nick alebo heslo.\n");
 				return;
@@ -1378,7 +1352,7 @@ void view_remote(UR_OBJECT user)
 					write_user(user,text);
 				}
 				else {
-					sprintf(text,"%s si talker ~OL%s~RS do zoznamu.\n",pohl(user,"Pridal","Pridala"), desc);
+					sprintf(text,"%s si talker ~OL%s~RS do zoznamu.\n",pohl(user,"Pridal","Pridala"),desc);
 					write_user(user,text);
 				}
 			}
@@ -1433,7 +1407,7 @@ int UPDATE_FDS(void)
 	return(--size_fds);
 }
 
-int ADD_FDS(int socket, int events)
+int ADD_FDS(int socket,int events)
 {
 	if (size_fds==MAX_POLL-1)
 		return 0;
@@ -1451,16 +1425,13 @@ extern int spracuj_remote_vstup(char *inpstr)
 	int x;
 	char *ptr;
 	char *povolene[]={
-		/* NUTS Staff... */
-		"\033[0m", "\033[1m", "\033[4m", "\033[5m", "\033[7m", "\033[8m",
+		"\033[0m","\033[1m","\033[4m","\033[5m","\033[7m","\033[8m",
 		"\033[30m","\033[31m","\033[32m","\033[33m",
 		"\033[34m","\033[35m","\033[36m","\033[37m",
 		"\033[40m","\033[41m","\033[42m","\033[43m",
 		"\033[44m","\033[45m","\033[46m","\033[47m",
-		/* TTT Staff... */
 		"\033[0;30m","\033[0;31m","\033[0;32m","\033[0;33m",
 		"\033[0;34m","\033[0;35m","\033[0;36m","\033[0;37m",
-		/* FORNAX Staff... */
 		"\033[1;30m","\033[1;31m","\033[1;32m","\033[1;33m",
 		"\033[1;34m","\033[1;35m","\033[1;36m","\033[1;37m",
 		"*"};
@@ -1482,12 +1453,6 @@ extern int spracuj_remote_vstup(char *inpstr)
 		return 0;
 }
 
-/***
- * Toto je uplne uzasna funkcia, ktora je vsak zdegradovana na parsovanie
- * telnet prikazov. Po malej uprave je to vsak o dost lepsi strstr, ktory
- * pozna wildmask v podobe otaznika. Pravda, istym problebom by mohlo byt
- * zistovanie samotneho otazniku, ale who cares?
- ***/
 char *strteln(char *string,char *substring,unsigned int stringlen)
 {
 	char *ptr1,*ptr2,*ptr3;
@@ -1522,31 +1487,28 @@ char *strteln(char *string,char *substring,unsigned int stringlen)
 	return NULL;
 }
 
-extern void parse_telnet_chars(UR_OBJECT user,char *inpstr, size_t len)
+extern void parse_telnet_chars(UR_OBJECT user,char *inpstr,size_t len)
 {
 	char *ptr;
 	char smalbuf[100];
 
-	/* nastavenie terminalu */
 	sprintf(smalbuf,"%c%c%c%c%c%c%c%c%c",IAC,SB,TELOPT_NAWS,0,'?',0,'?',IAC,SE);
 	if ((ptr=strteln(inpstr,smalbuf,len))!=NULL) {
-		user->colms=(unsigned char)*(ptr+4); /* RIDERFLOW */
+		user->colms=(unsigned char)*(ptr+4);
 		if (user->colms<5)
-			user->colms=5; /* pre istotu :) */
-		user->lines=(unsigned char)*(ptr+6); /* RIDERFLOW */
+			user->colms=5;
+		user->lines=(unsigned char)*(ptr+6);
 		if (user->lines<5)
-			user->lines=5; /* pre istotu :) */
+			user->lines=5;
 		if (user->statline==CHARMODE) {
 			user->statlcount=user->lines;
 			user->lines-=2;
 			init_statline(user);
 		}
 	}
-	/* Are you there? */
 	sprintf(smalbuf,"%c%c",IAC,AYT);
 	if (strteln(inpstr,smalbuf,len)!=NULL)
 		write_user(user,"[Atlantis : yes]\n");
-	/* Start Linemode */
 	sprintf(smalbuf,"%c%c%c",IAC,DO,TELOPT_SGA);
 	if (strteln(inpstr,smalbuf,len)!=NULL) {
 		if (user->statline==UNKNOWN)
@@ -1558,7 +1520,6 @@ extern void parse_telnet_chars(UR_OBJECT user,char *inpstr, size_t len)
 	if (strteln(inpstr,smalbuf,len)!=NULL)
 		if (user->statlcan==1)
 			boot_statline(user);
-	/* Do status! */
 	sprintf(smalbuf,"%c%c%c",IAC,DO,TELOPT_STATUS);
 	if (strteln(inpstr,smalbuf,len)!=NULL) {
 		sprintf(smalbuf,"%c%c%c",IAC,WILL,TELOPT_STATUS);
@@ -1577,7 +1538,7 @@ extern void parse_telnet_chars(UR_OBJECT user,char *inpstr, size_t len)
 			if (ptr>(inpstr+10)) {
 				int sajze=0;
 				char meno[100];
-				ptr=inpstr+10; /* VALUE */
+				ptr=inpstr+10;
 				while (*ptr!=(char)IAC) {
 					meno[sajze]=*ptr;
 					sajze++;
@@ -1604,20 +1565,20 @@ extern void parse_remote_ident(UR_OBJECT user,char *rinpstr,int len,int wsock)
 	int sajze;
 
 	if (*rinpstr!=(char)255)
-		return; /* nech sa nezdrzuje */
+		return;
 	sprintf(smalbuf,"%c%c%c",IAC,DO,TELOPT_NEW_ENVIRON);
-	if (strteln(rinpstr,smalbuf,len)!=NULL) { /* xcu vediet, ci to zvladame... */
-		user->remtelopt|=1; /* ze to zvlada ... */
+	if (strteln(rinpstr,smalbuf,len)!=NULL) {
+		user->remtelopt|=1;
 		sprintf(smalbuf,"%c%c%c",IAC,WILL,TELOPT_NEW_ENVIRON);
-		write(user->remote_socket[wsock],smalbuf,3); /* a potvrdime to! */
+		write(user->remote_socket[wsock],smalbuf,3);
 		return;
 	}
 	sprintf(smalbuf,"%c%c%c%c%c%c",IAC,SB,TELOPT_NEW_ENVIRON,TELQUAL_SEND,IAC,SE);
-	if (strteln(rinpstr,smalbuf,len)!=NULL) { /* semraci, semruju ident! */
+	if (strteln(rinpstr,smalbuf,len)!=NULL) {
 		if (user->remtelopt!=(user->remtelopt|1))
-			return; /* nepoprosili - nedostanu ;-) */
+			return;
 		sprintf(smalbuf,"%c%c%c%c%c%c%c%c%c%c",IAC,SB,TELOPT_NEW_ENVIRON,TELQUAL_IS,NEW_ENV_VAR,'U','S','E','R',NEW_ENV_VALUE);
-		sajze=10; /* dlzka smalbuf-u */
+		sajze=10;
 		sprintf(smallerbuf,"%s[%s]%c%c",user->name,user->site,IAC,SE);
 		strcpy((smalbuf+sajze),smallerbuf);
 		sajze+=strlen(smallerbuf);
