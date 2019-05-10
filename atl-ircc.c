@@ -1,7 +1,3 @@
-/***
- * IRC KLIENT pre Atlantis (C) 29.12.1999-3.1.2000 Spartakus
- * Status line (C) Rider of LoneStar Software
- ***/
 #include "atl-head.h"
 #include "atl-mydb.h"
 
@@ -15,23 +11,16 @@ char *get_ircserv_name(char *id)
 	sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,IRC_SERVERS);
 	if ((fp=fopen(filename,"r"))==NULL)
 		return nazov;
-	fscanf(fp, "%s %s %s", iden, server, port);
-	while (!feof(fp)) {
-		if (!strcmp(id, iden)) {
-			sprintf(nazov, "%s %s", server, port);
+	while (fscanf(fp,"%s %s %s",iden,server,port)!=EOF)
+		if (!strcmp(id,iden)) {
+			sprintf(nazov,"%s %s",server,port);
 			fclose(fp);
 			return nazov;
 		}
-		fscanf(fp, "%s %s %s", iden, server, port);
-	}
 	fclose(fp);
 	return nazov;
 }
 
-/***
- * Attempt to get '\n' terminated line of input from a character
- * mode client else store data read so far in user buffer.
- ***/
 int get_charclient_line(UR_OBJECT user,char *inpstr,int len)
 {
 	int l;
@@ -68,7 +57,6 @@ int get_charclient_line(UR_OBJECT user,char *inpstr,int len)
 		}
 	}
 	for(l=0;l<len;++l) {
-		/* see if delete entered */
 		if (inpstr[l]==8 || inpstr[l]==127) {
 			if (user->buffpos) {
 				user->buffpos--;
@@ -87,7 +75,6 @@ int get_charclient_line(UR_OBJECT user,char *inpstr,int len)
 			return 0;
 		}
 		user->buff[user->buffpos]=inpstr[l];
-		/* See if end of line */
 		if ((inpstr[l]>0 && inpstr[l]<32) || user->buffpos+2==BUFSIZE) {
 			terminate(user->buff);
 			strcpy(inpstr,user->buff);
@@ -106,8 +93,6 @@ int get_charclient_line(UR_OBJECT user,char *inpstr,int len)
 		text_statline(user,0);
 	return 0;
 }
-
-/************* STATUS LAJNA ************/
 
 void statline(UR_OBJECT user)
 {
@@ -135,7 +120,7 @@ void statline(UR_OBJECT user)
 			cls(user,D_LINES);
 		}
 		else
-			write2sock(user,user->socket,"\033[2;1r\033c\033[?7h",0); /* CRT oblaf ;-) */
+			write2sock(user,user->socket,"\033[2;1r\033c\033[?7h",0);
 		cls(user,0);
 		write_user(user,"Stavovy riadok bol ~FRZRUSENY~FW!\n\n");
 	}
@@ -143,7 +128,7 @@ void statline(UR_OBJECT user)
 		write_user(user,"Stlac ~OLMEDZERU~RS (+ ~OLENTER~RS, ak treba) pre zapojenie stavoveho riadku!\n");
 		user->statline=UNKNOWN;
 		sprintf(text,"%c%c%c%c%c%c%c%c%c",IAC,WILL,TELOPT_SGA,IAC,WILL,TELOPT_ECHO,IAC,DONT,TELOPT_LINEMODE);
-		write_user(user,text); /* pridat IAC, WONT, TELOPT_ECHO */
+		write_user(user,text);
 		if (user->statlcan==2)
 			boot_statline(user);
 	}
@@ -156,7 +141,6 @@ void boot_statline(UR_OBJECT user)
 	if (user->doom)
 		user->statlcount+=D_LINES;
 	user->lines-=2;
-	/*** zapojenie statline ***/
 	init_statline(user);
 	write_user(user,"Stavovy riadok ~FGZAPOJENY~FW!\n");
 	user->statline=CHARMODE;
@@ -167,11 +151,11 @@ void init_statline(UR_OBJECT user)
 	char smalbuf[100];
 
 	sprintf(smalbuf,"\033[?25l\033[%d;%dr",((user->doom)?(D_LINES+1):1),(user->statlcount)-2);
-	write2sock(user,user->socket,smalbuf,0); /* zapni scrollregion */
-	echo_off(user); /* vypni charecho (escape) */
+	write2sock(user,user->socket,smalbuf,0);
+	echo_off(user);
 	if (user->doom)
 		cls(user,D_LINES);
-	cls(user,0);      /* vymaz screen */
+	cls(user,0);
 	show_statline(user);
 	text_statline(user,1);
 }
@@ -182,40 +166,39 @@ void show_statline(UR_OBJECT user)
 	int x;
 	int mins;
 
-	sprintf(sequencia,"\0337\033[%d;1H",(user->statlcount)-1); /* save+goto Y,1 */
+	sprintf(sequencia,"\0337\033[%d;1H",(user->statlcount)-1);
 	write2sock(user,user->socket,sequencia,0);
 	user->newline=0;
 	mins=(int)(time(0) - user->last_login)/60;
 	if (user->actual_remote_socket && user->actual_remote_socket==user->ircsocknum)
-		sprintf(sequencia,"~BB~OL~FW %-12.12s ~FR * ~FG%02d:%02d %03d ~FY%3dpp ~FR* ~OL~FW%-16.16s ~FR* ~FY    Atlantis TALKER       ", user->irc_nick, thour, tmin, mins, user->pp, user->irc_chan);
+		sprintf(sequencia,"~BB~OL~FW %-12.12s ~FR * ~FG%02d:%02d %03d ~FY%3dpp ~FR* ~OL~FW%-16.16s ~FR* ~FY    Atlantis TALKER       ",user->irc_nick,thour,tmin,mins,user->pp,user->irc_chan);
 	else
-		sprintf(sequencia,"~BB~OL~FW %-12s ~FR * ~FG%02d:%02d %03d ~FY%3dpp ~FR* ~OL~FW%-16s ~FR* ~FY    Atlantis TALKER       ", user->name, thour, tmin, mins, user->pp, user->room->name);
-
-	if (user->colms>80 && user->colms<600) /* baxa na overflow :) */
+		sprintf(sequencia,"~BB~OL~FW %-12s ~FR * ~FG%02d:%02d %03d ~FY%3dpp ~FR* ~OL~FW%-16s ~FR* ~FY    Atlantis TALKER       ",user->name,thour,tmin,mins,user->pp,user->room->name);
+	if (user->colms>80 && user->colms<600)
 		for (x=user->colms; x>80; x--)
 			strcat(sequencia," ");
 	strcat(sequencia,"~BK~FW~RS\n\n");
 	write_user(user,sequencia);
-	write2sock(user,user->socket,"\0338",0); /* restore cursor */
+	write2sock(user,user->socket,"\0338",0);
 }
 
-void text_statline(UR_OBJECT user, int crflag)
+void text_statline(UR_OBJECT user,int crflag)
 {
 	char sequencia[150];
 	char *ptr;
-	int term, i,j, k, oddel;
+	int term,i,j,k,oddel;
 	RN_OBJECT remote;
 
-	sprintf(sequencia,"\0337\033[%d;1H",user->statlcount); /* save+goto Y,1 */
+	sprintf(sequencia,"\0337\033[%d;1H",user->statlcount);
 	write2sock(user,user->socket,sequencia,0);
 	i=0;
 	text[0]='\0';
-	if (user->buffpos && !isalpha(user->buff[0]) && !isdigit(user->buff[0]) && !strchr("!@$<>-:/,",user->buff[0])) { /* aby to tam neleezlo furt */
+	if (user->buffpos && !isalpha(user->buff[0]) && !isdigit(user->buff[0]) && !strchr("!@$<>-:/,",user->buff[0])) {
 		for (remote=remote_start;remote!=NULL;remote=remote->next) {
 			if (remote->shortcut==user->buff[0]) {
 				for (j=0;j<MAX_CONNECTIONS;j++)
 					if (user->remote[j]==remote) {
-						sprintf(text,"[%-3.3s] ", remote->desc);
+						sprintf(text,"[%-3.3s] ",remote->desc);
 						write2sock(user,user->socket,text,0);
 						i=1;
 						break;
@@ -231,7 +214,7 @@ void text_statline(UR_OBJECT user, int crflag)
 	if ((!i || crflag) && user->actual_remote_socket!=0) {
 		for (j=0;j<MAX_CONNECTIONS;j++)
 			if (user->remote_socket[j]==user->actual_remote_socket) {
-				sprintf(text,"[%-3.3s] ", user->remote[j]->desc);
+				sprintf(text,"[%-3.3s] ",user->remote[j]->desc);
 				write2sock(user,user->socket,text,0);
 				k=j;
 			}
@@ -251,13 +234,13 @@ void text_statline(UR_OBJECT user, int crflag)
 		}
 		strncpy(sequencia,ptr,100);
 		sequencia[term]='\0';
-		strcat(sequencia,"\033[7m \033[0m"); /* kurzor! :) */
+		strcat(sequencia,"\033[7m \033[0m");
 	}
 	else {
 		strcpy(sequencia,"\r");
 		if (k!=-1)
-			strcat(sequencia, text);
-		strcat(sequencia,"\033[K\033[7m \033[0m"); /* cr+zmaz_do_konca+kurzor */
+			strcat(sequencia,text);
+		strcat(sequencia,"\033[K\033[7m \033[0m");
 	}
 	write2sock(user,user->socket,sequencia,0);
 	write2sock(user,user->socket,"\033[K\0338",0);
@@ -272,7 +255,6 @@ void irc(UR_OBJECT user)
 		return;
 	}
 	if (word[1][1]=='o' || word[1][0]=='o') {
-		/* CONNECT */
 		word_count=3;
 		strcpy(word[1],"connect");
 		strcpy(word[2],"IRC");
@@ -280,7 +262,6 @@ void irc(UR_OBJECT user)
 		return;
 	}
 	if (word[1][0]=='d' || word[1][1]=='l') {
-		/* DISCONNECT */
 		word_count=3;
 		strcpy(word[1],"disconnect");
 		strcpy(word[2],"IRC");
@@ -316,14 +297,14 @@ void load_irc_details(UR_OBJECT user)
 			if (row[3])
 				strcpy(user->irc_name,row[3]);
 			else
-				sprintf(user->irc_name,"%s z Atlantidy", user->name);
+				sprintf(user->irc_name,"%s z Atlantidy",user->name);
 			ok=2;
 		}
 		mysql_free_result(result);
 	}
 	if (ok<2) {
 		strcpy(user->irc_defnick,user->name);
-		sprintf(user->irc_name,"%s z Atlantidy", user->name);
+		sprintf(user->irc_name,"%s z Atlantidy",user->name);
 		strcpy(user->irc_serv,"nextra1");
 		strcpy(user->irc_chan,"#atlantis");
 	}
@@ -351,7 +332,7 @@ void save_irc_details(UR_OBJECT user)
 	mysql_kvery(query);
 }
 
-void irc_prikaz(UR_OBJECT user, char *inpstr)
+void irc_prikaz(UR_OBJECT user,char *inpstr)
 {
 	char out[700];
 	int wc;
@@ -359,8 +340,7 @@ void irc_prikaz(UR_OBJECT user, char *inpstr)
 
 	endstring(inpstr);
 	inpstr[500]='\0';
-	sstrncpy(out,inpstr, 512);
-
+	sstrncpy(out,inpstr,512);
 	wc=word_count;
 	if (!wc)
 		return;
@@ -380,7 +360,7 @@ void irc_prikaz(UR_OBJECT user, char *inpstr)
 			if (user->irc_chan[0]=='\0')
 				write_user(user,"~OL~FB=~FW*~FB=~RS~FW Este niesi na ziadnom kanali (pouzi /join)\n");
 			else {
-				sprintf(text,"~OL~FB=~FW*~FB=~RS~FW [~OL%s~RS] ", user->irc_chan);
+				sprintf(text,"~OL~FB=~FW*~FB=~RS~FW [~OL%s~RS] ",user->irc_chan);
 				for (i=0; i<10; i++)
 					if (user->channels[i][0]!='\0' && strcmp(user->channels[i],user->irc_chan)) {
 						strcat(text,user->channels[i]);
@@ -394,17 +374,16 @@ void irc_prikaz(UR_OBJECT user, char *inpstr)
 		else {
 			for (i=0; i<10; i++)
 				if (!strcmp(user->channels[i],word[1])) {
-					strcpy(user->irc_chan, user->channels[i]);
-					sprintf(text,"~OL~FB=~FW*~FB= [~FY%s~FB]~RS~FW\n", word[1]);
+					strcpy(user->irc_chan,user->channels[i]);
+					sprintf(text,"~OL~FB=~FW*~FB= [~FY%s~FB]~RS~FW\n",word[1]);
 					write_user(user,text);
 					return;
 				}
 		}
-		sprintf(text,"~OL~FB=~FW*~FB=~RS~FW Na kanal ~OL%s~RS niesi prihlasen%s.\n", word[1], pohl(user,"y","a"));
+		sprintf(text,"~OL~FB=~FW*~FB=~RS~FW Na kanal ~OL%s~RS niesi prihlasen%s.\n",word[1],pohl(user,"y","a"));
 		write_user(user,text);
 		return;
 	}
-	/* JOIN */
 	if (!strncmp(word[0],"/j",2)) {
 		if (wc<2) {
 			write_user(user,"Pouzi: /join <kanal[,kanal]> [kluc,[kluc]]\n");
@@ -414,30 +393,28 @@ void irc_prikaz(UR_OBJECT user, char *inpstr)
 			write_user(user,"Musis sa najprv registrovat (prikaz: /nick)\n");
 			return;
 		}
-		sstrncpy(user->irc_chan, word[1],49);
+		sstrncpy(user->irc_chan,word[1],49);
 		if (user->statline==CHARMODE)
 			show_statline(user);
 		if (wc<3)
-			sprintf(out, "JOIN %s\n",word[1]);
+			sprintf(out,"JOIN %s\n",word[1]);
 		else
-			sprintf(out, "JOIN %s %s\n",word[1],word[2]);
+			sprintf(out,"JOIN %s %s\n",word[1],word[2]);
 		sprintf(text,"~OL~FB=~FW*~FB= [~FY%s~FB]~RS~FW\n",user->irc_chan);
 		write_user(user,text);
 	}
-	/* NICK */
-	if (!strncmp(word[0],"/ni", 3)) {
+	if (!strncmp(word[0],"/ni",3)) {
 		if (wc<2) {
 			write_user(user,"Pouzi: /nick <novy nick>\n");
 			return;
 		}
-		sprintf(out,"NICK %s\n", word[1]);
+		sprintf(out,"NICK %s\n",word[1]);
 		if (!user->irc_reg) {
 			sstrncpy(user->irc_nick,word[1],20);
 			if (user->statline==CHARMODE)
 				show_statline(user);
 		}
 	}
-	/* QUIT */
 	if (!strncmp(word[0],"/quit",5)) {
 		if (wc<2)
 			sprintf(out,"QUIT\n");
@@ -446,22 +423,19 @@ void irc_prikaz(UR_OBJECT user, char *inpstr)
 			sprintf(out,"QUIT :%s\n",inpstr);
 		}
 	}
-	/* ADMIN */
 	if (!strncmp(word[0],"/ad",3)) {
 		if (wc>1)
 			sprintf(out,"ADMIN %s\n",word[1]);
 		else
 			sprintf(out,"ADMIN\n");
 	}
-	/* AWAY */
 	if (!strncmp(word[0],"/aw",3)) {
 		inpstr=remove_first(inpstr);
 		if (wc>1)
 			sprintf(out,"AWAY :%s\n",inpstr);
 		else
-			sprintf(out, "AWAY\n");
+			sprintf(out,"AWAY\n");
 	}
-	/* NOTICE */
 	if (!strncmp(word[0],"/no",3)) {
 		if (wc<3) {
 			write_user(user,"Pouzi: /notice <nick[,nick]> <text>\n");
@@ -473,14 +447,13 @@ void irc_prikaz(UR_OBJECT user, char *inpstr)
 		record_irc(user,text);
 		write_user(user,text);
 	}
-	/* MSG, PRIVMSG */
 	if (!strncmp(word[0],"/ms",3) || !strncmp(word[0],"/pr",3) || !strcmp(word[0],"/m")) {
 		if (wc<3) {
 			write_user(user,"Pouzi: /msg <nick[,nick] {kanal,[kanal]}> <text>\n");
 			return;
 		}
 		inpstr=remove_first(remove_first(inpstr));
-		sprintf(out,"PRIVMSG %s :%s\n", word[1], inpstr);
+		sprintf(out,"PRIVMSG %s :%s\n",word[1],inpstr);
 		if (word[1][0]=='#' || word[1][0]=='&')
 			sprintf(text,"~FM<~FW%s:%s~FM> ~FW%s\n",word[1],user->irc_nick,inpstr);
 		else
@@ -488,11 +461,9 @@ void irc_prikaz(UR_OBJECT user, char *inpstr)
 		record_irc(user,text);
 		write_user(user,text);
 	}
-	/* INFO */
-	if (!strncmp(word[0],"/inf", 4))
+	if (!strncmp(word[0],"/inf",4))
 		sprintf(out,"INFO\n");
-	/* INVITE */
-	if (!strncmp(word[0],"/inv", 4)) {
+	if (!strncmp(word[0],"/inv",4)) {
 		if (wc<2) {
 			write_user(user,"Pouzi: /invite <nick> [kanal]\n");
 			return;
@@ -502,7 +473,6 @@ void irc_prikaz(UR_OBJECT user, char *inpstr)
 		else
 			sprintf(out,"INVITE %s %s\n",word[1],word[2]);
 	}
-	/* KICK (ufff :-) */
 	if (!strncmp(word[0],"/k",2)) {
 		if (wc<2) {
 			write_user(user,"Pouzi: /kick [kanal] <nick> [komentar]\n");
@@ -529,7 +499,6 @@ void irc_prikaz(UR_OBJECT user, char *inpstr)
 				sprintf(out,"KICK %s %s\n",user->irc_chan,word[1]);
 		}
 	}
-	/* ISON */
 	if (!strncmp(word[0],"/is",3)) {
 		if (wc<2) {
 			write_user(user,"Pouzi: /ison <nick>\n");
@@ -537,7 +506,6 @@ void irc_prikaz(UR_OBJECT user, char *inpstr)
 		}
 		sprintf(out,"ISON %s\n",word[1]);
 	}
-	/* LIST */
 	if (!strncmp(word[0],"/li",3)) {
 		if (wc<2) {
 			write_user(user,"Pouzi: /list <parameter>\n");
@@ -545,11 +513,9 @@ void irc_prikaz(UR_OBJECT user, char *inpstr)
 		}
 		sprintf(out,"LIST %s\n",word[1]);
 	}
-	/* LUSERS */
 	if (!strncmp(word[0],"/lu",3)) {
 		sprintf(out,"LUSERS\n");
 	}
-	/* MODE */
 	if (!strncmp(word[0],"/mod",4)) {
 		if (wc<2) {
 			write_user(user,"Pouzi: /mode [kanal] {[+|-]|o|p|s|i|t|n|b|v} [<limit>] [<nick>] [<banmask>]\n");
@@ -568,24 +534,21 @@ void irc_prikaz(UR_OBJECT user, char *inpstr)
 				sprintf(out,"MODE %s %s %s\n",user->irc_chan,word[1],word[2]);
 		}
 	}
-	/* MOTD */
 	if (!strncmp(word[0],"/mot",4))
 		sprintf(out,"MOTD\n");
-	/* NAMES */
-	if (!strncmp(word[0],"/na", 3)) {
+	if (!strncmp(word[0],"/na",3)) {
 		if (wc<2) {
 			write_user(user,"Pouzi: /names [<kanal>{,<kanal>}]\n");
 			return;
 		}
 		sprintf(out,"NAMES %s\n",word[1]);
 	}
-	/* LEAVE / PART */
 	if (!strncmp(word[0],"/pa",3) || !strncmp(word[0],"/le",3)) {
 		if (wc<2)
 			sprintf(out,"PART %s\n",user->irc_chan);
 		if (word[1][0]=='#' || word[1][0]=='&') {
 			if (wc<3)
-				sprintf(out,"PART %s\n", word[1]);
+				sprintf(out,"PART %s\n",word[1]);
 			else {
 				inpstr=remove_first(remove_first(inpstr));
 				sprintf(out,"PART %s :%s\n",word[1],inpstr);
@@ -596,7 +559,6 @@ void irc_prikaz(UR_OBJECT user, char *inpstr)
 			sprintf(out,"PART %s :%s\n",user->irc_chan,inpstr);
 		}
 	}
-	/* TOPIC */
 	if (!strncmp(word[0],"/top",4)) {
 		if (wc<2)
 			sprintf(out,"TOPIC %s\n",
@@ -614,13 +576,10 @@ void irc_prikaz(UR_OBJECT user, char *inpstr)
 			sprintf(out,"TOPIC %s :%s\n",user->irc_chan,inpstr);
 		}
 	}
-	/* TIME */
 	if (!strncmp(word[0],"/ti",3))
 		sprintf(out,"TIME\n");
-	/* VERSION */
 	if (!strncmp(word[0],"/ve",3))
 		sprintf(out,"VERSION\n");
-	/* WHOIS */
 	if (!strncmp(word[0],"/whoi",5) || !strncmp(word[0],"/wi",3)) {
 		if (wc<2) {
 			write_user(user,"Pouzi: /whois [<server>] <nick>[,<nick>,[...]]\n");
@@ -632,7 +591,6 @@ void irc_prikaz(UR_OBJECT user, char *inpstr)
 			sprintf(out,"WHOIS %s %s\n",word[1],word[2]);
 		goto SEND;
 	}
-	/* WHOWAS */
 	if (!strncmp(word[0],"/whow",5) || !strncmp(word[0],"/ww",3)) {
 		if (wc<2) {
 			write_user(user,"Pouzi: /whowas <nick> [<pocet> [<server>]]\n");
@@ -646,7 +604,6 @@ void irc_prikaz(UR_OBJECT user, char *inpstr)
 			sprintf(out,"WHOWAS %s %s %s\n",word[1],word[2],word[3]);
 		goto SEND;
 	}
-	/* WHO */
 	if (!strncmp(word[0],"/w",2)) {
 		if (wc<2) {
 			write_user(user,"Pouzi: /who <filter>\n");
@@ -655,7 +612,6 @@ void irc_prikaz(UR_OBJECT user, char *inpstr)
 		sprintf(out,"WHO %s\n",word[1]);
 		goto SEND;
 	}
-	/* ME (EMOTE) */
 	if (!strcmp(word[0],"/me") || !strncmp(word[0],"/em",3)) {
 		if (wc<2) {
 			write_user(user,"Pouzi: /me [kanal] <hlaska>\n");
@@ -688,7 +644,7 @@ void irc_prikaz(UR_OBJECT user, char *inpstr)
 	}
 	if (!strncmp(word[0],"/rev",4)) {
 		inpstr=remove_first(inpstr);
-		revirc_command(user, inpstr);
+		revirc_command(user,inpstr);
 		return;
 	}
 	if (!strncmp(word[0],"/h",2)) {
@@ -718,12 +674,12 @@ void prihlas_irc(UR_OBJECT user)
 	write(user->remote_login_socket,text,strlen(text));
 	sleep(1);
 	if (user->irc_defnick[0]!='\0') {
-		sprintf(text,"NICK %s\n", user->irc_defnick);
-		strcpy(user->irc_nick, user->irc_defnick);
+		sprintf(text,"NICK %s\n",user->irc_defnick);
+		strcpy(user->irc_nick,user->irc_defnick);
 	}
 	else {
-		sprintf(text,"NICK %s\n", user->name);
-		strcpy(user->irc_nick, user->name);
+		sprintf(text,"NICK %s\n",user->name);
+		strcpy(user->irc_nick,user->name);
 	}
 	write(user->remote_login_socket,text,strlen(text));
 	if (user->statline==CHARMODE)
@@ -734,7 +690,7 @@ void prihlas_irc(UR_OBJECT user)
 void spracuj_irc_vstup(UR_OBJECT user,char *inpstr)
 {
 	int wc=0;
-	int curw, lastw;
+	int curw,lastw;
 	char text2[2500];
 	char rnick[20],rident[200];
 	char *tmp;
@@ -752,7 +708,6 @@ void spracuj_irc_vstup(UR_OBJECT user,char *inpstr)
 	rident[0]='\0';
 	sprintf(text,"%s",inpstr);
 	if (irc_word[0][0]==':') {
-		/* zistime remote nick */
 		if (strchr(irc_word[0],'!')) {
 			sstrncpy(rident,strchr(irc_word[0],'!')+1,100);
 			sstrncpy(rnick,&irc_word[0][1],18);
@@ -763,13 +718,13 @@ void spracuj_irc_vstup(UR_OBJECT user,char *inpstr)
 	}
 	if (!strcmp(irc_word[curw],"PING")) {
 		curw++;
-		sprintf(text,"PONG %s\n", irc_word[curw]);
-		write_irc(user, text);
+		sprintf(text,"PONG %s\n",irc_word[curw]);
+		write_irc(user,text);
 		return;
 	}
 	if (!strcmp(irc_word[curw],"NICK")) {
-		if (!strcmp(rnick, user->irc_nick)) {
-			sstrncpy(user->irc_nick, irc_word[lastw],20);
+		if (!strcmp(rnick,user->irc_nick)) {
+			sstrncpy(user->irc_nick,irc_word[lastw],20);
 			if (user->statline==CHARMODE)
 				show_statline(user);
 		}
@@ -793,10 +748,10 @@ void spracuj_irc_vstup(UR_OBJECT user,char *inpstr)
 	}
 	if (!strcmp(irc_word[curw],"JOIN")) {
 		sprintf(text,"~OL~FB=~FW*~FB= ~FY%s ~RS~FW(~FT%s~FW) has joined %s\n",rnick,rident,irc_word[curw+1]);
-		if (!strcmp(rnick, user->irc_nick)) {
+		if (!strcmp(rnick,user->irc_nick)) {
 			for (i=0; i<10; i++)
 				if (user->channels[i][0]=='\0') {
-					sstrncpy(user->channels[i], irc_word[curw+1], 49);
+					sstrncpy(user->channels[i],irc_word[curw+1],49);
 					if (user->statline==CHARMODE)
 						show_statline(user);
 					break;
@@ -805,7 +760,6 @@ void spracuj_irc_vstup(UR_OBJECT user,char *inpstr)
 	}
 	if (!strcmp(irc_word[curw],"TOPIC"))
 		sprintf(text,"~OL~FB=~FW*~FB= ~FW%s ~RShas changed the topic on %s to: %s\n",rnick,irc_word[curw+1],irc_word[lastw]);
-	/* WHO */
 	if (!strcmp(irc_word[curw],"352"))
 		sprintf(text,"~OL~FY%-10s ~FW%-10s ~RS~FT%-3s ~FW%s@%s (%s)\n",irc_word[curw+2],irc_word[curw+6],irc_word[curw+7],irc_word[curw+3],irc_word[curw+4],irc_word[lastw]);
 	if (!strcmp(irc_word[curw],"366") || !strcmp(irc_word[curw],"315"))
@@ -832,7 +786,7 @@ void spracuj_irc_vstup(UR_OBJECT user,char *inpstr)
 		}
 	if (!strcmp(irc_word[curw],"INVITE"))
 		sprintf(text,"~OL~FB=~FW*~FB=~FW %s~RS invites you to~OL %s~RS\n",rnick,irc_word[lastw]);
-	if (!strncmp(irc_word[curw],"31",2) || !strcmp(irc_word[curw],"301") || !strcmp(irc_word[curw],"369")) {  /* /WHOIS */
+	if (!strncmp(irc_word[curw],"31",2) || !strcmp(irc_word[curw],"301") || !strcmp(irc_word[curw],"369")) {
 		if (irc_word[curw][2]=='1')
 			sprintf(text,"~OL~FB-> ~FW%-9s~RS~FW  (%s@%s)\n~OL~FB-> ~RS~FWIRCname  : %s\n",irc_word[curw+2],irc_word[curw+3],irc_word[curw+4],irc_word[lastw]);
 		if (irc_word[curw][2]=='9')
@@ -871,7 +825,7 @@ void spracuj_irc_vstup(UR_OBJECT user,char *inpstr)
 					user->channels[i][0]='\0';
 					break;
 				}
-			if (!strcmp(user->irc_chan, irc_word[curw+1])) {
+			if (!strcmp(user->irc_chan,irc_word[curw+1])) {
 				user->irc_chan[0]='\0';
 				for (i=0; i<10; i++)
 					if (user->channels[i][0]!='\0') {
@@ -883,9 +837,7 @@ void spracuj_irc_vstup(UR_OBJECT user,char *inpstr)
 			if (user->statline==CHARMODE)
 				show_statline(user);
 		}
-
 	}
-	/* topik */
 	if (!strcmp(irc_word[curw],"331"))
 		sprintf(text,"~OL~FB=~FW*~FB= ~RS~FWNo topic is set.\n");
 	if (!strcmp(irc_word[curw],"332"))
@@ -895,7 +847,6 @@ void spracuj_irc_vstup(UR_OBJECT user,char *inpstr)
 		since_int=atoi(irc_word[curw+4]);
 		sprintf(text,"~OL~FB=~FW*~FB= ~RS~FWTopic set by ~FT%s~FW (~FT%s~FW)\n",irc_word[curw+3],zobraz_datum((time_t *)&since_int,1));
 	}
-	/* odchod */
 	if (!strcmp(irc_word[curw],"PART")) {
 		if (irc_word[curw+2][0]>32)
 			sprintf(text,"~OL~FB=~FW*~FB= ~RS~FW%s has left channel %s [~OL%s~RS]\n",rnick,irc_word[curw+1],irc_word[lastw]);
@@ -920,7 +871,6 @@ void spracuj_irc_vstup(UR_OBJECT user,char *inpstr)
 				show_statline(user);
 		}
 	}
-	/* modes */
 	if (!strcmp(irc_word[curw],"MODE")) {
 		if (!irc_word[curw+3][0])
 			sprintf(text,"~OL~FB=~FW*~FB= ~RS~FWmode ~FT%s ~FW[~OL%s~RS] by ~OL%s~RS\n",irc_word[curw+1],irc_word[curw+2],rnick);
@@ -929,14 +879,12 @@ void spracuj_irc_vstup(UR_OBJECT user,char *inpstr)
 		else
 			sprintf(text,"~OL~FB=~FW*~FB= ~RS~FWmode change ~FW[~OL%s~RS] for user ~FT%s\n",irc_word[curw+2],irc_word[curw+1]);
 	}
-	/* quit */
 	if (!strcmp(irc_word[curw],"QUIT")) {
 		if (irc_word[curw+1][0]>32)
 			sprintf(text,"~OL~FB=~FW*~FB= ~RS~FWSignoff: ~OL%s~RS (%s)\n",rnick,irc_word[lastw]);
 		else
 			sprintf(text,"~OL~FB=~FW*~FB= ~RS~FWSignoff: ~OL%s~RS\n",rnick);
 	}
-	/* XYBY */
 	if (!strcmp(irc_word[curw],"401"))
 		sprintf(text,"~OL%s~RS: no such nick.\n",irc_word[curw+2]);
 	if (!strcmp(irc_word[curw],"402"))
@@ -1042,7 +990,7 @@ void spracuj_irc_vstup(UR_OBJECT user,char *inpstr)
 	if (!strcmp(irc_word[curw],"334"))
 		sprintf(text,"~FB[~OL~FY*~RS~FB] ~FT%s\n",irc_word[lastw]);
 	if (!strcmp(irc_word[curw],"324"))
-		sprintf(text,"%-20s %-5s %s\n", irc_word[curw+2],irc_word[curw+3],irc_word[curw+4]);
+		sprintf(text,"%-20s %-5s %s\n",irc_word[curw+2],irc_word[curw+3],irc_word[curw+4]);
 	if (!strcmp(irc_word[curw],"341"))
 		sprintf(text,"~FTInviting ~OL%s~RS~FT to %s.\n",irc_word[curw+2],irc_word[curw+3]);
 	if (!strcmp(irc_word[curw],"342"))
