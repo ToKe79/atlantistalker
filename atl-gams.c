@@ -1,6 +1,6 @@
 #include "atl-head.h"
-#define PISKVORKY_MIN_MOVES 25 /* minimalny pocet tahov na zapis do winners */
-#define PISKVORKY_MIN_TLT 12 /* minimalny TLT v hodinach na zapis do winners */
+#define PISKVORKY_MIN_MOVES 25
+#define PISKVORKY_MIN_TLT 12
 
 char *karta_znak[8]={"7","8","9","X","D","H","K","E"};
 char *karta_farba[4]={"~RS~FG98","~OL~FRv","~RS~FYA","~OL~FY()"};
@@ -35,19 +35,12 @@ extern void log_game(char *str)
 	fclose(fp);
 }
 
-/***
- * LODICKY (battle sh1ts)
- * Copyright RIDER (editor, ascii-art & some useful functions)
- * Copyright SPARTAKUS (the game, design and Atlantis implementation)
- * ENJOY!
- ***/
-
-int shsunk;               /*Globalna premenna sluziaca ako flag */
+int shsunk;
 
 extern void lod(UR_OBJECT user)
 {
 	UR_OBJECT u=NULL;
-	int shdef, x, y;
+	int shdef,x,y;
 	int neukazuj=0;
 	int cz;
 	char filename[255];
@@ -92,11 +85,11 @@ extern void lod(UR_OBJECT user)
 			return;
 		}
 		sprintf(filename,"%s%c%s.sav",LODICKY_SAVE_DIR,DIRSEP,user->name);
-		if (!(fp=ropen(filename,"w"))) { /*APPROVED*/
+		if (!(fp=ropen(filename,"w"))) {
 			write_user(user,"Prepac, nemozem otvorit subor na zapis.\n");
 			return;
 		}
-		fprintf(fp,"%s\n",u->name); /* S kym hra */
+		fprintf(fp,"%s\n",u->name);
 		for (x=0; x<10; x++) {
 			for (y=0; y<10; y++) {
 				a=user->shtable[x][y];
@@ -159,7 +152,7 @@ extern void lod(UR_OBJECT user)
 				p++;
 			}
 		}
-		fscanf(fp,"%d %d %d",&user->zasah,&u->zasah, &user->tah);
+		fscanf(fp,"%d %d %d",&user->zasah,&u->zasah,&user->tah);
 		fclose(fp);
 		user->game=4;
 		u->game=4;
@@ -266,7 +259,6 @@ extern void lod(UR_OBJECT user)
 			return;
 		}
 		if (strcmp(u->name,user->uname)) {
-			/* Posli hraci rekvest juzrovi */
 			if (u->shmode!=0) {
 				sprintf(text,"%s uz bojuje s niekym inym.\n",u->name);
 				write_user(user,text);
@@ -380,11 +372,11 @@ extern void lod(UR_OBJECT user)
 			write_user(user,"Cisla musia byt z intervalu 0-9!\n");
 			return;
 		}
-		switch (user->shstatus) { /*Ktoru lod to staviame???*/
+		switch (user->shstatus) {
 			case 0:
-				write_user(user,"Staviam BITEVNU LOD ... "); /*Prvu - tj. bitevnu lod*/
-				shdef=4;                              /*Jej dlzka je 4 znaky*/
-				break;                                /*atd, atd...*/
+				write_user(user,"Staviam BITEVNU LOD ... ");
+				shdef=4;
+				break;
 			case 1:
 				write_user(user,"Staviam prvy KRIZNIK ... ");
 				shdef=3;
@@ -423,31 +415,31 @@ extern void lod(UR_OBJECT user)
 				break;
 		}
 		if (shtest(user,x,y))
-			write_user(user,"~OL~FRNemozu byt dve lode vedla seba!\n");  /* cudzia lod v okoli */
-		else if ((shcount(user,x,y) <= 1) && user->shtable[y][x]=='X') {           /* rozoberanie vlastnej lode */
-			user->shtable[y][x]='.';                                    /* cast lode sa zmaze */
-			user->shbuild--;                                            /* vystavana dlzka sa zmensi */
+			write_user(user,"~OL~FRNemozu byt dve lode vedla seba!\n");
+		else if ((shcount(user,x,y) <= 1) && user->shtable[y][x]=='X') {
+			user->shtable[y][x]='.';
+			user->shbuild--;
 			shprn(user);
 			neukazuj=1;
 		}
 		else if (user->shtable[y][x]=='X')
-			write_user(user,"~OL~FRNemozes prestavavat lod od stredu!\n"); /* snaha rozobrat zo stredu lode */
+			write_user(user,"~OL~FRNemozes prestavavat lod od stredu!\n");
 		else if (user->shbuild && shcount(user,x,y)==0)
-			write_user(user,"~OL~FRNemozes stavat lod po kuskoch, ale pekne zasebou!\n"); /* snaha stavat lod nie za sebou */
+			write_user(user,"~OL~FRNemozes stavat lod po kuskoch, ale pekne zasebou!\n");
 		else {
-			user->shtable[y][x]='X';                  /* nova cast lode do tabulky */
-			user->shbuild++;                          /* vystavana dlzka lode sa zvacsila */
-			if (user->shbuild==shdef) {               /* je uz lod taka dlha, ako ma byt? */
-				user->shstatus++;     /* ano - bude sa stavat nova lod */
-				user->shbuild=0;      /* vystavana dlzka novej lode je zatial ziadna */
-				shset(user);        /* dostavanu lod zaradit do uzivania (022/042) */
+			user->shtable[y][x]='X';
+			user->shbuild++;
+			if (user->shbuild==shdef) {
+				user->shstatus++;
+				user->shbuild=0;
+				shset(user);
 				shprn(user);
 				neukazuj=1;
 				write_user(user,"~FGLod dostavana! ");
-				switch (user->shstatus) { /* Ktoru lod to staviame??? */
+				switch (user->shstatus) {
 					case 0:
-						write_user(user,"~FGTeraz postav ~OLBITEVNU LOD ~RS~FG(4 policka)\n");   /*Prvu - tj. bitevnu lod*/
-						break;                               /* atd, atd... */
+						write_user(user,"~FGTeraz postav ~OLBITEVNU LOD ~RS~FG(4 policka)\n");
+						break;
 					case 1:
 						write_user(user,"~FGTeraz postav prvy ~OLKRIZNIK ~RS~FG(3 policka)\n");
 						break;
@@ -508,7 +500,7 @@ extern void lod(UR_OBJECT user)
 		write_user(user,"Cakaj, spoluhrac este rozostavuje svoje lodstvo!\n");
 		return;
 	}
-	if ((word_count==3) && (user->shmode==1) && (u->shmode==1)) { /* Hrame ... */
+	if ((word_count==3) && (user->shmode==1) && (u->shmode==1)) {
 		if (!user->tah) {
 			write_user(user,"Pockaj az budes na rade!\n");
 			return;
@@ -536,7 +528,7 @@ extern void lod(UR_OBJECT user)
 			write_user(user,text);
 			return;
 		}
-		if (u->shtable[y][x]=='#') { /* TRAFIL! */
+		if (u->shtable[y][x]=='#') {
 			user->zasah+=1;
 			cz=shsunken(u,x,y);
 			shprn2(user,u);
@@ -573,8 +565,8 @@ extern void lod(UR_OBJECT user)
 					writecent(u,text);
 					break;
 			}
-			if (user->zasah==20) { /* Vyhral, beeee! :-> */
-				sprintf(text,"~OL~FTVyhral%s si! Lodstvo '~FW%s~FT' bolo navzdy pochovane pod morom ...\n\n",pohl(user,"","a"),sklonuj(u, 2));
+			if (user->zasah==20) {
+				sprintf(text,"~OL~FTVyhral%s si! Lodstvo '~FW%s~FT' bolo navzdy pochovane pod morom ...\n\n",pohl(user,"","a"),sklonuj(u,2));
 				writecent(user,text);
 				sprintf(text,"~OL~FRCele Tvoje lodstvo zmizlo pod morskou hladinou ... PREHRAL%s SI!!! \n\n",pohl(u,"","A"));
 				writecent(u,text);
@@ -608,7 +600,7 @@ extern void writecent(UR_OBJECT user,char txt[10000])
 	write_user(user,pom);
 }
 
-extern int shsink(UR_OBJECT user, int x,int y, int count) /* Rekurzivnu basen pisem basen rekurzivnu pisem...:)*/
+extern int shsink(UR_OBJECT user,int x,int y,int count)
 {
 	user->shtable[y][x]='@';
 	if (
@@ -621,9 +613,6 @@ extern int shsink(UR_OBJECT user, int x,int y, int count) /* Rekurzivnu basen pi
 			((y-1>=0) && (user->shtable[y-1][x]=='#'))
 	   )
 		shsunk=0;
-	/* tento priserny if tuto hore sluzi na zistenie, ci je potopena ci nie...*/
-	/* toto tu dole vola samo seba aby to pobehalo celu lod :) */
-	/* (S): Sorry Rider, tak toto je na mna moc ... :>>>>>>>>> */
 	if ((x+1<10) && (user->shtable[y][x+1]=='*'))
 		count=shsink(user,x+1,y,++count);
 	if ((y+1<10) && (user->shtable[y+1][x]=='*'))
@@ -635,20 +624,20 @@ extern int shsink(UR_OBJECT user, int x,int y, int count) /* Rekurzivnu basen pi
 	return count;
 }
 
-extern int shsunken(UR_OBJECT user, int x,int y)
+extern int shsunken(UR_OBJECT user,int x,int y)
 {
 	int i,j,z;
 
-	shsunk=1; /* Hypoteza H0: je lod potopena?? :)))*/
-	user->shtable[y][x]='*'; /* Zaznamenanie terajsieho zasahu */
-	z=shsink(user,x,y,1); /* Test H0 vs H1... */
+	shsunk=1;
+	user->shtable[y][x]='*';
+	z=shsink(user,x,y,1);
 	for (i=0;i<10;i++) {
 		for (j=0;j<10;j++) {
-			if (user->shtable[i][j]=='@') { /* Vymazavanie zavinacof*/
+			if (user->shtable[i][j]=='@') {
 				if (shsunk)
-					user->shtable[i][j]='+'; /* Potopena lod*/
+					user->shtable[i][j]='+';
 				else
-					user->shtable[i][j]='*';        /* Iba zasahy*/
+					user->shtable[i][j]='*';
 			}
 		}
 	}
@@ -667,7 +656,7 @@ extern void shset(UR_OBJECT user)
 
 extern int shreset(UR_OBJECT user)
 {
-	int i,j, poc=0;
+	int i,j,poc=0;
 
 	for (j=0;j<10;j++)
 		for (i=0;i<10;i++) {
@@ -687,7 +676,7 @@ extern int shreset(UR_OBJECT user)
 	return poc;
 }
 
-extern int shtest(UR_OBJECT user, int x, int y)
+extern int shtest(UR_OBJECT user,int x,int y)
 {
 	int r=0;
 
@@ -712,7 +701,7 @@ extern int shtest(UR_OBJECT user, int x, int y)
 	return r;
 }
 
-extern int shcount(UR_OBJECT user, int x, int y)
+extern int shcount(UR_OBJECT user,int x,int y)
 {
 	int r=0;
 
@@ -754,7 +743,7 @@ extern void shprn(UR_OBJECT user)
 	write_user(user,text);
 }
 
-extern void shprn2(UR_OBJECT user,UR_OBJECT u) /* Zobrazi obidve onee */
+extern void shprn2(UR_OBJECT user,UR_OBJECT u)
 {
 	int i,j;
 
@@ -778,9 +767,9 @@ extern void shprn2(UR_OBJECT user,UR_OBJECT u) /* Zobrazi obidve onee */
 		if (j==2)
 			sprintf(text,"~RS~FT%d  ~FY+------~OL~FMZASAHY~RS~FY------+  ~FT%d ",j,j);
 		else if (j==3)
-			sprintf(text,"~RS~FT%d  ~FY| ~OL~FG%-12s ~RS~FY:~OL~FW%2d ~RS~FY|  ~FT%d ",j,user->name, user->zasah,j);
+			sprintf(text,"~RS~FT%d  ~FY| ~OL~FG%-12s ~RS~FY:~OL~FW%2d ~RS~FY|  ~FT%d ",j,user->name,user->zasah,j);
 		else if (j==4)
-			sprintf(text,"~RS~FT%d  ~FY| ~OL~FG%-12s ~RS~FY:~OL~FW%2d ~RS~FY|  ~FT%d ",j,u->name, u->zasah,j);
+			sprintf(text,"~RS~FT%d  ~FY| ~OL~FG%-12s ~RS~FY:~OL~FW%2d ~RS~FY|  ~FT%d ",j,u->name,u->zasah,j);
 		else if (j==5)
 			sprintf(text,"~RS~FT%d  ~FY+------------------+  ~FT%d ",j,j);
 		else if ((j==7) && (user->tah))
@@ -814,12 +803,11 @@ extern void vynuluj_lod(UR_OBJECT user)
 {
 	int x,y;
 
-	for (y=0;y<10;y++) /* vymaze staru tabulku - posle lode k vode :)*/
+	for (y=0;y<10;y++)
 		for (x=0;x<10;x++)
 			user->shtable[y][x]='.';
 }
 
-/* ATLANTIS LABYRINT (C) 1998 Rider & Spartakus */
 extern void lab(UR_OBJECT user)
 {
 	int st;
@@ -893,7 +881,7 @@ extern void lab(UR_OBJECT user)
 		return;
 	}
 	if (!st) {
-		switch (tolower(word[1][0])) { /* Bereme prve pismeno zo smeroveho commandu */
+		switch (tolower(word[1][0])) {
 			case 's':
 				if (lab_room.sever[user->lab]) {
 					user->lab=lab_room.sever[user->lab];
@@ -958,7 +946,7 @@ extern void lab(UR_OBJECT user)
 				write_user(user,"Pouzi: .labyrint [start/stop/quit/show] [s/j/v/z/h/d]\n");
 				return;
 				break;
-		} /* to boli jednotlive smery - ziadna veda, iba sa prislusne zmenia pozicia */
+		}
 	}
 	if (user->lab==lab_room.end) {
 		sprintf(text,"%s\n",lab_room.popiska[user->lab]);
@@ -986,10 +974,10 @@ extern void lab(UR_OBJECT user)
 			return;
 		}
 	}
-	sprintf(text,"%s\n~FTMozes ist: ",lab_room.popiska[user->lab]); /* Text roomu + kam sa da ist */
+	sprintf(text,"%s\n~FTMozes ist: ",lab_room.popiska[user->lab]);
 	write_user(user,text);
 	if (lab_room.sever[user->lab])
-		write_user(user,"~OL~FRSEVER "); /* Mozne vychody... */
+		write_user(user,"~OL~FRSEVER ");
 	if (lab_room.juh[user->lab])
 		write_user(user,"~OL~FRJUH ");
 	if (lab_room.vychod[user->lab])
@@ -1251,7 +1239,7 @@ void piskvorky(UR_OBJECT user)
 		user->last_y=-2;
 		u->last_x=-1;
 		u->last_y=-2;
-		sprintf(text,"~FTZacal%s si hrat piskvorky s ~OL%s~RS~FT.\n",pohl(user,"","a"), sklonuj(u, 7));
+		sprintf(text,"~FTZacal%s si hrat piskvorky s ~OL%s~RS~FT.\n",pohl(user,"","a"),sklonuj(u,7));
 		write_user(user,text);
 		sprintf(text,"~FT%s ta vyzval%s hrat piskvorky.\n",user->name,pohl(user,"","a"));
 		write_user(u,text);
@@ -1295,7 +1283,6 @@ void piskvorky(UR_OBJECT user)
 		return;
 	}
 	if (!(strcmp(word[1],"Pass"))) {
-		/* empty */
 	}
 	else if (word_count<3) {
 		write_user(user,"Malo parametrov.\n");
@@ -1336,7 +1323,7 @@ void piskvorky(UR_OBJECT user)
 		}
 	x=atoi(word[1]);
 	y=atoi(word[2]);
-	if (x>15 || y>20 || x<0 || y<0) { /* hej, ale x je iba do 15! ;) */
+	if (x>15 || y>20 || x<0 || y<0) {
 		write_user(user,"Cisla mozu byt v rozsahu 0-15,0-20.\n");
 		return;
 	}
@@ -1742,7 +1729,7 @@ extern void stavhry(UR_OBJECT user1,UR_OBJECT user2)
 			write_user(user2,"~RS");
 			if (user1->tah) {
 				if (lastx==-1)
-					sprintf(text, "                       ~FTTah c. ~OL~FW%d~RS~FT, na tahu je %s (~FW%c~FT).~RS~BK\n",user1->moves,user1->name,user1->znak);
+					sprintf(text,"                       ~FTTah c. ~OL~FW%d~RS~FT, na tahu je %s (~FW%c~FT).~RS~BK\n",user1->moves,user1->name,user1->znak);
 				else
 					sprintf(text,"             ~FTTah c. ~OL~FW%d~RS~FT, posledny tah: [~FW%d,%d~FT]. Na tahu je %s (~FW%c~FT).~RS~BK\n",user1->moves,lastx,lasty,user1->name,user1->znak);
 				write_user(user2,text);
@@ -1751,9 +1738,9 @@ extern void stavhry(UR_OBJECT user1,UR_OBJECT user2)
 				if (!(u=get_user(user1->uname)))
 					return;
 				if (lastx==-1)
-					sprintf(text,"                       ~FTTah c. ~OL~FW%d~RS~FT, na tahu je %s (~FW%c~FT).~RS~BK\n",u->moves, u->name,u->znak);
+					sprintf(text,"                       ~FTTah c. ~OL~FW%d~RS~FT, na tahu je %s (~FW%c~FT).~RS~BK\n",u->moves,u->name,u->znak);
 				else
-					sprintf(text,"             ~FTTah c. ~OL~FW%d~RS~FT, posledny tah: [~FW%d,%d~FT]. Na tahu je %s (~FW%c~FT).~RS~BK\n",u->moves, lastx,lasty,u->name,u->znak);
+					sprintf(text,"             ~FTTah c. ~OL~FW%d~RS~FT, posledny tah: [~FW%d,%d~FT]. Na tahu je %s (~FW%c~FT).~RS~BK\n",u->moves,lastx,lasty,u->name,u->znak);
 				write_user(user2,text);
 			}
 		}
@@ -1811,7 +1798,7 @@ extern void stavhryg(UR_OBJECT user1,UR_OBJECT user2)
 				write_user(user2,text);
 			}
 			if (user1->game==3)
-				sprintf(text,"~OL~FR|\n"/*,i+1*/);
+				sprintf(text,"~OL~FR|\n");
 			write_user(user2,text);
 		}
 		if (user1->game==3)
@@ -1823,7 +1810,7 @@ extern void stavhryg(UR_OBJECT user1,UR_OBJECT user2)
 			write_user(user2,"~RS");
 			if (user1->tah) {
 				if (lastx==-1)
-					sprintf(text, "~FTTah c. ~OL~FW%d~RS~FT, na tahu je %s (~FW%c~FT).~RS~BK\n",user1->moves,user1->name,user1->znak);
+					sprintf(text,"~FTTah c. ~OL~FW%d~RS~FT, na tahu je %s (~FW%c~FT).~RS~BK\n",user1->moves,user1->name,user1->znak);
 				else
 					sprintf(text,"~FTTah c. ~OL~FW%d~RS~FT, posledny tah: [~FW%d,%d~FT]. Na tahu je %s (~FW%c~FT).~RS~BK\n",user1->moves,lastx,lasty,user1->name,user1->znak);
 				writecent(user2,text);
@@ -1832,9 +1819,9 @@ extern void stavhryg(UR_OBJECT user1,UR_OBJECT user2)
 				if (!(u=get_user(user1->uname)))
 					return;
 				if (lastx==-1)
-					sprintf(text,"~FTTah c. ~OL~FW%d~RS~FT, na tahu je %s (~FW%c~FT).~RS~BK\n",u->moves, u->name,u->znak);
+					sprintf(text,"~FTTah c. ~OL~FW%d~RS~FT, na tahu je %s (~FW%c~FT).~RS~BK\n",u->moves,u->name,u->znak);
 				else
-					sprintf(text,"~FTTah c. ~OL~FW%d~RS~FT, posledny tah: [~FW%d,%d~FT]. Na tahu je %s (~FW%c~FT).~RS~BK\n",u->moves, lastx,lasty,u->name,u->znak);
+					sprintf(text,"~FTTah c. ~OL~FW%d~RS~FT, posledny tah: [~FW%d,%d~FT]. Na tahu je %s (~FW%c~FT).~RS~BK\n",u->moves,lastx,lasty,u->name,u->znak);
 				writecent(user2,text);
 			}
 		}
@@ -2080,7 +2067,7 @@ extern void play_geo(UR_OBJECT user)
 		user->last_y=-2;
 		u->last_x=-1;
 		u->last_y=-2;
-		sprintf(text,"~FTZacal%s si hrat GEO s ~OL%s~RS~FT.\n",pohl(user,"","a"),sklonuj(u, 7));
+		sprintf(text,"~FTZacal%s si hrat GEO s ~OL%s~RS~FT.\n",pohl(user,"","a"),sklonuj(u,7));
 		write_user(user,text);
 		sprintf(text,"~FT%s ta vyzval%s hrat GEO.\n",user->name,pohl(user,"","a"));
 		write_user(u,text);
@@ -2170,7 +2157,6 @@ extern void play_geo(UR_OBJECT user)
 			write_user(user,"Tento stlpec je plny!\n");
 			return;
 		}
-		/* Determinuj x-ovu suradnicu */
 		x=0;
 		while ((x<5) && (user->pis[x][y]=='.'))
 			++x;
@@ -2194,7 +2180,6 @@ extern void play_geo(UR_OBJECT user)
 			write_user(user,"Tento stlpec je plny!\n");
 			return;
 		}
-		/* Determinuj x-ovu suradnicu */
 		x=0;
 		while ((x<5) && (u->pis[x][y]=='.'))++x;
 		if (u->pis[x][y]!='.')
@@ -2292,13 +2277,13 @@ extern void play_hangman(UR_OBJECT user,char *inpstr)
 		write_user(user,"Este nehras, pouzi .hangman start\n");
 		return;
 	}
-	if (strlen(inpstr)>3) { /* Plne hadanie! */
+	if (strlen(inpstr)>3) {
 		if (strlen(inpstr)!=strlen(user->hang_word)-1) {
 			write_user(user,"Pozor, dlzka zadaneho slova nie je rovnaka ako dlzka hadaneho slova.\n");
 			return;
 		}
-		if (!strncasecmp(inpstr,user->hang_word, strlen(inpstr))) {
-			sprintf(text,"~FY~OLVYBORNE!~RS ~FYUhad%s si slovo bez odvisnutia na sibenici!\n", pohl(user,"ol","la"));
+		if (!strncasecmp(inpstr,user->hang_word,strlen(inpstr))) {
+			sprintf(text,"~FY~OLVYBORNE!~RS ~FYUhad%s si slovo bez odvisnutia na sibenici!\n",pohl(user,"ol","la"));
 			add_point(user,DB_HANGMAN,1,0);
 			write_user(user,text);
 			user->hang_stage=-1;
@@ -2418,36 +2403,31 @@ extern char *get_hang_word(char *aword)
 	char filename[80];
 	FILE *fp;
 	static char fallback[15]="hangman";
-	int lines,cnt,i;
+	int lines=0,cnt=0,i=0;
 
-	lines=cnt=i=0;
 	sprintf(filename,"%s%c%s",DATAFILES,DIRSEP,HANGMAN_WORDS);
 	lines=count_lines(filename);
-	if (!lines) lines++;
+	if (!lines)
+		return fallback;
 	srand(time(0));
 	cnt=rand()%lines;
 	if (!(fp=ropen(filename,"r")))
 		return fallback;
 	fgets(aword,50,fp);
-	while (!feof(fp)) {
+	while (fgets(aword,sizeof(aword)-1,fp)!=NULL) {
 		if (i==cnt) {
 			fclose(fp);
-			return aword;
+			if (strlen(aword)>0)
+				return aword;
+			else
+				return fallback;
 		}
 		++i;
-		fgets(aword,50,fp);
 	}
 	fclose(fp);
 	return fallback;
 }
 
-
-/****************************** D00M *******************************
- ||\\//\\//\\|\/|  DOOM 3 - Fate Of Atlantis
- ||//\\//\\//||||  (c) 1998 Rider of LoneStar Software for Atlantis
- *******************************************************************/
-
-/*** vrati pointer na userovu strukturu z danych suradnic :> ***/
 extern UR_OBJECT doom_get_user(int x,int y)
 {
 	UR_OBJECT u;
@@ -2572,7 +2552,7 @@ extern void doom(UR_OBJECT user,char *inpstr)
 		}
 		sprintf(text,"\033[%d;%dr",D_LINES+1,user->lines);
 		user->lines-=D_LINES;
-		write_user(user,text); /* Doom window */
+		write_user(user,text);
 		user->doom=1;
 		user->doom_energy=0;
 		user->doom_loading=0;
@@ -2593,7 +2573,7 @@ extern void doom(UR_OBJECT user,char *inpstr)
 			return;
 		}
 		doom_quit(user);
-		return; /* byee... */
+		return;
 	}
 	if (!strcmp(word[1],"join")) {
 		if (user->doom_energy) {
@@ -2688,11 +2668,11 @@ extern void doom(UR_OBJECT user,char *inpstr)
 		}
 		doom_text(user,"Tadial sa NEDA ist!",1); return;
 	}
-	if (!strcmp(word[1],"iddqd")) { /* $$$ TESTOVANIE! */
+	if (!strcmp(word[1],"iddqd")) {
 		doom_showmap(user);
 		return;
 	}
-	if (!strcmp(word[1],"load")) { /* nabijanie zbrane */
+	if (!strcmp(word[1],"load")) {
 		if (user->doom_loading) {
 			doom_text(user,"Co vymyslas, ved tu zbran prave nabijas!",1);
 			return;
@@ -2711,7 +2691,7 @@ extern void doom(UR_OBJECT user,char *inpstr)
 		doom_text(user,text,0);
 		return;
 	}
-	switch (tolower(word[1][0])) { /* Bereme prve pismeno */
+	switch (tolower(word[1][0])) {
 		case 'f':
 			if ((flag=doom_check(user->doom_x,user->doom_y,user->doom_heading))==1) {
 				doom_map[user->doom_y][user->doom_x][4]=1;
@@ -2826,7 +2806,7 @@ extern void doom(UR_OBJECT user,char *inpstr)
 					write_user(user,"~LB~FR~OLPrask!~RS~FW\n");
 				}
 				else write_user(user,"~LB~FR~OLVrrum!~RS~FW\n");
-				if ((u=doom_check_view(user))!=NULL) { /* On snad dakoho TRAFIL! :> */
+				if ((u=doom_check_view(user))!=NULL) {
 					doom_text(u,"Ktosi po tebe striela!!!",1);
 					switch (user->doom_weapon) {
 						case 0:
@@ -2842,7 +2822,7 @@ extern void doom(UR_OBJECT user,char *inpstr)
 					if (u->doom_energy<0)
 						u->doom_energy=0;
 					write_doom(u,doom_map[u->doom_y][u->doom_x][u->doom_heading]);
-					if (u->doom_energy==0) { /* On ho dokonca DOSTAL! :) */
+					if (u->doom_energy==0) {
 						sprintf(text,"%s pad%s mrtv%s na zem!",u->name,pohl(u,"ol","la"),pohl(u,"y","a"));
 						doom_text(user,text,0);
 						sprintf(text,"%s ta dostal%s!",user->name,pohl(user,"","a"));
@@ -2913,14 +2893,13 @@ extern void doom_showmap(UR_OBJECT user)
 	write_user(user,"\n");
 }
 
-/* Writes image to D00M window */
 extern void write_doom(UR_OBJECT user,int location)
 {
 	UR_OBJECT u;
 	char n,e,s,w,buffer[D_COLMS+5],name[USER_NAME_LEN+3],weapon[20],rating[20];
 	int vidiho;
 
-	echo_off(user); /* nech nam to neblbne :> */
+	echo_off(user);
 	if (user->doom_score<10)
 		strcpy(rating,"Neskodny");
 	else if (user->doom_score<20)
@@ -2962,19 +2941,18 @@ extern void write_doom(UR_OBJECT user,int location)
 			n='?'; e='?'; s='?'; w='?';
 			break;
 	}
-
-	if ((u=doom_check_view(user))!=NULL && user->doom_energy) { /* Vidi user dakoho? */
-		vidiho=u->doom_heading - user->doom_heading; /* rozdiel v headingu */
+	if ((u=doom_check_view(user))!=NULL && user->doom_energy) {
+		vidiho=u->doom_heading-user->doom_heading;
 		if (vidiho<0)
-			vidiho+=4;                     /* kalibracia zaporu  */
-		vidiho++;                    /* zvacsenie o 1 (aby neexistovala 0) */
+			vidiho+=4;
+		vidiho++;
 		strcpy(name,u->name);
 	}
-	else { /* ...nevidi nist :) */
+	else {
 		vidiho=0;
 		strcpy(name,"");
 	}
-	write_user(user,"\0337\033[1;1H"); /* Save cursor, set it on 1:1 */
+	write_user(user,"\0337\033[1;1H");
 	sprintf(text,"~BT~FK   K O M P A S    ~FT[]~FW~BK%s~BT~FT[]~FKP A R A M E T R E ~BK\n",doom_grf[location][0]);
 	write_user(user,text);
 	sprintf(text,"~BB~OL~FY        %c         ~RS~BT~FT[]~FW~BK%s~BT~FT[]~OL~BBVidis:~FY%-12s\n",n,doom_grf[location][1],name);
@@ -3016,12 +2994,11 @@ extern void write_doom(UR_OBJECT user,int location)
 	write_user(user,text);
 	sprintf(text,"~BB~OL~FY        %c         ~RS~BT~FT[]~FW~BK%s~BT~FT[]~OL~BBHodnost :~FY%-9s~BK\n",s,doom_grf[location][5],rating);
 	write_user(user,text);
-	write_user(user,"\0338"); /* Restore cursor */
-	doom_text(user,"",0); /* vytlaci textlajnu + energiu */
-	echo_on(user); /* nech moze aj pisat :) */
+	write_user(user,"\0338");
+	doom_text(user,"",0);
+	echo_on(user);
 }
 
-/* D00M zaradi usera do pouzivania -> ak ma kde :) */
 extern int doom_join(UR_OBJECT user)
 {
 	int x,y,x1,y1;
@@ -3053,9 +3030,6 @@ extern int doom_join(UR_OBJECT user)
 	return 1;
 }
 
-/***
- * D00M kontroluje po pohybe ci dakomu nevbehol user do zorneho pola
- ***/
 extern void doom_checkround(int x,int y)
 {
 	UR_OBJECT u;
@@ -3074,34 +3048,29 @@ extern void doom_checkround(int x,int y)
 			write_doom(u,doom_map[u->doom_y][u->doom_x][u->doom_heading]);
 }
 
-/***
- * D00M kontroluje moznost vychodu z miestnosti
- * Vstup: x,y userovej polohy a smer, ktorym chce ist (0-3)
- * Vracia: 0 - false alebo 1 - true
- ***/
 extern int doom_check(int x,int y,int smer)
 {
-	if (smer > 3)
-		smer-=4; /* Pre voloviny ako user->heading+2 */
+	if (smer>3)
+		smer-=4;
 	switch (smer) {
 		case 0:
 			if ((y+1)==D_MAPY)
-				return 0;  /* koniec mapy na severe */
+				return 0;
 			break;
 		case 1:
 			if ((x+1)==D_MAPX)
-				return 0;  /* -||- na vychode */
+				return 0;
 			break;
 		case 2:
 			if (y<=0)
-				return 0;           /* -||- na juhu */
+				return 0;
 			break;
 		case 3:
 			if (x<=0)
-				return 0;           /* -||- na zapade */
+				return 0;
 			break;
 	}
-	switch (smer) { /* test "prazdnej" (nulovej) miestnosti */
+	switch (smer) {
 		case 0:
 			if (!doom_map[y+1][x][4])
 				return 0;
@@ -3119,7 +3088,7 @@ extern int doom_check(int x,int y,int smer)
 				return 0;
 			break;
 	}
-	switch (doom_map[y][x][smer]) { /* ktore lokacie NEVEDU dalej */
+	switch (doom_map[y][x][smer]) {
 		case  3:
 			return 0;
 			break;
@@ -3141,7 +3110,7 @@ extern int doom_check(int x,int y,int smer)
 		default:
 			break;
 	}
-	switch (smer) { /* test ci tam nie je user */
+	switch (smer) {
 		case 0:
 			if (doom_map[y+1][x][4]==2)
 				return 2;
@@ -3162,16 +3131,13 @@ extern int doom_check(int x,int y,int smer)
 	return 1;
 }
 
-/***
- * D00M Zisti, ci user vidi obet a ak ano, vrati DATA obete :>
- ***/
 extern UR_OBJECT doom_check_view(UR_OBJECT user)
 {
 	UR_OBJECT u=NULL;
 
 	if (!doom_check(user->doom_x,user->doom_y,user->doom_heading))
-		return 0; /* ak tam nikto nieje, tak neni o com :) */
-	switch (user->doom_heading) { /* test pritomnosti ineho usera */
+		return 0;
+	switch (user->doom_heading) {
 		case 0:
 			if (!(u=doom_get_user(user->doom_x,user->doom_y+1)))
 				return NULL;
@@ -3192,16 +3158,13 @@ extern UR_OBJECT doom_check_view(UR_OBJECT user)
 	return u;
 }
 
-/***
- * Writes text to D00M line
- ***/
 extern void doom_text(UR_OBJECT user,char *msg,int beep)
 {
 	int x;
 	char energy[40],sprava[100],temp[300];
 
-	echo_off(user); /* nech nam to neblbne :> */
-	write_user(user,"\0337\033[7;1H"); /* Save cursor, set it on 1:1 */
+	echo_off(user);
+	write_user(user,"\0337\033[7;1H");
 	strcpy(energy,"");
 	for (x=0;x<25;x++) {
 		if (x==5)
@@ -3211,14 +3174,14 @@ extern void doom_text(UR_OBJECT user,char *msg,int beep)
 		else
 			strcat(energy," ");
 	}
-	if (strlen(msg)) { /* vycentruje to spravu:) */
+	if (strlen(msg)) {
 		sstrncpy(sprava,msg,40);
 		sprava[40]='\0';
 		while (strlen(sprava)<40) {
 			strcat(sprava," ");
 			if (strlen(sprava)<40) {
 				sprintf(temp," %s",sprava);
-				sstrncpy(sprava, temp, 49);
+				sstrncpy(sprava,temp,49);
 			}
 		}
 	}
@@ -3228,13 +3191,10 @@ extern void doom_text(UR_OBJECT user,char *msg,int beep)
 	write_user(user,temp);
 	if (beep)
 		write_user(user,"~LB");
-	write_user(user,"\0338"); /* Restore cursor */
-	echo_on(user); /* nech moze aj pisat :) */
+	write_user(user,"\0338");
+	echo_on(user);
 }
 
-/***
- * D00M who :)
- ***/
 extern void doom_who(UR_OBJECT user)
 {
 	UR_OBJECT u;
@@ -3255,9 +3215,6 @@ extern void doom_who(UR_OBJECT user)
 	write_user(user,"~FK~OL+-+-+-+-+-+-+-+-+-+-+-+-+~RS~FW\n");
 }
 
-/***
- * D00M writeall
- ***/
 extern void doom_wall(UR_OBJECT user,char *msg)
 {
 	UR_OBJECT u;
@@ -3284,21 +3241,18 @@ extern void doom_quit(UR_OBJECT user)
 		if (user->doom_energy < 50)
 			add_point(user,DB_DOOM,-1,0);
 	}
-	user->doom=0; /* don't play any more... */
+	user->doom=0;
 	user->doom_energy=0;
 	user->lines+=D_LINES;
 	if (user->statline==CHARMODE)
 		init_statline(user);
 	else {
-		write_user(user,"\033c\033[?7h"); /* reset terminal + set wrap */
-		write_user(user,"\033[2;1r"); /* CRT cko! */
+		write_user(user,"\033c\033[?7h");
+		write_user(user,"\033[2;1r");
 	}
 	cls(user,0);
 }
 
-/***
- * Updates D00M
- ***/
 extern int doom_init()
 {
 	FILE *subor;
@@ -3344,9 +3298,6 @@ extern int doom_init()
 	return 0;
 }
 
-/***
- * Nabija zbrane ludom hrajucim dooma :)
- ***/
 extern void doom_load_users()
 {
 	UR_OBJECT u;
@@ -3358,7 +3309,7 @@ extern void doom_load_users()
 			if (u->doom_energy<100) {
 				u->doom_energy++;
 				if (!(u->doom_energy%4))
-					doom_text(u,"",0); /* kazde 4 body obnov energiu */
+					doom_text(u,"",0);
 			}
 		if (u->doom && u->doom_loading) {
 			u->doom_loading--;
@@ -3378,9 +3329,6 @@ extern void doom_load_users()
 	}
 }
 
-/***
- * "Bootovanie" skriptu - v podstate najdolezitejsia rutinka AAAAAA
- ***/
 int lab_load()
 {
 	int mode=0,lines=0,x=0,a,b,c,d,e,f;
@@ -3394,9 +3342,8 @@ int lab_load()
 		printf("CHYBA: Datafile nenajdeny\n");
 		return 1;
 	}
-	while (!feof(data)) {
-		string[0]='\0';
-		fgets(string,MAX_LINE,data);
+	string[0]='\0';
+	while (fgets(string,sizeof(string)-1,data)!=NULL) {
 		lines++;
 		if (string[0]=='[') {
 			mode=1;
@@ -3443,8 +3390,10 @@ int lab_load()
 				fclose(data);
 				return 1;
 			}
-			if (tolower(*string)=='e') lab_room.end=x;
-			if (tolower(*string)=='s') lab_room.start=x;
+			if (tolower(*string)=='e')
+				lab_room.end=x;
+			if (tolower(*string)=='s')
+				lab_room.start=x;
 			lab_room.sever[x]=a;
 			lab_room.juh[x]=b;
 			lab_room.vychod[x]=c;
@@ -3457,6 +3406,7 @@ int lab_load()
 			continue;
 		else
 			strcat(lab_room.popiska[x],string);
+		string[0]='\0';
 	}
 	fclose(data);
 	if (mode==0) {
@@ -3473,8 +3423,6 @@ int lab_load()
 	}
 	return 0;
 }
-
-/********** BJ *****************************************************/
 
 char *cards[53][5]={
 	{ ".-----. ","|~OLA~RS    | ","|  s  | ","|    ~OLA~RS| ","`-----' " },
@@ -3532,9 +3480,6 @@ char *cards[53][5]={
 	{ ".-----. ","|~FRO~FGX~FRO~FGX~FRO~RS| ","|~FGX~FRO~FGX~FRO~FGX~RS| ","|~FRO~FGX~FRO~FGX~FRO~RS| ","`-----' " }
 };
 
-/***
- *  create a new blackjack game in memory
- * **/
 BJ_GAME create_blackjack_game(void)
 {
 	BJ_GAME bj;
@@ -3544,7 +3489,6 @@ BJ_GAME create_blackjack_game(void)
 		write_syslog("GAMES: Memory allocation failure in create_blackjack_game().\n",1);
 		return NULL;
 	}
-	/* initialise game structure */
 	for (i=0;i<52;i++)
 		bj->deck[i]=i;
 	for (i=0;i<5;i++) {
@@ -3553,7 +3497,6 @@ BJ_GAME create_blackjack_game(void)
 	}
 	bj->bet=10;
 	bj->cardpos=0;
-	/* shuffle cards */
 	srand(time(0));
 	i=j=tmp=0;
 	for (i=0;i<52;i++) {
@@ -3562,7 +3505,6 @@ BJ_GAME create_blackjack_game(void)
 		bj->deck[i]=bj->deck[j];
 		bj->deck[j]=tmp;
 	}
-	/* deal first set of cards */
 	bj->hand[0]=bj->deck[bj->cardpos];
 	++bj->cardpos;
 	bj->dealer_hand[0]=bj->deck[bj->cardpos];
@@ -3575,9 +3517,6 @@ BJ_GAME create_blackjack_game(void)
 	return bj;
 }
 
-/***
- * destory the malloc'd bjack game
- ***/
 void destruct_blackjack_game(UR_OBJECT user)
 {
 	if (user->bj_game==NULL)
@@ -3586,9 +3525,6 @@ void destruct_blackjack_game(UR_OBJECT user)
 	user->bj_game=NULL;
 }
 
-/***
- * lets a user start, stop or check out their status of a game of Blackjack
- ***/
 void play_blackjack(UR_OBJECT user)
 {
 	int i,user_total,dealer_total,cnt,blank;
@@ -3601,7 +3537,6 @@ void play_blackjack(UR_OBJECT user)
 #endif
 		return;
 	}
-	/* start off a blackjack game */
 	if (!strcasecmp(word[1],"deal")) {
 		if (user->bj_game!=NULL) {
 			write_user(user,"You are already playing a game of Blackjack.\n");
@@ -3612,7 +3547,6 @@ void play_blackjack(UR_OBJECT user)
 			return;
 		}
 #if USE_MONEY_SYSTEM
-		/* did the user bet anything? */
 		if (word_count>2) {
 			user->bj_game->bet=atoi(word[2]);
 			if (!user->bj_game->bet) {
@@ -3621,7 +3555,6 @@ void play_blackjack(UR_OBJECT user)
 				return;
 			}
 		}
-		/* continue with trying to make game */
 		if (user->money<user->bj_game->bet) {
 			sprintf(text,"You haven't got enough money for the $%d ante!\n",user->bj_game->bet);
 			write_user(user,text);
@@ -3650,7 +3583,6 @@ void play_blackjack(UR_OBJECT user)
 		}
 		return;
 	}
-	/* show the status of the game */
 	if (!strcasecmp(word[1],"status")) {
 		if (user->bj_game==NULL) {
 			write_user(user,"You aren't playing a game of Blackjack.\n");
@@ -3664,14 +3596,13 @@ void play_blackjack(UR_OBJECT user)
 		write_user(user,text);
 		return;
 	}
-	/* end a game */
 	if (!strcmp(word[1],"surrender")) {
 		if (user->bj_game==NULL) {
 			write_user(user,"You aren't playing a game of Blackjack.\n");
 			return;
 		}
-#if USER_MONEY_SYSTEM
-		user->money+=(user->bj_game->bet/2);  /* full bet is taken off to start, so give half back */
+#if USE_MONEY_SYSTEM
+		user->money+=(user->bj_game->bet/2);
 		vwrite_user(user,"~FT~OLThe dealer says:~RS Sorry, but you have surrendered and lose $%d - half your bet.\n",user->bj_game->bet/2);
 #else
 		write_user(user,"~FT~OLThe dealer says:~RS You have surrendered your game.\n");
@@ -3679,7 +3610,6 @@ void play_blackjack(UR_OBJECT user)
 		destruct_blackjack_game(user);
 		return;
 	}
-	/* take another card */
 	if (!strcasecmp(word[1],"hit")) {
 		if (user->bj_game==NULL) {
 			write_user(user,"You aren't playing a game of Blackjack.\n");
@@ -3730,7 +3660,6 @@ void play_blackjack(UR_OBJECT user)
 		return;
 	}
 #if USE_MONEY_SYSTEM
-	/* double the bet on the current hand */
 	if (!strcasecmp(word[1],"double")) {
 		if (user->bj_game==NULL) {
 			write_user(user,"You aren't playing a game of Blackjack.\n");
@@ -3740,7 +3669,7 @@ void play_blackjack(UR_OBJECT user)
 			write_user(user,"You can't afford to double your bet.\n");
 			return;
 		}
-		user->money-=user->bj_game->bet;  /* take it off again */
+		user->money-=user->bj_game->bet;
 		user->bj_game->bet+=user->bj_game->bet;
 		cnt=blank=0;
 		for (i=0;i<5;i++) {
@@ -3775,7 +3704,6 @@ void play_blackjack(UR_OBJECT user)
 		goto CARD_SKIP;
 	}
 #endif
-	/* stand with the current hand */
 	if (!strcasecmp(word[1],"stand")) {
 		if (user->bj_game==NULL) {
 			write_user(user,"You aren't playing a game of Blackjack.\n");
@@ -3857,9 +3785,6 @@ void play_blackjack(UR_OBJECT user)
 #endif
 }
 
-/***
- * display to the user their hand of cards for blackjack
- ***/
 void show_blackjack_cards(UR_OBJECT user,int dealer,int start)
 {
 	int h,d,hand[5];
@@ -3897,9 +3822,6 @@ void show_blackjack_cards(UR_OBJECT user,int dealer,int start)
 	}
 }
 
-/***
- * Get the total of the users or dealers hand of cards
- ***/
 int check_blackjack_total(UR_OBJECT user,int dealer)
 {
 	int h,total,i,has_ace,all_aces_one;
@@ -3907,7 +3829,6 @@ int check_blackjack_total(UR_OBJECT user,int dealer)
 	has_ace=all_aces_one=0;
 	while (1) {
 		total=0;
-		/* get the user's total */
 		if (!dealer) {
 			for (h=0;h<5;h++) {
 				if (user->bj_game->hand[h]==-1)
@@ -3922,7 +3843,7 @@ int check_blackjack_total(UR_OBJECT user,int dealer)
 						else
 							total++;
 						break;
-					case 10: /* Jacks, Queens and Kings */
+					case 10:
 					case 11:
 					case 12:
 						total+=10;
@@ -3933,7 +3854,6 @@ int check_blackjack_total(UR_OBJECT user,int dealer)
 				}
 			}
 		}
-		/* get dealer's total */
 		else {
 			for (h=0;h<5;h++) {
 				if (user->bj_game->dealer_hand[h]==-1)
@@ -3947,7 +3867,7 @@ int check_blackjack_total(UR_OBJECT user,int dealer)
 						else
 							total++;
 						break;
-					case 10: /* Jacks, Queens and Kings */
+					case 10:
 					case 11:
 					case 12:
 						total+=10;
@@ -3994,7 +3914,6 @@ UR_OBJECT user;
 			||
 			(word[1][0]>'z')
 	   ) {
-		/* nedostatok parametrov, prvy znak parametra nie je cislo ani pismeno */
 		reversi_pishelp(user);
 		return;
 	}
@@ -4004,8 +3923,8 @@ UR_OBJECT user;
 			return;
 		}
 		user_sh=user->reversi_sh;
-		vwrite_user(user,"Prestal%s si hrat reversi.\n", pohl(user,"","a"));
-		sprintf(text,"%s prestal%s s tebou hrat reversi.\n",user->name, pohl(user,"","a"));
+		vwrite_user(user,"Prestal%s si hrat reversi.\n",pohl(user,"","a"));
+		sprintf(text,"%s prestal%s s tebou hrat reversi.\n",user->name,pohl(user,"","a"));
 		write_user(user_sh,text);
 		if (user->reversi_cislotahu>20) {
 			add_point(user_sh,DB_REVERSI,1,0);
@@ -4019,34 +3938,26 @@ UR_OBJECT user;
 	}
 	if (!strcmp(word[1],"show")) {
 		if (word_count>2) {
-			/* je 2.parameter = meno */
 			user_sh=get_user(word[2]);
 			if (user_sh==NULL) {
-				/* nezname meno */
 				write_user(user,notloggedon);
 				return;
 			}
-			/* uzivatel je prihlaseny */
 			if (!user_sh->reversi_cislotahu) {
-				/* nehra */
 				sprintf(text,"%s nehra reversi.\n",user_sh->name);
 				write_user(user,text);
 				return;
 			}
-			/* hra */
 			sprintf(text,"Toto je rozohrana hra %s:",sklonuj(user_sh,2));
 			write_user(user,text);
 			reversi_pisplan(user,user_sh);
 			reversi_pisplan2(user,user_sh);
 			return;
 		}
-		/* nie su dalsie parametre */
 		if (!user->reversi_cislotahu) {
-			/* nehra */
 			write_user(user,"Nehras reversi.\n");
 			return;
 		}
-		/* hra */
 		write_user(user,"Toto je tvoja rozohrana hra:");
 		reversi_pisplan(user,user);
 		reversi_pisplan2(user,user);
@@ -4054,23 +3965,17 @@ UR_OBJECT user;
 	}
 	if (!strcmp(word[1],"pass")) {
 		if (!user->reversi_cislotahu) {
-			/* nehra */
 			write_user(user,"Nehras reversi.\n");
 			return;
 		}
-		/* hra */
 		if (user->reversi_natahu!=1) {
-			/* nie je na tahu */
 			write_user(user,"Nie si na tahu.\n");
 			return;
 		}
-		/* je na tahu */
 		if (user->reversi_cislotahu!=1) {
-			/* nie je to prvy tah */
 			write_user(user,"Nie je to prvy tah.\n");
 			return;
 		}
-		/* je to prvy tah */
 		user_sh=user->reversi_sh;
 		user->reversi_natahu=1-user->reversi_natahu;
 		user_sh->reversi_natahu=1-user_sh->reversi_natahu;
@@ -4078,7 +3983,7 @@ UR_OBJECT user;
 		reversi_pisplan2(user,user);
 		reversi_pisplan(user_sh,user_sh);
 		reversi_pisplan2(user_sh,user_sh);
-		sprintf(text,"Vzdal%s si sa prveho tahu. Na tahu je %s.\n",pohl(user,"","a"), user_sh->name);
+		sprintf(text,"Vzdal%s si sa prveho tahu. Na tahu je %s.\n",pohl(user,"","a"),user_sh->name);
 		write_user(user,text);
 		sprintf(text,"%s sa vzdal%s prveho tahu. Si na tahu.\n",user->name,pohl(user,"","a"));
 		write_user(user_sh,text);
@@ -4088,10 +3993,9 @@ UR_OBJECT user;
 		write_user(user,"Reversi 1.2  Made by Alfonz (13.3.2000-2.4.2000)\n");
 		return;
 	}
-	/* special(debug) - vypis reversi_? uzivatela - ciste cisla */
 	if (!strcmp(word[1],"special")) {
 		char meno[USER_NAME_LEN+1];
-		UR_OBJECT user_;  /* user, ktoreho vypisuje */
+		UR_OBJECT user_;
 		if (word_count>2) {
 			user_=get_user(word[2]);
 			if (user_==NULL) {
@@ -4120,20 +4024,15 @@ UR_OBJECT user;
 		return;
 	}
 	if ((word[1][0]>='0') && (word[1][0]<='9')) {
-		/* suradnice */
 		if (!user->reversi_cislotahu) {
-			/* nehra */
 			write_user(user,"Nehras reversi.\n");
 			return;
 		}
-		/* hra */
 		user_sh=user->reversi_sh;
 		if (user->reversi_natahu!=1) {
-			/* nie je na tahu */
 			write_user(user,"Nie si na tahu.\n");
 			return;
 		}
-		/* je na tahu */
 		if (
 				(word_count<3)
 				||
@@ -4147,35 +4046,29 @@ UR_OBJECT user;
 				||
 				(word[2][0]>'7')
 		   ) {
-			/* nedostatok parametrov || dlzka parametrov != 1 || parametre mimo rozsah */
 			write_user(user,"Chybne parametre.\n");
 			reversi_pishelp(user);
 			return;
 		}
-		/* je na tahu a parametre v poriadku */
 		k=word[2][0]-'0';
 		l=word[1][0]-'0';
 		if (user->reversi_plan[l][k]) {
-			/* obsadene pole */
 			write_user(user,"Toto pole je obsadene.\n");
 			return;
 		}
 		if (reversi_testok(user,l,k)) {
-			/* mozno tahat podla pravidiel */
 			reversi_tah(user,l,k);
 			reversi_pisplan(user,user);
 			reversi_pisplan(user_sh,user_sh);
 			reversi_pocitajznaky(user,&pocetX,&pocetO);
 			if (user->reversi_cislotahu>60) {
-				/* plny plan */
 				if (pocetX==pocetO) {
-					/* remiza */
 					user->reversi_natahu=user_sh->reversi_natahu=2;
 					reversi_pisplan2(user,user);
 					reversi_pisplan2(user_sh,user_sh);
 					sprintf(text,"Reversi duel %s vs %s skoncil remizou.\n",user->name,user_sh->name);
 					write_room(user->room,text);
-					write_room(user_sh->room, text);
+					write_room(user_sh->room,text);
 					reversi_koniechry(user);
 					reversi_koniechry(user_sh);
 					return;
@@ -4214,16 +4107,12 @@ UR_OBJECT user;
 				reversi_koniechry(user_sh);
 				return;
 			}
-			/* nie je plny plan */
 			if (reversi_mozetahat(user_sh)) {
-				/* spoluhrac moze tahat */
 				reversi_pisplan2(user,user);
 				reversi_pisplan2(user_sh,user_sh);
 				return;
 			}
-			/* spoluhrac nemoze tahat */
 			if (reversi_mozetahat(user)) {
-				/* hrac moze tahat */
 				user_sh->reversi_natahu=1-user_sh->reversi_natahu;
 				user->reversi_natahu=1-user->reversi_natahu;
 				reversi_pisplan2(user,user);
@@ -4232,9 +4121,7 @@ UR_OBJECT user;
 				write_user(user_sh,"Nemozes tahat. Na tahu je spoluhrac.\n");
 				return;
 			}
-			/* nikto nemoze tahat */
 			if (pocetX==pocetO) {
-				/* remiza */
 				user->reversi_natahu=user_sh->reversi_natahu=2;
 				reversi_pisplan2(user,user);
 				reversi_pisplan2(user_sh,user_sh);
@@ -4283,32 +4170,24 @@ UR_OBJECT user;
 			log_game(text);
 			return;
 		}
-		/* nemozno tahat podla pravidiel */
 		write_user(user,"Podla pravidiel tu nemozes tahat.\n");
 		return;
 	}
-	/* predpoklada sa meno spoluhraca */
 	if (user->reversi_cislotahu) {
-		/* vyzyvatel uz hra */
-		sprintf(text,"Uz hras reversi s %s.\n", sklonuj(user->reversi_sh, 7));
+		sprintf(text,"Uz hras reversi s %s.\n",sklonuj(user->reversi_sh,7));
 		write_user(user,text);
 		return;
 	}
-	/* vyzyvatel este nehra */
 	user_sh=get_user(word[1]);
 	if (user_sh==user) {
-		/* vyzyvany=vyzyvatel */
 		write_user(user,"Nemozes hrat so sebou.\n");
 		return;
 	}
 	if (user_sh==NULL) {
-		/* nezname meno */
 		write_user(user,notloggedon);
 		return;
 	}
-	/* vyzyvany je prihlaseny */
 	if (user_sh->reversi_cislotahu) {
-		/* vyzyvany uz s niekym hra */
 		sprintf(text,"%s uz hra reversi.\n",user_sh->name);
 		write_user(user,text);
 		return;
@@ -4318,22 +4197,17 @@ UR_OBJECT user;
 		write_user(user,text);
 		return;
 	}
-	/* zaciatok hry */
 	if (word_count>2) {
-		/* test 2.parametra */
 		if (!strcmp(word[2],"o")) {
-			/* chce mat O */
 			user->reversi_znak=2;
 			user_sh->reversi_znak=1;
 		}
 		else {
-			/* chce mat X */
 			user->reversi_znak=1;
 			user_sh->reversi_znak=2;
 		}
 	}
 	else {
-		/* nie je 2.parameter - bude mat X */
 		user->reversi_znak=1;
 		user_sh->reversi_znak=2;
 	}
@@ -4347,9 +4221,9 @@ UR_OBJECT user;
 			user->reversi_plan[k][l]=user_sh->reversi_plan[k][l]=0;
 	user->reversi_plan[3][3]=user->reversi_plan[4][4]=user_sh->reversi_plan[3][3]=user_sh->reversi_plan[4][4]=1;
 	user->reversi_plan[3][4]=user->reversi_plan[4][3]=user_sh->reversi_plan[3][4]=user_sh->reversi_plan[4][3]=2;
-	sprintf(text,"%s si hrat reversi s %s.\n",pohl(user,"Zacal","Zacala"), sklonuj(user_sh,7));
+	sprintf(text,"%s si hrat reversi s %s.\n",pohl(user,"Zacal","Zacala"),sklonuj(user_sh,7));
 	write_user(user,text);
-	sprintf(text,"%s %s s tebou hrat reversi.\n",user->name, pohl(user,"zacal","zacala"));
+	sprintf(text,"%s %s s tebou hrat reversi.\n",user->name,pohl(user,"zacal","zacala"));
 	write_user(user_sh,text);
 	reversi_pisplan(user,user);
 	reversi_pisplan2(user,user);
@@ -4369,10 +4243,7 @@ void reversi_pishelp(UR_OBJECT user)
 	write_user(user,"          reversi stop              - ukonci rozohranu hru\n");
 }
 
-/* vypise plan a pocet znakov hracov */
 void reversi_pisplan(UR_OBJECT pisuser,UR_OBJECT user)
-/* pisuser - komu ma napisatň
- * user - koho hra */
 {
 	int k,l,pX,pO;
 	UR_OBJECT userX,userO;
@@ -4414,14 +4285,11 @@ void reversi_pisplan(UR_OBJECT pisuser,UR_OBJECT user)
 	write_user(pisuser,text);
 }
 
-/* vypise iba status hry - cislo tahu, kto je na tahu */
 void reversi_pisplan2(UR_OBJECT pisuser,UR_OBJECT user)
-/* pisuser - komu ma napisat
- * user - koho hra */
 {
 	UR_OBJECT userX,userO;
 	char natahu[USER_NAME_LEN+28];
-	int k,i=0;  /* i - posun sposobeny farbami */
+	int k,i=0;
 	char posltah[50];
 
 	if (user->reversi_znak==1) {
@@ -4458,7 +4326,6 @@ void reversi_pisplan2(UR_OBJECT pisuser,UR_OBJECT user)
 	write_user(pisuser,text);
 }
 
-/* spocita znaky na plane */
 void reversi_pocitajznaky(UR_OBJECT user,int *pX,int *pO)
 {
 	int k,l;
@@ -4473,47 +4340,34 @@ void reversi_pocitajznaky(UR_OBJECT user,int *pX,int *pO)
 			}
 }
 
-/* test, ci moze tahat podla pravidiel na [x,y] */
 int reversi_testok(UR_OBJECT user,int y,int x)
 {
 	int k,l,kn,ln,i,j;
-	/* k,l,kn,ln - suradnice [nove]
-	 * i - smer
-	 * j - posun v smere i
-	 */
 	int ok=0;
-	/* ok - moze tahat*/
 
 	if (user->reversi_plan[y][x])
 		return 0;
 	for (i=0; (!ok)&&(i<8) ;++i)
-		/* vyskusaj smer i */
 		for (k=x,l=y,j=0; !ok; k=kn,l=ln,++j) {
 			kn=k+reversi_smerX[i];
 			ln=l+reversi_smerY[i];
-			/* chod v smere i */
-			if ((kn<0)||(kn>7)||(ln<0)||(ln>7)) /* mimo plan */
+			if ((kn<0)||(kn>7)||(ln<0)||(ln>7))
 				break;
-			/* v plane */
-			if (user->reversi_plan[ln][kn]==0) /* prazdne */
+			if (user->reversi_plan[ln][kn]==0)
 				break;
 			if ((user->reversi_plan[ln][kn])==(user->reversi_znak)) {
-				/* moj znak */
-				if (j==0) /* kladeny a najdeny lezia pri sebe => zle */
+				if (j==0)
 					break;
-				/* medzi kladenym a najdenym je iny znak => dobre */
 				ok=1;
 				break;
 			}
-			/* znak spoluhraca => hladaj dalej */
 		}
 	return ok;
 }
 
-/* zisti, ci user moze tahat podla pravidiel */
 int reversi_mozetahat(UR_OBJECT user)
 {
-	int k,l,ok;	/* k,l - suradnice   ok - moze tahat */
+	int k,l,ok;
 
 	ok=0;
 	for (l=0; (!ok)&&(l<8) ;++l)
@@ -4525,43 +4379,29 @@ int reversi_mozetahat(UR_OBJECT user)
 void reversi_tah(UR_OBJECT user,int y,int x)
 {
 	int k,l,kn,ln,i,j,ok;
-	/***
-	 * k,l,kn,ln - suradnice [nove]
-	 * i - smer
-	 * j - posun v smere i
-	 * ok - mozno prevratit znaky v smere i
-	 ***/
 
 	for (i=0; i<8 ;++i) {
-		/* vyskusaj smer i */
 		ok=0;
 		for (k=x,l=y,j=0; !ok ;k=kn,l=ln,++j) {
 			kn=k+reversi_smerX[i];
 			ln=l+reversi_smerY[i];
-			/* chod v smere i */
-			if ((kn<0)||(kn>7)||(ln<0)||(ln>7)) /* mimo plan */
+			if ((kn<0)||(kn>7)||(ln<0)||(ln>7))
 				break;
-			/* v plane */
-			if (user->reversi_plan[ln][kn]==0) /* prazdne */
+			if (user->reversi_plan[ln][kn]==0)
 				break;
 			if (user->reversi_plan[ln][kn]==user->reversi_znak) {
-				/* moj znak */
-				if (j==0) /* kladeny a najdeny lezia pri sebe => zle */
+				if (j==0)
 					break;
-				/* medzi kladenym a najdenym je iny znak => dobre */
 				ok=1;
 				break;
 			}
-			/* znak spoluhraca => hladaj dalej */
 		}
-		if (ok) /* smer i je ok => prevratit znaky */
+		if (ok)
 			for (k=x,l=y; ;k=kn,l=ln) {
 				kn=k+reversi_smerX[i];
 				ln=l+reversi_smerY[i];
-				/* chod v smere i */
-				if (user->reversi_plan[ln][kn]==user->reversi_znak) /* moj znak => koniec prevracania */
+				if (user->reversi_plan[ln][kn]==user->reversi_znak)
 					break;
-				/* znak spoluhraca => prevracaj */
 				user->reversi_plan[ln][kn]=3-user->reversi_plan[ln][kn];
 				user->reversi_sh->reversi_plan[ln][kn]=3-user->reversi_sh->reversi_plan[ln][kn];
 			}
@@ -4577,7 +4417,6 @@ void reversi_tah(UR_OBJECT user,int y,int x)
 	user->reversi_sh->reversi_cislotahu+=1;
 }
 
-/* vynuluje udaje o hre */
 void reversi_koniechry(user)
 UR_OBJECT user;
 {
@@ -4590,29 +4429,10 @@ UR_OBJECT user;
 	user->reversi_znak=user->reversi_cislotahu=user->reversi_jept=user->reversi_ptX=user->reversi_ptY=0;
 }
 
-/* MINY - Ultimate Adventure :)                         */
-/* part of comments is in english and part v slovencine */
-/* pretoze som si myslel, ze komentare sa robia v anj   */
-/* nazor som zmenil po tom, ako som videl zdrojak       */
-/* poseidona                                            */
-
-/* ospravedlnujem sa za moje debilne indexovanie j,i    */
-/* len pred par dnami, som sa dozvedel, ze sa to robi   */
-/* i,j (logicke!)                                       */
-
-/* dalsia vec je, ze som to pisal na velkom terminale   */
-/* a preto som porusil pravidlo 80 znakov/riadok        */
-
-/* Este detail: ked sa clovek odhlasi pocas rozohranej  */
-/* hry ostane po nom alloc. pamet, preto treba volat    */
-/* niekde z "deep of nuts333.c" miny_done(user)         */
-/* alebo ma C garbage collector ?                       */
-
 #define M_X user->miny_x
 #define M_Y user->miny_y
 #define HOW_MINES user->miny_h
 
-/* these 3 numbers says, what is in the matrix */
 #define M_HIDDEN  50
 #define M_THERE   10
 #define M_FLAG    100
@@ -4629,15 +4449,13 @@ void miny_help_msg(UR_OBJECT user)
 	write_user(user,"       .miny draw                      - vykresli hracie pole\n");
 }
 
-/* na 99.9% sa tato hlaska nikdy nevypise */
-char *miny_alloc_msg = "~FRProblemy s pametou, kontaktuj spravcov\n";
+char *miny_alloc_msg = "~FRProblemy s pametou, kontaktuj spravcov!\n";
 
-/* vykreslim matrix */
 void miny_draw(UR_OBJECT user)
 {
 	unsigned int i,j;
 	char *buff;
-	int Hidden=0, Mines=0;
+	int Hidden=0,Mines=0;
 
 	for (j=0;j<M_Y;j++)
 		for (i=0;i<M_X;i++) {
@@ -4646,68 +4464,64 @@ void miny_draw(UR_OBJECT user)
 			if (M_TAB(j,i)>=M_FLAG)
 				Mines++;
 		}
-	/* Allocation buffer memory */
-	if (!(buff=(char *)malloc((user->miny_x)*15+100))) { /* <- tuto hodnotu som mozno vypocital zle */
+	if (!(buff=(char *)malloc((user->miny_x)*15+100))) {
 		write_user(user,miny_alloc_msg);
 		return;
 	}
-	/* Write Matrix (TOP) Labes */
 	sprintf(buff,"~FG  ");
 	for (i = 0;i < M_X;i++)
-		sprintf(buff+5+(i*2), "%2d", i);
-	strcat(buff, "\n");
+		sprintf(buff+5+(i*2),"%2d",i);
+	strcat(buff,"\n");
 	write_user(user,buff);
-	/* Show Matrix */
 	for (j=0;j<M_Y;j++) {
-		sprintf(buff,"~FG%2d ", j);
+		sprintf(buff,"~FG%2d ",j);
 		for (i = 0;i < M_X; i++) {
 			if (M_TAB(j,i)>=M_FLAG)
-				sprintf(buff+6+(i*8), "~OL~FMF ");
+				sprintf(buff+6+(i*8),"~OL~FMF ");
 			else if (M_TAB(j,i)>=M_HIDDEN)
-				sprintf(buff+6+(i*8), "~RS~FW# ");
+				sprintf(buff+6+(i*8),"~RS~FW# ");
 			else if (M_TAB(j,i)==M_THERE)
-				sprintf(buff+6+(i*8), "~OL~FY* ");
+				sprintf(buff+6+(i*8),"~OL~FY* ");
 			else if (M_TAB(j,i)==0)
-				sprintf(buff+6+(i*8), "~OL~FK. ");
+				sprintf(buff+6+(i*8),"~OL~FK. ");
 			else if (M_TAB(j,i)==1)
-				sprintf(buff+6+(i*8), "~OL~FB1 ");
+				sprintf(buff+6+(i*8),"~OL~FB1 ");
 			else if (M_TAB(j,i)==2)
-				sprintf(buff+6+(i*8), "~RS~FG2 ");
+				sprintf(buff+6+(i*8),"~RS~FG2 ");
 			else if (M_TAB(j,i)==3)
-				sprintf(buff+6+(i*8), "~OL~FR3 ");
+				sprintf(buff+6+(i*8),"~OL~FR3 ");
 			else if (M_TAB(j,i)==4)
-				sprintf(buff+6+(i*8), "~RS~FY4 ");
+				sprintf(buff+6+(i*8),"~RS~FY4 ");
 			else if (M_TAB(j,i)==5)
-				sprintf(buff+6+(i*8), "~RS~FT5 ");
+				sprintf(buff+6+(i*8),"~RS~FT5 ");
 			else
-				sprintf(buff+6+(i*8), "~OL~FW%c ",M_TAB(j,i)+'0');
+				sprintf(buff+6+(i*8),"~OL~FW%c ",M_TAB(j,i)+'0');
 		}
 		sprintf(text,"~RS~FG%-2d",j);
 		strcat(buff,text);
 		if (j==2) {
-			sprintf(text,"  ~RS~FTOdkryte:   ~OL%d", M_X*M_Y-Hidden);
+			sprintf(text,"  ~RS~FTOdkryte:   ~OL%d",M_X*M_Y-Hidden);
 			strcat(buff,text);
 		}
 		if (j==3) {
-			sprintf(text,"  ~RS~FTNeodkryte: ~OL%d", Hidden);
+			sprintf(text,"  ~RS~FTNeodkryte: ~OL%d",Hidden);
 			strcat(buff,text);
 		}
 		if (j==5) {
-			sprintf(text,"  ~RS~FTMiny: ~OL%d", user->miny_h-Mines);
-			strcat(buff, text);
+			sprintf(text,"  ~RS~FTMiny: ~OL%d",user->miny_h-Mines);
+			strcat(buff,text);
 		}
-		strcat(buff, "\n");
-		write_user(user, buff);
+		strcat(buff,"\n");
+		write_user(user,buff);
 	}
 	sprintf(buff,"~RS~FG  ");
 	for (i=0;i<M_X;i++)
-		sprintf(buff+8+(i*2), "%2d", i);
-	strcat(buff, "\n");
+		sprintf(buff+8+(i*2),"%2d",i);
+	strcat(buff,"\n");
 	write_user(user,buff);
 	free(buff);
 }
 
-/* ocislujem policka okolo miny */
 void miny_numbering(UR_OBJECT user,unsigned int j,unsigned int i)
 {
 	if (i+1<M_X) {
@@ -4730,12 +4544,10 @@ void miny_numbering(UR_OBJECT user,unsigned int j,unsigned int i)
 		M_TAB(j-1,i)+=(M_TAB(j-1,i)!=M_HIDDEN+M_THERE)?1:0;
 }
 
-/*** The Init - Miny ***/
 int miny_init(UR_OBJECT user)
 {
 	unsigned int i,j;
 
-	/* Memory Allocation */
 	user->miny_tab=(unsigned char **)malloc(sizeof(unsigned char *)*M_Y);
 	if (user->miny_tab==0)
 		return -1;
@@ -4744,15 +4556,13 @@ int miny_init(UR_OBJECT user)
 		if (!user->miny_tab[j])
 			return -1;
 	}
-	/* Set All Numbers to zero */
 	for (j=0;j<M_Y;j++)
 		for (i=0;i<M_X;i++)
 			M_TAB(j,i)=M_HIDDEN;
-	M_TAB(0,0)=(char)M_HIDDEN+9; /* zaznacim si ze pole este nie je ocislovane */
+	M_TAB(0,0)=(char)M_HIDDEN+9;
 	return 0;
 }
 
-/* Placing Miny & Numbers */
 void miny_placing(UR_OBJECT user,unsigned int oj,unsigned int oi)
 {
 	unsigned int i,j,total;
@@ -4770,7 +4580,6 @@ void miny_placing(UR_OBJECT user,unsigned int oj,unsigned int oi)
 	}
 }
 
-/* odkryva policka, ktore su prazdne - rekurz. */
 void miny_zero_show(UR_OBJECT user,unsigned int j,unsigned int i)
 {
 	M_TAB(j,i)=M_TAB(j,i)-M_HIDDEN;
@@ -4912,7 +4721,6 @@ void miny_zero_show(UR_OBJECT user,unsigned int j,unsigned int i)
 		miny_zero_show(user,j-1,i+1);
 }
 
-/* Done Miny - mrpropper */
 void miny_done(UR_OBJECT user)
 {
 	unsigned int j;
@@ -4927,7 +4735,6 @@ void miny_done(UR_OBJECT user)
 }
 
 
-/*** The "Game" - Miny ***/
 void miny(UR_OBJECT user)
 {
 	unsigned int i,j,b;
@@ -4993,8 +4800,8 @@ void miny(UR_OBJECT user)
 				write_user(user,"Este si nezacal hrat hru.\n");
 				return;
 			}
-			sscanf(word[1], "%d", &rj);
-			sscanf(word[2], "%d", &ri);
+			sscanf(word[1],"%d",&rj);
+			sscanf(word[2],"%d",&ri);
 			if (ri < 0 || rj < 0) {
 				sprintf(buff,"Suradnice nemozu byt zaportne!\n");
 				write_user(user,buff);
@@ -5003,7 +4810,7 @@ void miny(UR_OBJECT user)
 			j=rj;
 			i=ri;
 			if (i > (M_X-1) || j > (M_Y-1)) {
-				sprintf(buff, "Zadaj suradnice <0..%d> <0..%d> !\n", (user->miny_y-1), (user->miny_x-1));
+				sprintf(buff,"Zadaj suradnice <0..%d> <0..%d> !\n",(user->miny_y-1),(user->miny_x-1));
 				write_user(user,buff);
 				return;
 			}
@@ -5038,7 +4845,7 @@ void miny(UR_OBJECT user)
 				for (j=b=0;j<M_Y;j++) {
 					for (i=0;i<M_X;i++) {
 						if (M_TAB(j,i)==M_THERE) {
-							vwrite_user(user,"~FG~OL....Whooopz....\n~FG~OLNas%s si Minu.\n", pohl(user,"iel","la"));
+							vwrite_user(user,"~FG~OL....Whooopz....\n~FG~OLNas%s si Minu.\n",pohl(user,"iel","la"));
 							for (j=b=0;j<M_Y;j++)
 								for (i=0; i<M_X;i++)
 									if (M_TAB(j,i)<M_HIDDEN) b++;
@@ -5058,7 +4865,7 @@ void miny(UR_OBJECT user)
 					}
 				}
 				if (b==(M_X*M_Y)-HOW_MINES) {
-					vwrite_user(user,"~FG~OLVyhral%s si, gratulujem.\n", pohl(user,"","a"));
+					vwrite_user(user,"~FG~OLVyhral%s si, gratulujem.\n",pohl(user,"","a"));
 					if (M_X==8)
 						add_point(user,DB_MINY,5,0);
 					if (M_X==16)
@@ -6188,51 +5995,51 @@ void oline(UR_OBJECT u)
 	write_user(u,"~FB----------------------------------------------------------------------------=---~FW\n");
 }
 
-UR_OBJECT hra(UR_OBJECT user, int n)
+UR_OBJECT hra(UR_OBJECT user,int n)
 {
 	UR_OBJECT u;
 
-	if (n==1) { /* PISKVORKY */
+	if (n==1) {
 		if (user->game!=2)
 			return NULL;
 		else if ((u=get_user(user->uname)))
 			return u;
 		return NULL;
 	}
-	if (n==2) { /* GEO */
+	if (n==2) {
 		if (user->game!=3)
 			return NULL;
 		else if ((u=get_user(user->uname)))
 			return u;
 		return NULL;
 	}
-	if (n==3) { /* HANGMAN */
+	if (n==3) {
 		if (user->hang_stage==-1)
 			return NULL;
 		else
 			return user;
 	}
-	if (n==4) {  /* D00M */
+	if (n==4) {
 		if (!user->doom_energy)
 			return NULL;
 		else
 			return user;
 	}
-	if (n==5) { /* REVERSI */
+	if (n==5) {
 		if (!user->reversi_cislotahu)
 			return NULL;
 		else if (user->reversi_sh!=NULL)
 			return user->reversi_sh;
 		return NULL;
 	}
-	if (n==6) { /* DAMA */
+	if (n==6) {
 		if (user->dhrac<=0)
 			return NULL;
 		else if (user->dama->hrac[2-user->dhrac]!=NULL)
 			return user->dama->hrac[2-user->dhrac];
 		return NULL;
 	}
-	if (n==7) { /* MINY */
+	if (n==7) {
 		if (user->miny_tab==NULL)
 			return NULL;
 		else
@@ -6265,7 +6072,7 @@ void games(UR_OBJECT user)
 			continue;
 		u2=hra(u,1);
 		if (u2!=NULL)
-			vwrite_user(user,"~RS~FG-> ~FW%s vs. %s\n", u->name, u2->name);
+			vwrite_user(user,"~RS~FG-> ~FW%s vs. %s\n",u->name,u2->name);
 	}
 	write_user(user,"~FB[~OL~FYGEO~RS~FB]\n");
 	for (u=user_first;u!=NULL;u=u->next) {
@@ -6273,7 +6080,7 @@ void games(UR_OBJECT user)
 			continue;
 		u2=hra(u,2);
 		if (u2!=NULL)
-			vwrite_user(user,"~RS~FG-> ~FW%s vs. %s\n", u->name, u2->name);
+			vwrite_user(user,"~RS~FG-> ~FW%s vs. %s\n",u->name,u2->name);
 	}
 	write_user(user,"~FB[~OL~FYHangman~RS~FB]\n");
 	for (u=user_first;u!=NULL;u=u->next) {
@@ -6281,7 +6088,7 @@ void games(UR_OBJECT user)
 			continue;
 		u2=hra(u,3);
 		if (u2!=NULL)
-			vwrite_user(user,"~RS~FG-> ~FW%s\n", u->name);
+			vwrite_user(user,"~RS~FG-> ~FW%s\n",u->name);
 	}
 	write_user(user,"~FB[~OL~FYDOOM~RS~FB]\n");
 	for (u=user_first;u!=NULL;u=u->next) {
@@ -6289,7 +6096,7 @@ void games(UR_OBJECT user)
 			continue;
 		u2=hra(u,4);
 		if (u2!=NULL)
-			vwrite_user(user,"~RS~FG-> ~FW%s\n", u->name);
+			vwrite_user(user,"~RS~FG-> ~FW%s\n",u->name);
 	}
 	write_user(user,"~FB[~OL~FYReversi~RS~FB]\n");
 	for (u=user_first;u!=NULL;u=u->next) {
@@ -6297,7 +6104,7 @@ void games(UR_OBJECT user)
 			continue;
 		u2=hra(u,5);
 		if (u2!=NULL)
-			vwrite_user(user,"~RS~FG-> ~FW%s vs. %s\n", u->name, u2->name);
+			vwrite_user(user,"~RS~FG-> ~FW%s vs. %s\n",u->name,u2->name);
 	}
 	write_user(user,"~FB[~OL~FYDama~RS~FB]\n");
 	for (u=user_first;u!=NULL;u=u->next) {
@@ -6305,7 +6112,7 @@ void games(UR_OBJECT user)
 			continue;
 		u2=hra(u,6);
 		if (u2!=NULL)
-			vwrite_user(user,"~RS~FG-> ~FW%s vs. %s\n", u->name, u2->name);
+			vwrite_user(user,"~RS~FG-> ~FW%s vs. %s\n",u->name,u2->name);
 	}
 	write_user(user,"~FB[~OL~FYMiny~RS~FB]\n");
 	for (u=user_first;u!=NULL;u=u->next) {
@@ -6313,7 +6120,7 @@ void games(UR_OBJECT user)
 			continue;
 		u2=hra(u,7);
 		if (u2!=NULL)
-			vwrite_user(user,"~RS~FG-> ~FW%s\n", u->name);
+			vwrite_user(user,"~RS~FG-> ~FW%s\n",u->name);
 	}
 	write_user(user,"~FB[~OL~FYLodicky~RS~FB]\n");
 	for (u=user_first;u!=NULL;u=u->next) {
@@ -6321,7 +6128,7 @@ void games(UR_OBJECT user)
 			continue;
 		u2=hra(u,8);
 		if (u2!=NULL)
-			vwrite_user(user,"~RS~FG-> ~FW%s vs. %s\n", u->name, u2->name);
+			vwrite_user(user,"~RS~FG-> ~FW%s vs. %s\n",u->name,u2->name);
 	}
 	write_user(user,"~FB[~OL~FYLabyrint~RS~FB]\n");
 	for (u=user_first;u!=NULL;u=u->next) {
@@ -6329,12 +6136,12 @@ void games(UR_OBJECT user)
 			continue;
 		u2=hra(u,9);
 		if (u2!=NULL)
-			vwrite_user(user,"~RS~FG-> ~FW%s\n", u->name);
+			vwrite_user(user,"~RS~FG-> ~FW%s\n",u->name);
 	}
 	write_user(user,"~FB[~OL~FYClovece~RS~FB]\n");
 	for (u=user_first;u!=NULL;u=u->next) {
 		if (u->chrac>0) {
-			vwrite_user(user,"~RS~FG-> ~FW%s ~FG(hraju:~OL~FW", u->name);
+			vwrite_user(user,"~RS~FG-> ~FW%s ~FG(hraju:~OL~FW",u->name);
 			if (u->clovece->hrac[0]!=NULL)
 				vwrite_user(user," %s",u->clovece->hrac[0]->name);
 			if (u->clovece->hrac[1]!=NULL)
@@ -6349,7 +6156,7 @@ void games(UR_OBJECT user)
 	write_user(user,"~FB[~OL~FYFaraon~RS~FB]\n");
 	for (u=user_first;u!=NULL;u=u->next) {
 		if (u->fhrac>-1) {
-			vwrite_user(user,"~RS~FG-> ~FW%s ~FG(hraju:~OL~FW", u->name);
+			vwrite_user(user,"~RS~FG-> ~FW%s ~FG(hraju:~OL~FW",u->name);
 			if (u->farar->hrac[0]!=NULL)
 				vwrite_user(user," %s",u->farar->hrac[0]->name);
 			if (u->farar->hrac[1]!=NULL)
@@ -6761,7 +6568,6 @@ extern void add_cloveceplayer(UR_OBJECT user,UR_OBJECT u)
 	write_user(user,text);
 }
 
-/* socialne orientovana kocka (ak su 4 ks figurky doma na starte, hadze sa 1 az 7, 7 -> 6. */
 void hod_kockou(UR_OBJECT user,int rec)
 {
 	int cnt=0,i,j;
@@ -7585,8 +7391,6 @@ void clovece(UR_OBJECT user,char *inpstr)
 	}
 }
 
-/* farar (faraon) -> kartova gamesa (warning! narocne na rozmyslanie.. skoro jak clovece) */
-
 FR_OBJECT create_farar(void)
 {
 	FR_OBJECT farar;
@@ -7597,12 +7401,12 @@ FR_OBJECT create_farar(void)
 		return NULL;
 	}
 	for (i=0;i<32;++i)
-		farar->karty[i]=8; /* V) cislo hraca ktory ju drzi 0-4, inac v kope.*/
+		farar->karty[i]=8;
 	for (i=0;i<5;++i)
-		farar->hrac[i]=NULL;/* V) ak si tahas z kopy, beres kartu s najmensim */
+		farar->hrac[i]=NULL;
 	for (i=0;i<5;++i)
-		farar->active[i]=0; /* V) cislom, ak hadzes na kopu, karte sa priradi */
-	farar->natahu=-1; /* V) cislo o 1 vacsie ako najvacsie cislo v kope */
+		farar->active[i]=0;
+	farar->natahu=-1;
 	farar->action=0;
 	farar->revline=0;
 	for (i=0;i<REVIEW_LINES;++i)
@@ -8153,12 +7957,6 @@ void farar(UR_OBJECT user,char *inpstr)
 						farar_disp(user,-1);
 					return;
 				}
-				/* ->action:
-				 * 0: ok, mozes vyhadzovat
-				 * 1-12: tahaj si karty
-				 * 101-104: boli esa
-				 * 201-204: bol hornik a zmenil znak
-				 */
 				if (!strncmp(word[1],"sto",3)) {
 					if (100<user->farar->action && user->farar->action<105) {
 						i=user->fhrac;
@@ -8278,9 +8076,9 @@ void farar(UR_OBJECT user,char *inpstr)
 					if (hold[tah[0]]/4==5)
 						y=1;
 					if (hold[tah[0]]==16)
-						y=1; /* Ide zel. dolnik na vsetko? ano ak aktivovane. */
+						y=1;
 					if (oznac==4 && farba==0)
-						y=1; /* Ide na zel. dolnika setko? ano ak aktivovane. */
+						y=1;
 					if (hold[tah[0]]/4==oznac)
 						y=1;
 					if (user->farar->action>200) {
