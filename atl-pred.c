@@ -248,7 +248,6 @@ void load_and_parse_predmets(UR_OBJECT user)
 		total++;
 	}
 	mysql_free_result(result);
-	/* preindexujeme aby sa nepomenili predmety v roomach a u userov*/
 	if (user!=NULL) {
 		for(i=0;i<maxbefore;i++) {
 			index=-1;
@@ -373,23 +372,23 @@ void do_attack(UR_OBJECT user)
 				if (ran==pocet) {
 					vec=user->room->predmet[i];
 					switch (abs(predmet[vec]->attack)) {
-						case 1: /* macka */
+						case 1:
 							sprintf(texthb,"~FT~OL%s~RS~FT ta doskriabal%s.\n",predmet[vec]->name,zwjpohl(vec,"","a","o","i"));
 							sprintf(text,"~FY%s doskriabal%s %s.\n",predmet[vec]->name,zwjpohl(vec,"","a","o","i"),sklonuj(user,4));
 							break;
-						case 2: /* had */
+						case 2:
 							sprintf(texthb,"~FT~OL%s~RS~FT ta ustip%s do nohy. Zacala sa ti tocit hlava.\n",predmet[vec]->name,zwjpohl(vec,"ol","la","lo","li"));
 							sprintf(text,"~FY%s ustip%s %s do nohy.\n",predmet[vec]->name,zwjpohl(vec,"ol","la","lo","li"),sklonuj(user,4));
 							break;
-						case 3: /* squirrel */
+						case 3:
 							sprintf(texthb,"~FT~OL%s~RS~FT ti hodil%s orech rovno do hlavy.\n",predmet[vec]->name,zwjpohl(vec,"","a","o","i"));
 							sprintf(text,"~FY%s hodil%s %s orech do hlavy.\n",predmet[vec]->name,zwjpohl(vec,"","a","o","i"),sklonuj(user,3));
 							break;
-						case 4: /* topier */
+						case 4:
 							sprintf(texthb,"~FT~OL%s~RS~FT sa ti zahryz%s do krku a cicia ti krv.\n",predmet[vec]->name,zwjpohl(vec,"ol","la","lo","li"));
 							sprintf(text,"~FY%s sa zahryz%s %s do krku a cicia %s krv.\n",predmet[vec]->name,zwjpohl(vec,"ol","la","lo","li"),sklonuj(user,3),pohl(user,"mu","jej"));
 							break;
-						case 5: /* kon */
+						case 5:
 							sprintf(texthb,"~FT~OL%s~RS~FT ti tak kop%s do hlavy ze vidis same ***.\n",predmet[vec]->name,zwjpohl(vec,"ol","la","lo","li"));
 							sprintf(text,"~FY%s tak kop%s %s do hlavy ze vidi same ***.\n",predmet[vec]->name,zwjpohl(vec,"ol","la","lo","li"),sklonuj(user,4));
 							break;
@@ -409,7 +408,7 @@ void do_attack(UR_OBJECT user)
 					write_room_except(user->room,text,user);
 					wrtype=0;
 					if (predmet[vec]->altfunct & 2048)
-						user->lsd+=120; /* jedi had ;) */
+						user->lsd+=120;
 					if (predmet[vec]->altfunct & 64)
 						user->stars+=30;
 					pocet=user->pp-80;
@@ -499,11 +498,8 @@ void show_pict_on_event(UR_OBJECT user,int event,int vec,int newline)
 		}
 		return;
 	}
-	fgets(line,440,fp);
-	while (!feof(fp)) {
+	while (fgets(line,sizeof(line)-1,fp)!=NULL)
 		write_user(user,line);
-		fgets(line,440,fp);
-	}
 	fclose(fp);
 }
 
@@ -586,7 +582,7 @@ void pohaluz_predmetom(char *inpstr,unsigned int ok,int vec)
 			strcat(newimpstr," ");
 		}
 	}
-	sstrncpy(inpstr,newimpstr, ARR_SIZE-1);
+	sstrncpy(inpstr,newimpstr,ARR_SIZE-1);
 	free((void *)newimpstr);
 }
 
@@ -613,7 +609,6 @@ void do_funct_stuff(UR_OBJECT user,char *inpstr,int start)
 		zazuvackuj(inpstr,start);
 	if (is_affected(user,32)>-1)
 		pohaluz_predmetom(inpstr,start,is_affected(user,32));
-
 	if (store>-1)
 		user->affpermanent=store;
 }
@@ -653,7 +648,7 @@ void do_alt_funct(UR_OBJECT user,int vec)
 	if (predmet[vec]->altfunct & 8192) {
 		user->prehana=1;
 		user->prehana_t=10;
-		user->prehana_t2=10; /* kolkokrat ho to prezenie ;-) */
+		user->prehana_t2=10;
 		return;
 	}
 	if (predmet[vec]->altfunct & 32768) {
@@ -704,7 +699,7 @@ int forbidden(UR_OBJECT user,UR_OBJECT u,int vec)
 		if (predmet[vec]->restrikt & 256 && !(predmet[vec]->restrikt & 1)) {
 			if (!user->vis) {
 				sprintf(text,"Nema zmysel pouzit %s, ked uz si neviditeln%s!\n",predmet[vec]->akuzativ,pohl(user,"y","a"));
-				write_user(user, text);
+				write_user(user,text);
 				return 1;
 			}
 			if (user->viscount!=0) {
@@ -857,7 +852,6 @@ void hurt(UR_OBJECT user,UR_OBJECT u,int vec)
 			sprintf(text,"%s\n",parse_phrase(predmet[vec]->routphr,u,user,u->room,10));
 			write_room_except(u->room,text,u);
 		}
-
 	}
 }
 
@@ -1065,7 +1059,7 @@ void use_predmet(UR_OBJECT user,char *inpstr)
 {
 	int i,nah,where,pos,vec=-1,vec2=-1,dur=0,kder=-1,kdeh=-1,pos2=-1;
 	UR_OBJECT u=NULL;
-	char type[50], *name;
+	char type[50],*name;
 
 	if (word_count<2) {
 		write_user(user,"Pouzi: .use <predmet> [<uzivatel> | <predmet>]\n");
@@ -1092,7 +1086,7 @@ void use_predmet(UR_OBJECT user,char *inpstr)
 		write_user(user,"~OL~FGOK: riadenie letunu je teraz v ~LItvojich~RS~OL~FG rukach!\n");
 		sprintf(text,"~OL~FG%s sa ujal%s riadenia letunu...\n",name,pohl(user,"","a"));
 		write_room(get_room(FLYER_ROOM,NULL),text);
-		strcpy(flyer.pilot, user->name);
+		strcpy(flyer.pilot,user->name);
 		flyer.pozicia=1;
 		flyer.gotta_write=1;
 		return;
@@ -1105,7 +1099,7 @@ void use_predmet(UR_OBJECT user,char *inpstr)
 	}
 	pos=is_in_hands(user,vec);
 	where=is_in_room(user->room,vec);
-	if (predmet[vec]->function==24) {  /* zombie-like entities */
+	if (predmet[vec]->function==24) {
 		where=-1;
 		for (i=0;i<MPVM;i++)
 			if (user->room->predmet[i]==vec && user->room->dur[i]>9999 && user->room->dur[i]%10000==user->socket)
@@ -1181,7 +1175,7 @@ void use_predmet(UR_OBJECT user,char *inpstr)
 			&&
 			(predmet[vec]->function!=1)
 			&&
-			(predmet[vec]->function!=16) /* VEHICLE */
+			(predmet[vec]->function!=16)
 			&&
 			(predmet[vec]->function!=20)
 			&&
@@ -1252,16 +1246,14 @@ void use_predmet(UR_OBJECT user,char *inpstr)
 		dur=0;
 	else
 		dur=user->dur[pos];
-
 	if (word_count>2) {
 		vec2=expand_predmet(word[2]);
 		kder=is_in_room(user->room,vec2);
 		kdeh=is_in_hands(user,vec2);
 		u=get_user(word[2]);
 	}
-
 	if (word_count>2)
-		switch (predmet[vec]->function) { /* ine parametre */
+		switch (predmet[vec]->function) {
 			case 14:
 				if ((user->level<MOZENADAVAT) && (contains_swearing(inpstr,user)) && (ban_swearing)) {
 					write_user(user,noswearing);
@@ -1342,7 +1334,7 @@ void use_predmet(UR_OBJECT user,char *inpstr)
 				;
 		}
 	if (word_count>2) {
-		if (((u==NULL && vec2>-1)) || ((u!=NULL) && (kder>-1 || kdeh>-1))) { /* 2 parametre - predmet, predmet */
+		if (((u==NULL && vec2>-1)) || ((u!=NULL) && (kder>-1 || kdeh>-1))) {
 			if (kder==-1 && kdeh==-1) {
 				if (predmet[vec2]->type<3)
 					sprintf(text,"Ziadn%s %s sa tu momentalne nenachadza%s.\n",zwjpohl(vec2,"y","a","e","e"),predmet[vec2]->name,zwjpohl(vec2,"","","","ju"));
@@ -1388,7 +1380,6 @@ void use_predmet(UR_OBJECT user,char *inpstr)
 						wrtype=0;
 						user->room->dur[is_in_room(user->room,vec2)]=10000+user->socket;
 					}
-					/* V) zver ma svojho noveho pana :) */
 					return;
 				}
 			}
@@ -1401,7 +1392,7 @@ void use_predmet(UR_OBJECT user,char *inpstr)
 						vec2=-1;
 					if (vec2>-1 && predmet[vec2]->type<3) {
 						if (is_in_room(user->room,vec2)>-1) {
-							if (predmet[vec2]->function==24) { /* mlatenie ZOMBIKA */
+							if (predmet[vec2]->function==24) {
 								if (user->attacking) {
 									sprintf(text,"Este si nedokoncil%s utok.\n",pohl(user,"","a"));
 									write_user(user,text);
@@ -1463,7 +1454,7 @@ void use_predmet(UR_OBJECT user,char *inpstr)
 									user->room->predmet[kder]=-1;
 									user->room->dur[kder]=0;
 								}
-								else { /* ak biju zombika, bude sa branit */
+								else {
 									if (user->room->dur[kder]<10000) user->room->dur[kder]=-10000*abs_dur(user->room->dur[kder])-user->socket;
 									else if (abs_dur(user->room->dur[kder])<predmet[user->room->predmet[kder]]->dur/3) {
 										u=get_user_by_sock(user->room->dur[kder]%10000);
@@ -1520,7 +1511,7 @@ void use_predmet(UR_OBJECT user,char *inpstr)
 					return;
 			}
 		}
-		else { /* 2 parametre - predmet, user */
+		else {
 			if (u==NULL) {
 				write_user(user,notloggedon);
 				return;
@@ -1581,7 +1572,7 @@ void use_predmet(UR_OBJECT user,char *inpstr)
 						}
 						else {
 							u->glue=240;
-							sprintf(text,"%s si %s! Teraz sa par minut odtialto nepohne.\n",pohl(user,"Zalepil","Zalepila"),sklonuj(u, 4));
+							sprintf(text,"%s si %s! Teraz sa par minut odtialto nepohne.\n",pohl(user,"Zalepil","Zalepila"),sklonuj(u,4));
 							write_user(user,text);
 							sprintf(text,"%s Ta %s k zemi! Teraz sa par minut nemozes ani pohnut!\n",name,pohl(user,"prilepil","prilepila"));
 							write_user(u,text);
@@ -1790,8 +1781,7 @@ void use_predmet(UR_OBJECT user,char *inpstr)
 			}
 		}
 	}
-	if (word_count==2) { /* 1 parameter - predmet */
-		/* tunelovanie dvoma krtkami */
+	if (word_count==2) {
 		if (!strcmp(predmet[vec]->name,"krtko") && tunelik>0 && (!strcmp(user->room->name,"pohorie") || !strcmp(user->room->name,"vrchol") || !strcmp(user->room->name,"husty_les"))) {
 			vec2=0;
 			for (i=0;i<HANDS;i++) if (user->predmet[i]==vec) vec2++;
@@ -1809,7 +1799,7 @@ void use_predmet(UR_OBJECT user,char *inpstr)
 			}
 		}
 		switch (predmet[vec]->function) {
-			case 1: /* zviachacka */
+			case 1:
 				if (user->zuje && user->zuje_t==vec) {
 					if (is_free_in_hands(user)>-1) {
 						show_pict_on_event(user,32,vec,0);
@@ -1854,7 +1844,7 @@ void use_predmet(UR_OBJECT user,char *inpstr)
 				}
 				do_alt_funct(user,vec);
 				return;
-			case 2: /* refolfer */
+			case 2:
 				show_pict_on_event(user,32,vec,0);
 				if (dur>1) {
 					user->dur[is_in_hands(user,vec)]-=1;
@@ -1870,13 +1860,13 @@ void use_predmet(UR_OBJECT user,char *inpstr)
 				write_user(user,text);
 				sprintf(text,"~LB~FG%s si prilozil%s %s k spanku a stlacil%s spust ... ~OL~LI~FWBANG!~RS~FG Game over!\n",name,pohl(user,"","a"),predmet[vec]->akuzativ,pohl(user,"","a"));
 				write_room_except(user->room,text,user);
-				disconnect_user(user, 3, NULL);
+				disconnect_user(user,3,NULL);
 				return;
-			case 3:  /* zuby */
+			case 3:
 				sprintf(text,"Pouzi: .use %s <obet>\n",predmet[vec]->name);
 				write_user(user,text);
 				return;
-			case 4: /*  premena na iny predmet pri pouziti */
+			case 4:
 				show_pict_on_event(user,32,vec,0);
 				if (predmet[vec]->ustart!=NULL) {
 					sprintf(text,"%s\n",parse_phrase(predmet[vec]->ustart,user,NULL,NULL,0));
@@ -1897,7 +1887,7 @@ void use_predmet(UR_OBJECT user,char *inpstr)
 					}
 				}
 				return;
-			case 5: /* vehikel */
+			case 5:
 				if (is_free_in_room(user->room)==-1) {
 					sprintf(text,"%s uz nie je miesto.\n",user->room->where);
 					text[0]=toupper(text[0]);
@@ -1908,7 +1898,7 @@ void use_predmet(UR_OBJECT user,char *inpstr)
 				remove_from_hands(user,vec,0);
 				use_predmet(user,"");
 				return;
-			case 8: /* zbran pouzitelna aj na sebe. */
+			case 8:
 				if (predmet[vec]->ustart!=NULL) {
 					if (predmet[vec]->restrikt & 128 && !(predmet[vec]->restrikt & 1) && user->muzzled) {
 						sprintf(text,"Ved uz si umlcan%s, naco ti je %s ?\n",pohl(user,"y","a"),predmet[vec]->name);
@@ -1932,8 +1922,8 @@ void use_predmet(UR_OBJECT user,char *inpstr)
 					write_user(user,text);
 				}
 				return;
-			case 7: /* long range weapon - nastavenie primarnej zbrani */
-			case 9: /* close combat weapon - detto */
+			case 7:
+			case 9:
 				if (user->weapon!=vec) {
 					show_pict_on_event(user,32,vec,0);
 					sprintf(text,"Odteraz budes pouzivat %s pri boji aj ak mas viac zbrani.\n",predmet[vec]->akuzativ);
@@ -1946,7 +1936,7 @@ void use_predmet(UR_OBJECT user,char *inpstr)
 					write_user(user,text);
 				}
 				return;
-			case 10: /* consumable / predmet pouzitelny iba na sebe. */
+			case 10:
 				if (forbidden(user,NULL,vec))
 					return;
 				show_pict_on_event(user,32,vec,0);
@@ -1970,17 +1960,17 @@ void use_predmet(UR_OBJECT user,char *inpstr)
 						user->heal=100-user->health;
 				}
 				return;
-			case 11: /* kniha */
+			case 11:
 				show_pict_on_event(user,32,vec,0);
 				user->dur[is_in_hands(user,vec)]--;
 				show_kniha_kuziel(user,dur);
 				do_alt_funct(user,vec);
 				return;
-			case 14: /* telefon */
+			case 14:
 				sprintf(text,"Pouzi: .use %s <sprava>!\n",predmet[vec]->name);
 				write_user(user,text);
 				return;
-			case 15: /* explosive */
+			case 15:
 				if (user->dur[is_in_hands(user,vec)]>0 && predmet[vec]->error!=NULL) {
 					sprintf(text,"%s\n",parse_phrase(predmet[vec]->error,user,NULL,NULL,0));
 					write_user(user,text);
@@ -1994,7 +1984,7 @@ void use_predmet(UR_OBJECT user,char *inpstr)
 				}
 				do_alt_funct(user,vec);
 				return;
-			case 16: /* kridla */
+			case 16:
 				if (user->lieta) {
 					if (user->lieta>1 && is_free_in_hands(user)>-1) {
 						show_pict_on_event(user,32,vec,0);
@@ -2042,7 +2032,7 @@ void use_predmet(UR_OBJECT user,char *inpstr)
 				sprintf(text,"Nemas %s!\n",predmet[vec]->akuzativ);
 				write_user(user,text);
 				return;
-			case 17: /* satka */
+			case 17:
 				if (user->level<WAR) {
 					write_user(user,"Bohuzial, takyto druh utoku ma silu a schopnosti az level HRDINA!\n");
 					return;
@@ -2050,7 +2040,7 @@ void use_predmet(UR_OBJECT user,char *inpstr)
 				sprintf(text,"Pouzi: .use %s <obet>\n",predmet[vec]->name);
 				write_user(user,text);
 				return;
-			case 19: /* zapisovaci predmet */
+			case 19:
 				if (predmet[vec]->restrikt & 16 && !(predmet[vec]->restrikt & 1) && user->afro) {
 					sprintf(text,"Ale no tak, jedno afrodiziakum ti nestaci ?!\n");
 					write_user(user,text);
@@ -2064,7 +2054,7 @@ void use_predmet(UR_OBJECT user,char *inpstr)
 				if (predmet[vec]->restrikt & 256 && !(predmet[vec]->restrikt & 1)) {
 					if (!user->vis) {
 						sprintf(text,"Nema zmysel pouzit %s, ked uz si neviditeln%s!\n",predmet[vec]->akuzativ,pohl(user,"y","a"));
-						write_user(user, text);
+						write_user(user,text);
 						return;
 					}
 					if (user->viscount!=0) {
@@ -2102,11 +2092,11 @@ void use_predmet(UR_OBJECT user,char *inpstr)
 					editor(user,NULL);
 				}
 				return;
-			case 20: /* na tekvicu */
-			case 21: /* oblecko */
-			case 22: /* cizmy */
+			case 20:
+			case 21:
+			case 22:
 				if (user->predmet[HANDS+predmet[vec]->function-20]>-1) {
-					if (vec==user->predmet[HANDS+predmet[vec]->function-20]) { /* dame dole */
+					if (vec==user->predmet[HANDS+predmet[vec]->function-20]) {
 						if (is_free_in_hands(user)==-1) {
 							write_user(user,"Ved mas plne ruky..\n");
 							return;
@@ -2124,7 +2114,7 @@ void use_predmet(UR_OBJECT user,char *inpstr)
 						user->dur[HANDS+predmet[vec]->function-20]=0;
 						return;
 					}
-					else { /* neda sa oblject */
+					else {
 						if (is_in_hands(user,vec)==-1) {
 							sprintf(text,"Nemas %s!\n",predmet[vec]->akuzativ);
 							write_user(user,text);
@@ -2140,7 +2130,7 @@ void use_predmet(UR_OBJECT user,char *inpstr)
 						return;
 					}
 				}
-				else { /* mozme obliect */
+				else {
 					if (is_in_hands(user,vec)==-1) {
 						sprintf(text,"Nemas %s!\n",predmet[vec]->akuzativ);
 						write_user(user,text);
@@ -2306,7 +2296,7 @@ void throw_predmet(UR_OBJECT user)
 			write_user(user,text);
 			return;
 		}
-		if (user->pp < THROWCAN) {
+		if (user->pp<THROWCAN) {
 			sprintf(text,"Mas malo energie (%d), potrebujes aspon %d!\n",user->pp,THROWCAN);
 			write_user(user,text);
 			return;
@@ -2328,7 +2318,7 @@ void throw_predmet(UR_OBJECT user)
 				ok=1;
 		}
 		if (ok==0) {
-			if (u!=NULL) { /* heh, hadzeme do usera */
+			if (u!=NULL) {
 				if (u==user) {
 					sprintf(text,"Nemas take dlhe hnaty aby si moh%s hadzat do seba.\n",pohl(user,"ol","la"));
 					write_user(user,text);
@@ -2339,18 +2329,18 @@ void throw_predmet(UR_OBJECT user)
 					write_user(user,text);
 					return;
 				}
-				if (u->room==user->room && !(predmet[vec]->altfunct & 2)) { /* inac by sme mohli hadzat a dvihat doblba.. */
+				if (u->room==user->room && !(predmet[vec]->altfunct & 2)) {
 					sprintf(text,"Nehanbis sa hadzat takto z blizka ?!\n");
 					write_user(user,text);
 					return;
 				}
-				ok=0; /* dohodime ? */
+				ok=0;
 				for (i=0;i<MAX_LINKS;++i)
 					if (u->room->link[i]==user->room)
 						ok=1;
 				if (user->room==u->room || user->level==GOD)
-					ok=1;/* ujo god dohodi sade ;) */
-				if (ok==0) { /* nedohodime ;( */
+					ok=1;
+				if (ok==0) {
 					sprintf(text,"%s nedohodis, je to prilis daleko!\n",u->room->into);
 					text[0]=toupper(text[0]);
 					write_user(user,text);
@@ -2637,7 +2627,7 @@ void give_predmet(UR_OBJECT user)
 		write_user(user,text);
 		return;
 	}
-	if (u->ignall) { /*IGNALL*/
+	if (u->ignall) {
 		if (u->filepos)
 			write_user(user,"Uzivatel prave cita nejaky text a nechce byt ruseny.\n");
 		else if (u->malloc_start!=NULL)
@@ -2682,7 +2672,7 @@ void give_predmet(UR_OBJECT user)
 	remove_from_hands(user,vec,0);
 	sprintf(text,"Podal%s si %s %s.\n",pohl(user,"","a"),predmet[vec]->akuzativ,sklonuj(u,3));
 	write_user(user,text);
-	sprintf(text,"%s ti podal%s %s.\n",name, pohl(user,"","a"),predmet[vec]->akuzativ);
+	sprintf(text,"%s ti podal%s %s.\n",name,pohl(user,"","a"),predmet[vec]->akuzativ);
 	write_user(u,text);
 	sprintf(text,"%s podal%s %s %s.\n",name,pohl(user,"","a"),predmet[vec]->akuzativ,uname);
 	write_room_except2users(user->room,text,user,u);
@@ -2923,7 +2913,7 @@ void get_predmet(UR_OBJECT user)
 	show_pict_on_event(user,16,vec,0);
 	if (predmet[vec]->type<3)
 		wrtype=WR_ZVERY;
-	if ((predmet[vec]->type==3 || predmet[vec]->type==4) && dur==predmet[vec]->dur) { /* ak je rastlina neodtrhnuta, tak ju usklbneme */
+	if ((predmet[vec]->type==3 || predmet[vec]->type==4) && dur==predmet[vec]->dur) {
 		sprintf(text,"Odtrh%s si %s%s~FW.\n",pohl(user,"ol","la"),farba_p(vec),predmet[vec]->akuzativ);
 		write_user(user,text);
 		sprintf(text,"%s odtrh%s %s%s~FW.\n",name,pohl(user,"ol","la"),farba_p(vec),predmet[vec]->akuzativ);
@@ -2931,7 +2921,7 @@ void get_predmet(UR_OBJECT user)
 	else {
 		sprintf(text,"Zobral%s si %s%s~FW.\n",pohl(user,"","a"),farba_p(vec),predmet[vec]->akuzativ);
 		write_user(user,text);
-		sprintf(text,"%s zobral%s %s%s~FW.\n",name, pohl(user,"","a"),farba_p(vec),predmet[vec]->akuzativ);
+		sprintf(text,"%s zobral%s %s%s~FW.\n",name,pohl(user,"","a"),farba_p(vec),predmet[vec]->akuzativ);
 	}
 	write_room_except(user->room,text,user);
 	put_in_hands(user,vec,user->room->dur[is_in_room(user->room,vec)]);
@@ -3065,7 +3055,7 @@ void put_predmet(UR_OBJECT user)
 	remove_from_hands(user,vec,0);
 	sprintf(text,"Polozil%s si %s%s~FW.\n",pohl(user,"","a"),farba_p(vec),predmet[vec]->akuzativ);
 	write_user(user,text);
-	sprintf(text,"%s polozil%s %s%s~FW.\n",name, pohl(user,"","a"),farba_p(vec),predmet[vec]->akuzativ);
+	sprintf(text,"%s polozil%s %s%s~FW.\n",name,pohl(user,"","a"),farba_p(vec),predmet[vec]->akuzativ);
 	write_room_except(user->room,text,user);
 	wrtype=0;
 	if (user->sell_what==vec) {
@@ -3393,7 +3383,7 @@ void predmet_write(UR_OBJECT user,int done_editing)
 
 	if (done_editing) {
 		sprintf(filename,"pictures/%s",user->mail_to);
-		if (!(fp=ropen(filename,"a"))) { /*APPROVED*/
+		if (!(fp=ropen(filename,"a"))) {
 			sprintf(text,"CHYBA: Nemozno otvorit subor %s pre zapis v predmet_write().\n",filename);
 			write_syslog(text,0);
 			user->mail_to[0]='\0';
@@ -3413,7 +3403,7 @@ void zobraz_predmety(UR_OBJECT user,char *inpstr)
 {
 	UR_OBJECT u;
 	RM_OBJECT rm;
-	int i,y, proom,puser,vec=0,cnt,len,num=0,status;
+	int i,y,proom,puser,vec=0,cnt,len,num=0,status;
 	char tmp[8192];
 
 	i=0;
@@ -3421,493 +3411,382 @@ void zobraz_predmety(UR_OBJECT user,char *inpstr)
 		load_and_parse_predmets(user);
 		return;
 	}
-	/*
-	   if (!strcmp(word[1],"exportrooms") && user->level>=GOD) {
-	   for (rm=room_first;rm!=NULL;rm=rm->next) {
-	   text[0]='\0';
-	   for (i=0;i<MAX_LINKS;++i)
-	   if(rm->link[i]!=NULL) {
-	   strcat(text,rm->link_label[i]);
-	   strcat(text,",");
-	   }
-	   text[strlen(text)-1]='\0';
-	   strcpy(tmp,dbf_string(rm->desc_sk));
-	   sprintf(query,"replace into `rooms` (`name_sk`,`name_en`,`label`,`desc_sk`,`desc_en`,`links`,`topic`,`defaccess`,`access`,`grp`,`disabled`,`intophr`,`fromphr`,`wherephr`) values ('%s','%s','%s','%s','%s','%s','%s','%d','%d','%d',0,'%s','%s','%s');",rm->name,rm->name_en,rm->label,tmp,dbf_string(rm->desc_en),text,rm->topic,rm->access,rm->access,rm->group,rm->into,rm->from,rm->where);
-	   mysql_kvery(query);
-	   }
-	   write_user(user,"Rooms exported..\n");
-	   return;
-	   }
-	   */
-	/*
-	   if (!strcmp(word[1],"!dbstore!") && user->level>=GOD) {
-	   i=0;y=0;
-	   while (predmet[i]!=NULL) {
-	   sprintf(query,"insert into `entities` (`name`,`dativ`,`akuzativ`,`inytiv`,`food`,`type`,`weight`,`dur`,`price`,`function`,`altfunct`,`amount`,`attack`,`firerate`,`seconddur`,`pp`,`restrikt`,`tajm`,`enter`,`leave`,`inphr`,`outphr`,`ustart`,`rstart`,`ustop`,`rstop`,`userphr`,`roomphr`,`victim`,`special`,`pict`,`error`,`showpict`,`ofense`,`defense`,`udestroy`,`rdestroy`,`spawn`) values ('");
-	   strcpy(text,dbf_string(predmet[i]->name));
-	   strcat(query,text);strcat(query,"','");
-	   strcpy(text,dbf_string(predmet[i]->dativ));
-	   strcat(query,text);strcat(query,"','");
-	   strcpy(text,dbf_string(predmet[i]->akuzativ));
-	   strcat(query,text);strcat(query,"','");
-	   strcpy(text,dbf_string(predmet[i]->inytiv));
-	   strcat(query,text);strcat(query,"','");
-	   strcpy(text,dbf_string(predmet[i]->food));
-	   strcat(query,text);strcat(query,"','");
-	   sprintf(text,"%d",predmet[i]->type);
-	   strcat(query,text);strcat(query,"','");
-	   sprintf(text,"%d",predmet[i]->weight);
-	   strcat(query,text);strcat(query,"','");
-	   sprintf(text,"%d",predmet[i]->dur);
-	   strcat(query,text);strcat(query,"','");
-	   sprintf(text,"%d",predmet[i]->price);
-	   strcat(query,text);strcat(query,"','");
-	   sprintf(text,"%d",predmet[i]->function);
-	   strcat(query,text);strcat(query,"','");
-	   sprintf(text,"%d",predmet[i]->altfunct);
-	   strcat(query,text);strcat(query,"','");
-	   sprintf(text,"%d",predmet[i]->amount);
-	   strcat(query,text);strcat(query,"','");
-	   sprintf(text,"%d",predmet[i]->attack);
-	   strcat(query,text);strcat(query,"','");
-	   sprintf(text,"%d",predmet[i]->firerate);
-	   strcat(query,text);strcat(query,"','");
-	   sprintf(text,"%d",predmet[i]->seconddur);
-	   strcat(query,text);strcat(query,"','");
-	   sprintf(text,"%d",predmet[i]->pp);
-	   strcat(query,text);strcat(query,"','");
-	   sprintf(text,"%d",predmet[i]->restrikt);
-	   strcat(query,text);strcat(query,"','");
-	   sprintf(text,"%d",predmet[i]->tajm);
-	   strcat(query,text);strcat(query,"','");
-	   strcpy(text,dbf_string(predmet[i]->enter));
-	   strcat(query,text);strcat(query,"','");
-	   strcpy(text,dbf_string(predmet[i]->leave));
-	   strcat(query,text);strcat(query,"','");
-	   strcpy(text,dbf_string(predmet[i]->inphr));
-	   strcat(query,text);strcat(query,"','");
-	   strcpy(text,dbf_string(predmet[i]->outphr));
-	   strcat(query,text);strcat(query,"','");
-	   strcpy(text,dbf_string(predmet[i]->ustart));
-	   strcat(query,text);strcat(query,"','");
-	   strcpy(text,dbf_string(predmet[i]->rstart));
-	   strcat(query,text);strcat(query,"','");
-	   strcpy(text,dbf_string(predmet[i]->ustop));
-	   strcat(query,text);strcat(query,"','");
-	   strcpy(text,dbf_string(predmet[i]->rstop));
-	   strcat(query,text);strcat(query,"','");
-	   strcpy(text,dbf_string(predmet[i]->userphr));
-	   strcat(query,text);strcat(query,"','");
-	   strcpy(text,dbf_string(predmet[i]->roomphr));
-	   strcat(query,text);strcat(query,"','");
-	   strcpy(text,dbf_string(predmet[i]->victimphr));
-	   strcat(query,text);strcat(query,"','");
-	   strcpy(text,dbf_string(predmet[i]->special));
-	   strcat(query,text);strcat(query,"','");
-	   strcpy(text,dbf_string(predmet[i]->picture));
-	   strcat(query,text);strcat(query,"','");
-	   strcpy(text,dbf_string(predmet[i]->error));
-	   strcat(query,text);strcat(query,"','");
-	   sprintf(text,"%d",predmet[i]->showpict);
-	   strcat(query,text);strcat(query,"','");
-sprintf(text,"%d",predmet[i]->ofense);
-strcat(query,text);strcat(query,"','");
-sprintf(text,"%d",predmet[i]->defense);
-strcat(query,text);strcat(query,"','");
-strcpy(text,dbf_string(predmet[i]->udestroy));
-strcat(query,text);strcat(query,"','");
-strcpy(text,dbf_string(predmet[i]->rdestroy));
-strcat(query,text);strcat(query,"','");
-strcpy(text,dbf_string(predmet[i]->spawn));
-strcat(query,text);strcat(query,"');");
-if (mysql_query(&mysql,query)) {
-	sprintf(text,"~OL~FRERROR: %s\n",mysql_error(&mysql));
-	write_user(user,text);
-	y++;
-}
-i++;
-}
-sprintf(text,"Done.. %d errors.\n",y);
-write_user(user,text);
-return;
-}
-*/
-if (!strcmp(word[1],"disable")) {
-	if (word_count<3) {
-		sprintf(text,"Pouzi: .predmet disable <predmet>\n");
-		write_user(user,text);
-		return;
-	}
-	vec=expand_predmet(word[2]);
-	if (vec==-1) {
-		write_user(user,"Taky predmet neexistuje.\n");
-		return;
-	}
-	sprintf(query,"update `entities` set `disabled`='1' where `name`='%s';",predmet[vec]->name);
-	if (mysql_query(&mysql,query)) {
-		sprintf(text,"~OL~FRError: %s.\n",mysql_error(&mysql));
-		write_user(user,text);
-	}
-	else {
-		sprintf(text,"Predmet '%s' bol vyradeny.\n",predmet[vec]->name);
-		write_user(user,text);
-		load_and_parse_predmets(user);
-	}
-	return;
-}
-if (!strcmp(word[1],"enable")) {
-	if (word_count<3) {
-		sprintf(text,"Pouzi: .predmet enable <predmet>\n");
-		write_user(user,text);
-		return;
-	}
-	inpstr=remove_first(inpstr);
-	sprintf(query,"select `disabled`,`name` from `entities` where `name`='%s'",inpstr);
-	status=0;
-	if ((result=mysql_result(query))) {
-		if ((row=mysql_fetch_row(result))) {
-			if ((row[0]) && atoi(row[0])==1)
-				status=1;
-			else
-				status=2;
-			strcpy(tmp,row[1]);
+	if (!strcmp(word[1],"disable")) {
+		if (word_count<3) {
+			sprintf(text,"Pouzi: .predmet disable <predmet>\n");
+			write_user(user,text);
+			return;
 		}
-		mysql_free_result(result);
-	}
-	if (status==0) {
-		sprintf(text,"Predmet '%s' nie je definovany.\n",inpstr);
-		write_user(user,text);
-		return;
-	}
-	if (status==2) {
-		sprintf(text,"Predmet '%s' uz je aktivovany.\n",tmp);
-		write_user(user,text);
-		return;
-	}
-	sprintf(query,"update `entities` set `disabled`='0' where `name`='%s';",inpstr);
-	if (mysql_query(&mysql,query)) {
-		sprintf(text,"~OL~FRError: %s.\n",mysql_error(&mysql));
-		write_user(user,text);
-	}
-	else {
-		if (mysql_affected_rows(&mysql)) {
-			sprintf(text,"Predmet '%s' bol aktivovany.\n",tmp);
+		vec=expand_predmet(word[2]);
+		if (vec==-1) {
+			write_user(user,"Taky predmet neexistuje.\n");
+			return;
+		}
+		sprintf(query,"update `entities` set `disabled`='1' where `name`='%s';",predmet[vec]->name);
+		if (mysql_query(&mysql,query)) {
+			sprintf(text,"~OL~FRError: %s.\n",mysql_error(&mysql));
+			write_user(user,text);
+		}
+		else {
+			sprintf(text,"Predmet '%s' bol vyradeny.\n",predmet[vec]->name);
 			write_user(user,text);
 			load_and_parse_predmets(user);
 		}
-	}
-	return;
-}
-if (!strncmp(word[1],"conv",4)) {
-	if (pocet_konverzii==0)
-		write_user(user,"Nie su definovane ziadne konverzie.\n");
-	for (i=0;i<pocet_konverzii;i++) {
-		sprintf(text,"%s + %s + %s + %s\n= %20s | eli:%d%d%d%d  src:%d des:%d own:%d mana:%d S:%s\n%s\n%s\n%s\n",
-				(convert[i]->component[0]>-1)?predmet[convert[i]->component[0]]->name:"",
-				(convert[i]->component[1]>-1)?predmet[convert[i]->component[1]]->name:"",
-				(convert[i]->component[2]>-1)?predmet[convert[i]->component[2]]->name:"",
-				(convert[i]->component[3]>-1)?predmet[convert[i]->component[3]]->name:"",
-				(convert[i]->product>-1)?predmet[convert[i]->product]->name:"",
-				convert[i]->eliminate[0],convert[i]->eliminate[1],convert[i]->eliminate[2],convert[i]->eliminate[3],
-				convert[i]->source,convert[i]->destination,convert[i]->setowner,convert[i]->mana,convert[i]->spell,
-				(convert[i]->usermsg!=NULL)?convert[i]->usermsg:"-",
-				(convert[i]->roommsg!=NULL)?convert[i]->roommsg:"-",
-				(convert[i]->missing!=NULL)?convert[i]->missing:"-");
-		write_user(user,text);
-	}
-	return;
-}
-if (!strncmp(word[1],"desc",4)) {
-	if (word_count<3) {
-		write_user(user,"Pouzi: .predmet describe <predmet>\n");
 		return;
 	}
-	vec=expand_predmet(word[2]);
-	if (vec==-1) {
-		write_user(user,"Taky predmet tu nemame.\n");
+	if (!strcmp(word[1],"enable")) {
+		if (word_count<3) {
+			sprintf(text,"Pouzi: .predmet enable <predmet>\n");
+			write_user(user,text);
+			return;
+		}
+		inpstr=remove_first(inpstr);
+		sprintf(query,"select `disabled`,`name` from `entities` where `name`='%s'",inpstr);
+		status=0;
+		if ((result=mysql_result(query))) {
+			if ((row=mysql_fetch_row(result))) {
+				if ((row[0]) && atoi(row[0])==1)
+					status=1;
+				else
+					status=2;
+				strcpy(tmp,row[1]);
+			}
+			mysql_free_result(result);
+		}
+		if (status==0) {
+			sprintf(text,"Predmet '%s' nie je definovany.\n",inpstr);
+			write_user(user,text);
+			return;
+		}
+		if (status==2) {
+			sprintf(text,"Predmet '%s' uz je aktivovany.\n",tmp);
+			write_user(user,text);
+			return;
+		}
+		sprintf(query,"update `entities` set `disabled`='0' where `name`='%s';",inpstr);
+		if (mysql_query(&mysql,query)) {
+			sprintf(text,"~OL~FRError: %s.\n",mysql_error(&mysql));
+			write_user(user,text);
+		}
+		else {
+			if (mysql_affected_rows(&mysql)) {
+				sprintf(text,"Predmet '%s' bol aktivovany.\n",tmp);
+				write_user(user,text);
+				load_and_parse_predmets(user);
+			}
+		}
 		return;
 	}
-	sprintf(text,"\n");
+	if (!strncmp(word[1],"conv",4)) {
+		if (pocet_konverzii==0)
+			write_user(user,"Nie su definovane ziadne konverzie.\n");
+		for (i=0;i<pocet_konverzii;i++) {
+			sprintf(text,"%s + %s + %s + %s\n= %20s | eli:%d%d%d%d  src:%d des:%d own:%d mana:%d S:%s\n%s\n%s\n%s\n",
+					(convert[i]->component[0]>-1)?predmet[convert[i]->component[0]]->name:"",
+					(convert[i]->component[1]>-1)?predmet[convert[i]->component[1]]->name:"",
+					(convert[i]->component[2]>-1)?predmet[convert[i]->component[2]]->name:"",
+					(convert[i]->component[3]>-1)?predmet[convert[i]->component[3]]->name:"",
+					(convert[i]->product>-1)?predmet[convert[i]->product]->name:"",
+					convert[i]->eliminate[0],convert[i]->eliminate[1],convert[i]->eliminate[2],convert[i]->eliminate[3],
+					convert[i]->source,convert[i]->destination,convert[i]->setowner,convert[i]->mana,convert[i]->spell,
+					(convert[i]->usermsg!=NULL)?convert[i]->usermsg:"-",
+					(convert[i]->roommsg!=NULL)?convert[i]->roommsg:"-",
+					(convert[i]->missing!=NULL)?convert[i]->missing:"-");
+			write_user(user,text);
+		}
+		return;
+	}
+	if (!strncmp(word[1],"desc",4)) {
+		if (word_count<3) {
+			write_user(user,"Pouzi: .predmet describe <predmet>\n");
+			return;
+		}
+		vec=expand_predmet(word[2]);
+		if (vec==-1) {
+			write_user(user,"Taky predmet tu nemame.\n");
+			return;
+		}
+		sprintf(text,"\n");
+		i=0;
+		while (1) {
+			texthb[0]='\0';
+			num=0;
+			if (i==num)
+				sprintf(texthb,"Name:     ~OL%s\n",predmet[vec]->name);
+			num++;
+			if (i==num)
+				sprintf(texthb,"Dativ:    %s\n",predmet[vec]->dativ);
+			num++;
+			if (i==num)
+				sprintf(texthb,"Akuzativ: %s\n",predmet[vec]->akuzativ);
+			num++;
+			if (i==num)
+				sprintf(texthb,"Inytiv:   %s\n",predmet[vec]->inytiv);
+			num++;
+			if (i==num)
+				sprintf(texthb,"Type:     %d\n",predmet[vec]->type);
+			num++;
+			if (i==num)
+				sprintf(texthb,"Food:     %s\n",predmet[vec]->food);
+			num++;
+			if (i==num)
+				sprintf(texthb,"Function: %d\n",predmet[vec]->function);
+			num++;
+			if (i==num)
+				sprintf(texthb,"AltFunct: %ld\n",predmet[vec]->altfunct);
+			num++;
+			if (i==num)
+				sprintf(texthb,"Restrict: %d\n",predmet[vec]->restrikt);
+			num++;
+			if (i==num)
+				sprintf(texthb,"Durab.:   %d\n",predmet[vec]->dur);
+			num++;
+			if (i==num)
+				sprintf(texthb,"Amount:   %d\n",predmet[vec]->amount);
+			num++;
+			if (i==num)
+				sprintf(texthb,"Weight:   %d\n",predmet[vec]->weight);
+			num++;
+			if (i==num)
+				sprintf(texthb,"Price:    %d\n",predmet[vec]->price);
+			num++;
+			if (i==num)
+				sprintf(texthb,"PP:       %d\n",predmet[vec]->pp);
+			num++;
+			if (i==num)
+				if (predmet[vec]->enter!=NULL)
+					sprintf(texthb,"Enter:    %s\n",predmet[vec]->enter);
+			num++;
+			if (i==num)
+				if (predmet[vec]->leave!=NULL)
+					sprintf(texthb,"Leave:    %s\n",predmet[vec]->leave);
+			num++;
+			if (i==num)
+				if (predmet[vec]->uinphr!=NULL)
+					sprintf(texthb,"UInphr:   %s\n",predmet[vec]->uinphr);
+			num++;
+			if (i==num)
+				if (predmet[vec]->uoutphr!=NULL)
+					sprintf(texthb,"UOutphr:  %s\n",predmet[vec]->uoutphr);
+			num++;
+			if (i==num)
+				if (predmet[vec]->rinphr!=NULL)
+					sprintf(texthb,"RInphr:   %s\n",predmet[vec]->rinphr);
+			num++;
+			if (i==num)
+				if (predmet[vec]->routphr!=NULL)
+					sprintf(texthb,"ROutphr:  %s\n",predmet[vec]->routphr);
+			num++;
+			if (i==num)
+				if (predmet[vec]->ustart!=NULL)
+					sprintf(texthb,"UStart:   %s\n",predmet[vec]->ustart);
+			num++;
+			if (i==num)
+				if (predmet[vec]->rstart!=NULL)
+					sprintf(texthb,"RStart:   %s\n",predmet[vec]->rstart);
+			num++;
+			if (i==num)
+				if (predmet[vec]->ustop!=NULL)
+					sprintf(texthb,"UStop:    %s\n",predmet[vec]->ustop);
+			num++;
+			if (i==num)
+				if (predmet[vec]->rstop!=NULL)
+					sprintf(texthb,"RStop:    %s\n",predmet[vec]->rstop);
+			num++;
+			if (i==num)
+				if (predmet[vec]->userphr!=NULL)
+					sprintf(texthb,"Userphr:  %s\n",predmet[vec]->userphr);
+			num++;
+			if (i==num)
+				if (predmet[vec]->roomphr!=NULL)
+					sprintf(texthb,"Roomphr:  %s\n",predmet[vec]->roomphr);
+			num++;
+			if (i==num)
+				if(predmet[vec]->victimphr!=NULL)
+					sprintf(texthb,"Victimphr:%s\n",predmet[vec]->victimphr);
+			num++;
+			if (i==num)
+				if (predmet[vec]->special!=NULL)
+					sprintf(texthb,"Special:  %s\n",predmet[vec]->special);
+			num++;
+			if (i==num)
+				if (predmet[vec]->error!=NULL)
+					sprintf(texthb,"Error:    %s\n",predmet[vec]->error);
+			num++;
+			if (i==num)
+				sprintf(texthb,"Attack:   %d\n",predmet[vec]->attack);
+			num++;
+			if (i==num)
+				sprintf(texthb,"Firerate: %d\n",predmet[vec]->firerate);
+			num++;
+			if (i==num)
+				sprintf(texthb,"SecondDur:%d\n",predmet[vec]->seconddur);
+			num++;
+			if (i==num)
+				sprintf(texthb,"Time:     %d\n",predmet[vec]->tajm);
+			num++;
+			if (i==num)
+				if (predmet[vec]->picture!=NULL)
+					sprintf(texthb,"Picture:  %s\n",predmet[vec]->picture);
+			num++;
+			if (i==num)
+				sprintf(texthb,"ShowPict: %d\n",predmet[vec]->showpict);
+			num++;
+			if (i==num)
+				sprintf(texthb,"Ofense:   %d\n",predmet[vec]->ofense);
+			num++;
+			if (i==num)
+				sprintf(texthb,"Defense:  %d\n",predmet[vec]->defense);
+			num++;
+			if (i==num)
+				if (predmet[vec]->udestroy!=NULL)
+					sprintf(texthb,"UDestroy: %s\n",predmet[vec]->udestroy);
+			num++;
+			if (i==num)
+				if (predmet[vec]->rdestroy!=NULL)
+					sprintf(texthb,"RDestroy: %s\n",predmet[vec]->rdestroy);
+			num++;
+			if (i==num)
+				if (predmet[vec]->spawn!=NULL)
+					sprintf(texthb,"SpawnRoom:%s\n",predmet[vec]->spawn->name);
+			num++;
+			if (i==num)
+				sprintf(texthb,"SpawnArea:%d\n",predmet[vec]->spawnarea);
+			num++;
+			if (i==num)
+				if (predmet[vec]->ujoinphr!=NULL)
+					sprintf(texthb,"UJoinphr: %s\n",predmet[vec]->ujoinphr);
+			num++;
+			if (i==num)
+				if (predmet[vec]->rjoinphr!=NULL)
+					sprintf(texthb,"RJoinphr: %s\n",predmet[vec]->rjoinphr);
+			num++;
+			if (i==num)
+				if (predmet[vec]->searchphr!=NULL)
+					sprintf(texthb,"Searchphr:%s\n",predmet[vec]->searchphr);
+			if (texthb[0])
+				write_user(user,texthb);
+			if (i==num)
+				break;
+			i++;
+		}
+		return;
+	}
 	i=0;
-	while (1) {
-		texthb[0]='\0';
-		num=0;
-		if (i==num)
-			sprintf(texthb,"Name:     ~OL%s\n",predmet[vec]->name);
-		num++;
-		if (i==num)
-			sprintf(texthb,"Dativ:    %s\n",predmet[vec]->dativ);
-		num++;
-		if (i==num)
-			sprintf(texthb,"Akuzativ: %s\n",predmet[vec]->akuzativ);
-		num++;
-		if (i==num)
-			sprintf(texthb,"Inytiv:   %s\n",predmet[vec]->inytiv);
-		num++;
-		if (i==num)
-			sprintf(texthb,"Type:     %d\n",predmet[vec]->type);
-		num++;
-		if (i==num)
-			sprintf(texthb,"Food:     %s\n",predmet[vec]->food);
-		num++;
-		if (i==num)
-			sprintf(texthb,"Function: %d\n",predmet[vec]->function);
-		num++;
-		if (i==num)
-			sprintf(texthb,"AltFunct: %ld\n",predmet[vec]->altfunct);
-		num++;
-		if (i==num)
-			sprintf(texthb,"Restrict: %d\n",predmet[vec]->restrikt);
-		num++;
-		if (i==num)
-			sprintf(texthb,"Durab.:   %d\n",predmet[vec]->dur);
-		num++;
-		if (i==num)
-			sprintf(texthb,"Amount:   %d\n",predmet[vec]->amount);
-		num++;
-		if (i==num)
-			sprintf(texthb,"Weight:   %d\n",predmet[vec]->weight);
-		num++;
-		if (i==num)
-			sprintf(texthb,"Price:    %d\n",predmet[vec]->price);
-		num++;
-		if (i==num)
-			sprintf(texthb,"PP:       %d\n",predmet[vec]->pp);
-		num++;
-		if (i==num)
-			if (predmet[vec]->enter!=NULL)
-				sprintf(texthb,"Enter:    %s\n",predmet[vec]->enter);
-		num++;
-		if (i==num)
-			if (predmet[vec]->leave!=NULL)
-				sprintf(texthb,"Leave:    %s\n",predmet[vec]->leave);
-		num++;
-		if (i==num)
-			if (predmet[vec]->uinphr!=NULL)
-				sprintf(texthb,"UInphr:   %s\n",predmet[vec]->uinphr);
-		num++;
-		if (i==num)
-			if (predmet[vec]->uoutphr!=NULL)
-				sprintf(texthb,"UOutphr:  %s\n",predmet[vec]->uoutphr);
-		num++;
-		if (i==num)
-			if (predmet[vec]->rinphr!=NULL)
-				sprintf(texthb,"RInphr:   %s\n",predmet[vec]->rinphr);
-		num++;
-		if (i==num)
-			if (predmet[vec]->routphr!=NULL)
-				sprintf(texthb,"ROutphr:  %s\n",predmet[vec]->routphr);
-		num++;
-		if (i==num)
-			if (predmet[vec]->ustart!=NULL)
-				sprintf(texthb,"UStart:   %s\n",predmet[vec]->ustart);
-		num++;
-		if (i==num)
-			if (predmet[vec]->rstart!=NULL)
-				sprintf(texthb,"RStart:   %s\n",predmet[vec]->rstart);
-		num++;
-		if (i==num)
-			if (predmet[vec]->ustop!=NULL)
-				sprintf(texthb,"UStop:    %s\n",predmet[vec]->ustop);
-		num++;
-		if (i==num)
-			if (predmet[vec]->rstop!=NULL)
-				sprintf(texthb,"RStop:    %s\n",predmet[vec]->rstop);
-		num++;
-		if (i==num)
-			if (predmet[vec]->userphr!=NULL)
-				sprintf(texthb,"Userphr:  %s\n",predmet[vec]->userphr);
-		num++;
-		if (i==num)
-			if (predmet[vec]->roomphr!=NULL)
-				sprintf(texthb,"Roomphr:  %s\n",predmet[vec]->roomphr);
-		num++;
-		if (i==num)
-			if(predmet[vec]->victimphr!=NULL)
-				sprintf(texthb,"Victimphr:%s\n",predmet[vec]->victimphr);
-		num++;
-		if (i==num)
-			if (predmet[vec]->special!=NULL)
-				sprintf(texthb,"Special:  %s\n",predmet[vec]->special);
-		num++;
-		if (i==num)
-			if (predmet[vec]->error!=NULL)
-				sprintf(texthb,"Error:    %s\n",predmet[vec]->error);
-		num++;
-		if (i==num)
-			sprintf(texthb,"Attack:   %d\n",predmet[vec]->attack);
-		num++;
-		if (i==num)
-			sprintf(texthb,"Firerate: %d\n",predmet[vec]->firerate);
-		num++;
-		if (i==num)
-			sprintf(texthb,"SecondDur:%d\n",predmet[vec]->seconddur);
-		num++;
-		if (i==num)
-			sprintf(texthb,"Time:     %d\n",predmet[vec]->tajm);
-		num++;
-		if (i==num)
-			if (predmet[vec]->picture!=NULL)
-				sprintf(texthb,"Picture:  %s\n",predmet[vec]->picture);
-		num++;
-		if (i==num)
-			sprintf(texthb,"ShowPict: %d\n",predmet[vec]->showpict);
-		num++;
-		if (i==num)
-			sprintf(texthb,"Ofense:   %d\n",predmet[vec]->ofense);
-		num++;
-		if (i==num)
-			sprintf(texthb,"Defense:  %d\n",predmet[vec]->defense);
-		num++;
-		if (i==num)
-			if (predmet[vec]->udestroy!=NULL)
-				sprintf(texthb,"UDestroy: %s\n",predmet[vec]->udestroy);
-		num++;
-		if (i==num)
-			if (predmet[vec]->rdestroy!=NULL)
-				sprintf(texthb,"RDestroy: %s\n",predmet[vec]->rdestroy);
-		num++;
-		if (i==num)
-			if (predmet[vec]->spawn!=NULL)
-				sprintf(texthb,"SpawnRoom:%s\n",predmet[vec]->spawn->name);
-		num++;
-		if (i==num)
-			sprintf(texthb,"SpawnArea:%d\n",predmet[vec]->spawnarea);
-		num++;
-		if (i==num)
-			if (predmet[vec]->ujoinphr!=NULL)
-				sprintf(texthb,"UJoinphr: %s\n",predmet[vec]->ujoinphr);
-		num++;
-		if (i==num)
-			if (predmet[vec]->rjoinphr!=NULL)
-				sprintf(texthb,"RJoinphr: %s\n",predmet[vec]->rjoinphr);
-		num++;
-		if (i==num)
-			if (predmet[vec]->searchphr!=NULL)
-				sprintf(texthb,"Searchphr:%s\n",predmet[vec]->searchphr);
-		if (texthb[0])
-			write_user(user,texthb);
-		if (i==num)
-			break;
-		i++;
-	}
-	return;
-}
-i=0;
-proom=0;
-puser=0;
-len=0;
-vec=expand_predmet(word[1]);
-if (word_count>1 && vec>-1) {
-	sprintf(texthb,"%s",predmet[vec]->name);
-	sprintf(text,"%s",title(texthb,"~FG"));
-	for (rm=room_first;rm!=NULL;rm=rm->next) {
-		cnt=0;
-		for (y=0;y<MPVM;y++)
-			if (rm->predmet[y]==vec)
-				cnt++;
-		if (cnt>0) {
-			i+=cnt;
-			proom++;
-			if (cnt==1) {
-				if (rm->access & PRIVATE) {
-					sprintf(texthb,"~FR%s~FW",rm->name);
-					len-=6;
-				}
-				else
-					sprintf(texthb,"%s",rm->name);
-			}
-			else {
-				if (rm->access & PRIVATE) {
-					sprintf(texthb,"~FR%s~FW (%d)",rm->name,cnt);
-					len-=6;
-				}
-				else
-					sprintf(texthb,"%s (%d)",rm->name,cnt);
-			}
-			len+=strlen(texthb);
-			if (len>77) {
-				strcat(text,",\n");
-				len=strlen(texthb);
-			}
-			else if (proom>1) {
-				strcat(text,", ");
-				len+=2;
-			}
-			strcat(text,texthb);
-		}
-	}
-	if (proom>0)
-		strcat(text,"\n");
-	for (u=user_first;u!=NULL;u=u->next) {
-		if (u->login || u->type!=USER_TYPE || u->room==NULL)
-			continue;
-		cnt=0;
-		for (y=0;y<BODY;y++)
-			if (u->predmet[y]==vec)
-				cnt++;
-		if (cnt>0) {
-			i+=cnt;
-			puser++;
-			if (cnt==1)
-				sprintf(texthb,"%s",u->name);
-			else
-				sprintf(texthb,"%s (%d)",u->name,cnt);
-			len+=strlen(texthb);
-			if (len>77) {
-				strcat(text,",\n");
-				len=strlen(texthb);
-			}
-			else if (puser>1) {
-				strcat(text,", ");
-				len+=2;
-			}
-			strcat(text,texthb);
-		}
-	}
-	if (puser>0)
-		strcat(text,"\n");
-	sprintf(texthb,"spolu %d ks",i);
-	strcat(text,title(texthb,"~FG"));
-	if (i>0)
-		write_user(user,text);
-	else {
-		write_user(user,"Tento predmet sa momentalne nikde na talkeri nenachadza.\n");
-		if (predmet[vec]->amount>0)
-			sprintf(text,"Predmet '%s' sa automaticky doplna do poctu %d ks.\n",predmet[vec]->name,predmet[vec]->amount);
-		else
-			sprintf(text,"Predmet '%s' sa automaticky nevytvara.\n",predmet[vec]->name);
-		write_user(user,text);
-	}
-	return;
-}
-write_user(user,"~FR=-=-=-=-~BB~FY~OLHMOTNY INVESTICNY MAJETOK~RS~BK~FR-=-=-=-=-\n");
-write_user(user,"~FR|    ~OL~FYpredmet           ~RS~FR| ~OL~FYrm  ~RS~FR| ~OL~FYusr ~RS~FR| ~OL~FYsum ~RS~FR|\n");
-write_user(user,"~FR|=-=-=-=-=-=-=-=-=-=-=-|=-=-=|=-=-=|=-=-=|\n");
-while (predmet[i]!=NULL) {
-	proom=0; puser=0;
-	for (rm=room_first;rm!=NULL;rm=rm->next) {
-		for(y=0;y<MPVM;y++)
-			if (rm->predmet[y]==i)
+	proom=0;
+	puser=0;
+	len=0;
+	vec=expand_predmet(word[1]);
+	if (word_count>1 && vec>-1) {
+		sprintf(texthb,"%s",predmet[vec]->name);
+		sprintf(text,"%s",title(texthb,"~FG"));
+		for (rm=room_first;rm!=NULL;rm=rm->next) {
+			cnt=0;
+			for (y=0;y<MPVM;y++)
+				if (rm->predmet[y]==vec)
+					cnt++;
+			if (cnt>0) {
+				i+=cnt;
 				proom++;
-	}
-	for (u=user_first;u!=NULL;u=u->next) {
-		if (u->login || u->type!=USER_TYPE || u->room==NULL)
-			continue;
-		for (y=0;y<BODY;y++)
-			if (u->predmet[y]==i)
+				if (cnt==1) {
+					if (rm->access & PRIVATE) {
+						sprintf(texthb,"~FR%s~FW",rm->name);
+						len-=6;
+					}
+					else
+						sprintf(texthb,"%s",rm->name);
+				}
+				else {
+					if (rm->access & PRIVATE) {
+						sprintf(texthb,"~FR%s~FW (%d)",rm->name,cnt);
+						len-=6;
+					}
+					else
+						sprintf(texthb,"%s (%d)",rm->name,cnt);
+				}
+				len+=strlen(texthb);
+				if (len>77) {
+					strcat(text,",\n");
+					len=strlen(texthb);
+				}
+				else if (proom>1) {
+					strcat(text,", ");
+					len+=2;
+				}
+				strcat(text,texthb);
+			}
+		}
+		if (proom>0)
+			strcat(text,"\n");
+		for (u=user_first;u!=NULL;u=u->next) {
+			if (u->login || u->type!=USER_TYPE || u->room==NULL)
+				continue;
+			cnt=0;
+			for (y=0;y<BODY;y++)
+				if (u->predmet[y]==vec)
+					cnt++;
+			if (cnt>0) {
+				i+=cnt;
 				puser++;
+				if (cnt==1)
+					sprintf(texthb,"%s",u->name);
+				else
+					sprintf(texthb,"%s (%d)",u->name,cnt);
+				len+=strlen(texthb);
+				if (len>77) {
+					strcat(text,",\n");
+					len=strlen(texthb);
+				}
+				else if (puser>1) {
+					strcat(text,", ");
+					len+=2;
+				}
+				strcat(text,texthb);
+			}
+		}
+		if (puser>0)
+			strcat(text,"\n");
+		sprintf(texthb,"spolu %d ks",i);
+		strcat(text,title(texthb,"~FG"));
+		if (i>0)
+			write_user(user,text);
+		else {
+			write_user(user,"Tento predmet sa momentalne nikde na talkeri nenachadza.\n");
+			if (predmet[vec]->amount>0)
+				sprintf(text,"Predmet '%s' sa automaticky doplna do poctu %d ks.\n",predmet[vec]->name,predmet[vec]->amount);
+			else
+				sprintf(text,"Predmet '%s' sa automaticky nevytvara.\n",predmet[vec]->name);
+			write_user(user,text);
+		}
+		return;
 	}
-	if (puser>0 || proom>0) {
-		sprintf(text,"~FR| ~FG%-20s ~FR| ~FT%-3d ~FR| ~FT%-3d ~FR| ~OL~FW%-3d ~RS~FR|\n",predmet[i]->name,proom,puser,proom+puser);
-		write_user(user,text);
+	write_user(user,"~FR=-=-=-=-~BB~FY~OLHMOTNY INVESTICNY MAJETOK~RS~BK~FR-=-=-=-=-\n");
+	write_user(user,"~FR|    ~OL~FYpredmet           ~RS~FR| ~OL~FYrm  ~RS~FR| ~OL~FYusr ~RS~FR| ~OL~FYsum ~RS~FR|\n");
+	write_user(user,"~FR|=-=-=-=-=-=-=-=-=-=-=-|=-=-=|=-=-=|=-=-=|\n");
+	while (predmet[i]!=NULL) {
+		proom=0; puser=0;
+		for (rm=room_first;rm!=NULL;rm=rm->next) {
+			for(y=0;y<MPVM;y++)
+				if (rm->predmet[y]==i)
+					proom++;
+		}
+		for (u=user_first;u!=NULL;u=u->next) {
+			if (u->login || u->type!=USER_TYPE || u->room==NULL)
+				continue;
+			for (y=0;y<BODY;y++)
+				if (u->predmet[y]==i)
+					puser++;
+		}
+		if (puser>0 || proom>0) {
+			sprintf(text,"~FR| ~FG%-20s ~FR| ~FT%-3d ~FR| ~FT%-3d ~FR| ~OL~FW%-3d ~RS~FR|\n",predmet[i]->name,proom,puser,proom+puser);
+			write_user(user,text);
+		}
+		++i;
 	}
-	++i;
+	write_user(user,"~FR=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
+	if (user->level==GOD)
+		write_user(user,"Dalsie parametre: [enable | disable | describe] <predmet>\n");
 }
-write_user(user,"~FR=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
-if (user->level==GOD)
-	write_user(user,"Dalsie parametre: [enable | disable | describe] <predmet>\n");
-	}
 
 void fight_brutalis(UR_OBJECT user)
 {
@@ -4194,7 +4073,6 @@ void do_userhands()
 	UR_OBJECT user;
 	int i,ran,vec;
 	char name[20];
-	/* ak je qetina odtrhnuta, vadne, ak drzi zviera, vadne. (hmm) (V) */
 
 	for (user=user_first;user!=NULL;user=user->next) {
 		if (user->type==CLONE_TYPE || !user->zaradeny || user->login)
@@ -4246,7 +4124,7 @@ void do_userhands()
 								write_room_except(user->room,texthb,user);
 								wrtype=0;
 								if (user->dur[i]<10000)
-									put_in_room(user->room,user->predmet[i],4);/* vysmykne sa a zdrhacky */
+									put_in_room(user->room,user->predmet[i],4);
 								else
 									put_in_room(user->room,user->predmet[i],user->dur[i]);
 								user->carry-=predmet[user->predmet[i]]->weight;
@@ -4366,7 +4244,7 @@ void do_predmety(int user_trigged)
 							rm->predmet[i]=-1;
 							rm->dur[i]=0;
 							if (user_trigged==0)
-								return; /* radsej len 1 presun za heartbeat */
+								return;
 							continue;
 						}
 					}
@@ -4376,7 +4254,7 @@ void do_predmety(int user_trigged)
 							if (!u->login && u->type!=CLONE_TYPE && u->zaradeny && u->socket==(rm->dur[i]%10000)) {
 								ok=1;
 								if (u->room==rm)
-									break; /* ak majitel odletel, dlabeme nanho */
+									break;
 								if (u->room->group!=rm->group)
 									rm->dur[i]=default_dur(rm->predmet[i]);
 								else
@@ -4447,7 +4325,7 @@ void do_predmety(int user_trigged)
 									}
 							}
 						if (ok==0)
-							rm->dur[i]=default_dur(rm->predmet[i]); /* ak majitel zmizol */
+							rm->dur[i]=default_dur(rm->predmet[i]);
 						if (ok==2)
 							continue;
 					}
@@ -4559,7 +4437,6 @@ char *parse_phrase(char *str,UR_OBJECT user,UR_OBJECT u,RM_OBJECT rm,int whichty
 	}
 	else
 		ammo[0]='\0';
-
 	if (user==NULL)
 		sex=0;
 	else {
