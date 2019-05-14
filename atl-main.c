@@ -1,14 +1,3 @@
-/*) Atlantis Talker (----------------------------------------------------------
-   ____   ____                  .__           ______
-   \   \ /   /__________________|__|____     |  ____|
-    \   Y   // __ \_  __ \___   /  \__  \    |___  \      \\//
-     \     /\  ___/|  | \//    /|  |/ __ \_   ___>  | _  ==**==
-      \___/  \___  >__|  /_____ \__(____  /  <_____/ |_|  //\\
-
-----------------------------------------------------------) hadiq relase (-----
-                                         (c) 1997-2000 by Atlantis Talker group
-*/
-
 /* FIXME & TODO:
  * void invite() - da sa floodit, ak sa po sebe pytaju dvaja useri a striedaju sa
  * "Si umlcany" - prerobit muz/zena, kde este nie je
@@ -40,7 +29,7 @@ void logout_user(UR_OBJECT user,char *reason)
 		writesys(0,1,txt,user);
 		wrtype=0;
 	}
-	disconnect_user(user,3, reason);
+	disconnect_user(user,3,reason);
 }
 
 void poprehadzuj_prikazy(UR_OBJECT user)
@@ -60,7 +49,7 @@ void poprehadzuj_prikazy(UR_OBJECT user)
 		return;
 	}
 	while (fscanf(fp,"%s %d",comm,&level)!=EOF) {
-		sprintf(text,"Prikaz: %-10s Level: %d\n", comm, level);
+		sprintf(text,"Prikaz: %-10s Level: %d\n",comm,level);
 		if (user==NULL)
 			printf("%s",text);
 		else
@@ -120,7 +109,7 @@ void setpp(UR_OBJECT user,int amount)
 
 void view_history(UR_OBJECT user)
 {
-	UR_OBJECT u, u1;
+	UR_OBJECT u,u1;
 	int i,line;
 	char filename[80];
 	FILE *fp;
@@ -254,7 +243,7 @@ int lastchar(char *string,char *last)
 {
 	char tmp[USER_NAME_LEN+2];
 
-	sstrncpy(tmp, string, USER_NAME_LEN);
+	sstrncpy(tmp,string,USER_NAME_LEN);
 	strtolower(tmp);
 	if (strlen(last)>=strlen(tmp))
 		return 0;
@@ -337,7 +326,7 @@ void icqpage(UR_OBJECT user,char *inpstr)
 	inpstr=remove_first(inpstr);
 	fprintf(fp,"Sprava od: %s@%s:\n",user->name,TALKER_TELNET_HOST);
 	fprintf(fp,"%s\n",inpstr);
-	fprintf(fp,"--=[ Atlantis talker (telnet %s %d, %s ]=--\n", TALKER_TELNET_HOST,port[0],TALKER_WEB_SITE);
+	fprintf(fp,"--=[ Atlantis talker (telnet %s %d, %s ]=--\n",TALKER_TELNET_HOST,port[0],TALKER_WEB_SITE);
 	fclose(fp);
 	send_icq_page(user,icq_num,filename);
 	return;
@@ -557,7 +546,7 @@ int main(int argc,char *argv[])
 						user->hangupz=100000;
 						user->hangups=100000;
 						if (user->remote_socket[i]==user->ircsocknum)
-							sprintf(text,"~FT[IRC server ~OL%s~RS~FT uzavrel spojenie.]\n", get_ircserv_name(user->irc_serv));
+							sprintf(text,"~FT[IRC server ~OL%s~RS~FT uzavrel spojenie.]\n",get_ircserv_name(user->irc_serv));
 						else
 							sprintf(text,"~FT[~OL%s %d~RS~FT uzavrel spojenie.]\n",user->remote[i]->name,user->remote[i]->port);
 						write_user(user,text);
@@ -833,7 +822,7 @@ void got_line(UR_OBJECT user,char *inpstr)
 		show_recent_notifies(user);
 		user->afk_mesg[0]='\0';
 		if (user->vis) {
-			sprintf(text,"%s sa vratil%s ku klavesnici.\n",user->name, pohl(user,"","a"));
+			sprintf(text,"%s sa vratil%s ku klavesnici.\n",user->name,pohl(user,"","a"));
 			write_room_except(user->room,text,user);
 		}
 		if (user->afk==2) {
@@ -844,7 +833,7 @@ void got_line(UR_OBJECT user,char *inpstr)
 		user->afk=0;
 	}
 	if (!word_count) {
-		sprintf(histrecord,"%02d:%02d -enter-", tmin, tsec);
+		sprintf(histrecord,"%02d:%02d -enter-",tmin,tsec);
 		record_history(user,histrecord);
 		if (misc_ops(user,inpstr))
 			return;
@@ -1048,12 +1037,12 @@ char *get_ip_address(struct sockaddr_in acc_addr)
 	int fd[2];
 
 	sstrncpy(site,(char *)inet_ntoa(acc_addr.sin_addr),50);
-	strncpy(ipcka, site, 16);
-	strncpy(ipcka_glob, site, 16);
+	strncpy(ipcka,site,16);
+	strncpy(ipcka_glob,site,16);
 	for (i=0;i<RESCNUM;i++)
 		if (rescip[i][0]!='\0')
-			if (!strcmp(site, rescip[i])) {
-				strncpy(site, rescho[i], 50);
+			if (!strcmp(site,rescip[i])) {
+				strncpy(site,rescho[i],50);
 				resc_cached++;
 				return site;
 			}
@@ -1085,7 +1074,7 @@ char *get_ip_address(struct sockaddr_in acc_addr)
 			if (!loop) {
 				kill(pid,9);
 				close(fd[0]);
-				waitpid(pid, &status, 0);
+				waitpid(pid,&status,0);
 			}
 		}
 	}
@@ -1370,7 +1359,7 @@ void load_rooms_desc(UR_OBJECT user)
 					sprintf(text,"CHYBA\n- Nemozno alokovat miesto pre popis miestnosti!\n");
 					write_syslog(text,0);
 					if (user==NULL)
-						fprintf(stderr,"%s", text);
+						fprintf(stderr,"%s",text);
 					break;
 				}
 				strcpy(rm1->desc_sk,row[0]);
@@ -1383,7 +1372,7 @@ void load_rooms_desc(UR_OBJECT user)
 					sprintf(text,"CHYBA\n- Nemozno alokovat miesto pre anglicky popis miestnosti!\n");
 					write_syslog(text,0);
 					if (user==NULL)
-						fprintf(stderr,"%s", text);
+						fprintf(stderr,"%s",text);
 					break;
 				}
 				strcpy(rm1->desc_en,row[1]);
@@ -1441,7 +1430,7 @@ void load_rooms_desc(UR_OBJECT user)
 				fprintf(stderr,"%s",text);
 			return;
 		}
-		strcpy(alt_island_desc, tempdesc);
+		strcpy(alt_island_desc,tempdesc);
 	}
 	if (alt_plachetnica_desc!=NULL)
 		free((void *)alt_plachetnica_desc);
@@ -1489,7 +1478,7 @@ void load_rooms_desc(UR_OBJECT user)
 				fprintf(stderr,"%s",text);
 			return;
 		}
-		strcpy(alt_plachetnica_desc, tempdesc);
+		strcpy(alt_plachetnica_desc,tempdesc);
 	}
 	if (alt_home_desc!=NULL)
 		free((void *)alt_home_desc);
@@ -1537,7 +1526,7 @@ void load_rooms_desc(UR_OBJECT user)
 				fprintf(stderr,"%s",text);
 			return;
 		}
-		strcpy(alt_home_desc, tempdesc);
+		strcpy(alt_home_desc,tempdesc);
 	}
 	if (user==NULL)
 		fprintf(stderr,"OK\n");
@@ -2045,12 +2034,12 @@ void sig_handler(int sig)
 			break;
 	}
 	sprintf(text,"\n\n\07~OL~FRSYSTEM:~FR~LI POHROMA - %s\n\n",dovod);
-	write_room(NULL, text);
-	sprintf(text,"WARNING: %s signal received!\n", dovod);
+	write_room(NULL,text);
+	sprintf(text,"WARNING: %s signal received!\n",dovod);
 	write_syslog(text,1);
-	sprintf(text,"WARNING: %s signal received!", dovod);
+	sprintf(text,"WARNING: %s signal received!",dovod);
 	log_commands(text,"",1);
-	sprintf(r,"signal (%s)", dovod);
+	sprintf(r,"signal (%s)",dovod);
 	if (shtdn)
 		talker_shutdown(NULL,r,0);
 	force_listen=0;
@@ -2147,7 +2136,7 @@ ssize_t twrite(int fd,const void *buf,size_t count)
 	tv.tv_sec=2;
 	tv.tv_usec=666;
 	FD_ZERO(&wfd);
-	FD_SET(fd, &wfd);
+	FD_SET(fd,&wfd);
 	if (select(fd+1,NULL,&wfd,NULL,&tv)<1) {
 		writeerror=1;
 		tajmauts++;
@@ -2156,7 +2145,7 @@ ssize_t twrite(int fd,const void *buf,size_t count)
 #ifndef WIN32
 	siginterrupt(SIGALRM,1);
 #endif
-	signal(SIGALRM, twrite_timeout);
+	signal(SIGALRM,twrite_timeout);
 	alarm(TIMEOUT);
 	retval=write(fd,buf,count);
 	alarm(0);
@@ -2660,9 +2649,9 @@ void login(UR_OBJECT user,char *inpstr)
 					write_user(user,"\nTvoja prezyvka: ");
 				return;
 			}
-			if (strstr(inpstr, "set ")==inpstr) {
+			if (strstr(inpstr,"set ")==inpstr) {
 				char *word1=inpstr+4;
-				if (!strcmp(word1, "xml")) {
+				if (!strcmp(word1,"xml")) {
 					if (user->xml_buffer == NULL) {
 						write_user(user,"XML mode on\n");
 						create_user_xml(user);
@@ -2674,7 +2663,7 @@ void login(UR_OBJECT user,char *inpstr)
 						user->output_format=OUTPUT_FORMAT_PLAIN;
 					}
 				}
-				write_user (user, "\nTvoja prezyvka: ");
+				write_user(user,"\nTvoja prezyvka: ");
 				return;
 			}
 			if (!strcmp(name,"**")) {
@@ -2714,7 +2703,7 @@ void login(UR_OBJECT user,char *inpstr)
 			name[0]=toupper(name[0]);
 			temp=jdb_info(DB_BAN,name);
 			if (temp!=NULL) {
-				sprintf(text,"\nTento uzivatel bol vyhosteny z Atlantidy.\nDovod: %s\n", temp);
+				sprintf(text,"\nTento uzivatel bol vyhosteny z Atlantidy.\nDovod: %s\n",temp);
 				write_user(user,text);
 				sprintf(text,"Pokus o prihlasenie bannuteho uzivatela %s z adresy %s!!!\n",name,user->site);
 				write_syslog(text,1);
@@ -2722,12 +2711,12 @@ void login(UR_OBJECT user,char *inpstr)
 				return;
 			}
 			if (user_banned(name)) {
-				sprintf(text,"Prepac, toto meno (%s) nemozes mat. Vyber si ine.\n\n", name);
+				sprintf(text,"Prepac, toto meno (%s) nemozes mat. Vyber si ine.\n\n",name);
 				write_user(user,text);
 				attempts(user);
 				return;
 			}
-			sstrncpy(user->name,name, USER_NAME_LEN);
+			sstrncpy(user->name,name,USER_NAME_LEN);
 			for (u=user_first;u!=NULL;u=u->next) {
 				if (u->login && u!=user && !strcmp(u->name,user->name)) {
 					disconnect_user(u,3,NULL);
@@ -2752,7 +2741,7 @@ void login(UR_OBJECT user,char *inpstr)
 				if (newuser_siteban(user->site)) {
 					sprintf(text,"\nPrepac, z tejto adresy (%s) nieje momentalne mozne\nvytvaranie novych kont.\n",user->site);
 					write_user(user,text);
-					disconnect_user(user, 3,NULL);
+					disconnect_user(user,3,NULL);
 					return;
 				}
 				if (user->port==port[1]) {
@@ -2848,7 +2837,7 @@ void login(UR_OBJECT user,char *inpstr)
 					return;
 				}
 				write_user(user,"\n\nNespravne heslo - prihlasenie zlyhalo.\n\n");
-				sprintf(text,"Incorrect login (%s) from %s\n",user->name, user->site);
+				sprintf(text,"Incorrect login (%s) from %s\n",user->name,user->site);
 				write_syslog(text,1);
 				attempts(user);
 			}
@@ -3137,7 +3126,7 @@ void connect_user(UR_OBJECT user)
 			rm=u->room;
 			sprintf(text,"\n\nUz si raz prihlasen%s z %s, rusim predchadzajuce spojenie ...\n",pohl(user,"y","a"),u->site);
 			write_user(user,text);
-			sprintf(text,"\n\n~OLPrihlasil%s si sa znova z %s. Rusim spojenie ...\n", pohl(u,"","a"),user->site);
+			sprintf(text,"\n\n~OLPrihlasil%s si sa znova z %s. Rusim spojenie ...\n",pohl(u,"","a"),user->site);
 			write_user(u,text);
 			if (u->statline==CHARMODE) {
 				u->statline=NONEMODE;
@@ -3225,7 +3214,7 @@ void connect_user(UR_OBJECT user)
 		if ((user->room=get_room("zalar",NULL))==NULL)
 			user->room=room_first;
 	if (!strcmp(user->name,"Guest") && guest.name[0]!='\0') {
-		sprintf(user->desc, "~OL~FW%s", guest.name);
+		sprintf(user->desc,"~OL~FW%s",guest.name);
 		if ((rm=get_room(GUEST_ROOM,NULL))==NULL)
 			user->room=get_room("namestie",NULL);
 		else
@@ -3286,14 +3275,14 @@ void connect_user(UR_OBJECT user)
 	if (user->wrap)
 		write_user(user,"\033[?7h");
 	write_user(user,"\n");
-	sprintf(text,"~OL~FB+~RS~FB-~OL~FY Vitaj v Atlantide, %s! ~RS~FB", user->name);
+	sprintf(text,"~OL~FB+~RS~FB-~OL~FY Vitaj v Atlantide, %s! ~RS~FB",user->name);
 	for (i=12-strlen(user->name);i;i--)
 		chrcat(text,'-');
 	strcat(text,"------------~OL+~RS~FB------------------------------~OL+\n");
 	write_user(user,text);
-	vwrite_user(user,"~FB|~FW Uroven: ~FT%-7.7s ~FB|~FW Momentalne online: ~FT%-3d ~FWludi ~FB|~FW Posledne prihlasenie:        ~FB|\n", level_name[user->level], num_of_users);
-	vwrite_user(user,"~FB|~FW Notify: ~FT%-3d~FWludi ~FB|~FW Vtipov na jokeboarde: ~FT%-5d ~FB|~FT %-28.28s ~FB|\n",user->notify_num, pocet_vtipov, zobraz_datum((time_t *)&user->last_login, 3));
-	vwrite_user(user,"~FB|~FW Makier: ~FT%-4d    ~FB|~FW Miestnost: ~FT%-16.16s ~FB|~FT %-28.28s ~FB|\n",user->macro_num, user->room->name, user->last_site);
+	vwrite_user(user,"~FB|~FW Uroven: ~FT%-7.7s ~FB|~FW Momentalne online: ~FT%-3d ~FWludi ~FB|~FW Posledne prihlasenie:        ~FB|\n",level_name[user->level],num_of_users);
+	vwrite_user(user,"~FB|~FW Notify: ~FT%-3d~FWludi ~FB|~FW Vtipov na jokeboarde: ~FT%-5d ~FB|~FT %-28.28s ~FB|\n",user->notify_num,pocet_vtipov,zobraz_datum((time_t *)&user->last_login,3));
+	vwrite_user(user,"~FB|~FW Makier: ~FT%-4d    ~FB|~FW Miestnost: ~FT%-16.16s ~FB|~FT %-28.28s ~FB|\n",user->macro_num,user->room->name,user->last_site);
 	write_user(user,"~OL~FB+~RS~FB-----------------~OL+~RS~FB-----------------------------~OL+~RS~FB------------------------------~OL+\n");
 	if ((user_counter=counter_db(1))!=0) {
 		sprintf(text,"Si navstevnikom cislo %d, gratulujeme!\n",user_counter);
@@ -3312,7 +3301,7 @@ void connect_user(UR_OBJECT user)
 	if ((user->level>=KIN) && (minlogin_level!=-1))
 		write_user(user,"~OL~FRPozor: je nastaveny minlogin!\n");
 	if (user->level)
-		hint(user, 1);
+		hint(user,1);
 	if (user->level) {
 		sprintf(filename,"select body from files where filename='%s'",motd2_file);
 		switch (sqlmore(user,user->socket,filename)) {
@@ -3352,8 +3341,8 @@ void connect_user(UR_OBJECT user)
 		parse(user,"auto",0);
 	}
 	if (user==guest.user && guest.on) {
-		sprintf(text,"~OL~FY%s, vitame Ta v Atlantide!\n", guest.name);
-		write_room(user->room, text);
+		sprintf(text,"~OL~FY%s, vitame Ta v Atlantide!\n",guest.name);
+		write_room(user->room,text);
 	}
 	word_count=0;
 	who_for_web();
@@ -3562,7 +3551,7 @@ void disconnect_user(UR_OBJECT user,int message,char *dovod1)
 	zrus_pager_haldu(user);
 	if (user->lynx) {
 		kill(-user->lynx,9);
-		waitpid(user->lynx, &status, 0);
+		waitpid(user->lynx,&status,0);
 	}
 	sprintf(tempfilename,"%s%c%s-lynx%s",TMPFOLDER,DIRSEP,user->name,TMPSUFFIX);
 	if ((fp=ropen(text,"r"))!=NULL) {
@@ -3594,12 +3583,12 @@ void disconnect_user(UR_OBJECT user,int message,char *dovod1)
 	if (user->chrac>0) {
 		word_count=2;
 		strcpy(word[1],"koniec");
-		clovece(user, NULL);
+		clovece(user,NULL);
 	}
 	if (user->fhrac>-1) {
 		word_count=2;
 		strcpy(word[1],"koniec");
-		farar(user, NULL);
+		farar(user,NULL);
 	}
 	if (user->xannel!=NULL) {
 		word_count=2;
@@ -3687,7 +3676,7 @@ void disconnect_user(UR_OBJECT user,int message,char *dovod1)
 		guest.user=NULL;
 	}
 	if (user==guest.talk && guest.on && guest.moderator!=NULL) {
-		sprintf(text,"~OL%s mal%s slovo a odhlasil%s sa, udel slovo niekomu inemu!\n", user->name, pohl(user,"","a"), pohl(user,"","a"));
+		sprintf(text,"~OL%s mal%s slovo a odhlasil%s sa, udel slovo niekomu inemu!\n",user->name,pohl(user,"","a"),pohl(user,"","a"));
 		write_user(guest.moderator,text);
 		guest.talk=NULL;
 	}
@@ -3723,7 +3712,7 @@ void disconnect_user(UR_OBJECT user,int message,char *dovod1)
 			}
 			sprintf(text,"\n~OL~FB.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._~RS\n");
 			write_user(user,text);
-			sprintf(text,"~OL~FT   Odhlasuje sa ~FW~BB%s %s~RS~FT~OL dna ~BB~FW%s~RS~FT~OL miestneho casu.~RS\n",level_name[user->level], user->name,long_date(3));
+			sprintf(text,"~OL~FT   Odhlasuje sa ~FW~BB%s %s~RS~FT~OL dna ~BB~FW%s~RS~FT~OL miestneho casu.~RS\n",level_name[user->level],user->name,long_date(3));
 			writecent(user,text);
 			sprintf(text,"~OL~FT   Stravil%s si tu ~BB~FW%d~RS~FT~OL minut.",pohl(user,"","a"),mins);
 			if (user->muzzled && !user->jailed)
@@ -3794,7 +3783,7 @@ void disconnect_user(UR_OBJECT user,int message,char *dovod1)
 		if (user->vis) {
 			if (check_notify_user(u2,user) && u2!=user) {
 				if (dovod!=NULL && (u2->ignsys || u2->ignnongreenhorn))
-					sprintf(text,"~LB~OL~FR%s~RS~FR sa ti prave odhlasil%s [~OL%s~RS~FR]\n",user->name,pohl(user,"","a"), dovod);
+					sprintf(text,"~LB~OL~FR%s~RS~FR sa ti prave odhlasil%s [~OL%s~RS~FR]\n",user->name,pohl(user,"","a"),dovod);
 				else
 					sprintf(text,"~LB~OL~FR%s~RS~FR sa ti prave odhlasil%s.\n",user->name,pohl(user,"","a"));
 				write_user(u2,text);
@@ -3900,8 +3889,8 @@ void send_recent_tells(UR_OBJECT user,int sp)
 			return;
 		time (&akt_cas);
 		fprintf(fp,"From: Atlantis Talker <%s@%s>\n",TALKER_EMAIL_ALIAS,TALKER_EMAIL_HOST);
-		fprintf(fp,"To: %s <%s>\n", user->name,user->email);
-		fprintf(fp,"Subject: revtell (%s)\n\n", zobraz_datum(&akt_cas,5));
+		fprintf(fp,"To: %s <%s>\n",user->name,user->email);
+		fprintf(fp,"Subject: revtell (%s)\n\n",zobraz_datum(&akt_cas,5));
 	}
 	for (i=0;i<REVTELL_LINES;++i) {
 		line=(user->revline+i)%REVTELL_LINES;
@@ -3954,7 +3943,7 @@ int misc_ops(UR_OBJECT user,char *inpstr)
 
 	if (user->misc_op) {
 		sprintf(histrecord,"%02d:%02d *%d",tmin,tsec,user->misc_op);
-		record_history(user, histrecord);
+		record_history(user,histrecord);
 	}
 	switch (user->misc_op) {
 		case 1:
@@ -4270,7 +4259,7 @@ int misc_ops(UR_OBJECT user,char *inpstr)
 				write_user(user,"vediet Tvoje pohlavie (zadaj: muz (male) alebo zena (female))\nPohlavie: ");
 				return 1;
 			}
-			write_user(user, "\n~FWNevadi, prihlasit sa mozes aj neskor (.pomoc mlist)\n\n");
+			write_user(user,"\n~FWNevadi, prihlasit sa mozes aj neskor (.pomoc mlist)\n\n");
 			write_user(user,"Aby sa vypisy (oslovenia apod.) zobrazovali gramaticky spravne, potrebujeme\n");
 			write_user(user,"vediet Tvoje pohlavie - zadaj: muz (male) alebo zena (female))\nPohlavie: ");
 			user->misc_op=17;
@@ -4457,10 +4446,10 @@ void posielanie(UR_OBJECT user)
 		}
 	}
 	fclose(fp);
-	write_user(user, "\n~OLVyborne, uspesne si sa zaregistroval. ~RSKazdu chvilu ocakavaj email v ktorom sa\n");
-	write_user(user, "dozvies svoje request-heslo. Potom zadaj prikaz ~OL.request <heslo>~RS a stanes sa\n");
-	write_user(user, "plnopravnym obcanom Atlantisu.\n\n");
-	strcpy(samo, "aeiouy");
+	write_user(user,"\n~OLVyborne, uspesne si sa zaregistroval. ~RSKazdu chvilu ocakavaj email v ktorom sa\n");
+	write_user(user,"dozvies svoje request-heslo. Potom zadaj prikaz ~OL.request <heslo>~RS a stanes sa\n");
+	write_user(user,"plnopravnym obcanom Atlantisu.\n\n");
+	strcpy(samo,"aeiouy");
 	strcpy(spolu,"bcdfghjklmnprstvz");
 	srand((unsigned int)time(&t));
 	heslo[0]=spolu[(rand()%17)];
@@ -4485,7 +4474,7 @@ void posielanie(UR_OBJECT user)
 	sprintf(par,"./posli %s %s %s %s",user->name,user->email,heslo,user->site);
 	switch (double_fork()) {
 		case -1:
-			sprintf(text,"~OL~FRCHYBA VO FORKOVANI PRI POKUSE POSLAT REQUEST HESLO UZIVATELOVI %s!\n", user->name);
+			sprintf(text,"~OL~FRCHYBA VO FORKOVANI PRI POKUSE POSLAT REQUEST HESLO UZIVATELOVI %s!\n",user->name);
 			writesys(KIN,1,text,NULL);
 			write_syslog(text,1); return;
 		case 0:
@@ -4494,7 +4483,7 @@ void posielanie(UR_OBJECT user)
 	}
 	sprintf(text,"~OL~FY%s ~FGuspesne dokoncil%s request, email: ~FR%s\n",user->name,pohl(user,"","a"),user->email);
 	wrtype=WR_NEWBIE;
-	writesys(WIZ, 1, text, NULL);
+	writesys(WIZ,1,text,NULL);
 	wrtype=0;
 	sprintf(text,"Request from: %s, email: %s\n",user->name,user->email);
 	write_syslog(text,1);
@@ -4534,7 +4523,7 @@ void editor(UR_OBJECT user,char *inpstr)
 					write_user(user,"Chyba: nepodarilo sa ulozit rozpisany text.\n");
 			case 'S':
 			case 'U':
-				sprintf(text,"%s ukoncil%s pisanie v editore.\n",user->name, pohl(user,"","a"));
+				sprintf(text,"%s ukoncil%s pisanie v editore.\n",user->name,pohl(user,"","a"));
 				write_room_except(user->room,text,user);
 				switch (user->misc_op) {
 					case 3:
@@ -4572,7 +4561,7 @@ void editor(UR_OBJECT user,char *inpstr)
 				return;
 			case 'Z':
 				write_user(user,"\nSprava bola zrusena.\n");
-				sprintf(text,"%s zrusil%s pisanie v editore.\n",user->name, pohl(user,"","a"));
+				sprintf(text,"%s zrusil%s pisanie v editore.\n",user->name,pohl(user,"","a"));
 				write_room_except(user->room,text,user);
 				user->subject[0]='\0';
 				editor_done(user);
@@ -4596,7 +4585,7 @@ void editor(UR_OBJECT user,char *inpstr)
 					write_user(user,"Text bol ulozeny, neskor ho mozes nacitat v editore prikazom .ins\nalebo si ho pozriet prikazom .postponed (.pos)\n");
 				else
 					write_user(user,"Chyba: nepodarilo sa ulozit rozpisany text.\n");
-				sprintf(text,"%s zrusil%s pisanie v editore.\n",user->name, pohl(user,"","a"));
+				sprintf(text,"%s zrusil%s pisanie v editore.\n",user->name,pohl(user,"","a"));
 				write_room_except(user->room,text,user);
 				user->subject[0]='\0';
 				editor_done(user);
@@ -4649,14 +4638,14 @@ void editor(UR_OBJECT user,char *inpstr)
 		}
 		if (!webuser)
 			write_user(user,"~FT01>~FW");
-		sprintf(text,"%s zacal%s nieco pisat v editore...\n",user->name, pohl(user,"",""));
+		sprintf(text,"%s zacal%s nieco pisat v editore...\n",user->name,pohl(user,"",""));
 		if (user->misc_op!=21)
 			write_room_except(user->room,text,user);
 		return;
 	}
 	if ((user->level<MOZENADAVAT) && (contains_swearing(inpstr,user)) && (ban_swearing)) {
 		write_user(user,noswearing);
-		sprintf(text,"~OL~FR~LB[CENZURA: %s sa pokusil%s pisat skaredo v editore!]~RS\n",user->name, pohl(user,"","a"));
+		sprintf(text,"~OL~FR~LB[CENZURA: %s sa pokusil%s pisat skaredo v editore!]~RS\n",user->name,pohl(user,"","a"));
 		writesys(WIZ,1,text,user);
 		sprintf(text,"~FT%02d>~RS",user->edit_line);
 		if (!webuser)
@@ -4698,7 +4687,7 @@ void editor(UR_OBJECT user,char *inpstr)
 			return;
 		}
 		if (redoline>=user->edit_line) {
-			sprintf(text,"CHYBA: Riadok c. %d este nieje napisany!\n%02d>",redoline, user->edit_line);
+			sprintf(text,"CHYBA: Riadok c. %d este nieje napisany!\n%02d>",redoline,user->edit_line);
 			write_user(user,text);
 			return;
 		}
@@ -5045,9 +5034,9 @@ void record_wizshout(char *str)
 void record_lastlog(UR_OBJECT user,int spent,char *dovod)
 {
 	if (dovod!=NULL)
-		sprintf(lastlog[lastlogline],"~FG[%02d:%02d] ~FW~OL%-12s ~RS~FT(%3d min) ~RS~FR[~OL%.50s~RS~FR]~RS\n", thour, tmin, user->name, spent, dovod);
+		sprintf(lastlog[lastlogline],"~FG[%02d:%02d] ~FW~OL%-12s ~RS~FT(%3d min) ~RS~FR[~OL%.50s~RS~FR]~RS\n",thour,tmin,user->name,spent,dovod);
 	else
-		sprintf(lastlog[lastlogline],"~FG[%02d:%02d] ~FW~OL%-12s ~RS~FT(%3d min)~RS\n", thour, tmin, user->name, spent);
+		sprintf(lastlog[lastlogline],"~FG[%02d:%02d] ~FW~OL%-12s ~RS~FT(%3d min)~RS\n",thour,tmin,user->name,spent);
 	lastlogline=(lastlogline+1)%LASTLOG_LINES;
 }
 
@@ -6390,7 +6379,7 @@ char *long_date(int which)
 		return dstr;
 	}
 	if (which==2) {
-		sprintf(dstr,"Dnes je %s %d. %s %d. Meniny ma %s.\n~OLGong oznamil %02d:%02d:%02d (skoro) presne ;).\n~OLPocet sekund od 1.1.1970: %d",day[twday],tmday,month[tmonth],tyear,meniny(tmday,tmonth),thour,tmin,tsec, (int)time(0));
+		sprintf(dstr,"Dnes je %s %d. %s %d. Meniny ma %s.\n~OLGong oznamil %02d:%02d:%02d (skoro) presne ;).\n~OLPocet sekund od 1.1.1970: %d",day[twday],tmday,month[tmonth],tyear,meniny(tmday,tmonth),thour,tmin,tsec,(int)time(0));
 		return dstr;
 	}
 	if (which)
@@ -6406,8 +6395,8 @@ char *meniny(int mday,int mmonth)
 	FILE *fp;
 	char fname[255],line[81],denmes[81];
 
-	sprintf(denmes,"%02d.%02d",mday, mmonth+1);
-	sprintf(fname, "%s%c%s",DATAFILES,DIRSEP,MENINY_FILE);
+	sprintf(denmes,"%02d.%02d",mday,mmonth+1);
+	sprintf(fname,"%s%c%s",DATAFILES,DIRSEP,MENINY_FILE);
 	if (!(fp=ropen(fname,"r"))) {
 		sprintf(text,"Nemozem najst subor s meninami!\n");
 		write_syslog(text,0);
@@ -6898,13 +6887,13 @@ RM_OBJECT create_room()
 
 void destroy_user_clones(UR_OBJECT user)
 {
-	UR_OBJECT u, next;
+	UR_OBJECT u,next;
 
 	u=user_first;
 	while (u!=NULL) {
 		next=u->next;
 		if (u->type==CLONE_TYPE && u->owner==user) {
-			sprintf(text,"Klon %s sa rozplynul v prachu.\n", u->name);
+			sprintf(text,"Klon %s sa rozplynul v prachu.\n",u->name);
 			write_room(u->room,text);
 			destruct_user(u);
 		}
@@ -7104,7 +7093,7 @@ void exec_com(UR_OBJECT user,char *inpstr)
 			return;
 		}
 		if (!odobraty && com_num!=-1 && com_level[com_num]<KIN) {
-			sprintf(text,"Tento prikaz je dostupny az od levelu %s.\n", level_name[com_level[com_num]]);
+			sprintf(text,"Tento prikaz je dostupny az od levelu %s.\n",level_name[com_level[com_num]]);
 			write_user(user,text);
 			return;
 		}
@@ -7116,7 +7105,7 @@ void exec_com(UR_OBJECT user,char *inpstr)
 		guest.getuser=1;
 	else
 		guest.getuser=0;
-	if (guest.on && !strcmp(user->room->name, GUEST_ROOM)) {
+	if (guest.on && !strcmp(user->room->name,GUEST_ROOM)) {
 		if ((com_num==SAY || com_num==EMOTE || com_num==TO_USER || com_num==THINK || com_num==SING || com_num==SIGN) && user!=guest.talk && user!=guest.moderator && user!=guest.user) {
 			write_user(user,"Nemas teraz pridelene slovo - pockaj az ti ho moderator prideli!\n");
 			return;
@@ -7985,11 +7974,11 @@ void guest_command(UR_OBJECT user,char *inpstr)
 		write_user(user,"       .guest talk Luzer         - Luzer dostane slovo\n");
 		write_user(user,"       .guest quit (off)         - ukonci guest mod\n\n");
 		if (guest.name[0]!='\0') {
-			sprintf(text,"Meno hosta: ~OL%s\n", guest.name);
+			sprintf(text,"Meno hosta: ~OL%s\n",guest.name);
 			write_user(user,text);
 		}
 		if (guest.moderator!=NULL) {
-			sprintf(text,"Moderator : ~OL%s\n", guest.moderator->name);
+			sprintf(text,"Moderator : ~OL%s\n",guest.moderator->name);
 			write_user(user,text);
 		}
 		if (!guest.on)
@@ -8022,7 +8011,7 @@ void guest_command(UR_OBJECT user,char *inpstr)
 	if (!strcmp(word[1],"talk")) {
 		if (word_count<3) {
 			if (guest.talk!=NULL) {
-				sprintf(text,"Momentalne ma slovo: ~OL%s\n", guest.talk->name);
+				sprintf(text,"Momentalne ma slovo: ~OL%s\n",guest.talk->name);
 				write_user(user,text);
 			}
 			write_user(user,"Pouzi: .guest talk <uzivatel>\n");
@@ -8034,9 +8023,9 @@ void guest_command(UR_OBJECT user,char *inpstr)
 		}
 		if ((u=get_user(word[2]))!=NULL) {
 			guest.talk=u;
-			sprintf(text,"Slovo ma: ~OL%s\n", u->name);
+			sprintf(text,"Slovo ma: ~OL%s\n",u->name);
 			write_user(user,text);
-			sprintf(text,"~OLDostal%s si slovo, mozes hovorit.\n", pohl(u,"","a"));
+			sprintf(text,"~OLDostal%s si slovo, mozes hovorit.\n",pohl(u,"","a"));
 			write_user(u,text);
 			return;
 		}
@@ -8058,7 +8047,7 @@ void guest_command(UR_OBJECT user,char *inpstr)
 			write_user(user,"Uzivatel \"Guest\" nieje prihlaseny!\n");
 			return;
 		}
-		sprintf(guest.user->desc, "~OL~FW%s",guest.name);
+		sprintf(guest.user->desc,"~OL~FW%s",guest.name);
 		if ((rm=get_room(GUEST_ROOM,NULL))==NULL)
 			guest.user->room=get_room("namestie",NULL);
 		else
@@ -8066,13 +8055,13 @@ void guest_command(UR_OBJECT user,char *inpstr)
 		guest.on=1;
 		guest.user->room->sndproof=1;
 		look(guest.user);
-		move_user(user, guest.user->room, 3);
+		move_user(user,guest.user->room,3);
 		sprintf(text,"~OL~FY%s, vitame Ta v Atlantide!\n",guest.name);
 		write_room(user->room,text);
 		return;
 	}
 	if (guest.name[0]!='\0') {
-		sprintf(text,"Meno hosta uz je nastavene: ~OL%s\n", guest.name);
+		sprintf(text,"Meno hosta uz je nastavene: ~OL%s\n",guest.name);
 		write_user(user,text);
 		if (!guest.on)
 			write_user(user,"Guest mod este nie je aktivovany (host sa musi nahlasit)\n");
@@ -8212,7 +8201,7 @@ SKIP:
 	fprintf(fp,"To: %s <%s>\n",u->name,u->email);
 	fprintf(fp,"X-mailer: Atlantis Talker ver. %s\n",ATLANTIS);
 	if (u->autofwd) {
-		fprintf(fp,"Subject: .smail od: %s\n", from);
+		fprintf(fp,"Subject: .smail od: %s\n",from);
 		fprintf(fp,"\n");
 		colour_com_strip(from);
 		fputs(from,fp);
@@ -8253,7 +8242,7 @@ void send_email(UR_OBJECT user,char *to,char *message)
 	fprintf(fp,"From: %s <%s@%s>\n",user->name,user->name,TALKER_EMAIL_HOST);
 	fprintf(fp,"To: %s <%s>\n",to,to);
 	fprintf(fp,"X-mailer: Atlantis Talker ver. %s\n",ATLANTIS);
-	fprintf(fp,"Subject: %s\n", user->subject);
+	fprintf(fp,"Subject: %s\n",user->subject);
 	fprintf(fp,"\n");
 	colour_com_strip(message);
 	fputs(message,fp);
@@ -8783,7 +8772,7 @@ void ignore(UR_OBJECT user,char *inpstr)
 				user->igngames=0;
 				return;
 			}
-			write_user(user,"Odteraz ignorujes hry (piskvorky, reversy, ...).\n");
+			write_user(user,"Odteraz ignorujes hry (piskvorky, reversi, ...).\n");
 			user->igngames=1;
 			return;
 		}
@@ -8873,7 +8862,7 @@ void ignore(UR_OBJECT user,char *inpstr)
 		sprintf(text,"~FT.ignore portalissh   ~FW- ignorujes shouty na portalise (spravcovia)    ~OL(%s)\n",noyes(user->ignportalis));
 		write_user(user,text);
 	}
-	sprintf(text,"~FT.ignore games        ~FW- ignorujes hry (piskvorky, reversy, ...)       ~OL(%s)\n",noyes(user->igngames));
+	sprintf(text,"~FT.ignore games        ~FW- ignorujes hry (piskvorky, reversi, ...)       ~OL(%s)\n",noyes(user->igngames));
 	write_user(user,text);
 	sprintf(text,"~FT.ignore autopromote  ~FW- ignorujes automaticke povysovanie             ~OL(%s)\n",noyes(user->ignautopromote));
 	write_user(user,text);
@@ -8903,7 +8892,7 @@ void toggle_ignword(UR_OBJECT user,char *inpstr)
 			write_user(user,"~FRNeignorujes~FW nijake slovo!\n");
 		else {
 
-			sprintf(text,"~FRPrestal%s~FW si ignorovat frazu: %s\n", pohl(user,"","a"), user->ignword);
+			sprintf(text,"~FRPrestal%s~FW si ignorovat frazu: %s\n",pohl(user,"","a"),user->ignword);
 			user->ignword[0]='\0';
 			write_user(user,text);
 		}
@@ -9156,7 +9145,7 @@ void set_homepage(UR_OBJECT user,char *inpstr)
 		return;
 	}
 	sstrncpy(user->homepage,inpstr,59);
-	sprintf(text,"OK, tvoja homepage bola nastavena: ~OL%s\n", user->homepage);
+	sprintf(text,"OK, tvoja homepage bola nastavena: ~OL%s\n",user->homepage);
 	write_user(user,text);
 }
 
@@ -9204,7 +9193,7 @@ void set(UR_OBJECT user,char *inpstr)
 			return;
 		}
 		if ((u=get_user(word[2]))==NULL) {
-			write_user(user, notloggedon);
+			write_user(user,notloggedon);
 			return;
 		}
 		type=word[1][4]-48;
@@ -10792,7 +10781,7 @@ void set(UR_OBJECT user,char *inpstr)
 		}
 		sstrncpy(user->email,word[2],EMAIL_LEN);
 		colour_com_strip(user->email);
-		sprintf(text,"%s si svoju email adresu na: %s\n", pohl(user,"Nastavil","Nastavila"), user->email);
+		sprintf(text,"%s si svoju email adresu na: %s\n",pohl(user,"Nastavil","Nastavila"),user->email);
 		write_user(user,text);
 		sprintf(filename,"%s%c%s",MISCFILES,DIRSEP,ADRESY_USEROV);
 		if (!(fp=ropen(filename,"a")))
@@ -10813,7 +10802,7 @@ void set(UR_OBJECT user,char *inpstr)
 	}
 	if (!strncmp(word[1],"ircni",5)) {
 		if (word_count<3) {
-			sprintf(text,"Tvoj aktualny IRC nick: ~OL%s~RS\n", user->irc_defnick);
+			sprintf(text,"Tvoj aktualny IRC nick: ~OL%s~RS\n",user->irc_defnick);
 			write_user(user,text);
 			return;
 		}
@@ -10821,14 +10810,14 @@ void set(UR_OBJECT user,char *inpstr)
 			write_user(user,"Prilis dlhy nick.\n");
 			return;
 		}
-		sstrncpy(user->irc_defnick, word[2], 20);
-		sprintf(text,"IRC nick bol nastaveny na: ~OL%s~RS\n", user->irc_defnick);
+		sstrncpy(user->irc_defnick,word[2],20);
+		sprintf(text,"IRC nick bol nastaveny na: ~OL%s~RS\n",user->irc_defnick);
 		write_user(user,text);
 		return;
 	}
 	if (!strncmp(word[1],"ircna",5)) {
 		if (word_count<3) {
-			sprintf(text,"Tvoj aktualny IRCname: ~OL%s~RS\n", user->irc_name);
+			sprintf(text,"Tvoj aktualny IRCname: ~OL%s~RS\n",user->irc_name);
 			write_user(user,text);
 			return;
 		}
@@ -10837,8 +10826,8 @@ void set(UR_OBJECT user,char *inpstr)
 			return;
 		}
 		inpstr=remove_first(inpstr);
-		sstrncpy(user->irc_name, inpstr, 49);
-		sprintf(text,"IRCname bol nastaveny na: ~OL%s~RS\n", user->irc_name);
+		sstrncpy(user->irc_name,inpstr,49);
+		sprintf(text,"IRCname bol nastaveny na: ~OL%s~RS\n",user->irc_name);
 		write_user(user,text);
 		return;
 	}
@@ -11144,7 +11133,7 @@ char *auth_sockuser2(register int s,register unsigned short local,register unsig
 	__sighandler_t old_sig;
 	struct timeval rtv;
 
-	old_sig=signal(SIGPIPE, SIG_IGN);
+	old_sig=signal(SIGPIPE,SIG_IGN);
 	FD_ZERO(&wfds);
 	FD_SET(s,&wfds);
 	rtv.tv_sec=rtimeout;
@@ -11248,7 +11237,7 @@ void whois(UR_OBJECT user)
 		return;
 	}
 	if ((u=get_user(word[1]))==NULL) {
-		write_user(user, notloggedon);
+		write_user(user,notloggedon);
 		return;
 	}
 	sprintf(text,"~FTTotoznost usera %s je: ~OL~FR%s~RS~FW\nNova poziadavka sa spracovava...\n",u->name,u->real_ident);
@@ -11300,7 +11289,7 @@ char *real_user(UR_OBJECT gdo)
 	}
 	auth_fd2(gdo->socket,&inlocal,&inremote,&local,&remote);
 	if ((real_name=auth_tcpuser2(inlocal,inremote,local,remote))==NULL) {
-		sprintf(ru, "<UNKNOWN>");
+		sprintf(ru,"<UNKNOWN>");
 		return ru;
 	}
 	else {
@@ -11365,7 +11354,7 @@ void look(UR_OBJECT user)
 	RM_OBJECT rm;
 	UR_OBJECT u;
 	char temp[82],line[451],filename[81],ptr[10];
-	int i,y, exits,users,ap,vel,vec,myp;
+	int i,y,exits,users,ap,vel,vec,myp;
 	FILE *fp;
 
 	if (word_count>1 && com_num==LOOK) {
@@ -11415,7 +11404,7 @@ void look(UR_OBJECT user)
 		write_user(user,"\n~FG[Detailnejsie informacie o riadeni letunu dostanes zadanim prikazu ~OL.pomoc letun~RS~FG]\n");
 	}
 	if ((!strcmp(rm->name,FLYER_ROOM)) && (flyer.pozicia)) {
-		sprintf(text,"\n~FG[Pilot: ~OL%-12.12s~RS~FG - Sustredenie: ~OL%d~RS~FG Vykon: ~OL%d~RS~FG Vyska: ~OL%d~RS~FG Palivo: ~OL%d~RS~FG]\n",flyer.pilot, flyer.mind,flyer.vykon,flyer.vyska,flyer.palivo);
+		sprintf(text,"\n~FG[Pilot: ~OL%-12.12s~RS~FG - Sustredenie: ~OL%d~RS~FG Vykon: ~OL%d~RS~FG Vyska: ~OL%d~RS~FG Palivo: ~OL%d~RS~FG]\n",flyer.pilot,flyer.mind,flyer.vykon,flyer.vyska,flyer.palivo);
 		write_user(user,text);
 	}
 	users=0;
@@ -11746,7 +11735,7 @@ void say(UR_OBJECT user,char *inpstr,int comm)
 		user->hidden=0;
 	}
 	sprintf(histrecord,"%02d:%02d say",tmin,tsec);
-	record_history(user, histrecord);
+	record_history(user,histrecord);
 	if (user->muzzled) {
 		write_user(user,"Si umlcany, nemozes rozpravat.\n");
 		return;
@@ -11878,7 +11867,7 @@ void think(UR_OBJECT user,char *inpstr)
 	}
 	if ((user->level<MOZENADAVAT) && (contains_swearing(inpstr,user)) && (ban_swearing)) {
 		write_user(user,noswearing);
-		sprintf(text,"~OL~FR~LB[CENZURA: %s sa pokusil%s skaredo mysliet!]~RS\n",user->name,pohl(user,"", "a"));
+		sprintf(text,"~OL~FR~LB[CENZURA: %s sa pokusil%s skaredo mysliet!]~RS\n",user->name,pohl(user,"","a"));
 		writesys(KIN,1,text,user);
 		return;
 	}
@@ -11903,16 +11892,16 @@ void sing(UR_OBJECT user,char *inpstr)
 	char *name;
 
 	if (user->muzzled) {
-		write_user(user, "Si umlcany, nemozes si ani pospevovat!\n");
+		write_user(user,"Si umlcany, nemozes si ani pospevovat!\n");
 		return;
 	}
 	if (word_count<2) {
-		write_user(user, "Co si chces zaspievat?\n");
+		write_user(user,"Co si chces zaspievat?\n");
 		return;
 	}
 	if ((user->level<MOZENADAVAT) && (contains_swearing(inpstr,user)) && (ban_swearing)) {
 		write_user(user,noswearing);
-		sprintf(text,"~OL~FR~LB[CENZURA: %s sa pokusil%s skaredo spievat!]~RS\n",user->name, pohl(user,"","a"));
+		sprintf(text,"~OL~FR~LB[CENZURA: %s sa pokusil%s skaredo spievat!]~RS\n",user->name,pohl(user,"","a"));
 		writesys(KIN,1,text,user);
 		return;
 	}
@@ -12063,7 +12052,7 @@ void shout(UR_OBJECT user,char *inpstr)
 		return;
 	}
 	if (user->pp<SHOUTCAN) {
-		sprintf(text,"Mas malo energie (%d), potrebujes aspon %d!\n",user->pp, SHOUTCAN);
+		sprintf(text,"Mas malo energie (%d), potrebujes aspon %d!\n",user->pp,SHOUTCAN);
 		write_user(user,text);
 		return;
 	}
@@ -12216,14 +12205,14 @@ void quest_command(UR_OBJECT user,char *inpstr)
 	if (quest.lastquest==questy_za_den) {
 		sprintf(text2,"~OL~FWPosledny ~RSquest uz dnes bol o ~OL~FW%-5s~RS~FW, leader ~OL~FW%s~RS~FW, ",quest.lq_time,quest.lq_leader);
 		if (strlen(quest.lq_winner)>1)
-			sprintf(text,"vitaz: ~OL~FY%s~RS~FW\n", quest.lq_winner);
+			sprintf(text,"vitaz: ~OL~FY%s~RS~FW\n",quest.lq_winner);
 		else
 			strcpy(text,"bez vyhlasenia vitaza.\n");
 		strcat(text2,text);
 	}
 	else {
 		if (quest.lastquest<questy_za_den && quest.lastquest!=0) {
-		sprintf(text2,"Quest uz dnes bol o ~OL~FW%-5s~RS~FW, leader ~OL~FW%s~RS~FW, ", quest.lq_time,quest.lq_leader);
+		sprintf(text2,"Quest uz dnes bol o ~OL~FW%-5s~RS~FW, leader ~OL~FW%s~RS~FW, ",quest.lq_time,quest.lq_leader);
 		if (strlen(quest.lq_winner)>1)
 			sprintf(text,"vitaz: ~OL~FY%s~RS~FW\n",quest.lq_winner);
 		else
@@ -12276,9 +12265,9 @@ void quest_command(UR_OBJECT user,char *inpstr)
 				return;
 			}
 			u->quest=3;
-			sprintf(text,"%s ma odteraz moznost otvorit a viest quest.\n", u->name);
+			sprintf(text,"%s ma odteraz moznost otvorit a viest quest.\n",u->name);
 			write_user(user,text);
-			sprintf(text,"~OL%s ti dal%s moznost otvorit a viest quest!\n", user->name, pohl(user,"","a"));
+			sprintf(text,"~OL%s ti dal%s moznost otvorit a viest quest!\n",user->name,pohl(user,"","a"));
 			write_user(u,text);
 			return;
 		}
@@ -12311,9 +12300,9 @@ void quest_command(UR_OBJECT user,char *inpstr)
 				sprintf(text,"~FG~OL*** Dnesny quest vedie ~FY%s~FG ***\n",user->name);
 				record_quest(text);
 				quest_logger(text);
-				strcpy(quest.lq_leader, user->name);
+				strcpy(quest.lq_leader,user->name);
 			}
-			sprintf(quest.lq_time,"%02d:%02d", thour, tmin);
+			sprintf(quest.lq_time,"%02d:%02d",thour,tmin);
 			quest.lq_winner[0]='\0';
 			quest.queston=1;
 			user->quest=2;
@@ -12344,7 +12333,7 @@ void quest_command(UR_OBJECT user,char *inpstr)
 				return;
 			}
 			u->quest=4;
-			sprintf(text,"~OL~FG%s bol%s vyhosten%s z questu!\n", u->name,pohl(u,"","a"),pohl(u,"y","a"));
+			sprintf(text,"~OL~FG%s bol%s vyhosten%s z questu!\n",u->name,pohl(u,"","a"),pohl(u,"y","a"));
 			write_user(user,text);
 			sprintf(text,"~OL~FG%s vyhostil%s %s z questu!\n",user->name,pohl(user,"","a"),sklonuj(u,4));
 			write_room_except(NULL,text,user);
@@ -12540,7 +12529,7 @@ void logtime(UR_OBJECT user)
 		return;
 	}
 	if (!(u=get_user(word[1]))) {
-		write_user(user, notloggedon);
+		write_user(user,notloggedon);
 		return;
 	}
 	if (!strcmp(word[2],"vrat")) {
@@ -12655,7 +12644,7 @@ void tell(UR_OBJECT user,char *inpstr,int reply)
 			else
 				sprintf(text,"Posledne ti hovoril: ~OL%s~RS\n","\253Im");
 		}
-		write_user(user, text);
+		write_user(user,text);
 		return;
 	}
 	if ((reply==3) && (word_count<2 || !user->lasttellto[0])) {
@@ -12664,7 +12653,7 @@ void tell(UR_OBJECT user,char *inpstr,int reply)
 		else {
 			sprintf(text,"Posledny komu si nieco hovoril%s bol(a): ~OL%s~RS\n",pohl(user,"","a"),user->lasttellto);
 		}
-		write_user(user, text);
+		write_user(user,text);
 		return;
 	}
 	if (reply==2 || !strcmp(word[1],",")) {
@@ -12693,7 +12682,7 @@ void tell(UR_OBJECT user,char *inpstr,int reply)
 			return;
 		}
 		if(!(u=get_user(user->lasttellfrom))) {
-			write_user(user, notloggedon);
+			write_user(user,notloggedon);
 			return;
 		}
 	}
@@ -13442,7 +13431,7 @@ void cooltalk(UR_OBJECT user,char *inpstr)
 			break;
 		case 8:
 			sstrncpy(temp,revert(inpstr),MAX_LAME-1);
-			sstrncpy(vysledok,lame_color(temp,2), MAX_LAME-1);
+			sstrncpy(vysledok,lame_color(temp,2),MAX_LAME-1);
 			break;
 		default:
 			write_user(user,"Bug v cooltalk()!?\n");
@@ -13543,7 +13532,7 @@ void cooltopic(UR_OBJECT user,char *inpstr)
 			break;
 		case 8:
 			sstrncpy(temp,revert(inpstr),MAX_LAME-1);
-			sstrncpy(vysledok,lame_color(temp,2), MAX_LAME-1);
+			sstrncpy(vysledok,lame_color(temp,2),MAX_LAME-1);
 			break;
 		default:
 			write_user(user,"Bug v cooltalk()!?\n");
@@ -14047,7 +14036,7 @@ void cow(UR_OBJECT user)
 	strcpy(temp,veta);
 	temp[0]=toupper(temp[0]);
 	strcpy(veta,temp);
-	sprintf(text, "~FT\252C2Vypotil%s si~RS~FW: %s\n",pohl(user,"","a"),veta);
+	sprintf(text,"~FT\252C2Vypotil%s si~RS~FW: %s\n",pohl(user,"","a"),veta);
 	write_user(user,text);
 	if (user->vis)
 		name=user->name;
@@ -14232,7 +14221,7 @@ void fortune_cookies(UR_OBJECT user)
 	}
 }
 
-void hint(UR_OBJECT user, int ihned)
+void hint(UR_OBJECT user,int ihned)
 {
 	FILE *fp;
 	char filename[255],line[501];
@@ -14321,7 +14310,7 @@ void secho(UR_OBJECT user,char *inpstr)
 	}
 	if ((user->level<MOZENADAVAT) && (contains_swearing(inpstr,user)) && (ban_swearing)) {
 		write_user(user,noswearing);
-		sprintf(text,"~OL~FR~LB[CENZURA: %s sa pokusil%s skaredo shout-echovat!]~RS\n",user->name, pohl(user,"","a"));
+		sprintf(text,"~OL~FR~LB[CENZURA: %s sa pokusil%s skaredo shout-echovat!]~RS\n",user->name,pohl(user,"","a"));
 		writesys(WIZ,1,text,user);
 		return;
 	}
@@ -14416,7 +14405,7 @@ void pecho(UR_OBJECT user,char *inpstr)
 			return;
 		}
 		else if (user->level>WIZ || u->level<user->level) {
-			sprintf(text,"%s by ta normalne mal%s ignorovat.\n",u->name, pohl(u,"","a"));
+			sprintf(text,"%s by ta normalne mal%s ignorovat.\n",u->name,pohl(u,"","a"));
 			write_user(user,text); }
 	}
 	if (check_ignore_user(user,u)) {
@@ -14452,7 +14441,7 @@ void pecho(UR_OBJECT user,char *inpstr)
 	}
 	if ((user->level<MOZENADAVAT) && (contains_swearing(inpstr,user)) && (ban_swearing)) {
 		write_user(user,noswearing);
-		sprintf(text,"~OL~FR~LB[CENZURA: %s sa pokusil%s skaredo private-echovat!]~RS\n",user->name, pohl(user,"","a"));
+		sprintf(text,"~OL~FR~LB[CENZURA: %s sa pokusil%s skaredo private-echovat!]~RS\n",user->name,pohl(user,"","a"));
 		writesys(WIZ,1,text,user);
 		return;
 	}
@@ -14910,7 +14899,7 @@ void go(UR_OBJECT user)
 					move_user(u,rm,1);
 				}
 				else {
-					sprintf(text,"Prepac, nemozes nasledovat %s %s!\n",sklonuj(user, 4),rm->into);
+					sprintf(text,"Prepac, nemozes nasledovat %s %s!\n",sklonuj(user,4),rm->into);
 					write_user(u,text);
 				}
 			}
@@ -15073,9 +15062,9 @@ void toggle_ignall(UR_OBJECT user)
 		user->ignall=1;
 		return;
 	}
-	sprintf(text,"Prestal%s si ignorovat, zase budes vsetko pocut.\n", pohl(user,"","a"));
+	sprintf(text,"Prestal%s si ignorovat, zase budes vsetko pocut.\n",pohl(user,"","a"));
 	write_user(user,text);
-	sprintf(text,"%s vas prestal%s ignorovat.\n",user->name, pohl(user,"","a"));
+	sprintf(text,"%s vas prestal%s ignorovat.\n",user->name,pohl(user,"","a"));
 	write_room_except(user->room,text,user);
 	user->ignall=0;
 }
@@ -15098,7 +15087,7 @@ void ignore_user(UR_OBJECT user)
 	UR_OBJECT u;
 	int n,cnt;
 	char tmptxt[200];
-	int je_nahlaseny=0, existuje=0;
+	int je_nahlaseny=0,existuje=0;
 	NOTIFY bunka;
 
 	if (word_count<3) {
@@ -15121,7 +15110,7 @@ void ignore_user(UR_OBJECT user)
 		strcpy(text,"");
 		for (bunka=user->ignorelist;bunka!=NULL;bunka=bunka->next) {
 			cnt++;
-			sprintf(tmptxt,"~OL~FR| ~RS~FW%-12s ", bunka->meno);
+			sprintf(tmptxt,"~OL~FR| ~RS~FW%-12s ",bunka->meno);
 			strcat(text,tmptxt);
 			if (cnt==5) {
 				strcat(text,"~OL~FR|\n~OL~FR+--------------+--------------+--------------+--------------+--------------+\n");
@@ -15158,7 +15147,7 @@ void ignore_user(UR_OBJECT user)
 		if ((u=get_user(word[2])))
 			je_nahlaseny=1;
 	}
-	if (!(delete_notify(&(user->ignorelist), word[2]))) {
+	if (!(delete_notify(&(user->ignorelist),word[2]))) {
 		if (!existuje) {
 			write_user(user,nosuchuser);
 			return;
@@ -15198,7 +15187,7 @@ void notify_user(UR_OBJECT user)
 	UR_OBJECT u;
 	int n,cnt;
 	char tmptxt[200];
-	int je_nahlaseny=0, existuje=0;
+	int je_nahlaseny=0,existuje=0;
 	NOTIFY bunka;
 
 	if ((word_count==2) && (!strcmp(word[1],"who"))) {
@@ -15248,7 +15237,7 @@ void notify_user(UR_OBJECT user)
 		}
 		if (cnt)
 			strcat(text,"+\n");
-		write_user(user, text);
+		write_user(user,text);
 		write_user(user,"Ak chces niekoho pridat/vyradit z tohoto zoznamu, napis .notify <meno>\n");
 		sprintf(text,"Momentalne mas %d %s v notify zozname.\n",user->notify_num,skloncislo(user->notify_num,"cloveka","ludi","ludi"));
 		write_user(user,text);
@@ -15277,7 +15266,7 @@ void notify_user(UR_OBJECT user)
 			write_user(user,nosuchuser);
 			return;
 		}
-		add_notify(&(user->notifylist), word[1]);
+		add_notify(&(user->notifylist),word[1]);
 		sprintf(query,"replace into `notify` (`userid`,`victim`) values('%d','%s');",user->id,word[1]);
 		mysql_kvery(query);
 		sprintf(text,"Pridal%s si do svojho notify-listu meno: ~OL%s~RS.\n",pohl(user,"","a"),word[1]);
@@ -15431,7 +15420,7 @@ void toggle_prompt(UR_OBJECT user,char *inpstr)
 		return;
 	}
 	strcpy(user->prompt_string,inpstr);
-	sprintf(text,"Prompt nastaveny na: '%s~RS~FW~BK'\n", user->prompt_string);
+	sprintf(text,"Prompt nastaveny na: '%s~RS~FW~BK'\n",user->prompt_string);
 	user->prompt=1;
 	write_user(user,text);
 }
@@ -15473,7 +15462,7 @@ int check_iophrase(char *fraza)
 {
 	char temp[PHRASE_LEN+1];
 
-	sstrncpy(temp, fraza, PHRASE_LEN);
+	sstrncpy(temp,fraza,PHRASE_LEN);
 	strtolower(temp);
 	if (strstr(temp,"povedal") || strstr(temp,"zakrical"))
 		return 1;
@@ -15844,7 +15833,7 @@ void set_topic(UR_OBJECT user,char *inpstr)
 	}
 	if ((user->level<MOZENADAVAT) && (contains_swearing(inpstr,user)) && (ban_swearing)) {
 		write_user(user,noswearing);
-		sprintf(text,"~OL~FR~LB[CENZURA: %s sa pokusil%s nastavit skaredy topic v roome %s]~RS\n",user->name,pohl(user,"","a"), user->room->name);
+		sprintf(text,"~OL~FR~LB[CENZURA: %s sa pokusil%s nastavit skaredy topic v roome %s]~RS\n",user->name,pohl(user,"","a"),user->room->name);
 		writesys(WIZ,1,text,user);
 		return;
 	}
@@ -15974,12 +15963,12 @@ void bcast(UR_OBJECT user,char *inpstr,int done_editing)
 	}
 	force_listen=1;
 	if (user->vis)
-		sprintf(text,"~LB\n~OL~FK--~RS~FW-=~OL~FW=(*~FY Dolezita sprava od %s ~OL~FW*)=~RS~FW=-~OL~FK--\n~OL~FW%s~RS~FW\n\n",sklonuj(user, 2),whichone);
+		sprintf(text,"~LB\n~OL~FK--~RS~FW-=~OL~FW=(*~FY Dolezita sprava od %s ~OL~FW*)=~RS~FW=-~OL~FK--\n~OL~FW%s~RS~FW\n\n",sklonuj(user,2),whichone);
 	else
 		sprintf(text,"~LB\n~OL~FK--~RS~FW-=~OL~FW=(*~FY DOLEZITA SPRAVA ~OL~FW*)=~RS~FW=-~OL~FK--\n~OL~FW%s~RS~FW\n\n",whichone);
 	write_room(NULL,text);
 	if (user->vis)
-		sprintf(text,"~OL~FK--~RS~FW-=~OL~FW=(* ~FW%s~FY  Dolezita sprava od %s ~OL~FW*)=~RS~FW=-~OL~FK--\n~OL~FW%s~RS~FW\n\n",long_date(3),sklonuj(user, 2),whichone);
+		sprintf(text,"~OL~FK--~RS~FW-=~OL~FW=(* ~FW%s~FY  Dolezita sprava od %s ~OL~FW*)=~RS~FW=-~OL~FK--\n~OL~FW%s~RS~FW\n\n",long_date(3),sklonuj(user,2),whichone);
 	else
 		sprintf(text,"~OL~FK--~RS~FW-=~OL~FW=(* ~FW%s~FY  DOLEZITA SPRAVA ~OL~FW*)=~RS~FW=-~OL~FK--\n~OL~FW%s~RS~FW\n\n",long_date(3),whichone);
 	record_bcast(text);
@@ -16370,7 +16359,7 @@ void customexamine(UR_OBJECT user,char *username,int testall)
 						strcpy(var,u->homepage);
 						break;
 					case 'c':
-						sprintf(var,"%s",zobraz_datum((time_t *)&u->last_login, 2));
+						sprintf(var,"%s",zobraz_datum((time_t *)&u->last_login,2));
 						break;
 					case 'k':
 						sprintf(var,"%s",zobraz_datum((time_t *)&(u->last_login),1));
@@ -16838,7 +16827,7 @@ char *parse_who_line(UR_OBJECT u,char *line,int wizzes,int users,int userlevel)
 	int align,type,pos;
 	unsigned int i,ii,width,len;
 	char temp[500],var[500],yes[32],no[32],z;
-	int secs, daysuptime, hoursuptime,idle=0,mins=0,blik,cols;
+	int secs,daysuptime,hoursuptime,idle=0,mins=0,blik,cols;
 
 	if (u!=NULL) {
 		mins=(int)(time(0)-u->last_login)/60;
@@ -17836,11 +17825,11 @@ void who_alt4(UR_OBJECT user)
 			sprintf(text,"~OL~FB[~FY%3.3s~FB]| ",u->cloak?level_name[u->cloak]:level_name[u->level]);
 		fprintf(fp,"%s",text);
 		if (u->sex==1)
-			sprintf(text,"~OL~FB[~FY%3.3s~FB] | [~FYM~FB] | ", u->room->name);
+			sprintf(text,"~OL~FB[~FY%3.3s~FB] | [~FYM~FB] | ",u->room->name);
 		else if (u->sex==0)
-			sprintf(text,"~OL~FB[~FY%3.3s~FB] | [~FRZ~FB] | ", u->room->name);
+			sprintf(text,"~OL~FB[~FY%3.3s~FB] | [~FRZ~FB] | ",u->room->name);
 		else
-			sprintf(text,"~OL~FB[~FY%3.3s~FB] | [~FY?~FB] | ", u->room->name);
+			sprintf(text,"~OL~FB[~FY%3.3s~FB] | [~FY?~FB] | ",u->room->name);
 		fprintf(fp,"%s",text);
 		strcpy(stav,"~OL~FW");
 		if (u->afk)
@@ -18390,9 +18379,9 @@ UR_OBJECT user;
 			sprintf(text,"~RS~FM%-7s ",u->cloak?level_name[u->cloak]:level_name[u->level]);
 		fprintf(fp,"%s",text);
 		if (idle>14) {
-			sprintf(text, "~RS~FM: %3d/",mins);
+			sprintf(text,"~RS~FM: %3d/",mins);
 			fprintf(fp,"%s",text);
-			sprintf(text, "~OL~FM%d\n",idle);
+			sprintf(text,"~OL~FM%d\n",idle);
 		}
 		else
 			sprintf(text,"~RS~FM: %3d/%d\n",mins,idle);
@@ -18537,7 +18526,7 @@ void who_from(UR_OBJECT user)
 		for (u=user_first;u!=NULL;u=u->next) {
 			if (u->type!=USER_TYPE || u->login)
 				continue;
-			if (strstr(u->site, odkial)) {
+			if (strstr(u->site,odkial)) {
 				sprintf(text,"~OL~FY%-12s ~RS~FR[~OL~FR%s~RS~FR]\n",u->name,u->site);
 				write_user(user,text);
 			}
@@ -18571,7 +18560,7 @@ void insult_user(UR_OBJECT user)
 		return;
 	}
 	if ((u=get_user(word[1]))==NULL) {
-		write_user(user, notloggedon);
+		write_user(user,notloggedon);
 		return;
 	}
 	if (u==user) {
@@ -18605,7 +18594,7 @@ void insult_user(UR_OBJECT user)
 			sprintf(veta,"Pocas evolucie %s %s predkov v dozornej komisii!\n",pohl(u,"mal","mala"),u->name);
 			break;
 		case 6:
-			sprintf(veta,"%s %s z vlastneho rodokmena!\n",u->name, pohl(u,"vypadol","vypadla"));
+			sprintf(veta,"%s %s z vlastneho rodokmena!\n",u->name,pohl(u,"vypadol","vypadla"));
 			break;
 		case 7:
 			sprintf(veta,"%s ma dva mozgy: jeden sa kdesi stratil a ten druhy ho hlada!\n",u->name);
@@ -18859,7 +18848,7 @@ void sclerotic(UR_OBJECT user)
 	write_syslog(text,1);
 	sprintf(text,"Poslal%s si sklerotikovi %s nove heslo, pride mu emailom.\n",pohl(user,"","a"),word[1]);
 	write_user(user,text);
-	strcpy(samo, "aeiouy");
+	strcpy(samo,"aeiouy");
 	strcpy(spolu,"bcdfghjklmnprstvz");
 	heslo[0]=spolu[(rand()%17)];
 	heslo[1]=samo[(rand()%6)];
@@ -18923,7 +18912,7 @@ void ranks(UR_OBJECT user)
 	write_user(user,text);
 	sprintf(text," ~FTLevel ~OL~FM1: OBCAN    ~RS~FW- ~OLpravoplatny obcan Atlantidy        ~OL~FM%-2d     (%-3d)      ~OL~FR%d~RS~FW\n",citizen,slave+citizen,tlt4level[1]);
 	write_user(user,text);
-	sprintf(text," ~FTLevel ~OL~FM2: VOJAK    ~RS~FW- ~OLvojak, majuci nasu doveru          ~OL~FM%-2d     (%-3d)      ~OL~FR%d~RS~FW\n", soldier,slave+citizen+soldier,tlt4level[2]);
+	sprintf(text," ~FTLevel ~OL~FM2: VOJAK    ~RS~FW- ~OLvojak, majuci nasu doveru          ~OL~FM%-2d     (%-3d)      ~OL~FR%d~RS~FW\n",soldier,slave+citizen+soldier,tlt4level[2]);
 	write_user(user,text);
 	sprintf(text," ~FTLevel ~OL~FM3: BOJOVNIK ~RS~FW- ~OLsilny a odvazny vodca bojovnikov   ~OL~FM%-2d     (%-3d)      ~OL~FR%d~RS~FW\n",warrior,slave+citizen+soldier+warrior,tlt4level[3]);
 	write_user(user,text);
@@ -18982,15 +18971,15 @@ void sign(UR_OBJECT user,char *inpstr)
 		name=user->name;
 	else
 		name=invisname(user);
-	sprintf(text, "~FR%s ~FWnapisal%s tabulku:\n",name,pohl(user,"","a"));
+	sprintf(text,"~FR%s ~FWnapisal%s tabulku:\n",name,pohl(user,"","a"));
 	write_room(user->room,text);
-	sprintf(text, "~FY%s", hv);
+	sprintf(text,"~FY%s",hv);
 	write_room(user->room,text);
 	sprintf(text,"~FY|~FW %s ~RS~FY|\n",inpstr);
 	write_room(user->room,text);
-	sprintf(text, "~FY%s", hv);
+	sprintf(text,"~FY%s",hv);
 	write_room(user->room,text);
-	sprintf(text, "~FT\252C2%s napisal%s tabulku: ~RS~FW%s\n",name,pohl(user,"","a"),inpstr);
+	sprintf(text,"~FT\252C2%s napisal%s tabulku: ~RS~FW%s\n",name,pohl(user,"","a"),inpstr);
 	record(user->room,text);
 }
 
@@ -19074,7 +19063,7 @@ void help_fonts(UR_OBJECT user)
 {
 	FILE *fp;
 	char filename[81];
-	char query[]="SELECT `fontid`, `fontname` FROM `fonts` WHERE `enabled`='Y' ORDER BY `fontid`";
+	char query[]="SELECT `fontid`,`fontname` FROM `fonts` WHERE `enabled`='Y' ORDER BY `fontid`";
 	char querylongestname[]="SELECT MAX(LENGTH(`fontname`)) as `longestname` FROM `fonts` WHERE `enabled`='Y'";
 	char querylongestid[]="SELECT LENGTH(MAX(`fontid`)) as `longestid` FROM `fonts` WHERE `enabled`='Y'";
 	MYSQL_RES *result;
@@ -19259,7 +19248,7 @@ void commands(UR_OBJECT user,int engl)
 			strcat(pom," ,");
 		if (!strcmp(comm,"quest"))
 			strcat(pom," $");
-		sprintf(temp,"%-16s ", pom);
+		sprintf(temp,"%-16s ",pom);
 		strcat(text,temp);
 		if (cnt==6) {
 			strcat(text,"\n");
@@ -19382,7 +19371,7 @@ void help_credits(UR_OBJECT user)
 	write_user(user,"~BM             ~BB             ~BT             ~BG             ~BY             ~BR             ~RS~BK~FW\n\n");
 }
 
-void review(UR_OBJECT user, char *inpstr)
+void review(UR_OBJECT user,char *inpstr)
 {
 	RM_OBJECT rm=user->room;
 	int i,line,cnt,kolko,total=0;
@@ -20113,7 +20102,7 @@ void smail(UR_OBJECT user,char *inpstr,int done_editing)
 		write_user(user,"Prilis dlha adresa!\n");
 		return;
 	}
-	sstrncpy(emailadr, word[1],99);
+	sstrncpy(emailadr,word[1],99);
 	if (strstr(emailadr,"@")) {
 		if (strpbrk(emailadr," ;$/+*[]\\<|>")) {
 			write_user(user,"Nespravne zadana email adresa!\n");
@@ -20125,7 +20114,7 @@ void smail(UR_OBJECT user,char *inpstr,int done_editing)
 		}
 		sprintf(text,"\n~OL~FK--~RS~FW-=~OL~FW=(*~RS~FW Pisanie E-mailu na adresu ~OL~FR%s ~OL~FW*)=~RS~FW=-~OL~FK--\n\n",word[1]);
 		write_user(user,text);
-		sstrncpy(user->mail_to,word[1], WORD_LEN);
+		sstrncpy(user->mail_to,word[1],WORD_LEN);
 		if (word_count>2) {
 			inpstr=remove_first(inpstr);
 			if (strlen(inpstr)>120) {
@@ -20221,7 +20210,7 @@ void smail(UR_OBJECT user,char *inpstr,int done_editing)
 	sprintf(text,"\n~OL~FK--~RS~FW-=~OL~FW=(*~RS~FW Pisanie spravy uzivatelovi ~OL~FR%s ~OL~FW*)=~RS~FW=-~OL~FK--\n\n",word[1]);
 	write_user(user,text);
 	user->misc_op=4;
-	sstrncpy(user->mail_to,word[1], WORD_LEN);
+	sstrncpy(user->mail_to,word[1],WORD_LEN);
 	editor(user,NULL);
 }
 
@@ -20260,7 +20249,7 @@ void examine(UR_OBJECT user)
 {
 	UR_OBJECT u,u2;
 	FILE *fp;
-	char filename[80],line[451], temp[400], hp[HOMEPAGE_LEN+20];
+	char filename[80],line[451],temp[400],hp[HOMEPAGE_LEN+20];
 	int new_mail,days,hours,mins,timelen,days2,hours2,mins2,idle;
 	int nasiel=0;
 	int vec,i,pos,len=0,profile=0,repos=0;
@@ -20406,7 +20395,7 @@ void examine(UR_OBJECT user)
 			texthb[0]='\0';
 			if (u->age>0)
 				sprintf(texthb," ~RS~FGAge:~OL~FW~FW%3d ~RS~FGy",u->age);
-			sprintf(text,"~RS~FGHomepage : ~OL~FW%-36.36s ~RS~FGPP/MA: ~OL~FW%3d~RS~FG/~OL~FW%-3d %s\n", hp, u->pp,u->mana,texthb);
+			sprintf(text,"~RS~FGHomepage : ~OL~FW%-36.36s ~RS~FGPP/MA: ~OL~FW%3d~RS~FG/~OL~FW%-3d %s\n",hp,u->pp,u->mana,texthb);
 			write_user(user,text);
 			if (u->logoutmsg[0] && u->logoutmsg[0]!='-') {
 				sprintf(text,"~RS~FGLogoutMsg: ~OL~FW%s\n",colour_com_strip2(u->logoutmsg,0));
@@ -20426,7 +20415,7 @@ void examine(UR_OBJECT user)
 				sprintf(texthb,"Vek:~FW%3d ~RS%s ",u->age,pohl(u,"~FTM","~FMZ"));
 			else
 				sprintf(texthb,"Pohl: ~RS~FW[%s~RS~FW] ",pohl(u,"~FTM","~FMZ"));
-			sprintf(text,"~FY~OLCelkovy cas ~RS~FB|~FW~OL %3d~RS dni~OL %2d~RS hodin ~OL%2d ~RSminut~FB| ~OL~FY%s~FB| ~OL~FYMiestnost: ~FW%-15s\n",days, hours, mins,texthb,u->room->name);
+			sprintf(text,"~FY~OLCelkovy cas ~RS~FB|~FW~OL %3d~RS dni~OL %2d~RS hodin ~OL%2d ~RSminut~FB| ~OL~FY%s~FB| ~OL~FYMiestnost: ~FW%-15s\n",days,hours,mins,texthb,u->room->name);
 			write_user(user,text);
 			sprintf(text,"~FB\\~OL~FY  Predmety ~RS~FB|~OL~FW             ~RS~FB|~OL~FW            ~RS~FB|~OL~FY Mail:~RS~FW [~LI~OL~FR%c~RS~FW] ~FB|~OL~FY Ignoruje :~OL~FW ",(new_mail>u->read_mail?'N':' '));
 			if (u->igntell)
@@ -20541,7 +20530,7 @@ void examine(UR_OBJECT user)
 		}
 		sprintf(text,"~OL~FB------------\\_______________________________________________________________~RS~FB__/ \n");
 		write_user(user,text);
-		sprintf(text,"~FB\\_____ ~OL~FYDlzka prihlasenia: ~FW%4d~FY hod. a ~FW %2d~FY min. ~FY(Necinnost: ~FW%2d~FY min. )~RS~FB _________) \n", hours2,mins2,idle);
+		sprintf(text,"~FB\\_____ ~OL~FYDlzka prihlasenia: ~FW%4d~FY hod. a ~FW %2d~FY min. ~FY(Necinnost: ~FW%2d~FY min. )~RS~FB _________) \n",hours2,mins2,idle);
 		write_user(user,text);
 	}
 	if (user->examine==2) {
@@ -20610,7 +20599,7 @@ void analyze(UR_OBJECT user)
 	hours2=(timelen)/3600;
 	mins2=(timelen%3600)/60;
 	avgidle=timelen/u->cps;
-	sprintf(temp,"%s\n",zobraz_datum((time_t *)&u->last_login, 2));
+	sprintf(temp,"%s\n",zobraz_datum((time_t *)&u->last_login,2));
 	idles=(int)(time(0)-u->last_input);
 	idlem=(int)(time(0)-u->last_input)/60;
 	idlet=u->idle+idlem;
@@ -20646,7 +20635,7 @@ void rooms(UR_OBJECT user)
 	UR_OBJECT u;
 	char access[20],*pom;
 	char nadpis[COOLBUF_LEN+2];
-	int cnt,i, ppredm=0,zwjs;
+	int cnt,i,ppredm=0,zwjs;
 	FILE *fp;
 	char filename[81];
 
@@ -20837,7 +20826,7 @@ int zmenheslo(UR_OBJECT user,int wizpass)
 			write_user(user,text);
 			sprintf(text,"~OL~FY%s ti zmenil%s heslo!\n",user->name,pohl(user,"","a"));
 			write_user(u,text);
-			sprintf(text,"%s zmenil%s heslo uzivatelovi: %s.\n",user->name,pohl(user,"", "a"),u->name);
+			sprintf(text,"%s zmenil%s heslo uzivatelovi: %s.\n",user->name,pohl(user,"","a"),u->name);
 			write_syslog(text,1);
 		}
 		else {
@@ -21404,7 +21393,7 @@ void autopromote(UR_OBJECT user,int promote)
 		user->level--;
 		sprintf(text,"\n~FR~OLPrave si bol%s pre nedostatok celkoveho casu degradovan%s na level: ~RS~OL%s!\n",pohl(user,"","a"),pohl(user,"y","a"),level_name[user->level]);
 		write_user(user,text);
-		sprintf(text,"~FR~OL%s bol%s degradovan%s na level: ~RS~OL%s ~FR(nedostatok casu).\n",user->name, pohl(user,"","a"),pohl(user,"y","a"),level_name[user->level]);
+		sprintf(text,"~FR~OL%s bol%s degradovan%s na level: ~RS~OL%s ~FR(nedostatok casu).\n",user->name,pohl(user,"","a"),pohl(user,"y","a"),level_name[user->level]);
 		write_room_except(NULL,text,user);
 		sprintf(text,"%s autoDEMOTED to level %s.\n",user->name,level_name[user->level]);
 		level_log(text);
@@ -21415,7 +21404,7 @@ void autopromote(UR_OBJECT user,int promote)
 void promote(UR_OBJECT user,char *inpstr)
 {
 	UR_OBJECT u;
-	char text2[80],*name, *temp,meno[14];
+	char text2[80],*name,*temp,meno[14];
 	int days;
 	int ph,lev;
 
@@ -21516,7 +21505,7 @@ void promote(UR_OBJECT user,char *inpstr)
 		days=u->total_login/86400;
 		if ((u->level==CIT && days<2) || (u->level==SOL && days<5) || (u->level==WAR && days<10) || (u->level==SAG && days<18) || (u->level>=PRI)) {
 			if (user->level<GOD) {
-				vwrite_user(user,"Povysit %s mozes, az ked bude mat dostatocny total-login!\n", sklonuj(u,2));
+				vwrite_user(user,"Povysit %s mozes, az ked bude mat dostatocny total-login!\n",sklonuj(u,2));
 				destruct_user(u);
 				destructed=0;
 				return;
@@ -21539,7 +21528,7 @@ void promote(UR_OBJECT user,char *inpstr)
 					return;
 				}
 			}
-			jdb_vyrad(DB_DEMOTE, u->id);
+			jdb_vyrad(DB_DEMOTE,u->id);
 		}
 		u->level++;
 		u->socket=-2;
@@ -22012,7 +22001,7 @@ void unban_user(UR_OBJECT user)
 	strcpy(kto,jdb_wizz(DB_BAN,word[1]));
 	if (strncmp(info,"Pravdepodobne",13) && strcmp(kto,user->name)) {
 		sprintf(text,"Prepac, len %s moze odblokovat tohoto uzivatela.\nDovod BANu bol: ~OL%s~RS\n",kto,info);
-		write_user(user, text);
+		write_user(user,text);
 		return;
 	}
 	uid=db_userid(word[1]);
@@ -22408,7 +22397,7 @@ void send_bomb(UR_OBJECT user)
 void send_kiss(UR_OBJECT user,char *inpstr)
 {
 	UR_OBJECT u;
-	RM_OBJECT from_rm, partner_rm;
+	RM_OBJECT from_rm,partner_rm;
 	char *name;
 	int obrazok=1;
 	int prenesie=1;
@@ -22463,7 +22452,7 @@ void send_kiss(UR_OBJECT user,char *inpstr)
 		return;
 	}
 	if (user->pp < KISSCAN) {
-		sprintf(text,"Mas malo energie (%d), potrebujes aspon %d!\n",user->pp, KISSCAN);
+		sprintf(text,"Mas malo energie (%d), potrebujes aspon %d!\n",user->pp,KISSCAN);
 		write_user(user,text);
 		return;
 	}
@@ -22545,7 +22534,7 @@ void send_kiss(UR_OBJECT user,char *inpstr)
 void kidnap(UR_OBJECT user)
 {
 	UR_OBJECT u;
-	RM_OBJECT odkial, kam;
+	RM_OBJECT odkial,kam;
 	char *name;
 
 	if (word_count<2) {
@@ -22553,7 +22542,7 @@ void kidnap(UR_OBJECT user)
 		return;
 	}
 	if (!(u=get_user(word[1]))) {
-		write_user (user,notloggedon);
+		write_user(user,notloggedon);
 		return;
 	}
 	if (u==user) {
@@ -22664,7 +22653,7 @@ void kidnap(UR_OBJECT user)
 void join(UR_OBJECT user)
 {
 	UR_OBJECT u;
-	RM_OBJECT odkial, kam;
+	RM_OBJECT odkial,kam;
 	int i,cnt=0;
 
 	if (user->room->group==4) {
@@ -22703,7 +22692,7 @@ void join(UR_OBJECT user)
 		return;
 	}
 	if (!(u=get_user(word[1]))) {
-		write_user (user,notloggedon);
+		write_user(user,notloggedon);
 		return;
 	}
 	if (u==user) {
@@ -22860,7 +22849,7 @@ void follow(UR_OBJECT user,int unfol)
 	}
 	if (unfol) {
 		if (user->follow[0]) {
-			sprintf(text,"%s si nasledovat: %s\n", pohl(user,"Prestal","Prestala"),user->follow);
+			sprintf(text,"%s si nasledovat: %s\n",pohl(user,"Prestal","Prestala"),user->follow);
 			write_user(user,text);
 			user->follow[0]='\0';
 			return;
@@ -22887,14 +22876,14 @@ void follow(UR_OBJECT user,int unfol)
 		return;
 	}
 	if (user->room!=u->room) {
-		sprintf(text,"%s nieje v tejto miestnosti!\n", u->name);
-		write_user (user,text);
+		sprintf(text,"%s nieje v tejto miestnosti!\n",u->name);
+		write_user(user,text);
 		return;
 	}
 	strcpy(user->follow,u->name);
-	sprintf(text, "%s si nasledovat %s.\n",pohl(user,"Zacal","Zacala"),sklonuj(u,4));
+	sprintf(text,"%s si nasledovat %s.\n",pohl(user,"Zacal","Zacala"),sklonuj(u,4));
 	write_user(user,text);
-	sprintf(text, "%s ta %s prenasledovat!\n",user->name,pohl(user,"zacal","zacala"));
+	sprintf(text,"%s ta %s prenasledovat!\n",user->name,pohl(user,"zacal","zacala"));
 	write_user(u,text);
 }
 
@@ -22903,7 +22892,7 @@ void send_to_jail(UR_OBJECT user,char *inpstr)
 	UR_OBJECT u;
 	char *name;
 	int cas=0;
-	char *temp, meno[14], tempcas[80];
+	char *temp,meno[14],tempcas[80];
 
 	if (word_count<3) {
 		write_user(user,"Pouzi: .jail <uzivatel> [<cas_v_minutach!> | <cancel [sure]> | <dovod>]\n");
@@ -23035,7 +23024,7 @@ void send_to_jail(UR_OBJECT user,char *inpstr)
 		write_syslog("CHYBA: Nemozno vytvorit docasny user object v send_to_jail().\n",0);
 		return;
 	}
-	sstrncpy(u->name,word[1], 12);
+	sstrncpy(u->name,word[1],12);
 	if (!load_user_details(u)) {
 		write_user(user,nosuchuser);
 		destruct_user(u);
@@ -23051,18 +23040,18 @@ void send_to_jail(UR_OBJECT user,char *inpstr)
 	if ((word_count==3 || word_count==4) && (!strncmp(word[2],"can",3))) {
 		if (u->jailed) {
 			if (u->level<=user->level) {
-				if ((temp=jdb_info(DB_JAIL, u->name))!=NULL) {
+				if ((temp=jdb_info(DB_JAIL,u->name))!=NULL) {
 					strcpy(meno,jdb_wizz(DB_JAIL,u->name));
-					if (strcmp(meno, user->name)) {
+					if (strcmp(meno,user->name)) {
 						if (user->level<GOD || strcmp(word[3],"sure")) {
-							sprintf(text,"Iba %s moze prepustit %s. Dovod zalara: ~OL%s\n", meno, sklonuj(u, 4), temp);
+							sprintf(text,"Iba %s moze prepustit %s. Dovod zalara: ~OL%s\n",meno,sklonuj(u,4),temp);
 							write_user(user,text);
 							destruct_user(u);
 							destructed=0;
 							return;
 						}
 					}
-					if (!jdb_vyrad(DB_JAIL, u->id)) {
+					if (!jdb_vyrad(DB_JAIL,u->id)) {
 						write_user(user,"Huh?!\n");
 					}
 				}
@@ -23234,9 +23223,9 @@ void send_sos(UR_OBJECT user,char *inpstr)
 			write_user(user,"Si umlcany - nemozes vysielat SOS.\n");
 			return;
 		}
-		sprintf(text,"~OL~FRPOZOR: %s ti posiela SOS:~RS~FW %s\n",user->name, inpstr);
+		sprintf(text,"~OL~FRPOZOR: %s ti posiela SOS:~RS~FW %s\n",user->name,inpstr);
 		write_level(WIZ,1,text,NULL);
-		sprintf(text,"~OL~FR%s SOSuje:~RS~FW %s\n",user->name, inpstr);
+		sprintf(text,"~OL~FR%s SOSuje:~RS~FW %s\n",user->name,inpstr);
 		record_sos(text);
 		write_user(user,"~OLVyslal si SOS signal vsetkym wizardom.\n");
 		return;
@@ -23377,7 +23366,7 @@ void write_noticeboard(UR_OBJECT user,int what,int done_editing)
 		time(&akt_cas);
 		fprintf(fp2,"From: Atlantis Talker <%s@%s>\n",TALKER_EMAIL_ALIAS,TALKER_EMAIL_HOST);
 		fprintf(fp2,"To: %s@%s\n",WIZZES_EMAIL_ALIAS,TALKER_EMAIL_HOST);
-		sprintf(text,"Subject: Notice digest (%s)\n\n", zobraz_datum(&akt_cas,4));
+		sprintf(text,"Subject: Notice digest (%s)\n\n",zobraz_datum(&akt_cas,4));
 		fprintf(fp2,"%s",text);
 		fclose(fp2);
 	}
@@ -23413,7 +23402,7 @@ void write_noticeboard(UR_OBJECT user,int what,int done_editing)
 	sprintf(text,"~OL~FR[====== ~FW%s ~FR=========================",pomocna);
 	text[46]='\0';
 	strcat(text,"============================================]\n");
-	fprintf(fp, "%s",text);
+	fprintf(fp,"%s",text);
 	colour_com_strip(text);
 	fprintf(fp2,"%s",text);
 	cnt=0;
@@ -23461,7 +23450,7 @@ void muzzle(UR_OBJECT user)
 			return;
 		}
 		if (u->muzzled>=user->level) {
-			sprintf(text,"%s uz je %s.\n",u->name, pohl(u,"umlcany","umlcana"));
+			sprintf(text,"%s uz je %s.\n",u->name,pohl(u,"umlcany","umlcana"));
 			write_user(user,text);
 			return;
 		}
@@ -23492,7 +23481,7 @@ void muzzle(UR_OBJECT user)
 		write_syslog("CHYBA: Nemozno vytvorit docasny user object v muzzle().\n",0);
 		return;
 	}
-	sstrncpy(u->name,word[1], 12);
+	sstrncpy(u->name,word[1],12);
 	if (!load_user_details(u)) {
 		write_user(user,nosuchuser);
 		destruct_user(u);
@@ -23522,7 +23511,7 @@ void muzzle(UR_OBJECT user)
 	strcpy(meno,u->name);
 	destruct_user(u);
 	destructed=0;
-	send_mail(user,meno, text);
+	send_mail(user,meno,text);
 	sprintf(text,"%s MUZZLED %s.\n",user->name,meno);
 	write_syslog(text,2);
 	police_freeze(user,1);
@@ -23554,7 +23543,7 @@ void unmuzzle(UR_OBJECT user)
 		}
 		sprintf(text,"~FG~OLOdstranil si nahubok uzivatela %s.\n",u->name);
 		write_user(user,text);
-		sprintf(text,"~FG~OL%s uzivatelom %s! Dakuj %s laskavost!\n",pohl(u,"Bol si odmlcany","Bola si odmlcana"), user->name, pohl(user,"mu za jeho","jej za jej"));
+		sprintf(text,"~FG~OL%s uzivatelom %s! Dakuj %s laskavost!\n",pohl(u,"Bol si odmlcany","Bola si odmlcana"),user->name,pohl(user,"mu za jeho","jej za jej"));
 		write_user(u,text);
 		sprintf(text,"%s UNMUZZLED %s.\n",user->name,u->name);
 		write_syslog(text,2);
@@ -23596,7 +23585,7 @@ void unmuzzle(UR_OBJECT user)
 	save_user_details(u,0);
 	sprintf(text,"~FG~OLOdmlcal si uzivatela %s.\n",u->name);
 	write_user(user,text);
-	sprintf(text,"~FG~OL%s.\n", pohl(u,"Bol si odmlcany","Bola si odmlcana"));
+	sprintf(text,"~FG~OL%s.\n",pohl(u,"Bol si odmlcany","Bola si odmlcana"));
 	strcpy(meno,u->name);
 	destruct_user(u);
 	destructed=0;
@@ -23705,7 +23694,7 @@ void system_details(UR_OBJECT user,int typ)
 #endif
 		write_user(user,text);
 	}
-	strcpy(bstr,zobraz_datum((time_t *)&boot_time, 1));
+	strcpy(bstr,zobraz_datum((time_t *)&boot_time,1));
 	secs=(int)(time(0)-boot_time);
 	days=secs/86400;
 	hours=(secs%86400)/3600;
@@ -23852,7 +23841,7 @@ void change_room_fix(UR_OBJECT user,int fix)
 		sprintf(text,"Pristup do miestnosti %s je odteraz ~FRFIXOVANY.\n",rm->name);
 		write_user(user,text);
 		if (user->room==rm) {
-			sprintf(text,"%s ~FR%s~RS pristup do tejto miestnosti.\n",name, pohl(user,"ZAFIXOVAL","ZAFIXOVALA"));
+			sprintf(text,"%s ~FR%s~RS pristup do tejto miestnosti.\n",name,pohl(user,"ZAFIXOVAL","ZAFIXOVALA"));
 			write_room_except(rm,text,user);
 		}
 		else {
@@ -23889,7 +23878,7 @@ void change_room_fix(UR_OBJECT user,int fix)
 
 void viewlog(UR_OBJECT user,char *inpstr)
 {
-	FILE *fp, *tmpfp;
+	FILE *fp,*tmpfp;
 	char *emp="\nSystemovy log je prazdny.\n";
 	int lines;
 	char line[200],filename[255],tmpfilename[255];
@@ -24032,7 +24021,7 @@ void send_mailinglist_request(UR_OBJECT user)
 		write_syslog("Nemozem otvorit subor pre odoslanie posty vo send_mailinglist_request()\n",0);
 		return;
 	}
-	fprintf(fp,"From: %s <%s>\n",user->name, user->email);
+	fprintf(fp,"From: %s <%s>\n",user->name,user->email);
 	fprintf(fp,"To: majordomo@rak.isternet.sk\n");
 	fprintf(fp,"X-mailer: Atlantis Talker ver. %s\n",ATLANTIS);
 	fprintf(fp,"Subject: prihlasenie\n");
@@ -24344,7 +24333,7 @@ void afk(UR_OBJECT user,char *inpstr)
 			}
 			write_user(user,"Si v AFK mode. Stlac ENTER pre navrat do talkera.\n");
 			if (inpstr[0]) {
-				sstrncpy(user->afk_mesg,inpstr, AFK_MESG_LEN);
+				sstrncpy(user->afk_mesg,inpstr,AFK_MESG_LEN);
 				sprintf(text,"AFK-sprava bola nastavena: ~OL%s~RS\n",inpstr);
 				if (!user->ignall || user->malloc_start==NULL)
 					write_user(user,text);
@@ -24358,7 +24347,7 @@ void afk(UR_OBJECT user,char *inpstr)
 	}
 	if (user->vis) {
 		if (user->afk_mesg[0])
-			sprintf(text,"%s %s od klavesnice: %s\n",user->name, pohl(user,"odisiel","odisla"), user->afk_mesg);
+			sprintf(text,"%s %s od klavesnice: %s\n",user->name,pohl(user,"odisiel","odisla"),user->afk_mesg);
 		else
 			sprintf(text,"%s %s od klavesnice.\n",user->name,pohl(user,"odisiel","odisla"));
 		write_room_except(user->room,text,user);
@@ -24651,7 +24640,7 @@ void rebirth(UR_OBJECT user)
 	write_syslog(text,2);
 }
 
-void repository(char *name, int typ)
+void repository(char *name,int typ)
 {
 	UR_OBJECT u=NULL;
 
@@ -24735,7 +24724,7 @@ void delete_user(UR_OBJECT user,int this_user)
 		write_syslog("CHYBA: Nemozno vytvorit docasny user object v delete_user().\n",0);
 		return;
 	}
-	sstrncpy(u->name,word[1], 12);
+	sstrncpy(u->name,word[1],12);
 	if (!load_user_details(u)) {
 		write_user(user,nosuchuser);
 		destruct_user(u);
@@ -24895,7 +24884,7 @@ void revtell(UR_OBJECT user,char *inpstr)
 			if (total-kolko<cnt) {
 				pom=(char *)malloc((strlen(user->revbuff[line])*sizeof(char))+100);
 				if (pom!=NULL) {
-					strcpy(pom, user->revbuff[line]);
+					strcpy(pom,user->revbuff[line]);
 					colour_com_strip(pom);
 					force_language(pom,user->lang,1);
 					strtolower(pom);
@@ -24938,7 +24927,7 @@ void revirc_command(UR_OBJECT user,char *inpstr)
 				write_user(user,title("~FWTvoj IRC  buffer","~OL~FB"));
 			pom=(char *)malloc((strlen(user->revirc[line])*sizeof(char))+1);
 			if (pom!=NULL) {
-				strcpy(pom, user->revirc[line]);
+				strcpy(pom,user->revirc[line]);
 				colour_com_strip(pom);
 				strtolower(pom);
 				if (!strlen(inpstr) || strstr(pom,inpstr))
@@ -25087,7 +25076,7 @@ void unlink_room(RM_OBJECT room,RM_OBJECT rm)
 void flyer_fly()
 {
 	RM_OBJECT letun,letisko;
-	UR_OBJECT user, pilot;
+	UR_OBJECT user,pilot;
 	int cest=0;
 
 	if (flyer.pozicia==0)
@@ -25410,11 +25399,11 @@ void check_web_commands()
 							sprintf(text,"~FMGratulujeme, prave si sa stal%s PLNOPRAVNYM obcanom Atlantisu.\n",pohl(u,"","a"));
 							write_user(u,text);
 							u->level++;
-							sprintf(text,"~FG~OL%s na level: ~RS~OL%s!\n",pohl(u,"Bol si povyseny","Bola si povysena"), level_name[u->level]);
+							sprintf(text,"~FG~OL%s na level: ~RS~OL%s!\n",pohl(u,"Bol si povyseny","Bola si povysena"),level_name[u->level]);
 							write_user(u,text);
 							sprintf(text,"~OL~FG%s~FR %s na level ~FY%s!\n",u->name,pohl(u,"bol povyseny","bola povysena"),level_name[u->level]);
 							write_room_except(u->room,text,u);
-							sprintf(text,"%s %s na level %s.\n",u->name,pohl(u,"bol AUTOMATICKY povyseny","bola AUTOMATICKY povysena"), level_name[u->level]);
+							sprintf(text,"%s %s na level %s.\n",u->name,pohl(u,"bol AUTOMATICKY povyseny","bola AUTOMATICKY povysena"),level_name[u->level]);
 							writesys(KIN,1,text,NULL);
 							write_syslog(text,1);
 							save_user_details(u,1);
@@ -25685,7 +25674,7 @@ void save_topic()
 
 void check_web_board()
 {
-	char filename[255], meno[20], rmeno[ROOM_NAME_LEN+1];
+	char filename[255],meno[20],rmeno[ROOM_NAME_LEN+1];
 	RM_OBJECT rm;
 	FILE *fp;
 
@@ -25704,9 +25693,9 @@ void check_web_board()
 
 void zapis_statistiku()
 {
-	FILE *fp, *temp;
-	int i, nasiel;
-	char match[40], string1[40];
+	FILE *fp,*temp;
+	int i,nasiel;
+	char match[40],string1[40];
 	char filename[255],tmpfilename[255];
 
 	sprintf(match,"%d.%d.%d",tmday,tmonth+1,tyear);
@@ -25734,7 +25723,7 @@ void zapis_statistiku()
 			all_logins=0;
 		}
 		else
-			fprintf(temp,"%s %d\n", string1, i);
+			fprintf(temp,"%s %d\n",string1,i);
 	if (!nasiel) {
 		fprintf(temp,"%s %d\n",match,all_logins);
 		all_logins=0;
@@ -26016,7 +26005,7 @@ void check_reboot_shutdown()
 void check_idle_and_timeout()
 {
 	UR_OBJECT user,next,u;
-	int tm, idle,mins;
+	int tm,idle,mins;
 	char filename[80];
 	char inpstr[20];
 	int bazina,i;
@@ -26419,7 +26408,7 @@ void check_idle_and_timeout()
 		if ((!user->afk || (user->afk && time_out_afks)) && !user->login && !user->warned && tm>=(user->goafkafter*60-60)) {
 			if (user->afk && tm>=(user_idle_time*3)-60) {
 				user->warned=1;
-				sprintf(texthb,"\n~LB~FY~OL~LI*** POZOR! Ak do minuty nic nenapises, budes automaticky %s! ***\n", pohl(user,"odpojeny","odpojena"));
+				sprintf(texthb,"\n~LB~FY~OL~LI*** POZOR! Ak do minuty nic nenapises, budes automaticky %s! ***\n",pohl(user,"odpojeny","odpojena"));
 				write_user(user,texthb);
 				user=next;
 				continue;
@@ -26461,7 +26450,7 @@ void play_on()
 	RM_OBJECT room;
 
 	room=get_room("amfiteater",NULL);
-	if ((play.file = ropen(play.name, "r")) == NULL) {
+	if ((play.file = ropen(play.name,"r")) == NULL) {
 		write_room(room,"~FY~OLZ technickych dovodov sa predstavenie, zial, nekona...\n~FY~OLZasa ktosi stratil scenar! A toto mi robia furt! No nezabili by ste ich?!~RS~FW\n");
 		if ((play.time=play_nxt())==ZERO)
 			play.on=2;
@@ -26491,8 +26480,8 @@ void vypis_predstavenia(char riadok[MAXSTRING+1])
 
 void play_it()
 {
-	char string[MAXSTRING+1]="", command[MAXSTRING+1]="", lcommand[MAXSTRING+1]="";
-	int pozicia, count;
+	char string[MAXSTRING+1]="",command[MAXSTRING+1]="",lcommand[MAXSTRING+1]="";
+	int pozicia,count;
 
 	while (fgets(string,MAXSTRING,play.file)) {
 		string[strlen(string)-1]='\0';
@@ -26704,7 +26693,7 @@ void zazuvackuj(char *inpstr,int ok)
 
 void zachlastaj2(char *inpstr,int ok)
 {
-	unsigned int i, nah, j;
+	unsigned int i,nah,j;
 	char *newimpstr;
 
 	if ((newimpstr=(char *)malloc(5000*sizeof(char)))==NULL) {
@@ -26769,7 +26758,7 @@ void zachlastaj2(char *inpstr,int ok)
 
 void zalamerizuj(char *inpstr,int ok)
 {
-	int nah, nah2,wordct=0;
+	int nah,nah2,wordct=0;
 
 	wordct=word_count-ok;
 	if (wordct<1)
@@ -27707,7 +27696,7 @@ int load_notifylist(NOTIFY *list,int id,int noti)
 
 int delete_notify(NOTIFY *list,char *meno)
 {
-	NOTIFY bunka, prev;
+	NOTIFY bunka,prev;
 	prev=NULL;
 
 	for (bunka=*list;bunka!=NULL;bunka=bunka->next) {
@@ -27823,7 +27812,7 @@ void aklient_log(char *meno)
 				pristupy++;
 				je=1;
 			}
-			fprintf(tempfp, "%s %d\n",juzer,pristupy);
+			fprintf(tempfp,"%s %d\n",juzer,pristupy);
 		}
 		if (!je)
 			fprintf(tempfp,"%s 1\n",meno);
@@ -27863,7 +27852,7 @@ void aklient_log(char *meno)
 			fprintf(tempfp,"%s 1\n",ver);
 		fclose(fp);
 		fclose(tempfp);
-		rename(tempfilename, filename);
+		rename(tempfilename,filename);
 	}
 	return;
 }
@@ -27894,7 +27883,7 @@ void who_for_web()
 		else
 			pohl='?';
 		fprintf(fp,"%s %s %s %d %d %c\n",u->name,u->room->name,level_name[u->level],mins,idle,pohl);
-		fprintf(fp,"%s\n", u->desc);
+		fprintf(fp,"%s\n",u->desc);
 	}
 	fclose(fp);
 }
@@ -27913,7 +27902,7 @@ char *zobraz_datum(time_t *raw,int typ)
 	if (typ==3)
 		sprintf(vystup,"%d.%d.%d, %02d:%02d (%s)",tm_struct->tm_mday,tm_struct->tm_mon+1,1900+tm_struct->tm_year,tm_struct->tm_hour,tm_struct->tm_min,day[tm_struct->tm_wday]);
 	if (typ==4)
-		sprintf(vystup,"%d.%d.%d",tm_struct->tm_mday,tm_struct->tm_mon+1, 1900+tm_struct->tm_year);
+		sprintf(vystup,"%d.%d.%d",tm_struct->tm_mday,tm_struct->tm_mon+1,1900+tm_struct->tm_year);
 	if (typ==5)
 		sprintf(vystup,"%d.%d.%d %02d:%02d",tm_struct->tm_mday,tm_struct->tm_mon+1,1900+tm_struct->tm_year,tm_struct->tm_hour,tm_struct->tm_min);
 	return vystup;
@@ -28088,7 +28077,7 @@ void sms(UR_OBJECT user,int done_editing)
 
 		switch (double_fork()) {
 			case -1:
-				sprintf(text,"~OL~FWSYSTEM: ~FRChyba v trojzubci pri posielani sms (user %s)!\n", user->name);
+				sprintf(text,"~OL~FWSYSTEM: ~FRChyba v trojzubci pri posielani sms (user %s)!\n",user->name);
 				writesys(KIN,1,text,NULL);
 				return;
 			case 0:
@@ -28330,7 +28319,7 @@ void statistic(UR_OBJECT user)
 	sprintf(text,"~FGCas straveny muzzled: ~OL~FW%d~RS~FG min. Pocet killnuti: ~OL~FW%d~RS~FG\n",u->totalmuzzletime/60,u->killed);
 	write_user(user,text);
 	if (u->first_login>0) {
-		sprintf(text,"~FYPrve prihlasenie: ~FW~OL%s\n",zobraz_datum((time_t *)&u->first_login, 3));
+		sprintf(text,"~FYPrve prihlasenie: ~FW~OL%s\n",zobraz_datum((time_t *)&u->first_login,3));
 		write_user(user,text);
 		if (u->commused[9]<1)
 			u->commused[9]=1;
@@ -28435,7 +28424,7 @@ void eject(UR_OBJECT user)
 				write_room(letun,text);
 				sprintf(text,"~OL~FGNajblizsie ku kormidle %s %s a hned sa %s k riadeniu...\n",pohl(u,"bol","bola"),u->name,pohl(u,"vrhol","vrhla"));
 				write_room(letun,text);
-				strcpy(flyer.pilot, u->name);
+				strcpy(flyer.pilot,u->name);
 				flyer.gotta_write=0;
 				write_user(u,"~OL~FGRiadenie letuna teraz ostalo iba na tebe!\n");
 			}
@@ -28727,7 +28716,7 @@ long int ymd_to_scalar(unsigned int yr,unsigned int mo,unsigned int dy)
 	return scalar;
 }
 
-void scalar_to_ymd(long int scalar,unsigned int *yr, unsigned int *mo, unsigned int *dy)
+void scalar_to_ymd(long int scalar,unsigned int *yr,unsigned int *mo,unsigned int *dy)
 {
 	unsigned n;
 
