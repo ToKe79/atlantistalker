@@ -32,7 +32,7 @@
 #if defined(HAVE_CONFIG)
 #include "config.h"
 #else
-#include "config.h.sample"
+#include "config-sample.h"
 #endif
 
 #ifdef HPUX_SB
