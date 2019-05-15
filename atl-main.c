@@ -23672,15 +23672,15 @@ void system_details(UR_OBJECT user,int typ)
 
 	if (user->level>=GOD && !strcmp(word[1],"backup")) {
 		if (backuptime>0) {
-			write_user(user,"Ukludni sa, zaloha bola urobena pred par minutami.\n");
+			vwrite_user(user,"Ukludni sa, zaloha bola urobena pred %d minut%s.\n",10-backuptime,skloncislo(10-backuptime,"ou","ami","ami"));
 			return;
 		}
 		if (!strcmp(word[2],"full")) {
-			write_user(user,"Dumping database..\n");
+			write_user(user,"Dumping database...\n");
 			do_db_backup(1);
 		}
 		else {
-			write_user(user,"Dumping usertable..\n");
+			write_user(user,"Dumping usertable...\n");
 			do_db_backup(0);
 		}
 		backuptime=10;
@@ -28973,7 +28973,7 @@ void misc_stuff(int level)
 
 void do_db_backup(int full)
 {
-	char filename[80],store[80];
+	char filename[80],store[80],cmd[255];
 	FILE *fp;
 
 	switch (double_fork()) {
@@ -28988,18 +28988,19 @@ void do_db_backup(int full)
 			}
 			if (full) {
 				sprintf(store,"f%0dh-%02dd-%02dm",thour,tmday,tmonth);
-				fprintf(fp,"mysqldump -h %s -B %s -a -u %s --password=%s >%s/%s.dump\n",DBHOST,DBNAME,DBUSER,DBPASS,BACKUP_DIR,store);
-				write_syslog("Dumping database..\n",1);
+				fprintf(fp,"mysqldump -h %s -B %s -a -u %s --password=%s >%s%c%s.dump\n",DBHOST,DBNAME,DBUSER,DBPASS,BACKUP_DIR,DIRSEP,store);
+				write_syslog("Dumping database...\n",1);
 			}
 			else {
 				sprintf(store,"u%0dh-%02dd-%02dm",thour,tmday,tmonth);
 				fprintf(fp,"mysqldump -h %s -B %s -a --tables users -u %s --password=%s >%s%c%s.dump\n",DBHOST,DBNAME,DBUSER,DBPASS,BACKUP_DIR,DIRSEP,store);
-				write_syslog("Dumping usertable..\n",1);
+				write_syslog("Dumping usertable...\n",1);
 			}
 			fprintf(fp,"rm %s\n",filename);
 			fclose(fp);
 			chmod(filename,S_IRUSR+S_IWUSR+S_IXUSR);
-			system(filename);
+			sprintf(cmd,"%s%s",EXECPREFIX,filename);
+			system(cmd);
 			_exit(1);
 			return;
 	}
