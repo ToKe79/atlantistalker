@@ -1,3 +1,5 @@
+This repository moved to GitLab: https://gitlab.com/ToKe79/atlantistalker
+
 # atlantistalker
 Atlantis Talker is a talker based on NUTS. The talker runs as a service on a host machine and users can connect to the service using telnet protocol (e.g. `telnet example.com 7000` when the talker is bound to port 7000 on the host machine).
 
