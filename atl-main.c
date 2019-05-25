@@ -1205,17 +1205,13 @@ void load_and_parse_config()
 		printf("\nNUTS: Could not load MOTD.\n");
 	sprintf(query,"update `users` set `online`=0");
 	mysql_kvery(query);
-	max_id=0;
+	max_id=1;
 	sprintf(query,"select max(`id`) from `users`");
 	if ((result=mysql_result(query))) {
 		if ((row=mysql_fetch_row(result)) && row[0]!=NULL) {
 			max_id=atoi(row[0])+1;
 		}
 		mysql_free_result(result);
-	}
-	if (max_id<1) {
-		perror("\nBRUTAL ERROR: Could not get max userID.\n");
-		boot_exit(1);
 	}
 	sprintf(query,"select `parameter`,`value` from `config`");
 	if (!(result=mysql_result(query))) {
