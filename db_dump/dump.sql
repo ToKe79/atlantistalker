@@ -309,7 +309,7 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`talker_daemon`@`localhost`*/ /*!50003 trigger insert_check_fonts before insert on fonts for each row begin if new.fontid = 0 then signal sqlstate '45000'; end if; if new.fontname = '' then signal sqlstate '45000'; end if; if new.fontbody = '' then signal sqlstate '45000'; end if; if new.enabled = '' then signal sqlstate '45000'; end if; end */;;
+/*!50003 CREATE*/ /*!50003 trigger insert_check_fonts before insert on fonts for each row begin if new.fontid = 0 then signal sqlstate '45000'; end if; if new.fontname = '' then signal sqlstate '45000'; end if; if new.fontbody = '' then signal sqlstate '45000'; end if; if new.enabled = '' then signal sqlstate '45000'; end if; end */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
