@@ -25,7 +25,7 @@ cat db_dump/dump.sql | mysql <your_dbname> -u <your_dbuser> -h <your_dbhost> -p 
 ## dependencies
 On Debian based systems install these packages:
 - libxml2-dev
-- default-mysqlclient-dev
+- default-libmysqlclient-dev
 - build-essential
 - ccache
 
